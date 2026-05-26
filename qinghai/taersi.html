@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Tar Temple · Sacred Site of Tibetan Buddhism | 5A Scenic Immersive Exploration</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary: #8b0000;
+  --secondary: #d4a843;
+  --bg: #1a0a0a;
+  --surface: rgba(139,0,0,0.12);
+  --text: #f5e6d3;
+  --text-dim: rgba(245,230,211,0.55);
+  --text-faint: rgba(245,230,211,0.2);
+  --glow: rgba(212,168,67,0.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* === Ethnic Pattern Background === */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:
+    repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(212,168,67,0.015) 20px,rgba(212,168,67,0.015) 21px),
+    repeating-linear-gradient(-45deg,transparent,transparent 20px,rgba(212,168,67,0.015) 20px,rgba(212,168,67,0.015) 21px);
+  pointer-events:none;z-index:0
+}
+
+/* === Ethnic Pattern Divider === */
+.ethnic-divider{
+  width:100%;height:4px;
+  background:repeating-linear-gradient(90deg,var(--secondary),var(--secondary) 8px,transparent 8px,transparent 16px);
+  position:relative
+}
+.ethnic-divider::before,.ethnic-divider::after{
+  content:'◆';position:absolute;top:50%;transform:translateY(-50%);
+  color:var(--secondary);font-size:10px
+}
+.ethnic-divider::before{left:20%}
+.ethnic-divider::after{right:20%}
+
+/* === Ornamental Corner Decor === */
+.corner-decor{
+  position:absolute;width:60px;height:60px;pointer-events:none
+}
+.corner-decor::before,.corner-decor::after{
+  content:'';position:absolute
+}
+.corner-decor.tl{top:10px;left:10px}
+.corner-decor.tr{top:10px;right:10px;transform:scaleX(-1)}
+.corner-decor.bl{bottom:10px;left:10px;transform:scaleY(-1)}
+.corner-decor.br{bottom:10px;right:10px;transform:scale(-1,-1)}
+.corner-decor::before{
+  top:0;left:0;width:20px;height:2px;background:var(--secondary)
+}
+.corner-decor::after{
+  top:0;left:0;width:2px;height:20px;background:var(--secondary)
+}
+
+/* === Hero === */
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:-20px;background:url('images/taersi/西宁市塔尔寺景区_01.jpg') center/cover;filter:brightness(0.5) saturate(1.2);transition:transform 0.1s ease-out}
+.hero-overlay{position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(212,168,67,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 70%, rgba(139,0,0,0.25) 0%, transparent 50%);
+}
+.hero-content{position:relative;z-index:2;text-align:center;padding:0 20px}
+.hero-badge{
+  display:inline-block;
+  padding:8px 32px;
+  border:1px solid rgba(212,168,67,0.4);
+  border-radius:30px;
+  font-family:'Noto Sans SC',sans-serif;
+  font-size:13px;letter-spacing:4px;color:var(--secondary);
+  margin-bottom:32px;
+  backdrop-filter:blur(8px);
+  background:rgba(139,0,0,0.15);
+}
+.hero-title{
+  font-family:'ZCOOL XiaoWei',serif;
+  font-size:clamp(48px,8vw,88px);
+  letter-spacing:16px;
+  color:#fff;
+  text-shadow:0 2px 40px rgba(0,0,0,0.6),0 0 80px rgba(212,168,67,0.15);
+  margin-bottom:16px;
+}
+.hero-sub{
+  font-size:clamp(16px,2vw,22px);
+  opacity:0.75;
+  letter-spacing:8px;
+  font-family:'Noto Sans SC',sans-serif;
+  font-weight:300;
+}
+.hero-ornament{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  margin-top:32px;
+}
+.hero-ornament .line{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--secondary),transparent)}
+.hero-ornament .diamond{color:var(--secondary);font-size:8px}
+
+/* === Scroll Hint === */
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+/* === HUD === */
+.hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.4s}
+.hud-item{backdrop-filter:blur(16px);background:rgba(139,0,0,0.2);border:1px solid rgba(212,168,67,0.15);border-radius:12px;padding:10px 18px;text-align:center;min-width:72px}
+.hud-item .hud-icon{font-size:16px;margin-bottom:2px}
+.hud-value{font-size:20px;font-weight:700;color:var(--secondary);font-family:'Noto Sans SC',sans-serif}
+.hud-label{font-size:10px;opacity:0.5;margin-top:2px;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif}
+
+/* === Content Section === */
+.content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1}
+.content-section.reverse{direction:rtl}
+.content-section.reverse .content-text{direction:ltr}
+.content-image{width:100%;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);position:relative;border:1px solid rgba(212,168,67,0.15)}
+.content-image::after{
+  content:'';position:absolute;inset:0;
+  border-radius:16px;
+  border:1px solid rgba(212,168,67,0.1);
+  pointer-events:none;
+}
+.content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+.content-image:hover img{transform:scale(1.05)}
+.content-text h2{font-size:clamp(28px,4vw,40px);margin-bottom:16px;letter-spacing:6px;font-family:'ZCOOL XiaoWei',serif;color:#fff}
+.content-divider{width:80px;height:2px;background:linear-gradient(90deg,var(--secondary),transparent);margin-bottom:24px}
+.content-text p{font-size:16px;line-height:2.2;opacity:0.8;margin-bottom:16px}
+.content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.content-tag{
+  padding:5px 20px;
+  border:1px solid rgba(212,168,67,0.3);
+  border-radius:20px;
+  font-size:12px;
+  letter-spacing:2px;
+  color:var(--secondary);
+  font-family:'Noto Sans SC',sans-serif;
+  background:rgba(212,168,67,0.06);
+}
+
+/* === Image Break === */
+.image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.image-break .bg{position:absolute;inset:-10px;background:url('images/taersi/西宁市塔尔寺景区_01.jpg') center/cover fixed;filter:brightness(0.35) saturate(1.05)}
+.image-break .overlay{position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 30px,rgba(139,0,0,0.03) 30px,rgba(139,0,0,0.03) 31px);
+}
+.image-break .quote{position:relative;z-index:2;text-align:center;padding:0 20px}
+.image-break .quote-ornament{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:24px}
+.image-break .quote-ornament .line{width:40px;height:1px;background:var(--secondary)}
+.image-break .quote-ornament .diamond{color:var(--secondary);font-size:6px}
+.image-break .quote-cn{font-size:clamp(28px,4vw,48px);letter-spacing:12px;font-family:'ZCOOL XiaoWei',serif;color:#fff;margin-bottom:12px}
+.image-break .quote-en{font-size:13px;opacity:0.45;letter-spacing:6px;text-transform:uppercase;font-family:'Noto Sans SC',sans-serif}
+
+/* === Gallery === */
+.gallery{padding:80px 40px;max-width:1400px;margin:0 auto;position:relative;z-index:1}
+.gallery-header{text-align:center;margin-bottom:48px}
+.gallery-header h2{font-size:clamp(24px,3vw,36px);letter-spacing:8px;font-family:'ZCOOL XiaoWei',serif;color:#fff;margin-bottom:12px}
+.gallery-header .ornament{color:var(--secondary);font-size:12px;letter-spacing:8px}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.gallery-item{position:relative;overflow:hidden;border-radius:12px;cursor:pointer;border:1px solid rgba(212,168,67,0.1)}
+.gallery-item img{width:100%;object-fit:cover;transition:transform 0.6s;display:block}
+.gallery-item:hover img{transform:scale(1.08)}
+.gallery-item .item-border{position:absolute;inset:0;pointer-events:none;z-index:2}
+.gallery-item .item-border .corner{position:absolute;width:24px;height:24px}
+.gallery-item .item-border .corner::before{content:'';position:absolute}
+.gallery-item .item-border .corner.tl{top:6px;left:6px}
+.gallery-item .item-border .corner.tr{top:6px;right:6px}
+.gallery-item .item-border .corner.bl{bottom:6px;left:6px}
+.gallery-item .item-border .corner.br{bottom:6px;right:6px}
+.gallery-item .item-border .corner.tl::before{top:0;left:0;width:12px;height:1px;background:var(--secondary)}
+.gallery-item .item-border .corner.tl::after{content:'';position:absolute;top:0;left:0;width:1px;height:12px;background:var(--secondary)}
+.gallery-item .item-border .corner.tr::before{top:0;right:0;width:12px;height:1px;background:var(--secondary)}
+.gallery-item .item-border .corner.tr::after{content:'';position:absolute;top:0;right:0;width:1px;height:12px;background:var(--secondary)}
+.gallery-item .item-border .corner.bl::before{bottom:0;left:0;width:12px;height:1px;background:var(--secondary)}
+.gallery-item .item-border .corner.bl::after{content:'';position:absolute;bottom:0;left:0;width:1px;height:12px;background:var(--secondary)}
+.gallery-item .item-border .corner.br::before{bottom:0;right:0;width:12px;height:1px;background:var(--secondary)}
+.gallery-item .item-border .corner.br::after{content:'';position:absolute;bottom:0;right:0;width:1px;height:12px;background:var(--secondary)}
+
+/* === Dashboard === */
+.dashboard{padding:80px 40px;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.dashboard-header{text-align:center;margin-bottom:48px}
+.dashboard-header h2{font-size:clamp(24px,3vw,36px);letter-spacing:8px;font-family:'ZCOOL XiaoWei',serif;color:#fff;margin-bottom:12px}
+.dashboard-header .ornament{color:var(--secondary);font-size:12px;letter-spacing:8px}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.dash-card{
+  backdrop-filter:blur(12px);
+  background:rgba(139,0,0,0.1);
+  border:1px solid rgba(212,168,67,0.12);
+  border-radius:16px;
+  padding:32px 20px;
+  text-align:center;
+  transition:all 0.4s;
+  position:relative;
+  overflow:hidden;
+}
+.dash-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--secondary),transparent);
+  opacity:0;transition:opacity 0.4s;
+}
+.dash-card:hover{transform:translateY(-6px);border-color:var(--secondary)}
+.dash-card:hover::before{opacity:1}
+.dash-icon{font-size:28px;margin-bottom:12px}
+.dash-value{font-size:34px;font-weight:700;color:var(--secondary);margin-bottom:6px;font-family:'Noto Sans SC',sans-serif}
+.dash-label{font-size:13px;opacity:0.5;letter-spacing:3px;font-family:'Noto Sans SC',sans-serif}
+
+/* === CTA === */
+.cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.cta-bg{position:absolute;inset:-10px;background:url('images/taersi/西宁市塔尔寺景区_01.jpg') center/cover;filter:brightness(0.3) saturate(0.9)}
+.cta-overlay{position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(26,10,10,0.6),transparent);
+}
+.cta-content{position:relative;z-index:2;text-align:center;padding:0 20px}
+.cta-ornament{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:24px}
+.cta-ornament .line{width:40px;height:1px;background:var(--secondary)}
+.cta-ornament .diamond{color:var(--secondary);font-size:6px}
+.cta-num{font-size:clamp(64px,10vw,120px);font-weight:900;letter-spacing:8px;opacity:0.12;margin-bottom:-24px;color:var(--secondary);font-family:'Noto Sans SC',sans-serif}
+.cta-title{font-size:clamp(24px,3vw,36px);letter-spacing:8px;margin-bottom:32px;font-family:'ZCOOL XiaoWei',serif;color:#fff}
+.cta-btn{
+  display:inline-block;
+  padding:14px 48px;
+  border:1px solid rgba(212,168,67,0.35);
+  border-radius:30px;
+  font-size:14px;
+  letter-spacing:4px;
+  text-decoration:none;
+  color:var(--text);
+  font-family:'Noto Sans SC',sans-serif;
+  transition:all 0.3s;
+  background:rgba(139,0,0,0.15);
+  backdrop-filter:blur(8px);
+}
+.cta-btn:hover{background:rgba(212,168,67,0.12);border-color:var(--secondary);color:var(--secondary)}
+
+/* === Footer === */
+.footer{padding:40px;text-align:center;opacity:0.3;font-size:12px;letter-spacing:3px;position:relative;z-index:1;font-family:'Noto Sans SC',sans-serif}
+.footer-ornament{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px}
+.footer-ornament .line{width:30px;height:1px;background:var(--secondary)}
+.footer-ornament .diamond{color:var(--secondary);font-size:5px}
+
+/* === Animations === */
+[data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+[data-animate].visible{opacity:1;transform:translateY(0)}
+
+/* === Gold Glow Pulse === */
+.golden-glow{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(212,168,67,0.08) 0%,transparent 70%);
+  animation:goldenPulse 5s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes goldenPulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.4}
+  50%{transform:translate(-50%,-50%) scale(1.3);opacity:0.8}
+}
+
+/* === Prayer Flag Wave === */
+.prayer-flag{
+  position:absolute;top:0;right:60px;
+  width:2px;height:100px;
+  background:linear-gradient(to bottom,#2196f3,#ffffff,#f44336,#4caf50,#ffeb3b);
+  animation:flagWave 3.5s ease-in-out infinite;
+  transform-origin:top center;
+  opacity:0.4;z-index:2;
+}
+@keyframes flagWave{
+  0%,100%{transform:rotate(-2deg)}
+  50%{transform:rotate(2deg)}
+}
+
+/* === Responsive === */
+@media(max-width:768px){
+  .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+  .content-section.reverse{direction:ltr}
+  .gallery-grid{grid-template-columns:1fr}
+  .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+  .hud{top:12px;right:12px;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .hud-item{padding:6px 12px;min-width:60px}
+  .hud-value{font-size:16px}
+  .hud-label{font-size:9px}
+  .hero-title{letter-spacing:8px}
+  .hero-badge{font-size:11px;padding:6px 20px}
+  .prayer-flag{right:20px;height:60px}
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="golden-glow"></div>
+  <div class="prayer-flag"></div>
+  <div class="corner-decor tl"></div>
+  <div class="corner-decor tr"></div>
+  <div class="corner-decor bl"></div>
+  <div class="corner-decor br"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ World-Class Tibetan Buddhist Sacred Site ✦</div>
+    <h1 class="hero-title">Tar Temple</h1>
+    <p class="hero-sub">Tsongkhapa's Sacred Land · Qinghai</p>
+    <div class="hero-ornament">
+      <span class="line"></span>
+      <span class="diamond">◆</span>
+      <span class="line"></span>
+    </div>
+  </div>
+  <div class="scroll-hint" id="scrollHud">
+    <span style="font-size:11px;letter-spacing:3px;opacity:0.5">Scroll to Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- HUD -->
+<div class="hud" id="hud">
+  <div class="hud-item"><div class="hud-icon">📅</div><div class="hud-value">1379</div><div class="hud-label">Founded</div></div>
+  <div class="hud-item"><div class="hud-icon">🏔</div><div class="hud-value">2700m</div><div class="hud-label">Altitude</div></div>
+  <div class="hud-item"><div class="hud-icon">📐</div><div class="hud-value">0.6km²</div><div class="hud-label">Area</div></div>
+  <div class="hud-item"><div class="hud-icon">⭐</div><div class="hud-value">4.7</div><div class="hud-label">Rating</div></div>
+</div>
+
+<!-- Content 1 -->
+<section class="content-section" data-animate>
+  <div class="content-image" style="height:480px">
+    <img src="images/taersi/西宁市塔尔寺景区_04.jpg" alt="Panoramic View of Tar Temple" loading="lazy" style="height:100%"/>
+  </div>
+  <div class="content-text">
+    <h2>Six Centuries of Sacred Chanting</h2>
+    <div class="content-divider"></div>
+    <p>Tar Temple, known in Tibetan as "Kumbum Jampa Ling," meaning "the Maitreya Temple of Ten Thousand Lion-Roaring Buddha Images," is nestled in the Lianhua Mountain valley of Huangzhong District, Xining City, Qinghai Province. First built in the 12th year of Hongwu reign of the Ming Dynasty (1379 AD), it was established in honor of Tsongkhapa, the founder of the Gelug school (Yellow Hat sect) of Tibetan Buddhism, with a history spanning over six hundred years.</p>
+    <p>Tar Temple is one of the six major monasteries of the Gelug school of Tibetan Buddhism and the first national 5A-level tourist attraction in Qinghai Province. Built along the mountainside, its halls are arranged in staggered layers, with golden tiles and crimson walls complementing the lush green forests. Known as the "World's Tibetan Academy," it attracts countless devotees and tourists for pilgrimage and sightseeing every year.</p>
+    <div class="content-tags">
+      <span class="content-tag">Six Major Gelug Monasteries</span>
+      <span class="content-tag">Tsongkhapa's Sacred Land</span>
+      <span class="content-tag">World Tibetan Academy</span>
+      <span class="content-tag">5A Scenic Area</span>
+    </div>
+  </div>
+</section>
+
+<!-- Image Break -->
+<section class="image-break">
+  <div class="bg"></div>
+  <div class="overlay"></div>
+  <div class="quote">
+    <div class="quote-ornament">
+      <span class="line"></span>
+      <span class="diamond">◆</span>
+      <span class="line"></span>
+    </div>
+    <div class="quote-cn">Ten Thousand Lion's Roar · One Lineage of Bodhi Heart</div>
+    <div class="quote-en">Kumbum · The Sacred Heart of Tibetan Buddhism</div>
+  </div>
+</section>
+
+<!-- Content 2 -->
+<section class="content-section reverse" data-animate>
+  <div class="content-image" style="height:480px">
+    <img src="images/taersi/西宁市塔尔寺景区_06.jpeg" alt="Golden Tile Hall at Tar Temple" loading="lazy" style="height:100%"/>
+  </div>
+  <div class="content-text">
+    <h2>Three Artistic Wonders</h2>
+    <div class="content-divider"></div>
+    <p>Tar Temple is world-renowned for its "Three Artistic Wonders" — butter sculpture, mural painting, and applique thangka. Butter sculptures are crafted from yak butter mixed with mineral pigments, shaped into lifelike Buddha figures, flowers, and human forms with exquisite craftsmanship. The annual butter sculpture exhibition on the 15th day of the first lunar month is one of the grandest artistic feasts on the snow-covered plateau.</p>
+    <p>The temple's murals span over a thousand square meters, painted on hall walls and beams with natural mineral pigments, their vibrant colors remaining unfaded for centuries. Applique thangka uses colored silk and satin cut and stitched together, creating a three-dimensional relief effect, hailed as "Tibetan embroidery thangka." These three masterpieces have all been inscribed on the National Intangible Cultural Heritage list.</p>
+    <div class="content-tags">
+      <span class="content-tag">Butter Sculpture</span>
+      <span class="content-tag">Murals</span>
+      <span class="content-tag">Applique Thangka</span>
+      <span class="content-tag">Intangible Heritage</span>
+    </div>
+  </div>
+</section>
+
+<!-- Content 3 -->
+<section class="content-section" data-animate>
+  <div class="content-image" style="height:480px">
+    <img src="images/taersi/西宁市塔尔寺景区_10.jpg" alt="Great Gold Tile Hall at Tar Temple" loading="lazy" style="height:100%"/>
+  </div>
+  <div class="content-text">
+    <h2>Golden Tiles Against the Sky</h2>
+    <div class="content-divider"></div>
+    <p>The Great Gold Tile Hall is the core building of Tar Temple, known in Tibetan as "Sertön," meaning "Golden Tile Hall." Its roof is covered with gilded copper tiles that gleam brilliantly under the plateau sun, radiating grandeur. Inside, the hall enshrines the 11-meter-tall stupa of Tsongkhapa, inlaid with gold, silver, and jewels, including diamonds, agates, and jade — hailed as "the world's most magnificent shrine." In front of the Great Gold Tile Hall stand the Bodhi tree and the Bodhi stupa. Legend has it that Tsongkhapa was born here; his mother buried his umbilical cord in the earth, from which a white sandalwood tree grew, with lion-roaring Buddha images naturally appearing on its leaves — hence the Tibetan name "Kumbum," meaning "ten thousand lion roars."</p>
+    <div class="content-tags">
+      <span class="content-tag">Great Gold Tile Hall</span>
+      <span class="content-tag">Gilded Copper Tiles</span>
+      <span class="content-tag">Tsongkhapa Stupa</span>
+      <span class="content-tag">Bodhi Tree</span>
+    </div>
+  </div>
+</section>
+
+<!-- Ethnic Divider -->
+<div class="ethnic-divider"></div>
+
+<!-- Gallery -->
+<section class="gallery" data-animate>
+  <div class="gallery-header">
+    <h2>Buddhist Realm of Light & Shadow</h2>
+    <div class="ornament">✦ Halls · Prayer Wheels · Chanting · Zen ✦</div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item" style="height:500px">
+      <img src="images/taersi/西宁市塔尔寺景区_02.jpg" alt="White Stupa at Tar Temple" style="height:100%" loading="lazy"/>
+      <div class="item-border"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div>
+    </div>
+    <div class="gallery-item" style="height:220px">
+      <img src="images/taersi/西宁市塔尔寺景区_03.jpg" alt="Prayer Wheels at Tar Temple" style="height:100%" loading="lazy"/>
+      <div class="item-border"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div>
+    </div>
+    <div class="gallery-item" style="height:260px">
+      <img src="images/taersi/西宁市塔尔寺景区_05.jpg" alt="Sutra Hall at Tar Temple" style="height:100%" loading="lazy"/>
+      <div class="item-border"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div>
+    </div>
+    <div class="gallery-item" style="height:280px">
+      <img src="images/taersi/西宁市塔尔寺景区_08.png" alt="Architecture at Tar Temple" style="height:100%" loading="lazy"/>
+      <div class="item-border"><span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Dashboard -->
+<section class="dashboard" data-animate>
+  <div class="dashboard-header">
+    <h2>Sacred Site Data</h2>
+    <div class="ornament">✦ Millennia of Heritage · Witnessed by Numbers ✦</div>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dash-card">
+      <div class="dash-icon">📅</div>
+      <div class="dash-value">1379</div>
+      <div class="dash-label">Year Founded</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🏔</div>
+      <div class="dash-value">2700m</div>
+      <div class="dash-label">Altitude</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">📐</div>
+      <div class="dash-value">0.6km²</div>
+      <div class="dash-label">Total Area</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">⭐</div>
+      <div class="dash-value">4.7</div>
+      <div class="dash-label">Rating</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <div class="cta-ornament">
+      <span class="line"></span>
+      <span class="diamond">◆</span>
+      <span class="line"></span>
+    </div>
+    <div class="cta-num">1379</div>
+    <div class="cta-title">Six Centuries of Chanting Endure · One Thought of Bodhi Toward the Lotus</div>
+    <a href="../index.html?prov=%E9%9D%92%E6%B5%B7%E7%9C%81" class="cta-btn">⟵ Back to Scenic Map</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-ornament">
+    <span class="line"></span>
+    <span class="diamond">◆</span>
+    <span class="line"></span>
+  </div>
+  <p>Tar Temple · National 5A Tourist Attraction · Xining, Qinghai</p>
+</footer>
+
+<script>
+(function(){
+  var img = new Image();
+  img.onload = function(){
+    document.getElementById('heroBg').style.backgroundImage = 'url("images/taersi/西宁市塔尔寺景区_01.jpg")';
+  };
+  img.src = 'images/taersi/西宁市塔尔寺景区_01.jpg';
+})();
+
+window.addEventListener('scroll', function(){
+  var s = document.getElementById('scrollHud');
+  if(s) s.style.opacity = window.scrollY > 100 ? '0' : '1';
+});
+
+document.querySelector('.hero').addEventListener('mousemove', function(e){
+  var x = (e.clientX / window.innerWidth - 0.5) * 10;
+  var y = (e.clientY / window.innerHeight - 0.5) * 10;
+  document.getElementById('heroBg').style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+});
+
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('[data-animate]').forEach(function(el){
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

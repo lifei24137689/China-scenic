@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Jinggangshan · Cradle of Revolution | 5A Scenic Immersive Exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #b71c1c;
+  --scarlet: #d32f2f;
+  --gold: #ffd54f;
+  --amber: #ffc107;
+  --steel: #5d4037;
+  --deep: #0a0505;
+  --surface: #1a0a0a;
+  --fog: rgba(183,28,28,.06);
+  --text: #f5eed5;
+  --text-dim: rgba(245,238,213,.55);
+  --text-faint: rgba(245,238,213,.25);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background:var(--deep);
+  color:var(--text);
+  font-family:'Noto Serif SC',serif;
+  line-height:1.8;
+  overflow-x:hidden;
+}
+
+#loading {
+  position:fixed; inset:0; z-index:9999;
+  background:var(--deep);
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity .6s,visibility .6s;
+}
+#loading.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+#loading .spinner {
+  width:48px; height:48px;
+  border:2px solid var(--text-faint);
+  border-top-color:var(--red);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+.hero {
+  position:relative; height:100vh; min-height:700px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.hero-bg {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  transform:scale(1.1);
+  transition:transform 1.5s cubic-bezier(.25,.46,.45,.94);
+}
+.hero.loaded .hero-bg { transform:scale(1); }
+.hero-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(10,5,5,.3) 0%,rgba(10,5,5,.5) 50%,var(--deep) 100%);
+}
+.spark-layer {
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(255,213,79,.08) 0%,transparent 60%);
+  animation:sparkPulse 6s ease-in-out infinite;
+}
+@keyframes sparkPulse {
+  0%,100% { opacity:.4; }
+  50% { opacity:.8; }
+}
+
+.hero-content {
+  position:relative; z-index:2; text-align:center;
+  max-width:900px; padding:0 2rem;
+}
+.hero-tag {
+  display:inline-block;
+  font-size:.85rem; letter-spacing:.3em;
+  color:var(--gold);
+  border:1px solid rgba(255,213,79,.3);
+  padding:.4rem 1.5rem; border-radius:2px;
+  margin-bottom:2rem;
+  backdrop-filter:blur(10px);
+}
+.hero h1 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(3.5rem,8vw,7rem);
+  font-weight:400;
+  color:var(--text);
+  line-height:1.2;
+  margin-bottom:.5rem;
+  text-shadow:0 0 80px rgba(183,28,28,.4);
+}
+.hero .subtitle {
+  font-size:clamp(1rem,2vw,1.4rem);
+  color:var(--gold);
+  letter-spacing:.2em;
+  margin-bottom:1.5rem;
+}
+.hero .desc {
+  font-size:1.05rem;
+  color:var(--text-dim);
+  max-width:600px; margin:0 auto 2.5rem;
+  line-height:1.9;
+}
+.hero .scroll-hint {
+  position:absolute; bottom:3rem; left:50%;
+  transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center;
+  gap:.5rem;
+  color:var(--text-faint);
+  font-size:.75rem; letter-spacing:.2em;
+}
+.scroll-hint .line {
+  width:1px; height:40px;
+  background:linear-gradient(180deg,var(--red),transparent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%,100% { transform:scaleY(1); opacity:.5; }
+  50% { transform:scaleY(1.8); opacity:1; }
+}
+
+.section {
+  max-width:1100px; margin:0 auto;
+  padding:6rem 2rem;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:4rem; align-items:center;
+}
+.section.reverse { direction:rtl; }
+.section.reverse .section-text { direction:ltr; }
+.section.reverse .section-visual { direction:ltr; }
+
+.section-text .chapter-num {
+  font-family:'ZCOOL XiaoWei',serif;
+  font-size:.8rem; letter-spacing:.3em;
+  color:var(--red);
+  margin-bottom:1rem;
+}
+.section-text h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+  margin-bottom:1.5rem;
+  line-height:1.3;
+}
+.section-text p {
+  color:var(--text-dim);
+  font-size:1.05rem;
+  line-height:2;
+  margin-bottom:1rem;
+}
+.section-text .highlight {
+  color:var(--gold);
+  font-weight:600;
+}
+
+.section-visual {
+  position:relative;
+  border-radius:8px; overflow:hidden;
+  aspect-ratio:4/5;
+  box-shadow:0 20px 60px rgba(183,28,28,.15);
+}
+.section-visual img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .8s ease;
+}
+.section-visual:hover img { transform:scale(1.05); }
+
+.image-break {
+  position:relative; height:60vh; min-height:400px;
+  background-size:cover; background-position:center;
+  background-attachment:fixed;
+  display:flex; align-items:center; justify-content:center;
+}
+.image-break .break-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,var(--deep),rgba(10,5,5,.4),var(--deep));
+}
+.image-break .break-quote {
+  position:relative; z-index:1; text-align:center;
+  max-width:700px; padding:0 2rem;
+}
+.image-break .break-quote .quote-text {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  color:var(--text);
+  line-height:1.6;
+  margin-bottom:1rem;
+}
+.image-break .break-quote .quote-author {
+  font-size:.9rem; color:var(--gold);
+  letter-spacing:.2em;
+}
+
+.gallery-section {
+  max-width:1100px; margin:0 auto;
+  padding:6rem 2rem;
+}
+.gallery-section .gallery-header {
+  text-align:center; margin-bottom:3rem;
+}
+.gallery-section .gallery-header h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+}
+.gallery-section .gallery-header .gallery-sub {
+  color:var(--red);
+  font-size:.85rem; letter-spacing:.3em;
+  margin-top:.5rem;
+}
+.gallery-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+}
+.gallery-grid .gallery-item {
+  position:relative;
+  border-radius:6px; overflow:hidden;
+  aspect-ratio:3/4;
+  cursor:pointer;
+}
+.gallery-grid .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 2; }
+.gallery-grid .gallery-item img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .6s ease;
+}
+.gallery-grid .gallery-item:hover img { transform:scale(1.08); }
+
+.dashboard-section {
+  max-width:1100px; margin:0 auto;
+  padding:4rem 2rem 6rem;
+}
+.dashboard-section .dash-header {
+  text-align:center; margin-bottom:3rem;
+}
+.dashboard-section .dash-header h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+}
+.dashboard-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.5rem;
+}
+.dash-card {
+  background:var(--surface);
+  border:1px solid rgba(183,28,28,.1);
+  border-radius:8px;
+  padding:2rem 1.5rem;
+  text-align:center;
+  transition:border-color .3s,transform .3s;
+}
+.dash-card:hover {
+  border-color:rgba(183,28,28,.3);
+  transform:translateY(-4px);
+}
+.dash-card .dash-icon {
+  font-size:2rem; margin-bottom:1rem;
+}
+.dash-card .dash-value {
+  font-family:'ZCOOL XiaoWei',serif;
+  font-size:2.2rem;
+  color:var(--red);
+  margin-bottom:.3rem;
+}
+.dash-card .dash-label {
+  font-size:.85rem; color:var(--text-dim);
+  letter-spacing:.1em;
+}
+
+.cta-section {
+  text-align:center; padding:6rem 2rem;
+  background:linear-gradient(180deg,transparent,rgba(183,28,28,.05),transparent);
+}
+.cta-section h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+  margin-bottom:1rem;
+}
+.cta-section p {
+  color:var(--text-dim);
+  margin-bottom:2rem;
+  font-size:1.05rem;
+}
+.cta-btn {
+  display:inline-block;
+  padding:.9rem 2.5rem;
+  border:1px solid var(--red);
+  color:var(--red);
+  text-decoration:none;
+  font-size:.9rem; letter-spacing:.2em;
+  border-radius:2px;
+  transition:all .3s;
+}
+.cta-btn:hover {
+  background:var(--red);
+  color:var(--text);
+}
+
+footer {
+  text-align:center; padding:3rem 2rem;
+  border-top:1px solid rgba(183,28,28,.1);
+}
+footer p {
+  color:var(--text-faint);
+  font-size:.8rem; letter-spacing:.15em;
+}
+
+.chapter-nav {
+  position:fixed; right:2rem; top:50%;
+  transform:translateY(-50%);
+  z-index:100;
+  display:flex; flex-direction:column;
+  gap:1rem;
+}
+.chapter-nav .nav-dot {
+  width:8px; height:8px;
+  border-radius:50%;
+  background:var(--text-faint);
+  transition:all .3s;
+  cursor:pointer;
+}
+.chapter-nav .nav-dot.active {
+  background:var(--red);
+  box-shadow:0 0 12px rgba(183,28,28,.5);
+}
+
+@media (max-width:768px) {
+  .section {
+    grid-template-columns:1fr;
+    gap:2rem; padding:4rem 1.5rem;
+  }
+  .section.reverse { direction:ltr; }
+  .gallery-grid {
+    grid-template-columns:repeat(2,1fr);
+  }
+  .gallery-grid .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 1; }
+  .dashboard-grid { grid-template-columns:repeat(2,1fr); }
+  .chapter-nav { display:none; }
+  .image-break { background-attachment:scroll; }
+}
+</style>
+</head>
+<body>
+
+<div id="loading"><div class="spinner"></div></div>
+
+<nav class="chapter-nav" id="chapterNav">
+  <div class="nav-dot active" data-target="hero"></div>
+  <div class="nav-dot" data-target="huangyangjie"></div>
+  <div class="nav-dot" data-target="wuzhi"></div>
+  <div class="nav-dot" data-target="academy"></div>
+  <div class="nav-dot" data-target="gallery"></div>
+  <div class="nav-dot" data-target="dashboard"></div>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="spark-layer"></div>
+  <div class="hero-content">
+    <div class="hero-tag">National 5A Scenic Area · Revolutionary Sacred Land</div>
+    <h1>Jinggangshan</h1>
+    <div class="subtitle">Cradle of Revolution · Red Sacred Land</div>
+    <p class="desc">A single spark can start a prairie fire. The five-hundred-li Jinggangshan, with its layered peaks and vast sea of forests, every inch of land is engraved with the magnificent red memory of that tumultuous era.</p>
+  </div>
+  <div class="scroll-hint">
+    <span>Explore Down</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<section class="section" id="huangyangjie" data-chapter="Huangyangjie">
+  <div class="section-text">
+    <div class="chapter-num">Chapter One</div>
+    <h2>Huangyangjie</h2>
+    <p>Huangyangjie stands at an elevation of <span class="highlight">1,343 meters</span>, the most famous of Jinggangshan's five major outposts. In 1928, the Red Army, with less than a battalion, repelled an attack by four enemy regiments here, creating the legendary battle of <span class="highlight">"the roar of cannons at Huangyangjie"</span>.</p>
+    <p>Standing at the Huangyangjie outpost, one can gaze into the distance at the sea of mountains and rolling clouds. The winding <span class="highlight">Grain-Carrying Trail</span> bears witness to the arduous years when Commander-in-Chief Zhu De shared hardships with the soldiers.</p>
+  </div>
+  <div class="section-visual">
+    <img src="江西/吉安市井冈山市井冈山风景旅游区/吉安市井冈山市井冈山风景旅游区_02.jpg" alt="Huangyangjie" loading="lazy">
+  </div>
+</section>
+
+<div class="image-break" style="background-image:url('江西/吉安市井冈山市井冈山风景旅游区/吉安市井冈山市井冈山风景旅游区_04.jpg')">
+  <div class="break-overlay"></div>
+  <div class="break-quote">
+    <div class="quote-text">"A single spark can start a prairie fire"</div>
+    <div class="quote-author">— Mao Zedong</div>
+  </div>
+</div>
+
+<section class="section reverse" id="wuzhi" data-chapter="Wuzhi Peak">
+  <div class="section-text">
+    <div class="chapter-num">Chapter Two</div>
+    <h2>Wuzhi Peak</h2>
+    <p>Wuzhi Peak is the main peak of Jinggangshan, standing at <span class="highlight">1,438 meters</span>. It is named for its five peaks standing side by side like five fingers. It is not only the symbol of Jinggangshan but also the prototype of the <span class="highlight">100-yuan banknote</span> from the fourth series of RMB.</p>
+    <p>Between the peaks, pristine forests thrive with abundant rare flora and fauna. Ascending to the summit, one can take in the panoramic view of the five-hundred-li Jinggangshan, with magnificent sea of clouds and sunrises.</p>
+  </div>
+  <div class="section-visual">
+    <img src="江西/吉安市井冈山市井冈山风景旅游区/吉安市井冈山市井冈山风景旅游区_05.jpg" alt="Wuzhi Peak" loading="lazy">
+  </div>
+</section>
+
+<section class="section" id="academy" data-chapter="Longjiang Academy">
+  <div class="section-text">
+    <div class="chapter-num">Chapter Three</div>
+    <h2>Red Heritage</h2>
+    <p>Jinggangshan preserves <span class="highlight">over 100</span> revolutionary site relics. Longjiang Academy is where Mao Zedong and Zhu De <span class="highlight">first met</span>, and it was also where the Red Army training corps was founded, earning it the reputation as the "cradle of military and political academies."</p>
+    <p>Mao Zedong's former residence in Ciping, Jinggangshan Revolutionary Museum, Xiaojing Red Army Hospital... Every site tells the story of those arduous and extraordinary years. Today, Jinggangshan has become a major national base for <span class="highlight">patriotic education</span>.</p>
+  </div>
+  <div class="section-visual">
+    <img src="江西/吉安市井冈山市井冈山风景旅游区/吉安市井冈山市井冈山风景旅游区_08.jpg" alt="Longjiang Academy" loading="lazy">
+  </div>
+</section>
+
+<section class="gallery-section" id="gallery" data-chapter="Gallery">
+  <div class="gallery-header">
+    <h2>Gallery</h2>
+    <div class="gallery-sub">GALLERY</div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img src="江西/吉安市井冈山市井冈山风景旅游区/吉安市井冈山市井冈山风景旅游区_09.jpg" alt="Jinggangshan New Look" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="江西/吉安市井冈山市井冈山风景旅游区/吉安市井冈山市井冈山风景旅游区_10.jpg" alt="Jinggangshan City" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="江西/吉安市井冈山市井冈山风景旅游区/吉安市井冈山市井冈山风景旅游区_11.jpg" alt="Dajing" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="江西/吉安市井冈山市井冈山风景旅游区/吉安市井冈山市井冈山风景旅游区_13.jpg" alt="Hundred-Bamboo Garden" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section class="dashboard-section" id="dashboard" data-chapter="Dashboard">
+  <div class="dash-header">
+    <h2>Jinggangshan · Dashboard</h2>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dash-card">
+      <div class="dash-icon">🏔️</div>
+      <div class="dash-value">1438m</div>
+      <div class="dash-label">Main Peak Elevation</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">📐</div>
+      <div class="dash-value">333km²</div>
+      <div class="dash-label">Scenic Area</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">⭐</div>
+      <div class="dash-value">4.6</div>
+      <div class="dash-label">Visitor Rating</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🏛️</div>
+      <div class="dash-value">100+</div>
+      <div class="dash-label">Revolutionary Sites</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Visit the Revolutionary Sacred Land</h2>
+  <p>Best season: Spring (Apr-May) for azaleas in bloom, Autumn (Sep-Nov) for layered autumn colors</p>
+  <span class="cta-btn">Back to Scenic Map</span>
+</section>
+
+<footer>
+  <p>Jinggangshan · Cradle of Revolution · Red Sacred Land · 5A Immersive Exploration</p>
+</footer>
+
+<script>
+(function(){
+  setTimeout(function(){
+    document.getElementById('loading').classList.add('hidden');
+  },800);
+
+  var heroBg=document.getElementById('heroBg');
+  var img=new Image();
+  img.onload=function(){
+    heroBg.style.backgroundImage="url('江西/吉安市井冈山市井冈山风景旅游区/吉安市井冈山市井冈山风景旅游区_01.jpg')";
+    document.querySelector('.hero').classList.add('loaded');
+  };
+  img.src='江西/吉安市井冈山市井冈山风景旅游区/吉安市井冈山市井冈山风景旅游区_01.jpg';
+
+  var sections=document.querySelectorAll('[data-chapter]');
+  var navDots=document.querySelectorAll('.nav-dot');
+
+  function updateNav(){
+    var scrollY=window.scrollY+window.innerHeight/3;
+    var current='';
+    sections.forEach(function(s){
+      if(s.offsetTop<=scrollY) current=s.id;
+    });
+    navDots.forEach(function(d){
+      d.classList.toggle('active',d.dataset.target===current);
+    });
+  }
+
+  navDots.forEach(function(dot){
+    dot.addEventListener('click',function(){
+      var target=document.getElementById(dot.dataset.target);
+      if(target) target.scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  window.addEventListener('scroll',updateNav);
+
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting) e.target.style.opacity='1';
+    });
+  },{threshold:.15});
+
+  document.querySelectorAll('.section,.gallery-section,.dashboard-section').forEach(function(el){
+    el.style.opacity='0';
+    el.style.transition='opacity .8s ease';
+    observer.observe(el);
+  });
+})();
+</script>
+
+<a href="../index.html?prov=江西省" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Scenic Map</a>
+</body>
+</html>

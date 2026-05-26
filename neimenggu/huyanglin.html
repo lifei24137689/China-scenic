@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Populus Euphratica Forest · Golden Fairytale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Serif SC','PingFang SC','Microsoft YaHei',serif;
+  background: #0a0805;
+  color: #f5e8d0;
+  overflow-x: hidden;
+}
+
+/* ===== Loading ===== */
+.loading-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: #0a0805;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.8s ease;
+}
+.loading-overlay.hidden { opacity: 0; pointer-events: none; }
+.loading-spinner {
+  width: 48px; height: 48px;
+  position: relative;
+  border-radius: 50%;
+  border: 2px solid rgba(249,168,37,.15);
+  border-top: 2px solid #f9a825;
+  animation: spin 1.2s linear infinite;
+}
+.loading-spinner::after {
+  content: '🍂';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 18px;
+  color: #f9a825;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%,100%{opacity:.6} 50%{opacity:1} }
+.loading-overlay p {
+  margin-top: 24px; font-size: 13px;
+  color: rgba(249,168,37,.4);
+  letter-spacing: 4px;
+}
+
+/* ===== Golden Aurora Pulse ===== */
+.aurora-pulse {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  overflow: hidden;
+}
+.aurora-pulse::before {
+  content: '';
+  position: absolute;
+  top: -30%; left: -10%;
+  width: 120%; height: 60%;
+  background: linear-gradient(135deg, transparent 30%, rgba(249,168,37,.04) 50%, rgba(239,108,0,.03) 70%, transparent 90%);
+  animation: auroraMove 8s ease-in-out infinite;
+  filter: blur(40px);
+}
+.aurora-pulse::after {
+  content: '';
+  position: absolute;
+  bottom: -20%; right: -10%;
+  width: 100%; height: 50%;
+  background: linear-gradient(225deg, transparent 30%, rgba(239,108,0,.03) 50%, rgba(249,168,37,.04) 70%, transparent 90%);
+  animation: auroraMove 10s ease-in-out infinite reverse;
+  filter: blur(50px);
+}
+@keyframes auroraMove {
+  0%,100% { transform: translateX(-5%) translateY(0); opacity: .5; }
+  25% { transform: translateX(5%) translateY(-3%); opacity: .8; }
+  50% { transform: translateX(-3%) translateY(3%); opacity: .4; }
+  75% { transform: translateX(3%) translateY(-2%); opacity: .7; }
+}
+
+/* ===== Autumn Leaf Pattern Background ===== */
+.pattern-bg {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  opacity: .025;
+  background-image:
+    radial-gradient(circle at 20% 50%, #f9a825 0.5px, transparent 0.5px),
+    radial-gradient(circle at 80% 30%, #ef6c00 0.5px, transparent 0.5px),
+    radial-gradient(circle at 50% 80%, #f9a825 0.5px, transparent 0.5px);
+  background-size: 60px 60px;
+}
+.pattern-top {
+  position: absolute; top: 0; left: 0; right: 0; height: 8px; z-index: 2;
+  background: repeating-linear-gradient(90deg,#f9a825 0,#f9a825 20px,#ef6c00 20px,#ef6c00 22px,#8b5e3c 22px,#8b5e3c 24px);
+}
+
+/* ===== Hero ===== */
+.hero {
+  position: relative; width: 100%; height: 100vh; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-bg {
+  position: absolute; inset: -10px;
+  background-size: cover; background-position: center;
+  filter: brightness(.55) saturate(1.15);
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 25%, #0a0805 85%);
+}
+.hero .top-fade {
+  position: absolute; top:0; left:0; right:0; height:35vh;
+  background: linear-gradient(180deg,#0a0805 0%,transparent 100%);
+}
+.hero .bottom-fade {
+  position: absolute; bottom:0; left:0; right:0; height:45vh;
+  background: linear-gradient(0deg,#0a0805 0%,#0a0805aa 15%,transparent 100%);
+}
+.hero .pattern-top { position: absolute; }
+
+/* ===== Falling Leaves ===== */
+.falling-leaves {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 3;
+  pointer-events: none; overflow: hidden;
+}
+.falling-leaves .leaf {
+  position: absolute; top: -20px;
+  width: 8px; height: 8px;
+  opacity: .12;
+  border-radius: 0 50% 50% 50%;
+  animation: leafFall linear infinite;
+}
+.falling-leaves .leaf:nth-child(1) { left: 5%; background: #f9a825; animation-duration: 14s; animation-delay: 0s; }
+.falling-leaves .leaf:nth-child(2) { left: 15%; background: #ef6c00; animation-duration: 16s; animation-delay: 2s; }
+.falling-leaves .leaf:nth-child(3) { left: 25%; background: #f9a825; animation-duration: 12s; animation-delay: 4s; }
+.falling-leaves .leaf:nth-child(4) { left: 40%; background: #ef6c00; animation-duration: 18s; animation-delay: 1s; }
+.falling-leaves .leaf:nth-child(5) { left: 55%; background: #f9a825; animation-duration: 13s; animation-delay: 3s; }
+.falling-leaves .leaf:nth-child(6) { left: 65%; background: #ef6c00; animation-duration: 15s; animation-delay: 5s; }
+.falling-leaves .leaf:nth-child(7) { left: 75%; background: #f9a825; animation-duration: 17s; animation-delay: 2.5s; }
+.falling-leaves .leaf:nth-child(8) { left: 85%; background: #ef6c00; animation-duration: 11s; animation-delay: 4.5s; }
+.falling-leaves .leaf:nth-child(9) { left: 92%; background: #f9a825; animation-duration: 14s; animation-delay: 1.5s; }
+@keyframes leafFall {
+  0% { transform: translateY(-10px) rotate(0deg) scale(1); opacity: 0; }
+  10% { opacity: .15; }
+  90% { opacity: .08; }
+  100% { transform: translateY(calc(100vh + 20px)) rotate(720deg) scale(.6); opacity: 0; }
+}
+
+/* ===== HUD (top-right data, no links) ===== */
+.hud { position: absolute; top: 0; left: 0; right: 0; z-index: 10; padding: 28px 40px; }
+.hud-top { display: flex; justify-content: flex-end; align-items: flex-start; }
+.data-panel { display: flex; gap: 8px; }
+.data-item {
+  text-align: center; padding: 10px 18px; border-radius: 10px;
+  background: rgba(10,8,5,.6);
+  border: 1px solid rgba(249,168,37,.12);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  min-width: 72px;
+}
+.data-item .num { font-size: 20px; font-weight: 700; }
+.data-item .num.gold { color: #f9a825; }
+.data-item .num.orange { color: #ef6c00; }
+.data-item .num.red { color: #e57373; }
+.data-item .num.cream { color: #f5e8d0; }
+.data-item .label { font-size: 9px; color: rgba(249,168,37,.4); margin-top: 2px; letter-spacing: 1px; }
+
+/* ===== Title on hero ===== */
+.title-group {
+  position: absolute; left: 40px; bottom: 140px; z-index: 11;
+}
+.title-group h1 {
+  font-size: 52px; font-weight: 900; letter-spacing: 4px;
+  text-shadow: 0 0 60px rgba(0,0,0,.6);
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+}
+.title-group h1 .badge {
+  font-size: 12px; padding: 4px 16px; border-radius: 14px;
+  background: rgba(239,108,0,.3);
+  border: 1px solid rgba(249,168,37,.3);
+  color: #f9a825; letter-spacing: 1px;
+  font-weight: 400;
+}
+.title-group .subtitle {
+  font-size: 14px; color: rgba(249,168,37,.4);
+  letter-spacing: 6px; margin-top: 6px;
+}
+
+/* ===== Scroll hint ===== */
+.scroll-hint {
+  position: absolute; bottom: 40px; left: 50%; z-index: 11;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: rgba(249,168,37,.25);
+  font-size: 10px; letter-spacing: 2px;
+}
+.scroll-hint .line {
+  width: 1px; height: 30px;
+  background: linear-gradient(180deg,rgba(249,168,37,.3),transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:.3;transform:scaleY(.5)} 50%{opacity:1;transform:scaleY(1)} }
+
+/* ===== Content Sections ===== */
+.section {
+  position: relative; min-height: 80vh;
+  display: flex; align-items: center;
+  padding: 80px 40px;
+}
+.section-inner {
+  max-width: 1200px; margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+}
+.section-inner.reverse { direction: rtl; }
+.section-inner.reverse > * { direction: ltr; }
+.section-image {
+  border-radius: 14px; overflow: hidden; position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  opacity: 0; transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(.16,1,.3,1);
+}
+.section-image.visible { opacity: 1; transform: translateY(0); }
+.section-image img {
+  width: 100%; height: 400px; object-fit: cover; display: block;
+  transition: transform 0.6s ease;
+}
+.section-image:hover img { transform: scale(1.03); }
+.section-image .img-overlay {
+  position: absolute; bottom:0; left:0; right:0; height:60%;
+  background: linear-gradient(0deg,#0a0805 0%,transparent 100%);
+  pointer-events: none;
+}
+.section-content {
+  opacity: 0; transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(.16,1,.3,1) 0.15s;
+}
+.section-content.visible { opacity: 1; transform: translateY(0); }
+.section-content .numeral {
+  font-size: 13px; color: rgba(249,168,37,.4);
+  letter-spacing: 3px; margin-bottom: 12px;
+}
+.section-content h2 {
+  font-size: 32px; font-weight: 700; letter-spacing: 2px;
+  margin-bottom: 20px; line-height: 1.3;
+}
+.section-content h2 .highlight {
+  color: #f9a825;
+}
+.section-content p {
+  font-size: 15px; line-height: 1.9;
+  color: rgba(245,232,208,.55);
+  margin-bottom: 20px;
+}
+.section-content .stat-row {
+  display: flex; gap: 24px; margin-top: 24px;
+}
+.section-content .stat-item {
+  text-align: center; padding: 16px 24px;
+  border-radius: 10px;
+  background: rgba(239,108,0,.1);
+  border: 1px solid rgba(249,168,37,.1);
+  min-width: 100px;
+}
+.section-content .stat-item .num { font-size: 28px; font-weight: 700; color: #f9a825; }
+.section-content .stat-item .lbl { font-size: 10px; color: rgba(249,168,37,.3); margin-top: 4px; letter-spacing: 1px; }
+
+/* ===== Image Break with Quote ===== */
+.image-break {
+  position: relative; width: 100%; height: 60vh; overflow: hidden;
+}
+.image-break .bg {
+  position: absolute; inset: -10px;
+  background-size: cover; background-position: center;
+  background-attachment: fixed;
+  filter: brightness(.45);
+}
+.image-break .overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg,#0a0805 0%,transparent 20%,transparent 80%,#0a0805 100%);
+}
+.image-break .quote {
+  position: absolute; bottom: 60px; left: 40px; right: 40px; z-index: 2;
+  max-width: 600px;
+}
+.image-break .quote p {
+  font-size: 24px; font-weight: 300; line-height: 1.7;
+  color: rgba(245,232,208,.5);
+  letter-spacing: 3px;
+}
+.image-break .quote .ornament {
+  font-size: 11px; color: rgba(249,168,37,.3);
+  letter-spacing: 4px; margin-top: 10px;
+}
+
+/* ===== Gallery (no text labels) ===== */
+.gallery-section { padding: 100px 40px; }
+.gallery-section .section-header {
+  max-width: 1200px; margin: 0 auto 40px;
+  text-align: center;
+}
+.gallery-section .section-header .numeral {
+  font-size: 13px; color: rgba(249,168,37,.4);
+  letter-spacing: 3px; margin-bottom: 12px;
+}
+.gallery-section .section-header h2 {
+  font-size: 32px; font-weight: 700; letter-spacing: 2px;
+}
+.gallery-section .section-header h2 .highlight { color: #f9a825; }
+.gallery-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr; gap: 12px;
+}
+.gallery-grid .col { display: flex; flex-direction: column; gap: 12px; }
+.gallery-grid .col:first-child { grid-row: span 2; }
+.gallery-item {
+  border-radius: 12px; overflow: hidden; position: relative;
+  opacity: 0; transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(.16,1,.3,1);
+}
+.gallery-item.visible { opacity: 1; transform: translateY(0); }
+.gallery-item img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.6s ease;
+}
+.gallery-item:hover img { transform: scale(1.05); }
+
+/* ===== Dashboard ===== */
+.dashboard-section {
+  padding: 100px 40px;
+  background: linear-gradient(180deg,#0a0805,#1a0d05,#0a0805);
+}
+.dashboard-section .section-header {
+  max-width: 1200px; margin: 0 auto 50px; text-align: center;
+}
+.dashboard-section .section-header .numeral {
+  font-size: 13px; color: rgba(249,168,37,.4);
+  letter-spacing: 3px; margin-bottom: 12px;
+}
+.dashboard-section .section-header h2 {
+  font-size: 32px; font-weight: 700; letter-spacing: 2px;
+}
+.dashboard-section .section-header h2 .highlight { color: #f9a825; }
+.dashboard-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+}
+.dashboard-card {
+  padding: 28px 24px; border-radius: 14px;
+  background: rgba(239,108,0,.06);
+  border: 1px solid rgba(249,168,37,.08);
+  text-align: center;
+  opacity: 0; transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(.16,1,.3,1);
+}
+.dashboard-card.visible { opacity: 1; transform: translateY(0); }
+.dashboard-card .icon { font-size: 28px; margin-bottom: 12px; }
+.dashboard-card .d-num { font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+.dashboard-card .d-label {
+  font-size: 10px; color: rgba(249,168,37,.3);
+  letter-spacing: 2px; margin-top: 6px;
+}
+.dashboard-card.gold .d-num { color: #f9a825; }
+.dashboard-card.orange .d-num { color: #ef6c00; }
+.dashboard-card.red .d-num { color: #e57373; }
+.dashboard-card.cream .d-num { color: #f5e8d0; }
+
+/* ===== CTA ===== */
+.cta-section {
+  padding: 120px 40px; text-align: center; position: relative;
+}
+.cta-section .bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  filter: brightness(.3);
+}
+.cta-section .overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg,#0a0805 0%,transparent 25%,transparent 75%,#0a0805 100%);
+}
+.cta-section .content {
+  position: relative; z-index: 2;
+  max-width: 600px; margin: 0 auto;
+}
+.cta-section .content .numeral {
+  font-size: 14px; color: #f9a825;
+  letter-spacing: 3px; margin-bottom: 16px;
+}
+.cta-section .content h2 {
+  font-size: 38px; font-weight: 700; letter-spacing: 4px;
+  margin-bottom: 16px;
+}
+.cta-section .content h2 .highlight { color: #f9a825; }
+.cta-section .content p {
+  font-size: 15px; color: rgba(245,232,208,.4);
+  line-height: 1.8; margin-bottom: 30px;
+}
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 32px;
+  border: 1px solid rgba(249,168,37,.3);
+  background: rgba(239,108,0,.2);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  color: #f9a825; font-size: 14px;
+  cursor: pointer; transition: all .3s;
+  letter-spacing: 1px; text-decoration: none;
+}
+.cta-btn:hover {
+  background: rgba(239,108,0,.35);
+  box-shadow: 0 0 40px rgba(249,168,37,.1);
+  transform: translateY(-2px);
+}
+
+/* ===== Footer ===== */
+footer {
+  padding: 40px; text-align: center;
+  border-top: 1px solid rgba(249,168,37,.06);
+}
+footer p {
+  font-size: 11px; color: rgba(249,168,37,.15);
+  letter-spacing: 2px;
+}
+
+/* ===== Corner decorations ===== */
+.corner { position: fixed; z-index: 100; pointer-events: none; }
+.corner-h { position: absolute; width: 20px; height: 1px; background: rgba(249,168,37,.08); }
+.corner-v { position: absolute; width: 1px; height: 20px; background: rgba(249,168,37,.08); }
+.corner-tl { top:10px;left:10px; } .corner-tr { top:10px;right:10px; }
+.corner-bl { bottom:10px;left:10px; } .corner-br { bottom:10px;right:10px; }
+.corner-tl .corner-h { top:0;left:0; } .corner-tl .corner-v { top:0;left:0; }
+.corner-tr .corner-h { top:0;right:0; } .corner-tr .corner-v { top:0;right:0; }
+.corner-bl .corner-h { bottom:0;left:0; } .corner-bl .corner-v { bottom:0;left:0; }
+.corner-br .corner-h { bottom:0;right:0; } .corner-br .corner-v { bottom:0;right:0; }
+
+/* ===== Scroll HUD ===== */
+.scroll-hud {
+  position: fixed; top:0; left:0; right:0; z-index:50;
+  padding: 12px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(10,8,5,.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(249,168,37,.06);
+  transform: translateY(-100%);
+  transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+}
+.scroll-hud.active { transform: translateY(0); }
+.scroll-hud .left { display: flex; align-items: center; gap: 16px; }
+.scroll-hud .site-name {
+  font-size: 13px; color: rgba(249,168,37,.4);
+  letter-spacing: 2px;
+}
+.scroll-hud .site-name strong { color: #f9a825; }
+.scroll-hud .right span {
+  font-size: 10px; color: rgba(249,168,37,.2);
+  letter-spacing: 2px;
+}
+
+/* ===== Scroll progress ===== */
+.scroll-progress {
+  position: fixed; top:0; left:0; right:0; z-index:60;
+  height: 2px; background: rgba(249,168,37,.05);
+}
+.scroll-progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg,#f9a825,#ef6c00);
+  transition: width 0.1s linear;
+}
+.scroll-progress-pct {
+  position: fixed; top:8px; right:42px; z-index:60;
+  font-size: 9px; color: rgba(249,168,37,.15);
+  letter-spacing: 1px;
+}
+
+/* ===== Chapter nav ===== */
+.chapter-nav {
+  position: fixed; right:14px; top:50%; transform:translateY(-50%); z-index:55;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.chapter-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(249,168,37,.12);
+  border: 1px solid transparent;
+  cursor: pointer; transition: all .3s;
+  position: relative;
+}
+.chapter-dot:hover, .chapter-dot.active {
+  background: #f9a825;
+  border-color: #f9a825;
+  box-shadow: 0 0 10px rgba(249,168,37,.3);
+}
+.chapter-dot .tip {
+  position: absolute; right:16px; top:50%; transform:translateY(-50%);
+  white-space: nowrap; font-size: 10px; color: rgba(249,168,37,.3);
+  background: rgba(10,8,5,.8); padding: 2px 8px; border-radius: 4px;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+  letter-spacing: 1px;
+}
+.chapter-dot:hover .tip { opacity: 1; }
+
+/* ===== Page transition ===== */
+.page-transition {
+  position: fixed; inset:0; z-index:9999;
+  pointer-events: none;
+  background: #0a0805;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(.16,1,.3,1);
+}
+.page-transition.active { opacity: 1; }
+
+/* ===== Responsive ===== */
+@media (max-width:768px) {
+  .hud { padding: 16px 20px; }
+  .data-panel { gap: 4px; }
+  .data-item { padding: 6px 12px; min-width: 56px; }
+  .data-item .num { font-size: 16px; }
+  .title-group { left: 20px; bottom: 120px; }
+  .title-group h1 { font-size: 32px; }
+  .section { padding: 60px 20px; min-height: auto; }
+  .section-inner { grid-template-columns: 1fr; gap: 30px; }
+  .section-inner.reverse { direction: ltr; }
+  .section-image img { height: 250px; }
+  .section-content h2 { font-size: 24px; }
+  .section-content .stat-row { flex-wrap: wrap; }
+  .gallery-section { padding: 60px 20px; }
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-grid .col:first-child { grid-row: auto; }
+  .dashboard-grid { grid-template-columns: repeat(2,1fr); }
+  .dashboard-section { padding: 60px 20px; }
+  .cta-section { padding: 80px 20px; }
+  .cta-section .content h2 { font-size: 26px; }
+  .image-break .quote p { font-size: 18px; }
+  .scroll-hud { padding: 10px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Loading ===== -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+  <p>Golden Autumn Populus · Millennia of Vigil</p>
+</div>
+
+<!-- ===== Aurora & Pattern Background ===== -->
+<div class="aurora-pulse"></div>
+<div class="pattern-bg"></div>
+
+<!-- ===== Corner Decorations ===== -->
+<div class="corner corner-tl"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-tr"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-bl"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-br"><div class="corner-h"></div><div class="corner-v"></div></div>
+
+<!-- ===== Scroll Progress ===== -->
+<div class="scroll-progress" id="scrollProgress">
+  <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+  <span class="scroll-progress-pct" id="scrollPct">0%</span>
+</div>
+
+<!-- ===== Scroll HUD ===== -->
+<div class="scroll-hud" id="scrollHud">
+  <div class="left">
+    <span class="site-name"><strong>Populus Euphratica Forest</strong> · Golden Fairytale</span>
+  </div>
+  <div class="right">
+    <span>National 5A Scenic Area · 2020</span>
+  </div>
+</div>
+
+<!-- ===== Chapter Nav ===== -->
+<div class="chapter-nav" id="chapterNav"></div>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="pattern-top"></div>
+  <div class="falling-leaves">
+    <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+    <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+    <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+  </div>
+  <div class="hero-bg" id="heroBg" style="background-image:url(images/huyanglin/阿拉善盟胡杨林旅游区_01.jpg)"></div>
+  <div class="hero-overlay"></div>
+  <div class="top-fade"></div>
+  <div class="bottom-fade"></div>
+
+  <div class="hud">
+    <div class="hud-top">
+      <div class="data-panel">
+        <div class="data-item">
+          <div class="num cream">900m</div>
+          <div class="label">Elevation</div>
+        </div>
+        <div class="data-item">
+          <div class="num gold">100km²</div>
+          <div class="label">Area</div>
+        </div>
+        <div class="data-item">
+          <div class="num red">4.6</div>
+          <div class="label">Rating</div>
+        </div>
+        <div class="data-item">
+          <div class="num orange">2020</div>
+          <div class="label">Designation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="title-group">
+    <h1>
+      Populus Euphratica Forest · Golden Fairytale
+      <span class="badge">World Wonder</span>
+    </h1>
+    <div class="subtitle">Alxa League · Inner Mongolia · Three Millennia of Vigil</div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll Down</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- ===== Section 1: Three Millennia of Vigil ===== -->
+<section class="section" data-chapter="Three Millennia of Vigil" id="sec1">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="images/huyanglin/阿拉善盟胡杨林旅游区_02.jpg" alt="Populus Euphratica Panorama" loading="lazy" />
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">✦ 01 ✦</div>
+      <h2>Three Millennia of Vigil</h2>
+      <p>One of only three remaining primitive populus euphratica forests in the world, the Ejina Populus Euphratica Forest is renowned for its legendary "three millennia" life cycle — alive for a thousand years, standing for a thousand years after death, and enduring for a thousand years after falling. Every October, hundreds of thousands of acres of populus euphratica burst into brilliant golden yellow, transforming the entire desert into a sea of gold.</p>
+      <p>Located in Ejina Banner, Alxa League, Inner Mongolia, the Populus Euphratica Forest Tourist Area is one of only three remaining primitive populus euphratica forests in the world and China's most spectacular populus euphratica landscape. During the golden autumn season, photography enthusiasts and travelers from around the world flock here to witness this soul-stirring golden feast.</p>
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="num">3000yr</div>
+          <div class="lbl">Legend of Life</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">5A Level</div>
+          <div class="lbl">Scenic Class</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">4.6</div>
+          <div class="lbl">Visitor Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Image Break 1 ===== -->
+<div class="image-break">
+  <div class="bg" style="background-image:url(images/huyanglin/阿拉善盟胡杨林旅游区_03.jpg)"></div>
+  <div class="overlay"></div>
+  <div class="quote">
+    <p>"Live for a millennium, stand for a millennium, endure for a millennium"</p>
+    <div class="ornament">✦ 🍂 ✦</div>
+  </div>
+</div>
+
+<!-- ===== Section 2: Eight-Bridge Scenery ===== -->
+<section class="section" data-chapter="Eight-Bridge Scenery" id="sec2">
+  <div class="section-inner reverse">
+    <div class="section-image" data-animate>
+      <img src="images/huyanglin/阿拉善盟胡杨林旅游区_04.jpg" alt="Bridge One to Bridge Eight" loading="lazy" />
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">✦ 02 ✦</div>
+      <h2>Eight-Bridge Scenery</h2>
+      <p>From Bridge One to Bridge Eight in the Ejina Populus Euphratica Forest, each bridge offers its own unique scenery. Bridge One has the densest populus trees, with golden leaves forming a canopy; Bridge Two features the enchanting Reflection Forest, where populus reflections on the calm river surface create a dreamlike scene; Bridge Three's Red Willow Sea interweaves with golden populus to form a colorful autumn tableau.</p>
+      <p>Bridge Four's Hero Forest is the filming location for the movie "Hero." The populus trees here are robust and powerful, with twisted branches resembling dragons, appearing even more majestic against the golden leaves. Bridge Seven's Dream Forest and Bridge Eight's Desert Forest showcase the magnificent spectacle of populus and desert coexisting in harmony, leaving visitors in awe.</p>
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="num">8 Bridges</div>
+          <div class="lbl">Scenic Corridor</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">Reflection</div>
+          <div class="lbl">Water Populus</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">Hero Forest</div>
+          <div class="lbl">Film Location</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Image Break 2 ===== -->
+<div class="image-break">
+  <div class="bg" style="background-image:url(images/huyanglin/阿拉善盟胡杨林旅游区_06.jpg)"></div>
+  <div class="overlay"></div>
+  <div class="quote">
+    <p>"Living for a thousand years, standing for a thousand years, enduring for a thousand years"</p>
+    <div class="ornament">✦ 🍂 ✦</div>
+  </div>
+</div>
+
+<!-- ===== Section 3: Ghost Forest & Black City ===== -->
+<section class="section" data-chapter="Ghost Forest &amp; Black City" id="sec3">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="images/huyanglin/阿拉善盟胡杨林旅游区_08.jpg" alt="Ghost Forest" loading="lazy" />
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">✦ 03 ✦</div>
+      <h2>Ghost Forest &amp; Black City</h2>
+      <p>The Ghost Forest is one of the most awe-inspiring attractions in the populus euphratica scenic area. The populus trees here have withered, yet still stand tall, assuming bizarre and varied postures across the desert. The dead trunks display countless strange forms — some like soaring dragons, others like roaring beasts — appearing increasingly desolate and magnificent under the setting sun, as if telling stories of millennia of vicissitudes.</p>
+      <p>The Black City ruins were once a frontier stronghold of the Western Xia Kingdom. Though only crumbling walls remain, one can still feel the prosperity and glory of those bygone days. The ancient walls have stood in the wind and sand for a thousand years, witnessing the changes of history alongside the surrounding populus forest. At dusk, golden afterglow spills over the ancient city walls, blending with the distant populus forest to create a timelessly beautiful scene.</p>
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="num">Ghost Forest</div>
+          <div class="lbl">Withered Wonder</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">Black City</div>
+          <div class="lbl">Western Xia Ruins</div>
+        </div>
+        <div class="stat-item">
+          <div class="num">Millennia</div>
+          <div class="lbl">Historical Witness</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Gallery ===== -->
+<section class="gallery-section" data-chapter="Gallery">
+  <div class="section-header">
+    <div class="numeral">✦ Light &amp; Shadow ✦</div>
+    <h2>Populus Forest <span class="highlight">Panoramic Gallery</span></h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="col">
+      <div class="gallery-item" data-animate style="grid-row:span 2;height:100%;">
+        <img src="images/huyanglin/阿拉善盟胡杨林旅游区_10.jpg" alt="Populus Euphratica panorama" style="height:100%;min-height:480px;" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-animate style="height:200px;">
+        <img src="images/huyanglin/阿拉善盟胡杨林旅游区_12.jpg" alt="Populus forest landscape" style="height:100%;" loading="lazy" />
+      </div>
+    </div>
+    <div class="col">
+      <div class="gallery-item" data-animate style="height:230px;">
+        <img src="images/huyanglin/阿拉善盟胡杨林旅游区_13.jpg" alt="Populus trees in autumn" style="height:100%;" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-animate style="height:250px;">
+        <img src="images/huyanglin/阿拉善盟胡杨林旅游区_15.jpg" alt="Golden populus leaves" style="height:100%;" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Dashboard ===== -->
+<section class="dashboard-section" data-chapter="Data Dashboard">
+  <div class="section-header">
+    <div class="numeral">✦ Data Dashboard ✦</div>
+    <h2>Scenic Area <span class="highlight">Key Metrics</span></h2>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dashboard-card cream" data-animate>
+      <div class="icon">🏔️</div>
+      <div class="d-num">900m</div>
+      <div class="d-label">Elevation</div>
+    </div>
+    <div class="dashboard-card gold" data-animate>
+      <div class="icon">🌍</div>
+      <div class="d-num">100km²</div>
+      <div class="d-label">Total Area</div>
+    </div>
+    <div class="dashboard-card red" data-animate>
+      <div class="icon">⭐</div>
+      <div class="d-num">4.6</div>
+      <div class="d-label">Visitor Rating</div>
+    </div>
+    <div class="dashboard-card orange" data-animate>
+      <div class="icon">📅</div>
+      <div class="d-num">2020</div>
+      <div class="d-label">5A Rating</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+  <div class="bg" style="background-image:url(images/huyanglin/阿拉善盟胡杨林旅游区_01.jpg)"></div>
+  <div class="overlay"></div>
+  <div class="content">
+    <div class="numeral">✦ 2020 · 5A Designation ✦</div>
+    <h2>Three Millennia of Vigil · Awaiting Your Arrival</h2>
+    <p>The populus euphratica, the most tenacious life on earth,<br/>awaits you in this golden autumn for a three-millennium rendezvous.</p>
+    <div class="cta-btn" id="backBtn">
+      <span>← Back to Overview</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Populus Euphratica Forest Tourist Area · Immersive Exploration · Ejina Banner, Alxa League</p>
+</footer>
+
+<div class="page-transition" id="pageTransition"></div>
+
+<script>
+(function() {
+  const heroBg = document.getElementById('heroBg');
+
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loading').classList.add('hidden');
+    }, 600);
+  });
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    if (heroBg) heroBg.style.transform = `translateY(${scrollY * 0.35}px)`;
+    const hud = document.getElementById('scrollHud');
+    if (scrollY > window.innerHeight * 0.6) {
+      hud.classList.add('active');
+    } else {
+      hud.classList.remove('active');
+    }
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('[data-animate]').forEach(el => {
+    observer.observe(el);
+  });
+
+  const progressFill = document.getElementById('scrollProgressFill');
+  const scrollPctEl = document.getElementById('scrollPct');
+  window.addEventListener('scroll', () => {
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight <= 0) return;
+    const pct = Math.min(100, Math.round((window.scrollY / docHeight) * 100));
+    if (progressFill) progressFill.style.width = pct + '%';
+    if (scrollPctEl) scrollPctEl.textContent = pct + '%';
+  });
+
+  const chapterNav = document.getElementById('chapterNav');
+  const chapters = document.querySelectorAll('[data-chapter]');
+  const chapterNames = [];
+
+  chapters.forEach((section, i) => {
+    const name = section.getAttribute('data-chapter');
+    chapterNames.push(name);
+    const dot = document.createElement('div');
+    dot.className = 'chapter-dot';
+    if (i === 0) dot.classList.add('active');
+    const label = document.createElement('span');
+    label.className = 'tip';
+    label.textContent = name;
+    dot.appendChild(label);
+    dot.addEventListener('click', () => {
+      section.scrollIntoView({ behavior: 'smooth' });
+    });
+    chapterNav.appendChild(dot);
+  });
+
+  const chapterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = Array.from(chapters).indexOf(entry.target);
+        document.querySelectorAll('.chapter-dot').forEach((dot, i) => {
+          dot.classList.toggle('active', i === idx);
+        });
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-80px 0px 0px 0px' });
+
+  chapters.forEach(section => chapterObserver.observe(section));
+
+  function navigateTo(url) {
+    const overlay = document.getElementById('pageTransition');
+    if (overlay) overlay.classList.add('active');
+    setTimeout(() => { window.location.href = url; }, 400);
+  }
+
+  document.getElementById('backBtn').addEventListener('click', () => {
+    navigateTo('../index.html?prov=%E5%86%85%E8%92%99%E5%8F%A4%E8%87%AA%E6%B2%BB%E5%8C%BA');
+  });
+
+})();
+</script>
+</body>
+</html>

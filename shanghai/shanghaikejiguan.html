@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Shanghai Science &amp; Technology Museum · Temple of Science | 5A Scenic Immersive Exploration</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Orbitron:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary: #1565c0;
+  --secondary: #00bcd4;
+  --bg: #050a15;
+  --surface: rgba(21,101,192,0.08);
+  --text: #e0f0ff;
+  --text-dim: rgba(224,240,255,0.55);
+  --glow: rgba(0,188,212,0.3);
+  --neon: #00bcd4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:-20px;background:url('images/shanghaikejiguan/上海科技馆_01.jpg') center/cover;filter:brightness(0.45) saturate(1.2);transition:transform 0.1s ease-out}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(21,101,192,0.15) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(0,188,212,0.08) 0%,transparent 50%)}
+.hero-content{position:relative;z-index:2;text-align:center}
+.hero-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(48px,8vw,96px);letter-spacing:16px;color:#fff;text-shadow:0 0 40px rgba(0,188,212,0.3),0 0 80px rgba(21,101,192,0.2)}
+.hero-sub{font-size:clamp(16px,2vw,24px);opacity:0.7;margin-top:20px;letter-spacing:8px;font-family:'Orbitron',sans-serif;font-weight:300;color:var(--secondary);text-shadow:0 0 20px rgba(0,188,212,0.2)}
+.hero-line{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:24px auto 0}
+
+.hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:12px;transition:opacity 0.5s}
+.hud-item{backdrop-filter:blur(16px);background:rgba(5,10,21,0.6);border:1px solid rgba(0,188,212,0.2);border-radius:12px;padding:14px 22px;text-align:center;box-shadow:0 0 20px rgba(0,188,212,0.08)}
+.hud-value{font-size:26px;font-weight:700;color:var(--secondary);font-family:'Orbitron',sans-serif;letter-spacing:1px}
+.hud-label{font-size:11px;opacity:0.5;margin-top:4px;letter-spacing:3px;font-weight:300}
+
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.5s}
+.scroll-hint span{font-size:11px;letter-spacing:4px;opacity:0.4;font-family:'Orbitron',sans-serif}
+.scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--secondary),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+.particles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.particle{position:absolute;width:3px;height:3px;background:var(--secondary);border-radius:50%;box-shadow:0 0 8px var(--glow);animation:floatUp var(--dur) ease-in-out infinite;opacity:0;left:var(--x);top:var(--y);animation-delay:var(--delay)}
+@keyframes floatUp{0%{transform:translateY(0) scale(0.3);opacity:0}20%{opacity:0.8}80%{opacity:0.6}100%{transform:translateY(-600px) scale(1.2);opacity:0}}
+
+.neon-border{position:relative}
+.neon-border::after{content:'';position:absolute;inset:0;border:1px solid rgba(0,188,212,0.15);border-radius:16px;box-shadow:0 0 30px rgba(0,188,212,0.06),inset 0 0 30px rgba(0,188,212,0.03);pointer-events:none}
+
+.content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.content-section.reverse{direction:rtl}
+.content-section.reverse .content-text{direction:ltr}
+.content-image{width:100%;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:1px solid rgba(0,188,212,0.12);position:relative}
+.content-image::after{content:'';position:absolute;inset:0;border-radius:16px;box-shadow:inset 0 0 40px rgba(0,188,212,0.05);pointer-events:none}
+.content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);display:block}
+.content-image:hover img{transform:scale(1.06)}
+.content-text h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(30px,4vw,44px);margin-bottom:16px;letter-spacing:6px;color:#fff}
+.content-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--secondary),transparent);margin-bottom:28px}
+.content-text p{font-size:16px;line-height:2;opacity:0.78;margin-bottom:16px;font-weight:300}
+.content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.content-tag{padding:6px 20px;border:1px solid rgba(0,188,212,0.2);border-radius:20px;font-size:12px;letter-spacing:3px;color:var(--secondary);background:rgba(0,188,212,0.05)}
+
+.image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.image-break .bg{position:absolute;inset:-10px;background:url('images/shanghaikejiguan/上海科技馆_06.jpg') center/cover fixed;filter:brightness(0.35) saturate(1.1)}
+.image-break .bg-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(5,10,21,0.2) 0%,rgba(5,10,21,0.6) 100%)}
+.image-break .quote{position:relative;z-index:2;text-align:center}
+.image-break .quote-cn{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(30px,4.5vw,52px);letter-spacing:10px;margin-bottom:16px;color:#fff;text-shadow:0 0 30px rgba(0,188,212,0.15)}
+.image-break .quote-en{font-size:14px;opacity:0.4;letter-spacing:6px;text-transform:uppercase;font-family:'Orbitron',sans-serif;font-weight:300}
+
+.gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+.gallery-header{text-align:center;margin-bottom:48px}
+.gallery-header h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(26px,3vw,38px);letter-spacing:8px;color:#fff;margin-bottom:12px}
+.gallery-header .gallery-line{width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:0 auto}
+.gallery-grid{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:240px 240px;gap:14px}
+.gallery-item{position:relative;overflow:hidden;border-radius:12px;border:1px solid rgba(0,188,212,0.1);cursor:pointer}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);display:block}
+.gallery-item:hover img{transform:scale(1.08)}
+.gallery-item:first-child{grid-row:span 2}
+
+.dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+.dashboard-header{text-align:center;margin-bottom:48px}
+.dashboard-header h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(26px,3vw,38px);letter-spacing:8px;color:#fff;margin-bottom:12px}
+.dashboard-header .dash-line{width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:0 auto}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.dash-card{backdrop-filter:blur(16px);background:rgba(5,10,21,0.5);border:1px solid rgba(0,188,212,0.12);border-radius:16px;padding:36px 24px;text-align:center;transition:transform 0.4s,border-color 0.4s,box-shadow 0.4s;position:relative;overflow:hidden}
+.dash-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);opacity:0;transition:opacity 0.4s}
+.dash-card:hover{transform:translateY(-6px);border-color:rgba(0,188,212,0.35);box-shadow:0 12px 40px rgba(0,188,212,0.1)}
+.dash-card:hover::before{opacity:1}
+.dash-icon{font-size:30px;margin-bottom:14px;opacity:0.7}
+.dash-value{font-size:34px;font-weight:700;color:var(--secondary);margin-bottom:8px;font-family:'Orbitron',sans-serif}
+.dash-label{font-size:13px;opacity:0.5;letter-spacing:3px;font-weight:300}
+
+.cta{height:65vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.cta-bg{position:absolute;inset:-10px;background:url('images/shanghaikejiguan/上海科技馆_01.jpg') center/cover;filter:brightness(0.3) saturate(0.9)}
+.cta-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(5,10,21,0.3) 0%,rgba(5,10,21,0.7) 100%)}
+.cta-content{position:relative;z-index:2;text-align:center}
+.cta-num{font-family:'Orbitron',sans-serif;font-size:clamp(72px,12vw,140px);font-weight:900;letter-spacing:12px;opacity:0.08;color:var(--secondary);margin-bottom:-24px}
+.cta-meta{font-size:14px;opacity:0.5;letter-spacing:6px;margin-bottom:16px;font-family:'Orbitron',sans-serif;font-weight:300}
+.cta-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(26px,3.5vw,42px);letter-spacing:8px;margin-bottom:40px;color:#fff;text-shadow:0 0 30px rgba(0,188,212,0.1)}
+.cta-btn{display:inline-block;padding:16px 52px;border:1px solid rgba(0,188,212,0.35);border-radius:30px;font-size:14px;letter-spacing:5px;text-decoration:none;color:var(--text);transition:all 0.4s;background:rgba(0,188,212,0.06);font-family:'Orbitron',sans-serif;font-weight:300}
+.cta-btn:hover{background:rgba(0,188,212,0.15);border-color:var(--secondary);box-shadow:0 0 30px rgba(0,188,212,0.15);transform:translateY(-2px)}
+
+.footer{padding:48px 40px;text-align:center;opacity:0.3;font-size:13px;letter-spacing:3px;font-weight:300;border-top:1px solid rgba(0,188,212,0.06)}
+
+[data-animate]{opacity:0;transform:translateY(50px);transition:opacity 0.9s cubic-bezier(0.25,0.46,0.45,0.94),transform 0.9s cubic-bezier(0.25,0.46,0.45,0.94)}
+[data-animate].visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+  .content-section.reverse{direction:ltr}
+  .content-image{height:280px}
+  .content-image img{height:100%}
+  .gallery{padding:60px 24px}
+  .gallery-grid{grid-template-columns:1fr;grid-template-rows:200px 200px 200px 200px}
+  .gallery-item:first-child{grid-row:span 1}
+  .dashboard{padding:60px 24px}
+  .dashboard-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .hud{top:12px;right:12px;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .hud-item{padding:8px 14px}
+  .hud-value{font-size:18px}
+  .hud-label{font-size:10px}
+  .hero-title{letter-spacing:8px}
+  .hero-sub{letter-spacing:4px}
+  .image-break{height:50vh}
+  .image-break .bg{background-attachment:scroll}
+  .cta{height:50vh}
+  .dash-card{padding:24px 16px}
+  .dash-value{font-size:26px}
+}
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">Shanghai Science &amp; Technology Museum</h1>
+    <p class="hero-sub">SHANGHAI SCIENCE &amp; TECHNOLOGY MUSEUM</p>
+    <div class="hero-line"></div>
+  </div>
+  <div class="scroll-hint" id="scrollHud">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="hud" id="hud">
+  <div class="hud-item"><div class="hud-value">100,000 m²</div><div class="hud-label">Floor Area</div></div>
+  <div class="hud-item"><div class="hud-value">11</div><div class="hud-label">Exhibition Halls</div></div>
+  <div class="hud-item"><div class="hud-value">4.5</div><div class="hud-label">Rating</div></div>
+</div>
+
+<section class="content-section" data-animate>
+  <div class="content-image"><img src="images/shanghaikejiguan/上海科技馆_02.jpg" alt="Shanghai Science & Technology Museum exterior" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>Temple of Science</h2>
+    <div class="content-divider"></div>
+    <p>Located on Century Avenue in Pudong New Area, the Shanghai Science &amp; Technology Museum covers a floor area of 100,600 square meters. Opened in 2001 and designated a National 5A Tourist Attraction in 2010, it is one of China's largest comprehensive science museums. Guided by the core philosophy of "Nature · Humanity · Technology," it offers rich interactive exhibits and immersive experiences that let visitors feel the charm of science through exploration. With an annual visitor volume exceeding 2.2 million, it stands as a benchmark for science popularization in China.</p>
+    <div class="content-tags">
+      <span class="content-tag">Science Museum</span>
+      <span class="content-tag">Science Education</span>
+      <span class="content-tag">Interactive Experience</span>
+    </div>
+  </div>
+</section>
+
+<section class="image-break">
+  <div class="bg"></div>
+  <div class="bg-overlay"></div>
+  <div class="quote">
+    <div class="quote-cn">Explore the Mysteries of Nature, Humanity &amp; Science</div>
+    <div class="quote-en">SCIENCE &amp; WONDER</div>
+  </div>
+</section>
+
+<section class="content-section reverse" data-animate>
+  <div class="content-image"><img src="images/shanghaikejiguan/上海科技馆_07.jpg" alt="Shanghai Science & Technology Museum exhibition hall" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>Exploration Without Boundaries</h2>
+    <div class="content-divider"></div>
+    <p>The museum houses 11 permanent exhibition halls, including the World of Biology, Earth Exploration, Light of Wisdom, Robot World, and Aerospace Universe, with over 90% of exhibits being interactive experiences. In Robot World, visitors can watch robots dance and play chess; in the Aerospace Universe, they can simulate space flight and experience weightlessness; in the Light of Wisdom hall, fun experiments reveal the mysteries of sound, light, electricity, and magnetism. The IMAX giant screen theater and dome theater deliver stunning audiovisual impact, making science accessible and tangible.</p>
+    <div class="content-tags">
+      <span class="content-tag">IMAX Theater</span>
+      <span class="content-tag">Robots</span>
+      <span class="content-tag">Space Experience</span>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" data-animate>
+  <div class="content-image"><img src="images/shanghaikejiguan/上海科技馆_08.jpg" alt="Shanghai Science & Technology Museum science education" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>Learning Through Play</h2>
+    <div class="content-divider"></div>
+    <p>The Shanghai Science &amp; Technology Museum is not only a base for science education but also a top choice for family outings. The Animal World exhibition area vividly recreates ecological scenes such as the African savanna and tropical rainforests; the Earth Exploration area showcases dinosaur fossils and the mysteries of geological change. The museum regularly hosts various science events and special exhibitions, allowing visitors of all ages to find their own scientific joy here. In 2025, its "Family Science" related topics across the internet garnered over 3.5 billion reads.</p>
+    <div class="content-tags">
+      <span class="content-tag">Family Science</span>
+      <span class="content-tag">Animal World</span>
+      <span class="content-tag">Dinosaur Fossils</span>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" data-animate>
+  <div class="gallery-header">
+    <h2>Visual Discovery</h2>
+    <div class="gallery-line"></div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item"><img src="images/shanghaikejiguan/上海科技馆_09.jpg" alt="Shanghai Science & Technology Museum exhibition hall" loading="lazy"/></div>
+    <div class="gallery-item"><img src="images/shanghaikejiguan/上海科技馆_10.jpg" alt="Shanghai Science & Technology Museum exhibit" loading="lazy"/></div>
+    <div class="gallery-item"><img src="images/shanghaikejiguan/上海科技馆_12.jpg" alt="Shanghai Science & Technology Museum interior" loading="lazy"/></div>
+    <div class="gallery-item"><img src="images/shanghaikejiguan/上海科技馆_15.jpg" alt="Shanghai Science & Technology Museum experience" loading="lazy"/></div>
+  </div>
+</section>
+
+<section class="dashboard" data-animate>
+  <div class="dashboard-header">
+    <h2>Science Data</h2>
+    <div class="dash-line"></div>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dash-card">
+      <div class="dash-icon">🏛</div>
+      <div class="dash-value">100,000 m²</div>
+      <div class="dash-label">Floor Area</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🔬</div>
+      <div class="dash-value">11</div>
+      <div class="dash-label">Exhibition Halls</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🌟</div>
+      <div class="dash-value">1700+</div>
+      <div class="dash-label">Exhibits</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">⭐</div>
+      <div class="dash-value">4.5</div>
+      <div class="dash-label">Rating</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <div class="cta-num">2010</div>
+    <div class="cta-meta">2010 · China's Science Education Landmark</div>
+    <div class="cta-title">The Seeds of Science Sprout Here</div>
+    <a href="../index.html?prov=%E4%B8%8A%E6%B5%B7%E5%B8%82" class="cta-btn">Back to Map</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>Shanghai Science &amp; Technology Museum · National 5A Tourist Attraction · Shanghai</p>
+</footer>
+
+<script>
+(function(){
+  var container=document.getElementById('particles');
+  for(var i=0;i<60;i++){
+    var p=document.createElement('div');
+    p.className='particle';
+    p.style.setProperty('--x',Math.random()*100+'%');
+    p.style.setProperty('--y',(60+Math.random()*40)+'%');
+    p.style.setProperty('--dur',(4+Math.random()*6)+'s');
+    p.style.setProperty('--delay',(Math.random()*6)+'s');
+    p.style.width=(2+Math.random()*3)+'px';
+    p.style.height=p.style.width;
+    container.appendChild(p);
+  }
+})();
+
+(function(){
+  var i=new Image();
+  i.onload=function(){document.getElementById('heroBg').style.backgroundImage='url("images/shanghaikejiguan/上海科技馆_01.jpg")'};
+  i.src='images/shanghaikejiguan/上海科技馆_01.jpg';
+})();
+
+window.addEventListener('scroll',function(){
+  var s=document.getElementById('scrollHud');
+  if(s)s.style.opacity=window.scrollY>100?'0':'1';
+  var h=document.getElementById('hud');
+  if(h)h.style.opacity=window.scrollY>80?'0':'1';
+});
+
+document.querySelector('.hero').addEventListener('mousemove',function(e){
+  var x=(e.clientX/window.innerWidth-0.5)*12;
+  var y=(e.clientY/window.innerHeight-0.5)*12;
+  document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)';
+});
+
+var observer=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting)e.target.classList.add('visible');
+  });
+},{threshold:0.15});
+document.querySelectorAll('[data-animate]').forEach(function(e){observer.observe(e)});
+</script>
+
+</body>
+</html>

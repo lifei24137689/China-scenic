@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Ming Xianling · Top Imperial Tomb in Central South China | 5A Scenic Area Immersive Exploration</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=ZCOOL+XiaoWei&family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary: #5b2c56;
+  --secondary: #c9a96e;
+  --bg: #0d0812;
+  --surface: rgba(91,44,86,0.12);
+  --text: #f0e6d3;
+  --text-dim: rgba(240,230,211,0.55);
+  --text-faint: rgba(240,230,211,0.25);
+  --glow: rgba(201,169,110,0.2);
+  --border-glow: rgba(201,169,110,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:-20px;background:url('images/mingxianling/mingxianling1.jpg') center/cover;filter:brightness(0.5) saturate(1.2);transition:transform 0.1s ease-out}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 20%,var(--bg) 80%)}
+.hero-overlay::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:800px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);animation:goldenPulse 4s ease-in-out infinite;pointer-events:none}
+@keyframes goldenPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.4}50%{transform:translate(-50%,-50%) scale(1.3);opacity:0.8}}
+.hero-content{position:relative;z-index:2;text-align:center}
+.hero-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(48px,8vw,88px);letter-spacing:14px;color:var(--text);text-shadow:0 0 40px rgba(201,169,110,0.3),0 4px 30px rgba(0,0,0,0.5)}
+.hero-title .badge{display:block;font-size:clamp(14px,1.5vw,20px);letter-spacing:8px;color:var(--secondary);margin-top:12px;font-family:'Noto Serif SC',serif;font-weight:300}
+.hero-sub{font-size:clamp(16px,2vw,24px);opacity:0.6;margin-top:20px;letter-spacing:6px;font-weight:300}
+.hero-sub span{color:var(--secondary)}
+.imperial-divider{width:160px;height:2px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:24px auto}
+.hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:12px;transition:opacity 0.4s}
+.hud-item{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid var(--border-glow);border-radius:12px;padding:12px 20px;text-align:center}
+.hud-value{font-size:22px;font-weight:700;color:var(--secondary)}
+.hud-value .small{font-size:13px;font-weight:300;opacity:0.6}
+.hud-label{font-size:11px;opacity:0.5;margin-top:4px;letter-spacing:2px}
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+.scroll-hint span{font-size:11px;letter-spacing:3px;opacity:0.4}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:0.2}50%{opacity:0.8}}
+.content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.content-section.reverse{direction:rtl}
+.content-section.reverse .content-text{direction:ltr}
+.content-image{width:100%;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:1px solid var(--border-glow)}
+.content-image img{width:100%;height:420px;object-fit:cover;display:block;transition:transform 0.6s}
+.content-image:hover img{transform:scale(1.05)}
+.content-text h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,4vw,40px);margin-bottom:16px;letter-spacing:6px}
+.content-divider{width:60px;height:2px;background:var(--secondary);margin-bottom:24px}
+.content-text p{font-size:16px;line-height:2.1;opacity:0.75;margin-bottom:16px}
+.content-text p:last-child{margin-bottom:0}
+.content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.content-tag{padding:5px 16px;border:1px solid var(--border-glow);border-radius:20px;font-size:12px;letter-spacing:2px;color:var(--secondary)}
+.image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.image-break .bg{position:absolute;inset:-10px;background:url('images/mingxianling/mingxianling3.jpg') center/cover fixed;filter:brightness(0.4) saturate(1.15)}
+.image-break .bg-overlay{position:absolute;inset:0;background:linear-gradient(180deg,var(--bg) 0%,transparent 20%,transparent 80%,var(--bg) 100%)}
+.image-break .quote{position:relative;z-index:2;text-align:center}
+.image-break .quote-cn{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,4vw,48px);letter-spacing:10px;margin-bottom:12px;text-shadow:0 0 30px rgba(201,169,110,0.2)}
+.image-break .quote-en{font-size:13px;opacity:0.4;letter-spacing:5px;text-transform:uppercase;font-weight:300}
+.gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+.gallery h2{text-align:center;font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3vw,36px);margin-bottom:12px;letter-spacing:6px}
+.gallery .gallery-sub{text-align:center;font-size:13px;opacity:0.4;letter-spacing:4px;margin-bottom:48px}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.gallery-item{position:relative;overflow:hidden;border-radius:12px;border:1px solid var(--border-glow);cursor:pointer}
+.gallery-item img{width:100%;object-fit:cover;transition:transform 0.6s}
+.gallery-item:hover img{transform:scale(1.08)}
+.dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+.dashboard h2{text-align:center;font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3vw,36px);margin-bottom:48px;letter-spacing:6px}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.dash-card{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid var(--border-glow);border-radius:16px;padding:32px 24px;text-align:center;transition:transform 0.3s,border-color 0.3s}
+.dash-card:hover{transform:translateY(-6px);border-color:var(--secondary)}
+.dash-icon{font-size:32px;margin-bottom:12px}
+.dash-value{font-size:clamp(24px,3vw,36px);font-weight:700;color:var(--secondary);margin-bottom:6px}
+.dash-label{font-size:13px;opacity:0.5;letter-spacing:2px}
+.dash-desc{font-size:12px;opacity:0.35;margin-top:8px;letter-spacing:1px}
+.cta{height:50vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--bg) 0%,#1a0d1e 50%,var(--bg) 100%)}
+.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);animation:goldenPulse 4s ease-in-out infinite;pointer-events:none}
+.cta-content{position:relative;z-index:2;text-align:center}
+.cta-num{font-family:'Orbitron',sans-serif;font-size:clamp(64px,10vw,120px);font-weight:900;letter-spacing:8px;opacity:0.12;margin-bottom:-24px;color:var(--secondary)}
+.cta-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3vw,36px);letter-spacing:6px;margin-bottom:32px}
+.cta-btn{display:inline-block;padding:14px 48px;border:1px solid var(--border-glow);border-radius:30px;font-size:15px;letter-spacing:4px;text-decoration:none;color:var(--text);transition:all 0.3s}
+.cta-btn:hover{background:rgba(201,169,110,0.1);border-color:var(--secondary)}
+.footer{padding:40px;text-align:center;opacity:0.3;font-size:13px;letter-spacing:2px;border-top:1px solid var(--border-glow)}
+[data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+[data-animate].visible{opacity:1;transform:translateY(0)}
+@media(max-width:768px){
+  .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+  .content-section.reverse{direction:ltr}
+  .content-image img{height:280px}
+  .gallery-grid{grid-template-columns:1fr}
+  .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+  .hud{top:12px;right:12px;gap:6px}
+  .hud-item{padding:8px 14px}
+  .hud-value{font-size:18px}
+  .hero-title{letter-spacing:8px}
+}
+</style>
+</head>
+<body>
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">Ming Xianling<span class="badge">World Cultural Heritage · National 5A Tourist Attraction</span></h1>
+    <div class="imperial-divider"></div>
+    <p class="hero-sub">Top Imperial Tomb in Central South China · <span>One Mausoleum, Two Mounds</span> A Unique Imperial Tomb</p>
+  </div>
+  <div class="scroll-hint" id="scrollHud">
+    <span>E X P L O R E  T H E  I M P E R I A L  T O M B</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="hud" id="hud">
+  <div class="hud-item"><div class="hud-value">183.13<span class="small"> ha</span></div><div class="hud-label">Mausoleum Area</div></div>
+  <div class="hud-item"><div class="hud-value">1519</div><div class="hud-label">Year Built</div></div>
+  <div class="hud-item"><div class="hud-value">47<span class="small"> yrs</span></div><div class="hud-label">Construction Period</div></div>
+</div>
+
+<section class="content-section" data-animate>
+  <div class="content-image"><img src="images/mingxianling/minglou.jpg" alt="Ming Lou (Soul Tower) of Ming Xianling" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>Imperial Mausoleum Charm</h2>
+    <div class="content-divider"></div>
+    <p>Ming Xianling is located on Chunde Mountain in the northeast of Zhongxiang City, Hubei Province. It is the joint burial tomb of Zhu Youyuan (posthumously honored as Emperor Ruizong Xian) and his mother Empress Zhangsheng, as honored by the Jiajing Emperor (Zhu Houcong) of the Ming Dynasty. Construction began in the 14th year of the Zhengde era (1519) and was completed in the 45th year of the Jiajing era (1566), taking 47 years. It is the only Ming Dynasty imperial mausoleum in central and southern China, and also the largest single imperial tomb among all Ming Dynasty imperial mausoleums.</p>
+    <p>The mausoleum covers an area of 183.13 hectares, with the tomb complex itself occupying 52 hectares. It consists of over 30 large-scale architectural groups, including inner and outer city walls, front and rear burial mounds, the square city and soul tower, dragon-scale sacred path, inner and outer Ming ponds, and the nine-bend imperial river. Its layout and architectural techniques are unique, playing an important role in linking the past and future within Ming Dynasty imperial tomb regulations.</p>
+    <div class="content-tags"><span class="content-tag">World Cultural Heritage</span><span class="content-tag">Ming Imperial Tomb</span><span class="content-tag">Royal Magnificence</span><span class="content-tag">Only in Central South China</span></div>
+  </div>
+</section>
+
+<section class="image-break">
+  <div class="bg"></div>
+  <div class="bg-overlay"></div>
+  <div class="quote">
+    <div class="quote-en">One Mausoleum, Two Mounds · A Unique Legacy</div>
+    <div class="quote-cn">一陵两冢 · 天下孤例</div>
+  </div>
+</section>
+
+<section class="content-section reverse" data-animate>
+  <div class="content-image"><img src="images/mingxianling/neihongmen.jpg" alt="Inner Red Gate of Ming Xianling" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>The Great Rites Controversy</h2>
+    <div class="content-divider"></div>
+    <p>The construction of Ming Xianling was the product of the "Great Rites Controversy," a major historical event in the mid-Ming Dynasty. After the Jiajing Emperor ascended the throne as a princely heir, he defied court officials' opposition by posthumously honoring his biological father Zhu Youyuan as emperor and expanded the original Prince Xing's tomb to imperial mausoleum standards. The main project took 24 years, with sporadic construction continuing for 47 years, ultimately creating this magnificent imperial tomb. This process was intertwined with the social thought, beliefs, and political turmoil of the early Jiajing period.</p>
+    <p>The mausoleum features double city walls, with the outer city wall shaped like a "golden vase," stretching 3,600 meters and winding through the rolling mountains. Red walls and yellow tiles gleam magnificently, and the layered architectural layout conveys a solemn sense of feudal ritual order — a genius masterpiece combining architectural art with environmental aesthetics.</p>
+    <div class="content-tags"><span class="content-tag">Great Rites Controversy</span><span class="content-tag">Jiajing Emperor</span><span class="content-tag">Golden Vase City Wall</span><span class="content-tag">Double City Walls</span></div>
+  </div>
+</section>
+
+<section class="content-section" data-animate>
+  <div class="content-image"><img src="images/mingxianling/waihongmen.jpg" alt="Outer Red Gate of Ming Xianling" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>Yaotai Twin Mounds</h2>
+    <div class="content-divider"></div>
+    <p>The most unique feature of Ming Xianling is its "one mausoleum, two burial mounds" layout, which is unparalleled among all Chinese imperial tombs throughout history. A tall brick-and-stone platform called "Yaotai" connects the old and new burial mounds, forming a figure-"8" pattern, creating an unprecedented special form among Ming Dynasty imperial tombs. This unique layout originated from the historical need of the Jiajing Emperor to bury his parents together.</p>
+    <p>On November 30, 2000, Ming Xianling was inscribed on the UNESCO World Heritage List as an important component of the "Imperial Tombs of the Ming and Qing Dynasties." In 1988, it was designated as a National Key Cultural Relics Protection Unit by the State Council. On February 6, 2024, it was officially certified as a National 5A Tourist Attraction, becoming the 15th 5A scenic area in Hubei Province.</p>
+    <div class="content-tags"><span class="content-tag">One Mausoleum, Two Mounds</span><span class="content-tag">Yaotai Platform</span><span class="content-tag">Twin Burial Mounds</span><span class="content-tag">World Heritage</span></div>
+  </div>
+</section>
+
+<section class="gallery" data-animate>
+  <h2>Imperial Tomb Gallery</h2>
+  <p class="gallery-sub">Gallery of Imperial Mausoleum</p>
+  <div class="gallery-grid">
+    <div class="gallery-item" style="height:500px"><img src="images/mingxianling/neimingtang.jpg" alt="Inner Ming Pond" style="height:100%" loading="lazy"/></div>
+    <div class="gallery-item" style="height:220px"><img src="images/mingxianling/huabiao.jpg" alt="Huabiao (Ornamental Pillar)" style="height:100%" loading="lazy"/></div>
+    <div class="gallery-item" style="height:260px"><img src="images/mingxianling/waihongmen2.jpg" alt="Outer Red Gate" style="height:100%" loading="lazy"/></div>
+    <div class="gallery-item" style="height:280px"><img src="images/mingxianling/shidanbi.jpg" alt="Stone Imperial Staircase" style="height:100%" loading="lazy"/></div>
+  </div>
+</section>
+
+<section class="dashboard" data-animate>
+  <h2>Tomb Data</h2>
+  <div class="dashboard-grid">
+    <div class="dash-card"><div class="dash-icon">🏛️</div><div class="dash-value">183.13 ha</div><div class="dash-label">Mausoleum Area</div><div class="dash-desc">Largest single Ming imperial tomb</div></div>
+    <div class="dash-card"><div class="dash-icon">📅</div><div class="dash-value">1519-1566</div><div class="dash-label">Construction Period</div><div class="dash-desc">47 years in total</div></div>
+    <div class="dash-card"><div class="dash-icon">🏆</div><div class="dash-value">2024</div><div class="dash-label">5A Rating</div><div class="dash-desc">National 5A Tourist Attraction</div></div>
+    <div class="dash-card"><div class="dash-icon">🌍</div><div class="dash-value">2000</div><div class="dash-label">World Heritage</div><div class="dash-desc">Inscribed on World Heritage List</div></div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta-glow"></div>
+  <div class="cta-content">
+    <div class="cta-num">1519</div>
+    <div class="cta-title">Top Imperial Tomb in Central South China · The Finest of Ming Imperial Tombs</div>
+    <a href="../index.html?prov=%E6%B9%96%E5%8C%97%E7%9C%81" class="cta-btn">Back to Scenic Area Overview</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>Ming Xianling Cultural Tourism Area · Zhongxiang City, Jingmen, Hubei Province · National 5A Tourist Attraction · World Cultural Heritage</p>
+</footer>
+
+<script>
+(function(){var i=new Image();i.onload=function(){document.getElementById('heroBg').style.backgroundImage="url('images/mingxianling/mingxianling1.jpg')"};i.src='images/mingxianling/mingxianling1.jpg'})();
+window.addEventListener('scroll',function(){var s=document.getElementById('scrollHud');if(s)s.style.opacity=window.scrollY>100?'0':'1'});
+document.querySelector('.hero')&&document.querySelector('.hero').addEventListener('mousemove',function(e){var x=(e.clientX/window.innerWidth-0.5)*10,y=(e.clientY/window.innerHeight-0.5)*10;var bg=document.getElementById('heroBg');if(bg)bg.style.transform='translate('+x+'px,'+y+'px)'});
+var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});
+document.querySelectorAll('[data-animate]').forEach(function(e){o.observe(e)});
+</script>
+</body>
+</html>

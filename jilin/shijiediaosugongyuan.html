@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>World Sculpture Park · Art Sanctuary | 5A Scenic Area Immersive Tour</title>
+
+
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
+      background: #0a0a0a;
+      color: #fff; overflow-x: hidden;
+    }
+    .loading-overlay { position: fixed; inset: 0; z-index: 1000; background: #0a0a0a; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s ease; }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner { width: 40px; height: 40px; border: 2px solid rgba(158,158,158,.1); border-top: 2px solid rgba(224,224,224,.4); border-radius: 50%; animation: spin 1.5s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p { margin-top: 20px; font-size: 13px; color: rgba(255,255,255,.3); letter-spacing: 3px; font-family: 'Courier New',monospace; }
+    .hero { position: relative; width: 100%; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .hero-bg { position: absolute; inset: -10px; background-size: cover; background-position: center; filter: brightness(0.55) saturate(0.8); transition: transform 0.1s ease-out; will-change: transform; }
+    .hero-overlay { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 25%, #0a0a0a 80%); }
+    .hero .top-fade { position: absolute; top: 0; left: 0; right: 0; height: 30vh; background: linear-gradient(180deg,#0a0a0a 0%,transparent 100%); }
+    .hero .bottom-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 40vh; background: linear-gradient(0deg,#0a0a0a 0%,#0a0a0aaa 20%,transparent 100%); }
+    .sculpture-glow { position: absolute; top: 45%; left: 50%; z-index: 3; transform: translate(-50%, -50%); width: 600px; height: 300px; background: radial-gradient(ellipse at center, rgba(224,224,224,0.06) 0%, rgba(158,158,158,0.03) 40%, transparent 70%); animation: sculpturePulse 7s ease-in-out infinite; pointer-events: none; }
+    @keyframes sculpturePulse { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.5} 50%{transform:translate(-50%,-50%) scale(1.15);opacity:1} }
+    .hud { position: absolute; inset: 0; z-index: 10; padding: 28px 40px; display: flex; flex-direction: column; }
+    .hud-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 20px; background: rgba(10,10,10,.5); border: 1px solid rgba(224,224,224,.1); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: rgba(255,255,255,.5); font-size: 13px; cursor: pointer; transition: all .3s; width: fit-content; text-decoration: none; }
+    .back-btn:hover { border-color: rgba(224,224,224,.2); color: #fff; }
+    .back-btn .arrow { display: inline-block; transition: transform .3s; }
+    .back-btn:hover .arrow { transform: translateX(-3px); }
+    .title-group { margin-top: 20px; }
+    .title-group h1 { font-size: 52px; font-weight: 700; letter-spacing: 3px; text-shadow: 0 0 60px rgba(0,0,0,.5); display: flex; align-items: baseline; gap: 14px; }
+    .title-group h1 .badge { font-size: 12px; padding: 4px 16px; border-radius: 14px; background: rgba(224,224,224,.1); border: 1px solid rgba(224,224,224,.18); color: rgba(255,255,255,.6); letter-spacing: 1px; }
+    .title-group h1 .stars { font-size: 16px; color: rgba(224,224,224,.35); letter-spacing: 2px; }
+    .title-group .subtitle { font-size: 14px; color: rgba(255,255,255,.35); letter-spacing: 6px; margin-top: 4px; }
+    .data-panel { display: flex; gap: 8px; }
+    .data-item { text-align: center; padding: 10px 18px; border-radius: 10px; background: rgba(10,10,10,.5); border: 1px solid rgba(224,224,224,.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); min-width: 72px; }
+    .data-item .num { font-size: 20px; font-weight: 700; }
+    .data-item .num.silver { color: #e0e0e0; }
+    .data-item .num.platinum { color: #b0b0b0; }
+    .data-item .num.steel { color: #8e8e8e; }
+    .data-item .label { font-size: 9px; color: rgba(255,255,255,.3); margin-top: 2px; letter-spacing: 1px; }
+    .hero-info { position: absolute; left: 40px; bottom: 130px; z-index: 11; max-width: 440px; }
+    .hero-info .card { background: rgba(10,10,10,.55); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 14px; border: 1px solid rgba(224,224,224,.06); padding: 22px 28px; }
+    .hero-info .card p { font-size: 14px; line-height: 1.8; color: rgba(255,255,255,.6); }
+    .hero-info .tags { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-info .tags span { padding: 4px 14px; border-radius: 14px; font-size: 11px; letter-spacing: 1px; border: 1px solid; }
+    .tag-sculpture { background: rgba(224,224,224,.06); border-color: rgba(224,224,224,.15); color: #e0e0e0; }
+    .tag-art { background: rgba(158,158,158,.06); border-color: rgba(158,158,158,.15); color: #9e9e9e; }
+    .tag-world { background: rgba(176,176,176,.06); border-color: rgba(176,176,176,.15); color: #b0b0b0; }
+    .scroll-hint { position: absolute; bottom: 40px; left: 50%; z-index: 11; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255,255,255,.2); font-size: 10px; letter-spacing: 2px; font-family: 'Courier New',monospace; }
+    .scroll-hint .line { width: 1px; height: 30px; background: linear-gradient(180deg,rgba(224,224,224,.3),transparent); animation: scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%,100%{opacity:0.3;transform:scaleY(0.5)} 50%{opacity:1;transform:scaleY(1)} }
+    .section { position: relative; min-height: 80vh; display: flex; align-items: center; padding: 80px 40px; }
+    .section-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .section-inner.reverse { direction: rtl; }
+    .section-inner.reverse > * { direction: ltr; }
+    .section-image { border-radius: 14px; overflow: hidden; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,.4); opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(.16,1,.3,1); }
+    .section-image.visible { opacity: 1; transform: translateY(0); }
+    .section-image img { width: 100%; height: 400px; object-fit: cover; display: block; transition: transform 0.6s ease; }
+    .section-image:hover img { transform: scale(1.03); }
+    .section-image .img-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(0deg,#0a0a0a 0%,transparent 100%); pointer-events: none; }
+    .section-image .img-label { position: absolute; bottom: 16px; left: 20px; font-size: 11px; color: rgba(255,255,255,.3); letter-spacing: 2px; font-family: 'Courier New',monospace; }
+    .section-content { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(.16,1,.3,1) 0.15s; }
+    .section-content.visible { opacity: 1; transform: translateY(0); }
+    .section-content .numeral { font-family: 'Courier New',monospace; font-size: 13px; color: rgba(158,158,158,.3); letter-spacing: 3px; margin-bottom: 12px; }
+    .section-content h2 { font-size: 32px; font-weight: 700; letter-spacing: 2px; margin-bottom: 20px; line-height: 1.3; }
+    .section-content h2 .highlight { background: linear-gradient(135deg,#e0e0e0,#9e9e9e); -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+    .section-content p { font-size: 15px; line-height: 1.9; color: rgba(255,255,255,.55); margin-bottom: 20px; }
+    .section-content .stat-row { display: flex; gap: 24px; margin-top: 24px; }
+    .section-content .stat-item { text-align: center; padding: 16px 24px; border-radius: 10px; background: rgba(224,224,224,.03); border: 1px solid rgba(224,224,224,.05); min-width: 100px; }
+    .section-content .stat-item .num { font-size: 28px; font-weight: 700; color: #e0e0e0; }
+    .section-content .stat-item .lbl { font-size: 10px; color: rgba(255,255,255,.3); margin-top: 4px; letter-spacing: 1px; }
+    .image-break { position: relative; width: 100%; height: 60vh; overflow: hidden; }
+    .image-break .bg { position: absolute; inset: -10px; background-size: cover; background-position: center; background-attachment: fixed; filter: brightness(0.4) saturate(0.85); }
+    .image-break .overlay { position: absolute; inset: 0; background: linear-gradient(180deg,#0a0a0a 0%,transparent 20%,transparent 80%,#0a0a0a 100%); }
+    .image-break .quote { position: absolute; bottom: 60px; left: 40px; right: 40px; z-index: 2; max-width: 600px; }
+    .image-break .quote p { font-size: 22px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,.6); letter-spacing: 2px; }
+    .image-break .quote .author { font-size: 12px; color: rgba(255,255,255,.25); letter-spacing: 3px; margin-top: 12px; font-family: 'Courier New',monospace; }
+    .gallery-section { padding: 100px 40px; }
+    .gallery-section .section-header { max-width: 1200px; margin: 0 auto 40px; }
+    .gallery-section .section-header .numeral { font-family: 'Courier New',monospace; font-size: 13px; color: rgba(158,158,158,.3); letter-spacing: 3px; margin-bottom: 12px; }
+    .gallery-section .section-header h2 { font-size: 32px; font-weight: 700; letter-spacing: 2px; }
+    .gallery-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .gallery-item { border-radius: 12px; overflow: hidden; position: relative; opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(.16,1,.3,1); }
+    .gallery-item.visible { opacity: 1; transform: translateY(0); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item .item-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(0deg,#0a0a0a 0%,transparent 100%); }
+    .gallery-item .item-overlay span { font-size: 12px; color: rgba(255,255,255,.4); letter-spacing: 1px; }
+    .dashboard-section { padding: 100px 40px; background: linear-gradient(180deg,#0a0a0a,#141414,#0a0a0a); }
+    .dashboard-section .section-header { max-width: 1200px; margin: 0 auto 50px; }
+    .dashboard-section .section-header .numeral { font-family: 'Courier New',monospace; font-size: 13px; color: rgba(158,158,158,.3); letter-spacing: 3px; margin-bottom: 12px; }
+    .dashboard-section .section-header h2 { font-size: 32px; font-weight: 700; letter-spacing: 2px; }
+    .dashboard-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+    .dashboard-card { padding: 28px 24px; border-radius: 14px; text-align: center; background: rgba(224,224,224,.02); border: 1px solid rgba(224,224,224,.04); opacity: 0; transform: translateY(20px); transition: all 0.6s cubic-bezier(.16,1,.3,1); }
+    .dashboard-card.visible { opacity: 1; transform: translateY(0); }
+    .dashboard-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .dashboard-card .d-num { font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+    .dashboard-card .d-label { font-size: 10px; color: rgba(255,255,255,.3); letter-spacing: 2px; margin-top: 6px; font-family: 'Courier New',monospace; }
+    .dashboard-card.silver .d-num { color: #e0e0e0; }
+    .dashboard-card.platinum .d-num { color: #b0b0b0; }
+    .dashboard-card.steel .d-num { color: #9e9e9e; }
+    .dashboard-card.iron .d-num { color: #7e7e7e; }
+    .cta-section { padding: 120px 40px; text-align: center; position: relative; }
+    .cta-section .bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: brightness(0.3) saturate(0.8); }
+    .cta-section .overlay { position: absolute; inset: 0; background: linear-gradient(180deg,#0a0a0a 0%,transparent 30%,transparent 70%,#0a0a0a 100%); }
+    .cta-section .content { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
+    .cta-section .content .numeral { font-family: 'Courier New',monospace; font-size: 13px; color: rgba(158,158,158,.3); letter-spacing: 3px; margin-bottom: 16px; }
+    .cta-section .content h2 { font-size: 36px; font-weight: 700; letter-spacing: 2px; margin-bottom: 16px; }
+    .cta-section .content p { font-size: 15px; color: rgba(255,255,255,.4); line-height: 1.8; margin-bottom: 30px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; border: 1px solid rgba(224,224,224,.2); background: rgba(224,224,224,.08); backdrop-filter: blur(12px); border-radius: 12px; color: #e0e0e0; font-size: 14px; cursor: pointer; transition: all .3s; letter-spacing: 1px; text-decoration: none; }
+    .cta-btn:hover { background: rgba(224,224,224,.18); box-shadow: 0 0 40px rgba(224,224,224,.1); transform: translateY(-2px); }
+    footer { padding: 40px; text-align: center; border-top: 1px solid rgba(224,224,224,.03); }
+    footer p { font-size: 11px; color: rgba(255,255,255,.15); letter-spacing: 2px; font-family: 'Courier New',monospace; }
+    .scroll-hud { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 12px 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(224,224,224,.03); transform: translateY(-100%); transition: transform 0.4s cubic-bezier(.16,1,.3,1); }
+    .scroll-hud.active { transform: translateY(0); }
+    .scroll-hud .left { display: flex; align-items: center; gap: 16px; }
+    .scroll-hud .site-name { font-size: 13px; color: rgba(255,255,255,.4); letter-spacing: 2px; font-family: 'Orbitron','PingFang SC',sans-serif; }
+    .scroll-hud .site-name strong { color: rgba(255,255,255,.6); }
+    .scroll-hud .right span { font-size: 10px; color: rgba(255,255,255,.2); letter-spacing: 2px; font-family: 'Orbitron','Courier New',monospace; }
+    .scroll-progress { position: fixed; top: 0; left: 0; right: 0; z-index: 60; height: 2px; background: rgba(224,224,224,.03); }
+    .scroll-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #9e9e9e, #e0e0e0); transition: width 0.1s linear; }
+    .scroll-progress-pct { position: fixed; top: 8px; right: 42px; z-index: 60; font-size: 9px; color: rgba(224,224,224,.1); font-family: 'Courier New',monospace; letter-spacing: 1px; }
+    .chapter-nav { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 55; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .chapter-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(224,224,224,.08); cursor: pointer; transition: all .3s; position: relative; }
+    .chapter-dot:hover { background: rgba(224,224,224,.25); transform: scale(1.4); }
+    .chapter-dot.active { background: rgba(224,224,224,.55); transform: scale(1.5); box-shadow: 0 0 10px rgba(224,224,224,.2); }
+    .chapter-dot .chapter-label { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: 9px; color: rgba(255,255,255,.15); letter-spacing: 2px; font-family: 'Courier New',monospace; opacity: 0; transition: opacity .3s; pointer-events: none; }
+    .chapter-dot:hover .chapter-label { opacity: 1; }
+    .chapter-counter { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 45; font-size: 10px; color: rgba(224,224,224,.08); font-family: 'Courier New',monospace; letter-spacing: 3px; transition: opacity 0.4s; opacity: 0; pointer-events: none; }
+    .chapter-counter.visible { opacity: 1; }
+    @keyframes target-lock { 0%{box-shadow:0 0 0 0 rgba(224,224,224,.1)} 100%{box-shadow:0 0 0 8px rgba(224,224,224,0)} }
+    .back-btn:hover,.cta-btn:hover,.chapter-dot:hover,.dashboard-card:hover{animation:target-lock 0.6s ease-out}
+    @media (max-width:768px) { .hud{padding:16px 20px}.hud-top{flex-direction:column}.data-panel{margin-top:12px;gap:4px} .data-item{padding:6px 12px;min-width:56px}.data-item .num{font-size:16px} .title-group h1{font-size:30px;flex-wrap:wrap} .hero-info{left:20px;right:20px;bottom:100px}.hero-info .card{padding:16px 20px}.hero-info .card p{font-size:12px} .section{padding:60px 20px;min-height:auto}.section-inner{grid-template-columns:1fr;gap:30px} .section-inner.reverse{direction:ltr}.section-image img{height:250px} .section-content h2{font-size:24px}.section-content .stat-row{flex-wrap:wrap} .gallery-section{padding:60px 20px}.gallery-grid{grid-template-columns:1fr} .dashboard-grid{grid-template-columns:repeat(2,1fr)}.dashboard-section{padding:60px 20px} .cta-section{padding:80px 20px}.cta-section .content h2{font-size:26px} .image-break .quote p{font-size:16px}.scroll-hud{padding:10px 20px} }
+  </style>
+</head>
+<body>
+
+  <div class="loading-overlay" id="loading">
+    <div class="loading-spinner"></div>
+    <p>Entering the Art Sanctuary ...</p>
+  </div>
+
+  <div class="scroll-progress" id="scrollProgress">
+    <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+    <span class="scroll-progress-pct" id="scrollPct">0%</span>
+  </div>
+
+  <div class="scroll-hud" id="scrollHud">
+    <div class="left"><span class="site-name"><strong>5A</strong> · World Sculpture Park</span></div>
+    <div class="right"><span>Jilin Province · Changchun City</span></div>
+  </div>
+
+  <div class="chapter-nav" id="chapterNav"></div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="sculpture-glow"></div>
+    <div class="top-fade"></div>
+    <div class="bottom-fade"></div>
+
+    <div class="hud">
+      <div class="hud-top">
+        <div>
+          
+          <div class="title-group">
+            <h1>World Sculpture Park<span class="badge">5A</span><span class="stars">★★★★★</span></h1>
+            <div class="subtitle">Jilin Province · Changchun City</div>
+          </div>
+        </div>
+        <div class="data-panel">
+          <div class="data-item"><div class="num silver">2017</div><div class="label">Year Listed</div></div>
+          <div class="data-item"><div class="num platinum">92</div><div class="label">Area (ha)</div></div>
+          <div class="data-item"><div class="num steel">4.5</div><div class="label">Visitor Rating</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-info">
+      <div class="card">
+        <p>
+          <span style="color:rgba(224,224,224,.45);font-size:11px;letter-spacing:2px;display:block;margin-bottom:8px;">◈ Art Brief · World Sculpture Park</span>
+          <span style="color:rgba(255,255,255,.75);">404 sculptors from 216 countries have left 454 works here — a garden of world sculpture.</span>
+        </p>
+        <div class="tags">
+          <span class="tag-sculpture">🗿 454 Works</span>
+          <span class="tag-art">🎨 216 Countries</span>
+          <span class="tag-world">🌍 Rodin's The Thinker</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint"><span>Scroll to Explore</span><div class="line"></div></div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="section" data-chapter="Art Sanctuary">
+    <div class="section-inner reverse">
+      <div class="section-image" data-animate>
+        <img src="jilin/长春世界雕塑园/长春世界雕塑园_02.jpg" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 02</div>
+        <h2>Five Halls <span class="highlight">Five Squares</span></h2>
+        <p>The park features a layout of "five halls and five squares." The five halls include Changchun Sculpture Art Museum, Songshan Hanrong African Art Collection Museum, Wei Xiaoming Art Museum, Changchun Sculpture Museum, and the Sculpture Experience Hall.</p>
+        <p>Rodin Square houses three masterpieces by the great artist: "The Thinker," "The Age of Bronze," and "Balzac," all cast from Rodin's original molds. The centerpiece of Spring Square, the "Friendship, Peace, Spring" sculpture, stands 29.5 meters tall and is assembled from 164 pieces of granite.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">5</div><div class="lbl">Halls</div></div>
+          <div class="stat-item"><div class="num">5</div><div class="lbl">Squares</div></div>
+          <div class="stat-item"><div class="num">10K+</div><div class="lbl">Collection Works</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="section" data-chapter="Light of Thought">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="jilin/长春世界雕塑园/长春世界雕塑园_03.jpg" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 03</div>
+        <h2>Rodin's <span class="highlight">Light of Thought</span></h2>
+        <p>In 2008, after three years of effort, the Changchun city government navigated numerous hurdles including the European Commission and the French Ministry of Culture to successfully bring in an original mold cast of Rodin's "The Thinker." This world-class art treasure, equivalent to the original, became the park's crown jewel.</p>
+        <p>Centered around Moore Lake, sculptures from various countries line the lakeside walkways. "Extension of Peace" (by Mark Whiteback, USA) stands in Peace Square, its two curved panels forming a gateway shape that symbolizes artistic dialogue across borders.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">2008</div><div class="lbl">The Thinker Arrival</div></div>
+          <div class="stat-item"><div class="num">5A</div><div class="lbl">Scenic Rating</div></div>
+          <div class="stat-item"><div class="num">⭐4.5</div><div class="lbl">Visitor Rating</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-section" data-chapter="Gallery">
+    <div class="section-header">
+      <div class="numeral">/// Gallery</div>
+      <h2>Sculpture <span style="background:linear-gradient(135deg,#e0e0e0,#9e9e9e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Art Moments</span></h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-animate style="height:360px;">
+        <img src="jilin/长春世界雕塑园/长春世界雕塑园_04.jpg" loading="lazy" />
+        <div class="item-overlay"></div>
+      </div>
+      <div class="gallery-item" data-animate style="height:360px;">
+        <img src="jilin/长春世界雕塑园/长春世界雕塑园_05.jpg" loading="lazy" />
+        <div class="item-overlay"></div>
+      </div>
+      <div class="gallery-item" data-animate style="height:360px;">
+        <img src="jilin/长春世界雕塑园/长春世界雕塑园_06.jpg" loading="lazy" />
+        <div class="item-overlay"></div>
+      </div>
+      <div class="gallery-item" data-animate style="height:360px;">
+        <img src="jilin/长春世界雕塑园/长春世界雕塑园_07.jpg" loading="lazy" />
+        <div class="item-overlay"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section class="dashboard-section" data-chapter="Dashboard">
+    <div class="section-header">
+      <div class="numeral">/// Dashboard</div>
+      <h2>Sculpture Park <span style="background:linear-gradient(135deg,#e0e0e0,#9e9e9e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Key Metrics</span></h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dashboard-card silver" data-animate><div class="icon">🗿</div><div class="d-num">5A</div><div class="d-label">Scenic Rating</div></div>
+      <div class="dashboard-card platinum" data-animate><div class="icon">📅</div><div class="d-num">2017</div><div class="d-label">Year Listed</div></div>
+      <div class="dashboard-card steel" data-animate><div class="icon">🌍</div><div class="d-num">216</div><div class="d-label">Participating Countries</div></div>
+      <div class="dashboard-card iron" data-animate><div class="icon">🎨</div><div class="d-num">404</div><div class="d-label">Sculptors</div></div>
+      <div class="dashboard-card silver" data-animate><div class="icon">📐</div><div class="d-num">92</div><div class="d-label">Area (ha)</div></div>
+      <div class="dashboard-card platinum" data-animate><div class="icon">🏛️</div><div class="d-num">5</div><div class="d-label">Number of Halls</div></div>
+      <div class="dashboard-card steel" data-animate><div class="icon">⚪</div><div class="d-num">2003</div><div class="d-label">Year Opened</div></div>
+      <div class="dashboard-card iron" data-animate><div class="icon">⭐</div><div class="d-num">4.5</div><div class="d-label">Visitor Rating</div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="bg" style="background-image:url("jilin/长春世界雕塑园/长春世界雕塑园_09.jpg");"></div>
+    <div class="overlay"></div>
+    <div class="content">
+      <div class="numeral">/// Next Destination</div>
+      <h2>Feel Civilization Through <span style="background:linear-gradient(135deg,#e0e0e0,#9e9e9e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Sculpture Art</span> from 216 Countries</h2>
+      <p>Stroll through Rodin Square, converse with The Thinker.<br/>Sculptures from around the world converse by the shores of Moore Lake.</p>
+      <a class="cta-btn" href="../index.html?prov=Jilin"><span>← Return to Satellite Overview</span></a>
+    </div>
+  </section>
+
+  <footer>
+    <p>World Sculpture Park · 5A Immersive Tour · SATELLITE TOUR · Source: Wikimedia Commons</p>
+  </footer>
+
+  <script>
+    (function(){
+      var heroImg = 'jilin/长春世界雕塑园/长春世界雕塑园_10.png';
+      var preload = new Image();
+      preload.onload = function() {
+        document.getElementById('heroBg').style.backgroundImage = 'url(' + heroImg + ')';
+        document.getElementById('loading').classList.add('hidden');
+      };
+      preload.onerror = function() {
+        document.getElementById('heroBg').style.backgroundImage = 'url(' + heroImg + ')';
+        document.getElementById('loading').classList.add('hidden');
+      };
+      preload.src = heroImg;
+      setTimeout(function(){ document.getElementById('loading').classList.add('hidden'); }, 5000);
+
+      var hero = document.getElementById('hero');
+      var heroBg = document.getElementById('heroBg');
+      window.addEventListener('scroll', function() {
+        heroBg.style.transform = 'translateY(' + (window.scrollY * 0.35) + 'px)';
+        var hud = document.getElementById('scrollHud');
+        if (window.scrollY > window.innerHeight * 0.6) hud.classList.add('active');
+        else hud.classList.remove('active');
+      });
+      hero.addEventListener('mousemove', function(e) {
+        var x = (e.clientX / window.innerWidth - 0.5) * 10;
+        var y = (e.clientY / window.innerHeight - 0.5) * 10;
+        heroBg.style.transform = 'translate(' + x + 'px, ' + y + 'px) translateY(' + (window.scrollY * 0.35) + 'px)';
+      });
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+      }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+      document.querySelectorAll('[data-animate]').forEach(function(el) { observer.observe(el); });
+
+      function animateCounter(el, target, suffix, duration) {
+        var isComplex = typeof target === 'string' && (target.includes('10K') || target.includes('5A') || target.includes('+'));
+        if (isComplex) { el.textContent = target; return; }
+        var numTarget = parseInt(target) || 0; suffix = suffix || '';
+        var startTime = performance.now();
+        function tick(now) {
+          var p = Math.min((now - startTime) / (duration || 1000), 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(numTarget * eased) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      var dashboardObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var numEl = entry.target.querySelector('.d-num');
+            if (numEl && !numEl.dataset.counted) {
+              numEl.dataset.counted = 'true';
+              var text = numEl.textContent.trim();
+              var match = text.match(/^([\d.]+)(%|[\u4e00-\u9fff]+)?/);
+              if (match) animateCounter(numEl, match[1], match[2] || '', 1000);
+            }
+          }
+        });
+      }, { threshold: 0.3 });
+      document.querySelectorAll('.dashboard-card').forEach(function(card) { dashboardObserver.observe(card); });
+
+      var progressFill = document.getElementById('scrollProgressFill');
+      var scrollPctEl = document.getElementById('scrollPct');
+      function updateScrollProgress() {
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight <= 0) return;
+        var pct = Math.min(100, Math.round((window.scrollY / docHeight) * 100));
+        if (progressFill) progressFill.style.width = pct + '%';
+        if (scrollPctEl) scrollPctEl.textContent = pct + '%';
+      }
+      window.addEventListener('scroll', updateScrollProgress);
+
+      var chapterNav = document.getElementById('chapterNav');
+      var chapters = document.querySelectorAll('[data-chapter]');
+      var chapterNames = [];
+      chapters.forEach(function(section, i) {
+        var name = section.getAttribute('data-chapter'); chapterNames.push(name);
+        var dot = document.createElement('div'); dot.className = 'chapter-dot';
+        if (i === 0) dot.classList.add('active');
+        var label = document.createElement('span'); label.className = 'chapter-label'; label.textContent = name;
+        dot.appendChild(label);
+        dot.addEventListener('click', function() { section.scrollIntoView({ behavior: 'smooth' }); });
+        chapterNav.appendChild(dot);
+      });
+      var chapterObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var idx = Array.from(chapters).indexOf(entry.target);
+            document.querySelectorAll('.chapter-dot').forEach(function(dot, i) { dot.classList.toggle('active', i === idx); });
+          }
+        });
+      }, { threshold: 0.3, rootMargin: '-80px 0px 0px 0px' });
+      chapters.forEach(function(s) { chapterObserver.observe(s); });
+
+      var chapterCounter = document.createElement('div'); chapterCounter.className = 'chapter-counter';
+      document.body.appendChild(chapterCounter);
+      var counterObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var idx = Array.from(chapters).indexOf(entry.target);
+            chapterCounter.textContent = 'Ch. ' + (idx + 1) + ' / ' + chapters.length + ' · ' + chapterNames[idx];
+            chapterCounter.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.3, rootMargin: '-80px 0px 0px 0px' });
+      chapters.forEach(function(s) { counterObserver.observe(s); });
+      updateScrollProgress();
+    })();
+  </script>
+</body>
+</html>

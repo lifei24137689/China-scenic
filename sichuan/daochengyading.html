@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Daocheng Yading  The Last Pure Land on the Blue Planet | 5A Scenic Area Immersive Exploration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@200;300;400;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #93c5fd;
+      --secondary: #ffffff;
+      --bg: #0b1628;
+      --surface: rgba(147,197,253,0.06);
+      --text: #e8f0fe;
+      --text-dim: rgba(232,240,254,0.45);
+      --accent: #1e3a5f;
+      --ice-glow: rgba(147,197,253,0.15);
+      --snow: rgba(255,255,255,0.7);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Sans SC','Noto Serif SC',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:url('images/daochengyading/甘孜州稻城亚丁旅游景区_01.jpeg') center/cover;filter:brightness(0.4) saturate(1.1);transition:transform 0.15s ease-out}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--bg) 95%);z-index:2;pointer-events:none}
+    .hero-content{position:relative;z-index:3;text-align:center}
+    .hero-title{font-size:clamp(42px,7vw,80px);font-weight:300;letter-spacing:8px;color:#fff;text-shadow:0 0 40px rgba(147,197,253,0.3)}
+    .hero-sub{font-size:clamp(14px,2.2vw,22px);color:var(--text-dim);letter-spacing:6px;margin-top:12px}
+    .hero-badge{display:inline-block;margin-top:20px;padding:8px 24px;border:1px solid rgba(255,255,255,0.15);border-radius:30px;font-size:12px;letter-spacing:3px;color:var(--text-dim)}
+    .snow-particle{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:4;text-align:center;transition:opacity 0.6s}
+    .scroll-hint span{display:block;font-size:11px;letter-spacing:4px;color:var(--text-dim);margin-bottom:8px}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(180deg,var(--text-dim),transparent);margin:0 auto}
+    .hud{display:flex;justify-content:center;gap:40px;padding:24px;position:relative;z-index:2;background:rgba(11,22,40,0.6);backdrop-filter:blur(10px)}
+    .hud-item{text-align:center}
+    .hud-value{font-size:20px;font-weight:600;color:var(--primary)}
+    .hud-label{font-size:11px;color:var(--text-dim);letter-spacing:2px;margin-top:4px}
+    .content-section{display:flex;align-items:center;gap:60px;max-width:1200px;margin:80px auto;padding:0 40px;opacity:0;transform:translateY(40px);transition:all 0.8s ease}
+    .content-section.visible{opacity:1;transform:translateY(0)}
+    .content-section.reverse{flex-direction:row-reverse}
+    .content-image{flex:1;overflow:hidden;border-radius:12px}
+    .content-image img{width:100%;height:400px;object-fit:cover;display:block}
+    .content-text{flex:1}
+    .content-text h2{font-size:28px;font-weight:300;letter-spacing:4px;margin-bottom:12px}
+    .content-divider{width:40px;height:1px;background:var(--primary);margin-bottom:20px}
+    .content-text p{font-size:14px;line-height:1.8;color:var(--text-dim);margin-bottom:12px}
+    .content-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+    .content-tag{padding:6px 16px;border:1px solid rgba(147,197,253,0.2);border-radius:20px;font-size:12px;color:var(--primary)}
+    .image-break{position:relative;height:50vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:url('images/daochengyading/甘孜州稻城亚丁旅游景区_03.jpg') center/cover fixed;filter:brightness(0.35) saturate(0.9)}
+    .bg-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,var(--bg) 95%);z-index:1}
+    .image-break .quote{position:relative;z-index:2;text-align:center}
+    .quote-cn{font-size:clamp(18px,3vw,32px);font-weight:300;letter-spacing:4px;color:#fff;margin-bottom:8px}
+    .quote-en{font-size:clamp(12px,1.5vw,18px);color:var(--text-dim);letter-spacing:3px}
+    .gallery{max-width:1200px;margin:80px auto;padding:0 40px;opacity:0;transform:translateY(40px);transition:all 0.8s ease}
+    .gallery.visible{opacity:1;transform:translateY(0)}
+    .gallery h2{text-align:center;font-size:24px;font-weight:300;letter-spacing:6px;margin-bottom:40px}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .gallery-item{overflow:hidden;border-radius:8px}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
+    .footer{text-align:center;padding:40px;color:var(--text-dim);font-size:12px;letter-spacing:2px;border-top:1px solid rgba(255,255,255,0.05)}
+    [data-animate]{opacity:0;transform:translateY(30px);transition:all 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="snow-particle">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span>
+    </div>
+    <div class="hero-content">
+      <h1 class="hero-title">Daocheng Yading</h1>
+      <p class="hero-sub">The Last Pure Land on the Blue Planet</p>
+      <div class="hero-badge">National 5A-Level Tourist Attraction  2020</div>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Explore the Pure Land</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">4500m</div><div class="hud-label">Average Elevation</div></div>
+    <div class="hud-item"><div class="hud-value">1344km²</div><div class="hud-label">Scenic Area</div></div>
+    <div class="hud-item"><div class="hud-value">4.8★</div><div class="hud-label">Rating</div></div>
+  </div>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="images/daochengyading/甘孜州稻城亚丁旅游景区_02.png" alt="Daocheng Yading Panorama" loading="lazy"/></div>
+      <p>The three sacred peaks  Xiannairi, Yangmaiyong, and Xianuoduoji  stand in a triangular formation, perpetually capped with snow, majestic and magnificent. Beneath the snow-capped mountains, Milk Lake, Five-Color Lake, and Pearl Lake are embedded like gems among the alpine meadows, reflecting dreamlike colors under the sunlight.</p>
+      <div class="content-tags">
+        <span class="content-tag">Snow Mountains &amp; Holy Lakes</span>
+        <span class="content-tag">Hiker&apos;s Paradise</span>
+        <span class="content-tag">Photographer&apos;s Haven</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="bg-overlay"></div>
+    <div class="snow-particle">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span>
+    </div>
+    <div class="quote">
+      <div class="quote-cn">Three Guardian Peaks  The Holy Land of Yading</div>
+      <div class="quote-en">Three Sacred Peaks · The Pure Land of Yading</div>
+    </div>
+  </section>
+
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="images/daochengyading/甘孜州稻城亚丁旅游景区_04.jpg" alt="Sacred Peaks of Daocheng Yading" loading="lazy"/></div> <div class="content-text">
+      <h2>Sacred Peaks &amp; Holy Lakes</h2>
+      <div class="content-divider"></div>
+      <p>Xiannairi (6,032m), the highest peak in Daocheng Yading, means "Guan Yin Bodhisattva" in Tibetan  towering, majestic, and eternally snow-covered. Yangmaiyong (5,958m) resembles Manjushri&apos;s sword of wisdom, with ridges as sharp as blades. Xianuoduoji (5,958m) takes the form of Vajrapani Bodhisattva, radiating immense power.</p>
+      <p>Milk Lake&apos;s waters appear milky white due to its rich mineral content, nestled among snowy peaks like a lustrous pearl. Five-Color Lake is famous for reflecting five hues as sunlight refracts through underwater plants and minerals. Pearl Lake glows like emerald jade, mirroring the majestic form of Xiannairi.</p>
+      <div class="content-tags">
+        <span class="content-tag">Xiannairi</span>
+        <span class="content-tag">Yangmaiyong</span>
+        <span class="content-tag">Xianuoduoji</span>
+        <span class="content-tag">Milk Lake</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="images/daochengyading/甘孜州稻城亚丁旅游景区_05.jpg" alt="Tibetan Culture at Daocheng Yading" loading="lazy"/></div>
+      <p>This is also a sacred land of Tibetan culture, where Tibetan people have guarded these holy peaks and lakes for generations. Mountain circumambulation, incense burning, and prayer flag hanging  ancient traditions of faith that have endured for millennia on this high plateau  adding profound cultural depth to this pure land.</p>
+      <div class="content-tags">
+        <span class="content-tag">Alpine Ecology</span>
+        <span class="content-tag">Tibetan Culture</span>
+        <span class="content-tag">Best Sep-Oct</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" data-animate>
+    <h2>✦ <span>Snow &amp; Ice</span> Pure Land ✦</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="grid-row:span 2;height:100%">
+        <img src="images/daochengyading/甘孜州稻城亚丁旅游景区_06.png" alt="Daocheng Yading Gallery" loading="lazy"/>
+    </div>
+    </div>
+  </section>
+
+  <script>
+    (function(){var i=new Image();i.onload=function(){document.getElementById('heroBg').style.backgroundImage="url('images/daochengyading/甘孜州稻城亚丁旅游景区_01.jpeg')"};i.src='images/daochengyading/甘孜州稻城亚丁旅游景区_01.jpeg'})();
+    window.addEventListener('scroll',function(){var s=document.getElementById('scrollHud');if(s)s.style.opacity=window.scrollY>100?'0':'1'});
+    document.querySelector('.hero').addEventListener('mousemove',function(e){var x=(e.clientX/window.innerWidth-0.5)*10,y=(e.clientY/window.innerHeight-0.5)*10;document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)'});
+    var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});
+    document.querySelectorAll('[data-animate]').forEach(function(e){o.observe(e)});
+  </script>
+</body>
+</html>
+
+
+
+

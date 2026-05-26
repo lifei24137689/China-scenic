@@ -1,0 +1,374 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yunyang Longgang · The World's No.1 Tiankeng | 5A Scenic Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@300;400;600;700&family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Serif SC','PingFang SC','Microsoft YaHei',serif;
+      background: #0c0705;
+      color: #fff7ed;
+      overflow-x: hidden;
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none; opacity: 0.02;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    :root {
+      --primary: #f97316;
+      --primary-glow: rgba(249,115,22,0.3);
+      --secondary: #fb923c;
+      --secondary-glow: rgba(251,146,60,0.25);
+      --accent: #ea580c;
+      --bg: #0c0705;
+      --surface: rgba(249,115,22,0.08);
+      --text: #fff7ed;
+      --text-dim: rgba(255,247,237,0.5);
+      --text-faint: rgba(255,247,237,0.18);
+    }
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: #0c0705;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 2px solid rgba(249,115,22,.15);
+      border-top: 2px solid rgba(251,146,60,.5);
+      border-radius: 50%; animation: spin 1.5s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p {
+      margin-top: 20px; font-size: 13px;
+      color: rgba(255,247,237,.25);
+      letter-spacing: 3px; font-family: 'Courier New',monospace;
+    }
+    .corner { position: fixed; z-index: 100; width: 40px; height: 40px; }
+    .corner-h { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg,transparent,rgba(249,115,22,.3),transparent); }
+    .corner-v { position: absolute; top: 0; left: 0; bottom: 0; width: 1px; background: linear-gradient(180deg,transparent,rgba(249,115,22,.3),transparent); }
+    .corner-tl { top: 20px; left: 20px; }
+    .corner-tr { top: 20px; right: 20px; transform: rotate(90deg); }
+    .corner-bl { bottom: 20px; left: 20px; transform: rotate(-90deg); }
+    .corner-br { bottom: 20px; right: 20px; transform: rotate(180deg); }
+    .scroll-progress { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 50; width: 4px; height: 200px; background: rgba(249,115,22,.1); border-radius: 2px; }
+    .scroll-progress-fill { position: absolute; top: 0; left: 0; width: 100%; background: linear-gradient(180deg,#ea580c,#f97316); border-radius: 2px; transition: height 0.1s ease; }
+    .scroll-progress-pct { position: absolute; right: 8px; top: 0; font-size: 10px; color: rgba(255,247,237,.2); writing-mode: vertical-rl; letter-spacing: 1px; font-family: 'Courier New',monospace; }
+    .scroll-hud { position: fixed; top: -60px; left: 0; right: 0; z-index: 45; padding: 14px 30px; background: rgba(12,7,5,.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(249,115,22,.08); transition: top 0.4s cubic-bezier(.16,1,.3,1); }
+    .scroll-hud.active { top: 0; }
+    .scroll-hud .left { float: left; font-size: 11px; color: rgba(255,247,237,.3); letter-spacing: 2px; }
+    .scroll-hud .left strong { color: #f97316; }
+    .scroll-hud .right { float: right; font-size: 11px; color: rgba(255,247,237,.3); letter-spacing: 2px; }
+    .scroll-hud::after { content: ''; display: block; clear: both; }
+    .chapter-nav { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 50; display: flex; flex-direction: column; gap: 12px; }
+    .chapter-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(249,115,22,.2); cursor: pointer; transition: all .3s; position: relative; }
+    .chapter-dot.active { background: rgba(249,115,22,.7); transform: scale(1.5); box-shadow: 0 0 10px rgba(249,115,22,.3); }
+    .chapter-dot .chapter-label { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: 9px; color: rgba(255,247,237,.15); letter-spacing: 2px; font-family: 'Courier New',monospace; opacity: 0; transition: opacity .3s; pointer-events: none; }
+    .chapter-dot:hover .chapter-label { opacity: 1; }
+    .page-transition { position: fixed; inset: 0; z-index: 9999; pointer-events: none; background: #0c0705; opacity: 0; transition: opacity 0.5s cubic-bezier(.16,1,.3,1); }
+    .page-transition.active { opacity: 1; }
+    .hero {
+      position: relative; width: 100%; height: 100vh;
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      filter: brightness(0.45) saturate(1.1);
+      transition: transform 0.1s ease-out; will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 25%, #0c0705 80%);
+    }
+    .hero .mist-layer {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(251,146,60,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 40%, rgba(249,115,22,0.04) 0%, transparent 50%);
+      animation: mistDrift 25s ease-in-out infinite;
+    }
+    @keyframes mistDrift {
+      0%, 100% { transform: translateX(0) scale(1); opacity: 0.6; }
+      50% { transform: translateX(25px) scale(1.02); opacity: 1; }
+    }
+    .hero .top-fade {
+      position: absolute; top: 0; left: 0; right: 0; height: 30vh;
+      background: linear-gradient(180deg,#0c0705 0%,transparent 100%);
+    }
+    .hero .bottom-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40vh;
+      background: linear-gradient(0deg,#0c0705 0%,#0c0705aa 20%,transparent 100%);
+    }
+    .hud { position: absolute; inset: 0; z-index: 10; padding: 28px 40px; display: flex; flex-direction: column; }
+    .hud-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 20px;
+      background: rgba(12,7,5,.5); border: 1px solid rgba(249,115,22,.15);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      color: rgba(255,247,237,.5); font-size: 13px; cursor: pointer; transition: all .3s; width: fit-content; text-decoration: none;
+    }
+    .back-btn:hover { border-color: rgba(249,115,22,.35); color: #fff7ed; }
+    .back-btn .arrow { display: inline-block; transition: transform .3s; }
+    .back-btn:hover .arrow { transform: translateX(-3px); }
+    .title-group { margin-top: 20px; }
+    .title-group h1 { font-size: 56px; font-weight: 700; letter-spacing: 8px; font-family: 'ZCOOL XiaoWei','Noto Serif SC',serif; text-shadow: 0 0 60px rgba(0,0,0,.5); display: flex; align-items: baseline; gap: 14px; }
+    .title-group h1 .badge { font-size: 12px; padding: 4px 16px; border-radius: 14px; background: rgba(249,115,22,.12); border: 1px solid rgba(249,115,22,.25); color: rgba(249,115,22,.8); letter-spacing: 1px; font-weight: 400; font-size: 11px; font-family: 'Noto Serif SC',serif; }
+    .title-group h1 .stars { font-size: 16px; color: rgba(249,115,22,.35); letter-spacing: 2px; font-weight: 400; }
+    .title-group .subtitle { font-size: 14px; color: rgba(255,247,237,.35); letter-spacing: 6px; margin-top: 4px; font-family: 'Noto Serif SC',serif; }
+    .hero-info { position: absolute; left: 40px; bottom: 130px; z-index: 11; max-width: 440px; }
+    .hero-info .card { background: rgba(12,7,5,.55); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 14px; border: 1px solid rgba(249,115,22,.1); padding: 22px 28px; }
+    .hero-info .card p { font-size: 14px; line-height: 1.8; color: rgba(255,247,237,.6); }
+    .hero-info .tags { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+    .tag-tiankeng { background: rgba(249,115,22,.08); border:1px solid rgba(249,115,22,.2); color: #f97316; }
+    .tag-glass-bridge { background: rgba(251,146,60,.08); border:1px solid rgba(251,146,60,.2); color: #fb923c; }
+    .tag-karst { background: rgba(234,88,12,.1); border:1px solid rgba(234,88,12,.2); color: #ea580c; }
+    .tag-cliff { background: rgba(253,186,116,.08); border:1px solid rgba(253,186,116,.2); color: #fdba74; }
+    .tag { padding: 4px 12px; border-radius: 10px; font-size: 11px; letter-spacing: 1px; }
+    .scroll-hint { position: absolute; bottom: 40px; left: 50%; z-index: 11; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255,247,237,.2); font-size: 10px; letter-spacing: 2px; font-family: 'Courier New',monospace; }
+    .scroll-hint .line { width: 1px; height: 30px; background: linear-gradient(180deg,rgba(249,115,22,.3),transparent); animation: scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%,100% { opacity: 0.3; transform: scaleY(0.5); } 50% { opacity: 1; transform: scaleY(1); } }
+    .section { position: relative; min-height: 80vh; display: flex; align-items: center; padding: 80px 40px; }
+    .section-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .section-inner.reverse { direction: rtl; }
+    .section-inner.reverse > * { direction: ltr; }
+    .section-image { border-radius: 14px; overflow: hidden; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,.4); opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(.16,1,.3,1); }
+    .section-image.visible { opacity: 1; transform: translateY(0); }
+    .section-image img { width: 100%; height: 400px; object-fit: cover; display: block; transition: transform 0.6s ease; }
+    .section-image:hover img { transform: scale(1.03); }
+    .section-image .img-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(0deg,#0c0705 0%,transparent 100%); pointer-events: none; }
+    .section-content { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(.16,1,.3,1) 0.15s; }
+    .section-content.visible { opacity: 1; transform: translateY(0); }
+    .section-content .numeral { font-family: 'Courier New',monospace; font-size: 13px; color: rgba(249,115,22,.4); letter-spacing: 3px; margin-bottom: 12px; }
+    .section-content h2 { font-size: 32px; font-weight: 700; letter-spacing: 2px; margin-bottom: 20px; line-height: 1.3; font-family: 'ZCOOL XiaoWei','Noto Serif SC',serif; }
+    .section-content h2 .highlight { background: linear-gradient(135deg,#ea580c,#f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .section-content p { font-size: 15px; line-height: 1.9; color: rgba(255,247,237,.55); margin-bottom: 20px; }
+    .section-content .stat-row { display: flex; gap: 24px; margin-top: 24px; }
+    .section-content .stat-item { text-align: center; padding: 16px 24px; border-radius: 10px; background: rgba(249,115,22,.05); border: 1px solid rgba(249,115,22,.08); min-width: 100px; }
+    .section-content .stat-item .num { font-size: 28px; font-weight: 700; color: #f97316; }
+    .section-content .stat-item .lbl { font-size: 10px; color: rgba(255,247,237,.3); margin-top: 4px; letter-spacing: 1px; }
+    .image-break { position: relative; width: 100%; height: 60vh; overflow: hidden; }
+    .image-break .bg { position: absolute; inset: -10px; background-size: cover; background-position: center; background-attachment: fixed; filter: brightness(0.3); }
+    .image-break .overlay { position: absolute; inset: 0; background: linear-gradient(180deg,#0c0705 0%,transparent 20%,transparent 80%,#0c0705 100%); }
+    .image-break .quote { position: absolute; bottom: 60px; left: 40px; right: 40px; z-index: 2; max-width: 600px; }
+    .image-break .quote p { font-size: 26px; font-weight: 400; line-height: 1.6; font-family: 'ZCOOL XiaoWei','Noto Serif SC',serif; color: rgba(255,247,237,.7); letter-spacing: 3px; }
+    .image-break .quote .author { font-size: 12px; color: rgba(255,247,237,.25); letter-spacing: 3px; margin-top: 12px; font-family: 'Courier New',monospace; }
+    .gallery-section { padding: 100px 40px; }
+    .gallery-section .section-header { max-width: 1200px; margin: 0 auto 40px; }
+    .gallery-section .section-header .numeral { font-family: 'Courier New',monospace; font-size: 13px; color: rgba(249,115,22,.4); letter-spacing: 3px; margin-bottom: 12px; }
+    .gallery-section .section-header h2 { font-size: 32px; font-weight: 700; letter-spacing: 2px; font-family: 'ZCOOL XiaoWei','Noto Serif SC',serif; }
+    .gallery-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+    .gallery-grid .col { display: flex; flex-direction: column; gap: 12px; }
+    .gallery-item { border-radius: 12px; overflow: hidden; position: relative; opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(.16,1,.3,1); }
+    .gallery-item.visible { opacity: 1; transform: translateY(0); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item.large { grid-column: span 2; height: 400px; }
+    .gallery-item.medium { height: 200px; }
+    .gallery-item.small { height: 180px; }
+    .dashboard-section { padding: 100px 40px; background: linear-gradient(180deg,#0c0705,#181410,#0c0705); }
+    .dashboard-section .section-header { max-width: 1200px; margin: 0 auto 50px; }
+    .dashboard-section .section-header .numeral { font-family: 'Courier New',monospace; font-size: 13px; color: rgba(249,115,22,.4); letter-spacing: 3px; margin-bottom: 12px; }
+    .dashboard-section .section-header h2 { font-size: 32px; font-weight: 700; letter-spacing: 2px; font-family: 'ZCOOL XiaoWei','Noto Serif SC',serif; }
+    .dashboard-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    .dashboard-card { background: rgba(249,115,22,.05); border: 1px solid rgba(249,115,22,.08); border-radius: 14px; padding: 28px; text-align: center; transition: all .3s; }
+    .dashboard-card:hover { background: rgba(249,115,22,.08); border-color: rgba(249,115,22,.15); }
+    .dashboard-card .icon { font-size: 24px; margin-bottom: 12px; }
+    .dashboard-card .value { font-size: 36px; font-weight: 700; color: #f97316; font-family: 'Orbitron','Courier New',monospace; }
+    .dashboard-card .label { font-size: 11px; color: rgba(255,247,237,.4); letter-spacing: 2px; margin-top: 6px; }
+    .dashboard-card .unit { font-size: 14px; color: rgba(249,115,22,.5); font-weight: 400; }
+    .cta-section { position: relative; padding: 120px 40px; overflow: hidden; }
+    .cta-section .bg { position: absolute; inset: -10px; background-size: cover; background-position: center; filter: brightness(0.25); }
+    .cta-section .overlay { position: absolute; inset: 0; background: linear-gradient(135deg,rgba(12,7,5,.95) 0%,rgba(12,7,5,.85) 100%); }
+    .cta-section .content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; text-align: center; }
+    .cta-section .content .numeral { font-family: 'Courier New',monospace; font-size: 13px; color: rgba(249,115,22,.4); letter-spacing: 3px; margin-bottom: 12px; }
+    .cta-section .content h2 { font-size: 36px; font-weight: 700; letter-spacing: 3px; margin-bottom: 20px; font-family: 'ZCOOL XiaoWei','Noto Serif SC',serif; }
+    .cta-section .content p { font-size: 16px; color: rgba(255,247,237,.5); line-height: 1.8; letter-spacing: 1px; }
+    .cta-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; border-radius: 30px; background: linear-gradient(135deg,#ea580c,#f97316); color: #fff7ed; font-weight: 600; text-decoration: none; margin-top: 28px; transition: all .3s; box-shadow: 0 4px 20px rgba(249,115,22,.3); }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(249,115,22,.4); }
+    footer { padding: 40px; text-align: center; border-top: 1px solid rgba(249,115,22,.05); }
+    footer p { font-size: 11px; color: rgba(255,247,237,.2); letter-spacing: 2px; }
+    @media (max-width: 768px) {
+      .hud { padding: 16px 20px; }
+      .hud-top { flex-direction: column; }
+      .title-group h1 { font-size: 36px; flex-wrap: wrap; letter-spacing: 4px; }
+      .hero-info { left: 20px; right: 20px; bottom: 100px; }
+      .hero-info .card { padding: 16px 20px; }
+      .hero-info .card p { font-size: 12px; }
+      .section { padding: 60px 20px; min-height: auto; }
+      .section-inner { grid-template-columns: 1fr; gap: 30px; }
+      .section-inner.reverse { direction: ltr; }
+      .section-image img { height: 250px; }
+      .section-content h2 { font-size: 24px; }
+      .section-content .stat-row { flex-wrap: wrap; }
+      .gallery-section { padding: 60px 20px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .dashboard-grid { grid-template-columns: repeat(2,1fr); }
+      .dashboard-section { padding: 60px 20px; }
+      .cta-section { padding: 80px 20px; }
+      .cta-section .content h2 { font-size: 26px; }
+      .image-break .quote p { font-size: 18px; }
+      .scroll-hud { padding: 10px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-overlay" id="loading"><div class="loading-spinner"></div><p>Connecting to Yunyang Longgang ...</p></div>
+  <div class="corner corner-tl"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-tr"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-bl"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-br"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="scroll-progress" id="scrollProgress"><div class="scroll-progress-fill" id="scrollProgressFill"></div><span class="scroll-progress-pct" id="scrollPct">0%</span></div>
+  <div class="scroll-hud" id="scrollHud"><div class="left"><span class="site-name"><strong>5A</strong> · Immersive Exploration</span></div><div class="right"><span id="hudLocation">Chongqing · Yunyang County</span></div></div>
+  <div class="chapter-nav" id="chapterNav"></div>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div><div class="mist-layer"></div>
+    <div class="top-fade"></div><div class="bottom-fade"></div>
+    <div class="hud"><div class="hud-top">
+      <div>
+        <a class="back-btn" href="../index.html?prov=%E9%87%8D%E5%BA%86%E5%B8%82"><span class="arrow">←</span> Back to Chongqing</a>
+        <div class="title-group"><h1>Yunyang Longgang<span class="badge">5A</span><span class="stars">★★★★★</span></h1><div class="subtitle">Chongqing · Yunyang County</div></div>
+      </div>
+    </div></div>
+    <div class="hero-info"><div class="card">
+      <p><span style="color:rgba(249,115,22,.5);font-size:11px;letter-spacing:2px;display:block;margin-bottom:8px;">◈ The World's No.1 Tiankeng · Skywalk</span><span style="color:rgba(255,247,237,.75);">The Longgang Tiankeng reaches a depth of 335 meters, forming the core wonder of karst landforms. The Cloud Corridor hovers 700 meters above ground. Standing on transparent glass with an abyss below and mist swirling around — thrilling and breathtaking.</span></p>
+      <div class="tags"><span class="tag tag-tiankeng">World's No.1 Tiankeng</span><span class="tag tag-glass-bridge">Cloud Corridor</span><span class="tag tag-karst">Karst Wonder</span><span class="tag tag-cliff">Ultimate Challenge</span></div>
+    </div></div>
+    <div class="scroll-hint"><span>Scroll to explore</span><div class="line"></div></div>
+  </section>
+
+  <section class="section" data-chapter="Longgang Tiankeng">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="images/longgang/img1.jpg" alt="Longgang Tiankeng" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 01</div>
+        <h2>Longgang Tiankeng <span class="highlight">The World's No.1 Tiankeng</span></h2>
+        <p>With a depth of 335 meters, the Longgang Tiankeng is known as the "World's No.1 Tiankeng." Peering down from the rim, the sheer cliffs plunge into unfathomable depths, inspiring awe and reverence.</p>
+        <p>This giant tiankeng is the centerpiece of the karst landscape, showcasing hundreds of millions of years of geological evolution. The walls appear carved by blades, while the lush vegetation at the bottom forms a unique underground ecosystem.</p>
+        <div class="stat-row"><div class="stat-item"><div class="num">335m</div><div class="lbl">Depth</div></div><div class="stat-item"><div class="num">World's No.1 Tiankeng</div><div class="lbl">Reputation</div></div><div class="stat-item"><div class="num">Karst Spectacle</div><div class="lbl">Landform Type</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="image-break">
+    <div class="bg" id="imageBreakBg"></div><div class="overlay"></div>
+    <div class="quote"><p>"Standing above the clouds, gazing down at the earth's rift"</p><div class="author">— Longgang Impression</div></div>
+  </div>
+
+  <section class="section" data-chapter="Cloud Corridor">
+    <div class="section-inner reverse">
+      <div class="section-image" data-animate>
+        <img src="images/longgang/img2.jpg" alt="Cloud Corridor" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 02</div>
+        <h2>Cloud Corridor <span class="highlight">Skywalk</span></h2>
+        <p>Suspended 700 meters above the ground, the glass-bottomed Cloud Corridor is longer than the Grand Canyon Skywalk in the USA. Standing on the transparent glass, you face a bottomless chasm beneath your feet, with mist and clouds swirling around — thrilling and exhilarating.</p>
+        <p>This is a must-visit for the brave — every step challenges your heartbeat. Built with high-strength laminated tempered glass, the corridor can accommodate hundreds of visitors simultaneously, letting you experience ultimate thrill in complete safety.</p>
+        <div class="stat-row"><div class="stat-item"><div class="num">700m</div><div class="lbl">Height Above Ground</div></div><div class="stat-item"><div class="num">Glass Skywalk</div><div class="lbl">Type</div></div><div class="stat-item"><div class="num">Ultimate Thrill</div><div class="lbl">Experience</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-chapter="Landscape Painting">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="images/longgang/img3.jpg" alt="Landscape Painting" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 03</div>
+        <h2>Landscape Painting <span class="highlight">Sea of Clouds</span></h2>
+        <p>The Shisun River and Qingshui Lake shimmer like mirrors, while the canyon streams murmur and towering peaks stand in splendor. The sea of clouds shifts unpredictably; at sunrise, golden rays pierce through the rolling mist, creating a celestial wonderland.</p>
+        <p>Longgang combines majesty, peril, wonder, and tranquility — a paradise for photographers. No matter the season, there is always a different natural beauty waiting to be discovered.</p>
+        <div class="stat-row"><div class="stat-item"><div class="num">Shisun River</div><div class="lbl">Waterscape</div></div><div class="stat-item"><div class="num">Sea of Clouds</div><div class="lbl">Landscape</div></div><div class="stat-item"><div class="num">Photographer's Paradise</div><div class="lbl">Reputation</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section" data-chapter="Gallery">
+    <div class="section-header">
+      <div class="numeral">/// 04</div>
+      <h2>Landscape Gallery</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item large visible"><img src="images/longgang/gallery1.jpg" alt="Yunyang Longgang Scenery" loading="lazy" /></div>
+      <div class="gallery-item medium visible"><img src="images/longgang/gallery2.jpg" alt="Longgang Tiankeng" loading="lazy" /></div>
+      <div class="gallery-item medium visible"><img src="images/longgang/gallery3.jpg" alt="Cloud Corridor" loading="lazy" /></div>
+      <div class="gallery-item small visible"><img src="images/longgang/gallery4.jpg" alt="Landscape Painting" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section class="dashboard-section" data-chapter="Data">
+    <div class="section-header">
+      <div class="numeral">/// 05</div>
+      <h2>Scenic Area Data</h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dashboard-card"><div class="icon">🏆</div><div class="value">5A</div><div class="label">Rating</div></div>
+      <div class="dashboard-card"><div class="icon">🎫</div><div class="value">100<span class="unit">¥</span></div><div class="label">Peak Season Ticket</div></div>
+      <div class="dashboard-card"><div class="icon">📅</div><div class="value">2017</div><div class="label">5A Year Awarded</div></div>
+      <div class="dashboard-card"><div class="icon">⛰️</div><div class="value">335<span class="unit">m</span></div><div class="label">Tiankeng Depth</div></div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="bg" id="ctaBg"></div><div class="overlay"></div>
+    <div class="content">
+      <div class="numeral">/// Explore Next Stop</div>
+      <h2>Step Into <span style="background:linear-gradient(135deg,#ea580c,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Longgang</span> & Challenge the Sky</h2>
+      <p>Feel nature's masterpiece before the 335m tiankeng,<br/>and push your limits on the 700m glass skywalk.</p>
+      <a class="cta-btn" href="../index.html?prov=%E9%87%8D%E5%BA%86%E5%B8%82"><span>← Back to Satellite Overview</span></a>
+    </div>
+  </section>
+
+  <footer><p>5A Immersive Exploration · Yunyang Longgang · Data Source: Yunyang Baxiangqing Tourism Company</p></footer>
+  <div class="page-transition" id="pageTransition"></div>
+
+  <script>
+    var heroImgUrl='images/longgang/hero.jpg';
+    var hi=new Image();hi.onload=function(){
+      var d=document.getElementById('loading');
+      document.getElementById('heroBg').style.backgroundImage="url('"+heroImgUrl+"')";
+      document.getElementById('imageBreakBg').style.backgroundImage="url('"+heroImgUrl+"')";
+      document.getElementById('ctaBg').style.backgroundImage="url('"+heroImgUrl+"')";
+      if(d)d.classList.add('hidden');
+    };hi.onerror=function(){var d=document.getElementById('loading');if(d)d.classList.add('hidden');};hi.src=heroImgUrl;
+    setTimeout(function(){var d=document.getElementById('loading');if(d&&!d.classList.contains('hidden'))d.classList.add('hidden');},8000);
+    var scrollHud=document.getElementById('scrollHud');window.addEventListener('scroll',function(){
+      if(window.scrollY>300)scrollHud.classList.add('active');else scrollHud.classList.remove('active');
+      var scrollTop=window.scrollY,docHeight=document.documentElement.scrollHeight-window.innerHeight;
+      var pct=Math.min(100,Math.round((scrollTop/docHeight)*100));
+      document.getElementById('scrollProgressFill').style.height=pct+'%';
+      document.getElementById('scrollPct').textContent=pct+'%';
+    });
+    var heroBg=document.getElementById('heroBg'),hero=document.getElementById('hero');
+    hero.addEventListener('mousemove',function(e){
+      var x=(e.clientX/window.innerWidth-0.5)*15,y=(e.clientY/window.innerHeight-0.5)*10;
+      heroBg.style.transform='translate('+x+'px, '+y+'px)';
+    });
+    var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting)entry.target.classList.add('visible');});},{threshold:0.15});
+    document.querySelectorAll('[data-animate]').forEach(function(el){observer.observe(el);});
+    var chapters=document.querySelectorAll('[data-chapter]'),chapterNav=document.getElementById('chapterNav');
+    chapters.forEach(function(ch,i){var dot=document.createElement('div');dot.className='chapter-dot';var label=document.createElement('span');label.className='chapter-label';label.textContent=ch.getAttribute('data-chapter');dot.appendChild(label);dot.addEventListener('click',function(){ch.scrollIntoView({behavior:'smooth'});});chapterNav.appendChild(dot);});
+    var chapterDots=document.querySelectorAll('.chapter-dot');
+    var chObserver=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var idx=Array.from(chapters).indexOf(entry.target);chapterDots.forEach(function(d,i){d.classList.toggle('active',i===idx);});}});},{threshold:0.5});
+    chapters.forEach(function(ch){chObserver.observe(ch);});
+  </script>
+</body>
+</html>

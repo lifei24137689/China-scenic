@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Lijiang River · Gallery on the Li | 5A Scenic Area Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0d9488;
+      --secondary: #06b6d4;
+      --bg: #042f2e;
+      --surface: rgba(13,148,136,0.12);
+      --text: #e0f5f0;
+      --text-dim: rgba(224,245,240,0.55);
+      --glow: rgba(13,148,136,0.25);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    /* === Hero === */
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:url('img/lijiang/桂林市漓江景区_01.jpg') center/cover;filter:brightness(0.5) saturate(1.2);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(13,148,136,0.25) 0%,transparent 60%),radial-gradient(ellipse at 70% 60%,rgba(6,182,212,0.15) 0%,transparent 50%),linear-gradient(180deg,rgba(4,47,46,0.6) 0%,transparent 40%,rgba(4,47,46,0.4) 100%)}
+    .water-ripple{position:absolute;bottom:0;left:0;right:0;height:120px;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(13,148,136,0.08) 3px,rgba(13,148,136,0.08) 6px);animation:ripple 8s linear infinite;z-index:2}
+    @keyframes ripple{0%{transform:translateY(0)}100%{transform:translateY(-20px)}}
+    .hero-content{position:relative;z-index:3;text-align:center}
+    .glass-title{background:rgba(13,148,136,0.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(13,148,136,0.2);border-radius:20px;padding:48px 64px;display:inline-block}
+    .hero-title{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(48px,8vw,88px);letter-spacing:16px;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,0.4)}
+    .hero-sub{font-size:clamp(16px,2vw,22px);opacity:0.8;margin-top:16px;letter-spacing:8px;font-family:'Noto Serif SC',serif}
+    @keyframes floatGlow{0%,100%{text-shadow:0 0 20px rgba(6,182,212,0.2)}50%{text-shadow:0 0 40px rgba(6,182,212,0.5)}}
+    .hero-title{animation:floatGlow 4s ease-in-out infinite}
+
+    /* === HUD === */
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:var(--surface);border:1px solid rgba(13,148,136,0.2);border-radius:14px;padding:12px 18px;text-align:center;min-width:72px}
+    .hud-value{font-size:22px;font-weight:700;color:var(--secondary)}
+    .hud-label{font-size:10px;opacity:0.55;margin-top:4px;letter-spacing:2px}
+
+    /* === Scroll Hint === */
+    .scroll-hint{position:absolute;bottom:140px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-size:11px;letter-spacing:3px;opacity:0.5}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+    /* === Content === */
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);position:relative}
+    .content-image::after{content:'';position:absolute;inset:0;border-radius:16px;box-shadow:inset 0 0 40px rgba(13,148,136,0.1)}
+    .content-image img{width:100%;height:420px;object-fit:cover;display:block;transition:transform 0.6s}
+    .content-image:hover img{transform:scale(1.05)}
+    .content-text h2{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(28px,4vw,42px);margin-bottom:20px;letter-spacing:4px;color:#fff}
+    .content-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--secondary),transparent);margin-bottom:24px}
+    .content-text p{font-size:16px;line-height:2;opacity:0.78;margin-bottom:16px}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .content-tag{padding:6px 18px;border:1px solid rgba(6,182,212,0.25);border-radius:20px;font-size:13px;letter-spacing:2px;color:var(--secondary);background:rgba(6,182,212,0.06)}
+
+    /* === Image Break === */
+    .image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:url('img/lijiang/桂林市漓江景区_04.jpeg') center/cover fixed;filter:brightness(0.4) saturate(1.15)}
+    .image-break .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,47,46,0.5),transparent 30%,transparent 70%,rgba(4,47,46,0.6) 100%)}
+    .image-break .quote{position:relative;z-index:2;text-align:center;max-width:700px;padding:0 40px}
+    .image-break .quote-cn{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(28px,4vw,48px);letter-spacing:8px;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,0.3);white-space:nowrap}
+    .image-break .quote-en{font-size:13px;opacity:0.5;letter-spacing:4px;margin-top:12px}
+
+    /* === Gallery === */
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{text-align:center;font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(24px,3vw,36px);margin-bottom:48px;letter-spacing:6px;color:#fff}
+    .gallery-grid{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:auto auto;gap:12px;max-width:1200px;margin:0 auto}
+    .gallery-item{position:relative;overflow:hidden;border-radius:12px;cursor:pointer;border:1px solid rgba(13,148,136,0.15)}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .gallery-item:hover img{transform:scale(1.08)}
+    .gallery-item:first-child{grid-row:span 2}
+
+    /* === Dashboard === */
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .dash-card{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:var(--surface);border:1px solid rgba(13,148,136,0.15);border-radius:16px;padding:32px 24px;text-align:center;transition:transform 0.3s,border-color 0.3s}
+    .dash-card:hover{transform:translateY(-4px);border-color:var(--secondary);box-shadow:0 8px 30px rgba(6,182,212,0.1)}
+    .dash-icon{font-size:28px;margin-bottom:12px}
+    .dash-value{font-size:32px;font-weight:700;color:var(--secondary);margin-bottom:6px}
+    .dash-label{font-size:13px;opacity:0.55;letter-spacing:2px}
+
+    /* === CTA === */
+    .cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:url('img/lijiang/桂林市漓江景区_13.jpg') center/cover;filter:brightness(0.3) saturate(0.9)}
+    .cta-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,47,46,0.5),transparent 30%,transparent 70%,rgba(4,47,46,0.7) 100%)}
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(64px,10vw,120px);font-weight:900;letter-spacing:8px;opacity:0.12;margin-bottom:-20px;color:var(--secondary)}
+    .cta-title{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(24px,3vw,36px);letter-spacing:6px;margin-bottom:32px;color:#fff}
+    .cta-btn{display:inline-block;padding:14px 48px;border:1px solid rgba(255,255,255,0.25);border-radius:30px;font-size:15px;letter-spacing:4px;text-decoration:none;color:var(--text);background:rgba(13,148,136,0.1);backdrop-filter:blur(12px);transition:all 0.3s}
+    .cta-btn:hover{background:rgba(13,148,136,0.25);border-color:var(--secondary);box-shadow:0 0 30px rgba(6,182,212,0.15)}
+
+    /* === Footer === */
+    .footer{padding:40px;text-align:center;opacity:0.35;font-size:13px;letter-spacing:2px;border-top:1px solid rgba(13,148,136,0.1)}
+
+    /* === Animation === */
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    /* === Responsive === */
+    @media(max-width:768px){
+      .glass-title{padding:32px 24px}
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .content-image img{height:280px}
+      .gallery-grid{grid-template-columns:1fr}
+      .gallery-item:first-child{grid-row:auto;height:300px}
+      .gallery-item{height:220px}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:6px}
+      .hud-item{padding:8px 12px;min-width:56px}
+      .hud-value{font-size:16px}
+      .hud-label{font-size:9px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="water-ripple"></div>
+    <div class="hero-content">
+      <div class="glass-title">
+        <h1 class="hero-title">Li River</h1>
+        <p class="hero-sub">A hundred li of Li River, a hundred li of gallery</p>
+      </div>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- HUD -->
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">150m</div><div class="hud-label">Elevation</div></div>
+    <div class="hud-item"><div class="hud-value">1159km²</div><div class="hud-label">Total Area</div></div>
+    <div class="hud-item"><div class="hud-value">4.7</div><div class="hud-label">Rating</div></div>
+    <div class="hud-item"><div class="hud-value">✓</div><div class="hud-label">World Natural Heritage</div></div>
+  </div>
+
+  <!-- Content 1 -->
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="img/lijiang/桂林市漓江景区_02.jpg" alt="Lijiang River Landscape" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>The Hundred-li Lijiang River</h2>
+      <div class="content-divider"></div>
+      <p>The Lijiang River originates from Mount Mao'er in northeastern Guilin, stretching about 164 kilometers. It flows through Guilin, Yangshuo, and other areas, embodying the essence of Guilin's landscapes. Along its banks, majestic peaks rise sharply, emerald waters meander, and green mountains are reflected in the clear ripples, creating a magnificent painting where "boats sail on blue waves, and people wander within a picture."</p>
+      <p>Centered on karst landforms, the Lijiang River Scenic Area features the world's most typical peaks and peak-cluster landscapes. It was designated a National Key Scenic Area in 1982 and rated a National 5A Tourist Attraction in 2007.</p>
+      <div class="content-tags">
+        <span class="content-tag">Karst Landscape</span>
+        <span class="content-tag">Landscape Gallery</span>
+        <span class="content-tag">World Heritage</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Image Break -->
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <div class="quote-cn">The river winds like a green silk ribbon, the mountains rise like jade hairpins</div>
+      <div class="quote-en">—— Tang Dynasty · Han Yu</div>
+    </div>
+  </section>
+
+  <!-- Content 2 reverse -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="img/lijiang/桂林市漓江景区_03.jpg" alt="Nine-Horse Mountain" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Nine-Horse Mountain</h2>
+      <div class="content-divider"></div>
+      <p>Nine-Horse Mountain is one of the most famous sights along the Lijiang River, located near Xingping Ancient Town. The cliff face looks as if it were carved by knives and axes, standing about 200 meters high and 100 meters wide. Naturally formed on the rock wall are images of nine gallant horses — some standing, some lying, some galloping, some leaping — incredibly lifelike.</p>
+      <p>A local folk rhyme goes: "Look, young horse-spotter, tell me how many horses there are? Spot seven and you're a top scholar, spot nine and you're the champion." Over the centuries, countless poets and literati have left behind poems and legendary tales inspired by this site.</p>
+      <div class="content-tags">
+        <span class="content-tag">Natural Wonder</span>
+        <span class="content-tag">Folklore</span>
+        <span class="content-tag">Photo Spot</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content 3 -->
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="img/lijiang/桂林市漓江景区_05.jpg" alt="Yellow Cloth Reflection" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Yellow Cloth Reflection</h2>
+      <div class="content-divider"></div>
+      <p>Yellow Cloth Reflection is located in the prime section of the Lijiang River. It gets its name from a massive yellowish-brown stone slab on the riverbed that spreads like a yellow cloth. Here the river is wide and the current gentle. The green mountains and lush trees along both banks are reflected in the crystal-clear, mirror-like water, blurring the line between reality and illusion — dreamlike and enchanting.</p>
+      <p>This spot is the backdrop for the 20-yuan banknote and one of the best photography locations along the Lijiang River. On sunny days, with blue skies, white clouds, green peaks, and emerald bamboo mirrored in the water, it becomes hard to tell where the mountain ends and its reflection begins — a beauty beyond words.</p>
+      <div class="content-tags">
+        <span class="content-tag">Banknote Background</span>
+        <span class="content-tag">Photography Paradise</span>
+        <span class="content-tag">Yellow Cloth Reflection</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" data-animate>
+    <h2>Visual Exploration</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="img/lijiang/桂林市漓江景区_06.jpg" alt="Lijiang River Panorama" loading="lazy"/></div>
+      <div class="gallery-item"><img src="img/lijiang/桂林市漓江景区_07.png" alt="Lijiang River in Misty Rain" loading="lazy"/></div>
+      <div class="gallery-item"><img src="img/lijiang/桂林市漓江景区_09.jpg" alt="Lijiang River Bamboo Raft" loading="lazy"/></div>
+      <div class="gallery-item"><img src="img/lijiang/桂林市漓江景区_11.jpg" alt="Lijiang River at Dusk" loading="lazy"/></div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="dashboard" data-animate>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🏔</div><div class="dash-value">214km</div><div class="dash-label">River Length</div></div>
+      <div class="dash-card"><div class="dash-icon">🌊</div><div class="dash-value">1159km²</div><div class="dash-label">Scenic Area</div></div>
+      <div class="dash-card"><div class="dash-icon">⭐</div><div class="dash-value">4.7</div><div class="dash-label">Rating</div></div>
+      <div class="dash-card"><div class="dash-icon">📅</div><div class="dash-value">1982</div><div class="dash-label">Designated</div></div>
+      <div class="dash-card"><div class="dash-icon">🛶</div><div class="dash-value">5</div><div class="dash-label">Highlight Sections</div></div>
+      <div class="dash-card"><div class="dash-icon">🌿</div><div class="dash-value">85%</div><div class="dash-label">Forest Coverage</div></div>
+      <div class="dash-card"><div class="dash-icon">📸</div><div class="dash-value">20+</div><div class="dash-label">Photo Spots</div></div>
+      <div class="dash-card"><div class="dash-icon">🌸</div><div class="dash-value">All Year</div><div class="dash-label">Best Season</div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-overlay"></div>
+    <div class="cta-content">
+      <div class="cta-num">Li River</div>
+      <div class="cta-title">Explore the Hundred-li Landscape Scroll</div>
+      <a href="../index.html?prov=%E5%B9%BF%E8%A5%BF%E5%A3%AE%E6%97%8F%E8%87%AA%E6%B2%BB%E5%8C%BA" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Lijiang River Scenic Area · National 5A Tourist Attraction · Guilin, Guangxi</p>
+  </footer>
+
+  <script>
+    (function(){
+      var heroBg = document.getElementById('heroBg');
+      var bgUrl = 'img/lijiang/桂林市漓江景区_01.jpg';
+      var img = new Image();
+      img.onload = function(){ heroBg.style.backgroundImage = 'url(' + bgUrl + ')' };
+      img.src = bgUrl;
+
+      window.addEventListener('scroll', function(){
+        var s = document.getElementById('scrollHud');
+        if(s) s.style.opacity = window.scrollY > 100 ? '0' : '1';
+      });
+
+      document.querySelector('.hero').addEventListener('mousemove', function(e){
+        var x = (e.clientX / window.innerWidth - 0.5) * 12;
+        var y = (e.clientY / window.innerHeight - 0.5) * 12;
+        document.getElementById('heroBg').style.transform = 'translate(' + x + 'px,' + y + 'px)';
+      });
+
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting) e.target.classList.add('visible');
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('[data-animate]').forEach(function(e){ observer.observe(e); });
+    })();
+  </script>
+</body>
+</html>

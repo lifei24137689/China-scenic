@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Firefly Water Cave · Underground Grand Canyon | 5A Scenic Immersive Exploration</title>
+  <style>
+    /* ===== T7 Sci-Fi Wonderland · Floating Particles Color Scheme ===== */
+    :root {
+      --primary: #10b981;
+      --secondary: #a3e635;
+      --bg: #0a1a0f;
+      --surface: rgba(16,185,129,0.08);
+      --text: #e0ffe0;
+      --text-dim: rgba(224,255,224,0.55);
+      --glow: rgba(16,185,129,0.3);
+      --neon: #10b981;
+    }
+
+    /* ===== Reset & Base ===== */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+      line-height:1.8;
+    }
+
+    /* ===== Hero ===== */
+    .hero{
+      height:100vh;
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .hero-bg{
+      position:absolute;inset:-20px;
+      background:url('images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_03.jpg') center/cover no-repeat;
+      filter:brightness(0.45) saturate(1.1);
+      transition:transform 0.1s ease-out;
+      will-change:transform;
+    }
+    .hero-overlay{
+      position:absolute;inset:0;z-index:1;
+      background:radial-gradient(ellipse at center,transparent 10%,var(--bg) 75%),
+                 radial-gradient(ellipse at 50% 45%,rgba(16,185,129,0.06) 0%,transparent 50%);
+      pointer-events:none;
+    }
+
+    /* Neon Glow Pulse */
+    .neon-aurora{
+      position:absolute;
+      top:30%;left:20%;
+      width:800px;height:500px;
+      background:radial-gradient(ellipse,rgba(16,185,129,0.12) 0%,rgba(163,230,53,0.06) 30%,transparent 70%);
+      animation:auroraPulse 6s ease-in-out infinite;
+      z-index:1;
+      pointer-events:none;
+    }
+    .neon-aurora:nth-child(2){
+      top:55%;left:35%;
+      width:600px;height:350px;
+      background:radial-gradient(ellipse,rgba(163,230,53,0.1) 0%,rgba(16,185,129,0.04) 40%,transparent 70%);
+      animation:auroraPulse 8s ease-in-out 3s infinite reverse;
+    }
+    .neon-aurora:nth-child(3){
+      top:10%;left:55%;
+      width:500px;height:420px;
+      background:radial-gradient(ellipse,rgba(16,185,129,0.07) 0%,transparent 65%);
+      animation:auroraPulse 10s ease-in-out 5s infinite;
+    }
+    @keyframes auroraPulse{
+      0%,100%{transform:scale(1) rotate(0deg);opacity:0.4}
+      50%{transform:scale(1.3) rotate(3deg);opacity:0.75}
+    }
+
+    /* Floating Glowing Particles */
+    .particle{
+      position:absolute;
+      width:4px;height:4px;
+      background:var(--neon);
+      border-radius:50%;
+      box-shadow:0 0 10px var(--glow),0 0 20px var(--glow),0 0 40px rgba(16,185,129,0.12);
+      animation:floatParticle 6s ease-in-out infinite;
+      z-index:2;
+      pointer-events:none;
+    }
+    .particle.small{
+      width:2px;height:2px;
+      box-shadow:0 0 6px var(--glow),0 0 14px rgba(16,185,129,0.15);
+    }
+    .particle.lime{
+      background:var(--secondary);
+      box-shadow:0 0 10px rgba(163,230,53,0.4),0 0 22px rgba(163,230,53,0.2);
+    }
+    .particle-field{
+      position:absolute;inset:0;z-index:2;
+      pointer-events:none;overflow:hidden;
+    }
+    .p1{left:8%;top:18%;animation-delay:0s;animation-duration:6s}
+    .p2{left:22%;top:72%;animation-delay:0.8s;animation-duration:7s}
+    .p3{left:38%;top:12%;animation-delay:1.6s;animation-duration:8s}
+    .p4{left:52%;top:82%;animation-delay:2.4s;animation-duration:5.5s}
+    .p5{left:65%;top:22%;animation-delay:3.2s;animation-duration:6.5s}
+    .p6{left:78%;top:58%;animation-delay:0.5s;animation-duration:7.5s}
+    .p7{left:15%;top:45%;animation-delay:1.3s;animation-duration:8.5s}
+    .p8{left:42%;top:35%;animation-delay:2.1s;animation-duration:6.8s}
+    .p9{left:58%;top:65%;animation-delay:3.8s;animation-duration:5.3s}
+    .p10{left:88%;top:28%;animation-delay:4.5s;animation-duration:7.2s}
+    .p11{left:5%;top:85%;animation-delay:5.2s;animation-duration:6.3s}
+    .p12{left:32%;top:55%;animation-delay:0.3s;animation-duration:9s}
+    .p13{left:72%;top:8%;animation-delay:1.9s;animation-duration:5.8s}
+    .p14{left:92%;top:75%;animation-delay:2.7s;animation-duration:7.8s}
+    .p15{left:48%;top:48%;animation-delay:3.5s;animation-duration:8.2s}
+    .p16{left:18%;top:10%;animation-delay:4.1s;animation-duration:6.1s}
+    .p17{left:82%;top:42%;animation-delay:5.8s;animation-duration:7.4s}
+    .p18{left:55%;top:92%;animation-delay:6.5s;animation-duration:6.9s}
+    .p19{left:35%;top:5%;animation-delay:7.2s;animation-duration:5.6s}
+    .p20{left:68%;top:38%;animation-delay:7.9s;animation-duration:8.7s}
+    @keyframes floatParticle{
+      0%,100%{transform:translateY(0) translateX(0) scale(1);opacity:0.25}
+      25%{transform:translateY(-20px) translateX(8px) scale(1.6);opacity:0.85}
+      50%{transform:translateY(-45px) translateX(-5px) scale(2);opacity:1}
+      75%{transform:translateY(-25px) translateX(-10px) scale(1.4);opacity:0.6}
+    }
+
+    /* Firefly Blinking Particles */
+    .firefly{
+      position:absolute;
+      width:2px;height:2px;
+      background:var(--secondary);
+      border-radius:50%;
+      box-shadow:0 0 6px rgba(163,230,53,0.5),0 0 12px rgba(163,230,53,0.2);
+      animation:fireflyBlink 3s ease-in-out infinite;
+      z-index:2;
+      pointer-events:none;
+    }
+    @keyframes fireflyBlink{
+      0%,100%{opacity:0;transform:scale(0.5)}
+      20%{opacity:0.9;transform:scale(1.8)}
+      40%{opacity:0.15;transform:scale(0.8)}
+      60%{opacity:0.95;transform:scale(2.2)}
+      80%{opacity:0.1;transform:scale(0.6)}
+    }
+
+    .hero-content{
+      position:relative;z-index:5;text-align:center;
+    }
+
+    .neon-frame{
+      display:inline-block;
+      padding:28px 56px;
+      border:1px solid rgba(16,185,129,0.4);
+      box-shadow:0 0 24px rgba(16,185,129,0.15),inset 0 0 24px rgba(16,185,129,0.06);
+      border-radius:4px;
+      position:relative;
+    }
+    .neon-frame::before{
+      content:'';
+      position:absolute;top:-1px;left:15%;right:15%;height:1px;
+      background:linear-gradient(90deg,transparent,var(--secondary),transparent);
+    }
+    .neon-frame::after{
+      content:'';
+      position:absolute;bottom:-1px;left:15%;right:15%;height:1px;
+      background:linear-gradient(90deg,transparent,var(--secondary),transparent);
+    }
+    .hero-title{
+      font-family:'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif;
+      font-size:clamp(38px,6vw,68px);
+      letter-spacing:8px;
+      color:var(--text);
+      text-shadow:0 0 40px rgba(16,185,129,0.5),0 0 80px rgba(16,185,129,0.25);
+      line-height:1.3;
+    }
+    .hero-sub{
+      font-size:clamp(14px,1.6vw,20px);
+      letter-spacing:6px;
+      opacity:0.55;
+      margin-top:22px;
+      color:var(--secondary);
+      font-family:'Consolas','Courier New','Microsoft YaHei',monospace;
+    }
+    .hero-badge{
+      display:inline-block;
+      margin-top:22px;
+      padding:6px 26px;
+      border:1px solid rgba(16,185,129,0.35);
+      border-radius:2px;
+      font-size:12px;
+      letter-spacing:5px;
+      color:var(--primary);
+      text-shadow:0 0 10px rgba(16,185,129,0.3);
+      font-family:'Consolas','Courier New','Microsoft YaHei',monospace;
+    }
+
+    /* ===== Scan Line Effect ===== */
+    .scan-line{
+      position:absolute;
+      left:0;right:0;
+      height:1px;
+      background:linear-gradient(90deg,transparent,rgba(16,185,129,0.15),transparent);
+      animation:scanDown 4s linear infinite;
+      z-index:3;
+      pointer-events:none;
+    }
+    @keyframes scanDown{
+      0%{top:0;opacity:0}
+      10%{opacity:1}
+      90%{opacity:1}
+      100%{top:100%;opacity:0}
+    }
+
+    /* ===== Scroll Hint ===== */
+    .scroll-hint{
+      position:absolute;bottom:44px;left:50%;transform:translateX(-50%);
+      z-index:5;display:flex;flex-direction:column;align-items:center;gap:10px;
+      transition:opacity 0.4s;
+    }
+    .scroll-line{
+      width:1px;height:44px;
+      background:linear-gradient(to bottom,var(--secondary),transparent);
+      animation:scrollPulse 2s ease-in-out infinite;
+    }
+    .scroll-hint span{
+      font-size:11px;letter-spacing:4px;color:var(--text-dim);
+    }
+    @keyframes scrollPulse{0%,100%{opacity:0.2;transform:scaleY(0.6)}50%{opacity:1;transform:scaleY(1)}}
+
+    /* ===== HUD Panel ===== */
+    .hud{
+      position:fixed;top:24px;right:24px;z-index:100;
+      display:flex;gap:10px;
+      transition:opacity 0.4s;
+    }
+    .hud-item{
+      backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      background:var(--surface);
+      border:1px solid rgba(16,185,129,0.25);
+      border-radius:6px;
+      padding:14px 20px;
+      text-align:center;
+      min-width:72px;
+      box-shadow:0 0 16px rgba(16,185,129,0.05);
+    }
+    .hud-value{
+      font-size:22px;font-weight:700;
+      color:var(--secondary);
+      font-family:'Consolas','Courier New',monospace;
+      letter-spacing:1px;
+    }
+    .hud-label{
+      font-size:10px;color:var(--text-dim);
+      margin-top:4px;letter-spacing:3px;
+    }
+
+    /* ===== Content Area ===== */
+    .content-section{
+      max-width:1140px;margin:0 auto;
+      padding:100px 40px;
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:64px;align-items:center;
+    }
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{
+      width:100%;border-radius:6px;overflow:hidden;
+      box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 30px rgba(16,185,129,0.1);
+      border:1px solid rgba(16,185,129,0.15);
+      position:relative;
+    }
+    .content-image img{
+      width:100%;height:420px;object-fit:cover;display:block;
+      transition:transform 0.8s ease;
+    }
+    .content-image:hover img{transform:scale(1.05)}
+    .content-text h2{
+      font-family:'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif;
+      font-size:clamp(28px,4vw,44px);
+      letter-spacing:6px;
+      margin-bottom:16px;
+      color:var(--secondary);
+      text-shadow:0 0 20px rgba(16,185,129,0.3);
+    }
+    .content-divider{
+      width:50px;height:1px;
+      background:linear-gradient(90deg,var(--secondary),transparent);
+      margin-bottom:24px;
+    }
+    .content-text p{
+      font-size:15px;line-height:2.1;opacity:0.72;
+      margin-bottom:14px;
+    }
+    .content-tags{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;
+    }
+    .content-tag{
+      padding:6px 18px;
+      border:1px solid rgba(16,185,129,0.25);
+      border-radius:20px;
+      font-size:12px;
+      letter-spacing:3px;
+      color:var(--primary);
+      transition:all 0.3s;
+    }
+    .content-tag:hover{
+      background:var(--surface);
+      border-color:var(--secondary);
+    }
+
+    /* ===== Image Break Section ===== */
+    .image-break{
+      height:60vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .image-break .bg{
+      position:absolute;inset:-10px;
+      background:url('images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_11.jpg') center/cover fixed no-repeat;
+      filter:brightness(0.35) saturate(1.05);
+    }
+    .image-break .quote{
+      position:relative;z-index:2;text-align:center;
+    }
+    .image-break .quote-cn{
+      font-family:'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif;
+      font-size:clamp(28px,4vw,48px);
+      letter-spacing:8px;
+      margin-bottom:12px;
+      color:var(--text);
+      text-shadow:0 0 40px rgba(16,185,129,0.4);
+    }
+    .image-break .quote-en{
+      font-size:13px;opacity:0.45;letter-spacing:5px;
+      text-transform:uppercase;color:var(--text-dim);
+    }
+
+    /* ===== Gallery ===== */
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{
+      text-align:center;
+      font-family:'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif;
+      font-size:clamp(24px,3vw,36px);
+      margin-bottom:48px;
+      letter-spacing:8px;
+      color:var(--secondary);
+      text-shadow:0 0 20px rgba(16,185,129,0.2);
+    }
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+    .gallery-item{
+      position:relative;overflow:hidden;border-radius:6px;
+      cursor:pointer;
+      border:1px solid rgba(16,185,129,0.12);
+      transition:box-shadow 0.4s;
+    }
+    .gallery-item:hover{
+      box-shadow:0 0 24px rgba(16,185,129,0.18);
+    }
+    .gallery-item img{
+      width:100%;height:100%;object-fit:cover;display:block;
+      transition:transform 0.6s ease;
+    }
+    .gallery-item:hover img{transform:scale(1.08)}
+
+    /* ===== Dashboard ===== */
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dashboard-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+    }
+    .dash-card{
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      background:var(--surface);
+      border:1px solid rgba(16,185,129,0.12);
+      border-radius:8px;
+      padding:32px 24px;
+      text-align:center;
+      transition:transform 0.4s,border-color 0.4s,box-shadow 0.4s;
+      position:relative;
+      overflow:hidden;
+    }
+    .dash-card:hover{
+      transform:translateY(-6px);
+      border-color:var(--secondary);
+      box-shadow:0 12px 40px rgba(16,185,129,0.15),0 0 20px rgba(16,185,129,0.08);
+    }
+    .dash-card::before{
+      content:'';
+      position:absolute;top:0;left:50%;
+      transform:translateX(-50%);
+      width:30px;height:1px;
+      background:var(--secondary);
+      opacity:0;
+      transition:opacity 0.4s;
+    }
+    .dash-card:hover::before{opacity:1}
+    .dash-icon{font-size:28px;margin-bottom:12px}
+    .dash-value{
+      font-size:28px;font-weight:700;
+      color:var(--secondary);
+      margin-bottom:6px;
+      font-family:'Microsoft YaHei','PingFang SC',sans-serif;
+    }
+    .dash-label{
+      font-size:13px;opacity:0.5;
+      letter-spacing:3px;
+      color:var(--text-dim);
+    }
+
+    /* ===== CTA Section ===== */
+    .cta{
+      height:60vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .cta-bg{
+      position:absolute;inset:-10px;
+      background:url('images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_12.jpg') center/cover no-repeat;
+      filter:brightness(0.3) saturate(0.85);
+    }
+    .cta-aurora{
+      position:absolute;top:20%;left:25%;
+      width:700px;height:400px;
+      background:radial-gradient(ellipse,rgba(16,185,129,0.1) 0%,rgba(163,230,53,0.04) 40%,transparent 70%);
+      animation:auroraPulse 7s ease-in-out infinite;
+      z-index:1;
+      pointer-events:none;
+    }
+    .cta-aurora:nth-child(2){
+      top:45%;left:10%;
+      width:500px;height:300px;
+      background:radial-gradient(ellipse,rgba(163,230,53,0.07) 0%,transparent 65%);
+      animation:auroraPulse 9s ease-in-out 4s infinite reverse;
+    }
+    .cta-content{
+      position:relative;z-index:2;text-align:center;
+    }
+    .cta-num{
+      font-size:clamp(72px,11vw,140px);font-weight:900;
+      letter-spacing:16px;
+      opacity:0.1;
+      margin-bottom:-24px;
+      color:var(--secondary);
+      font-family:'Consolas','Courier New',monospace;
+    }
+    .cta-title{
+      font-family:'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif;
+      font-size:clamp(22px,3vw,34px);
+      letter-spacing:6px;
+      margin-bottom:36px;
+      color:var(--text);
+      text-shadow:0 0 30px rgba(16,185,129,0.3);
+    }
+    .cta-btn{
+      display:inline-block;
+      padding:14px 48px;
+      border:1px solid rgba(16,185,129,0.35);
+      border-radius:30px;
+      font-size:15px;
+      letter-spacing:5px;
+      text-decoration:none;
+      color:var(--text);
+      transition:all 0.4s;
+      backdrop-filter:blur(8px);
+      background:rgba(16,185,129,0.06);
+    }
+    .cta-btn:hover{
+      background:rgba(16,185,129,0.16);
+      border-color:var(--secondary);
+      box-shadow:0 0 30px rgba(16,185,129,0.25);
+    }
+
+    /* ===== Footer ===== */
+    .footer{
+      padding:40px;
+      text-align:center;
+      opacity:0.3;
+      font-size:12px;
+      letter-spacing:3px;
+      color:var(--text-dim);
+    }
+
+    /* ===== Scroll Animation ===== */
+    [data-animate]{
+      opacity:0;transform:translateY(40px);
+      transition:opacity 0.8s ease,transform 0.8s ease;
+    }
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    /* ===== Responsive ===== */
+    @media(max-width:768px){
+      .content-section{
+        grid-template-columns:1fr;
+        padding:60px 24px;
+        gap:32px;
+      }
+      .content-section.reverse{direction:ltr}
+      .gallery-grid{grid-template-columns:1fr}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:6px}
+      .hud-item{padding:8px 14px}
+      .hud-value{font-size:18px}
+      .hero-title{letter-spacing:4px}
+      .neon-frame{padding:18px 32px}
+      .neon-aurora{width:350px;height:220px}
+      .neon-aurora:nth-child(2){width:280px;height:180px}
+      .neon-aurora:nth-child(3){width:250px;height:200px}
+      .cta-num{letter-spacing:8px}
+    }
+  </style>
+</head>
+<body>
+  <!-- ==================== Hero ==================== -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+
+    <!-- Neon Glow -->
+    <div class="neon-aurora"></div>
+    <div class="neon-aurora"></div>
+    <div class="neon-aurora"></div>
+
+    <!-- Scan Line Effect -->
+    <div class="scan-line"></div>
+
+    <!-- Floating Glowing Particles (20) + Firefly Blinking Lights -->
+    <div class="particle-field">
+      <div class="particle p1"></div>
+      <div class="particle small p2"></div>
+      <div class="particle lime p3"></div>
+      <div class="particle p4"></div>
+      <div class="particle small p5"></div>
+      <div class="particle p6"></div>
+      <div class="particle lime p7"></div>
+      <div class="particle small p8"></div>
+      <div class="particle p9"></div>
+      <div class="particle small p10"></div>
+      <div class="particle lime p11"></div>
+      <div class="particle p12"></div>
+      <div class="particle small p13"></div>
+      <div class="particle p14"></div>
+      <div class="particle lime p15"></div>
+      <div class="particle small p16"></div>
+      <div class="particle p17"></div>
+      <div class="particle small p18"></div>
+      <div class="particle lime p19"></div>
+      <div class="particle p20"></div>
+      <div class="firefly" style="left:12%;top:25%;animation-delay:0s"></div>
+      <div class="firefly" style="left:28%;top:38%;animation-delay:1.2s"></div>
+      <div class="firefly" style="left:45%;top:15%;animation-delay:2.4s"></div>
+      <div class="firefly" style="left:62%;top:42%;animation-delay:0.6s"></div>
+      <div class="firefly" style="left:78%;top:20%;animation-delay:1.8s"></div>
+      <div class="firefly" style="left:35%;top:68%;animation-delay:3.0s"></div>
+      <div class="firefly" style="left:55%;top:78%;animation-delay:0.9s"></div>
+      <div class="firefly" style="left:85%;top:55%;animation-delay:2.1s"></div>
+      <div class="firefly" style="left:18%;top:88%;animation-delay:1.5s"></div>
+      <div class="firefly" style="left:68%;top:90%;animation-delay:2.7s"></div>
+    </div>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="neon-frame">
+        <h1 class="hero-title">Firefly Water Cave</h1>
+      </div>
+      <p class="hero-sub">FIREFLY · CAVE · WONDER</p>
+      <div class="hero-badge">5A · 2020 · Asia's Rare Firefly Water Cave</div>
+    </div>
+
+    <div class="scroll-hint" id="scrollHud">
+      <span>Explore the Wonder</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ==================== HUD Data Panel ==================== -->
+  <div class="hud" id="hud">
+    <div class="hud-item">
+      <div class="hud-value">Dark River</div>
+      <div class="hud-label">Underground River</div>
+    </div>
+    <div class="hud-item">
+      <div class="hud-value">6100</div>
+      <div class="hud-label">Canyon Length (m)</div>
+    </div>
+    <div class="hud-item">
+      <div class="hud-value">4.4</div>
+      <div class="hud-label">Scenic Rating</div>
+    </div>
+  </div>
+
+  <!-- ==================== Content Section 1: Firefly Water Cave ==================== -->
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_05.jpg" alt="Firefly Water Cave" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Firefly Water Cave</h2>
+      <div class="content-divider"></div>
+      <p>The Firefly Water Cave is a rare firefly viewing sanctuary in Asia. The cave maintains a constant temperature of 18&#8451; year-round, with surging underground rivers and towering stalactites. Taking a boat deep into the cave, you look up to see thousands of fireflies twinkling like stars, dotting the dome like a fallen galaxy, leaving you breathless.</p>
+      <p>From June to August each year, fireflies enter their active season, and the density of light dots inside the cave reaches its peak. These luminous sprites have extremely strict requirements for their ecological environment. The fact that fireflies thrive and multiply here is nature&rsquo;s most gentle endorsement of this pure land. Being here feels like a dream.</p>
+      <div class="content-tags">
+        <span class="content-tag">Rare in Asia</span>
+        <span class="content-tag">Firefly Starry Sky</span>
+        <span class="content-tag">Constant 18&#8451;</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Content Section 2 (Reverse): Underground Grand Canyon ==================== -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image">
+      <img src="images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_07.jpg" alt="Underground Grand Canyon" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Underground Grand Canyon</h2>
+      <div class="content-divider"></div>
+      <p>Linyi Underground Grand Canyon stretches 6,100 meters in length, making it one of China&rsquo;s super-large karst caves, hailed as &ldquo;China&rsquo;s No. 1 Cave for Underground River Rafting.&rdquo; The canyon reaches a maximum width of over 100 meters and a maximum height of 46 meters, creating a majestic and awe-inspiring spectacle. Underground rivers meander through the canyon, with stalactites in countless fascinating forms.</p>
+      <p>Underground river rafting is the biggest highlight, spanning about 1,000 meters. Riding a rubber raft through the darkness, you experience thrilling rapids and calm, mirror-like waters in turns. The stalactites on both sides glisten under the colorful lights, creating a dazzling underground world known as the &ldquo;Underground Three Gorges.&rdquo;</p>
+      <div class="content-tags">
+        <span class="content-tag">6,100m</span>
+        <span class="content-tag">Underground River Rafting</span>
+        <span class="content-tag">Underground Three Gorges</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Content Section 3: Butterfly Valley & Stalactites ==================== -->
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_09.jpg" alt="Butterfly Valley and Stalactites" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Butterfly Valley &amp; Stalactite Wonders</h2>
+      <div class="content-divider"></div>
+      <p>Butterfly Valley is another major highlight of the Firefly Water Cave scenic area. Flowers bloom year-round in the valley, with butterflies dancing gracefully. Hundreds of butterfly species inhabit and flutter here, complementing the surrounding green mountains and clear waters, creating a paradise on earth. Strolling through, the harmony between man and nature unfolds before your eyes.</p>
+      <p>The stalactite clusters of the Underground Grand Canyon formed over hundreds of millions of years of geological change. Stalagmites, stalactites, and draperies take on various shapes&mdash;some like inverted lotuses, others like cascading waterfalls. Illuminated by colorful lights, the entire cave resembles a natural underground palace, quietly telling the story of Earth&rsquo;s vicissitudes.</p>
+      <div class="content-tags">
+        <span class="content-tag">Butterflies Dancing</span>
+        <span class="content-tag">Stalactite Wonders</span>
+        <span class="content-tag">Hundreds of Millions of Years</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Image Break Section ==================== -->
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="quote">
+      <div class="quote-cn">Stars Descend into the Light of the Earth&rsquo;s Core</div>
+      <div class="quote-en">Stars Descend · Into the Heart of Earth</div>
+    </div>
+  </section>
+
+  <!-- ==================== Gallery ==================== -->
+  <section class="gallery" data-animate>
+    <h2>Wonderland Light &amp; Shadow</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="height:480px">
+        <img src="images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_04.jpg" alt="Firefly Underground River" loading="lazy"/>
+      </div>
+      <div class="gallery-item" style="height:220px">
+        <img src="images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_06.jpg" alt="Canyon Stalactites" loading="lazy"/>
+      </div>
+      <div class="gallery-item" style="height:240px">
+        <img src="images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_08.jpg" alt="Underground Rapids" loading="lazy"/>
+      </div>
+      <div class="gallery-item" style="height:260px">
+        <img src="images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_10.jpg" alt="Karst Cave Wonders" loading="lazy"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Dashboard ==================== -->
+  <section class="dashboard" data-animate>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <div class="dash-icon">🪲</div>
+        <div class="dash-value">Fireflies</div>
+        <div class="dash-label">Firefly Water Cave</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-icon">🏞</div>
+        <div class="dash-value">Grand Canyon</div>
+        <div class="dash-label">Underground Grand Canyon</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-icon">🚣</div>
+        <div class="dash-value">Rafting</div>
+        <div class="dash-label">Underground River Rafting</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-icon">💎</div>
+        <div class="dash-value">Stalactites</div>
+        <div class="dash-label">Stalactite Wonders</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CTA ==================== -->
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-aurora"></div>
+    <div class="cta-aurora"></div>
+    <div class="cta-content">
+      <div class="cta-num">6100</div>
+      <div class="cta-title">Underground Wonder &middot; Hidden River Realm</div>
+      <a href="../index.html?prov=%E5%B1%B1%E4%B8%9C%E7%9C%81" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <!-- ==================== Footer ==================== -->
+  <footer class="footer">
+    <p>Linyi Firefly Water Cave &amp; Underground Grand Canyon Scenic Area &middot; National 5A Tourist Attraction &middot; Linyi, Shandong</p>
+  </footer>
+
+  <!-- ==================== Script ==================== -->
+  <script>
+    // Image preload
+    (function(){
+      var i=new Image();
+      i.onload=function(){
+        document.getElementById('heroBg').style.backgroundImage="url('images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_03.jpg')"
+      };
+      i.src='images/临沂市萤火虫水洞·地下大峡谷旅游区/临沂市萤火虫水洞·地下大峡谷旅游区_03.jpg'
+    })();
+
+    // Scroll HUD hide
+    window.addEventListener('scroll',function(){
+      var s=document.getElementById('scrollHud');
+      if(s)s.style.opacity=window.scrollY>100?'0':'1'
+    });
+
+    // Mouse parallax
+    document.querySelector('.hero').addEventListener('mousemove',function(e){
+      var x=(e.clientX/window.innerWidth-0.5)*10,
+          y=(e.clientY/window.innerHeight-0.5)*10;
+      document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)'
+    });
+
+    // IntersectionObserver scroll animation
+    var observer=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting)entry.target.classList.add('visible')
+      })
+    },{threshold:0.15});
+
+    document.querySelectorAll('[data-animate]').forEach(function(el){
+      observer.observe(el)
+    });
+  </script>
+</body>
+</html>

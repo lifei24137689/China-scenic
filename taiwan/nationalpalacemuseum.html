@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>National Palace Museum · Chinese Heritage Through Generations | Taiwan 5A Scenic Spot Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;700&family=Orbitron:wght@400;700;900&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #8b0000;
+      --secondary: #d4a843;
+      --accent: #2d8c6c;
+      --bg: #0f0a08;
+      --surface: rgba(139,0,0,0.10);
+      --text: #f0e8d8;
+      --text-dim: rgba(240,232,216,0.55);
+      --text-faint: rgba(240,232,216,0.25);
+      --glow: rgba(212,168,67,0.2);
+      --stone-green: #2d8c6c;
+      --stone-blue: #1e5a8c;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    /* === Mural Texture (T13) === */
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+
+    /* === Hero === */
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:center/cover;filter:brightness(0.45) saturate(1.15);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(139,0,0,0.15) 0%,transparent 40%,rgba(30,90,140,0.1) 100%)}
+    .golden-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(212,168,67,0.12) 0%,transparent 70%);animation:goldenPulse 4s ease-in-out infinite;pointer-events:none}
+    @keyframes goldenPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.5}50%{transform:translate(-50%,-50%) scale(1.3);opacity:1}}
+    .hero-content{position:relative;z-index:2;text-align:center}
+    .hero-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(42px,7vw,84px);letter-spacing:14px;color:var(--text);text-shadow:0 2px 30px rgba(0,0,0,0.6),0 0 80px rgba(212,168,67,0.12)}
+    .hero-sub{font-size:clamp(14px,1.8vw,22px);opacity:0.7;margin-top:18px;letter-spacing:8px;font-weight:300}
+    .hero-divider{width:120px;height:2px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:20px auto}
+    .hero-tagline{font-size:clamp(12px,1.2vw,16px);opacity:0.4;letter-spacing:6px;margin-top:12px;font-weight:300}
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-size:11px;letter-spacing:3px;opacity:0.5}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+    /* === T13 Decorative Corner === */
+    .deco-corner{position:absolute;z-index:1;opacity:0.08;pointer-events:none}
+    .deco-corner-tl{top:30px;left:30px;width:80px;height:80px;border-top:1px solid var(--secondary);border-left:1px solid var(--secondary)}
+    .deco-corner-br{bottom:30px;right:30px;width:80px;height:80px;border-bottom:1px solid var(--secondary);border-right:1px solid var(--secondary)}
+
+    /* === HUD === */
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 16px;text-align:center;min-width:72px}
+    .hud-value{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;color:var(--secondary)}
+    .hud-label{font-size:10px;opacity:0.5;margin-top:3px;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif}
+
+    /* === Content Section === */
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.08)}
+    .content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .content-image:hover img{transform:scale(1.05)}
+    .content-text h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,3.5vw,40px);margin-bottom:16px;letter-spacing:6px;color:var(--text)}
+    .content-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--secondary),transparent);margin-bottom:24px}
+    .content-text p{font-size:16px;line-height:2.1;opacity:0.8;margin-bottom:16px;font-weight:300}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .content-tag{padding:5px 16px;border:1px solid rgba(212,168,67,0.2);border-radius:20px;font-size:12px;letter-spacing:2px;color:var(--secondary);font-family:'Noto Sans SC',sans-serif}
+
+    /* === Image Break === */
+    .image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:center/cover fixed;filter:brightness(0.38) saturate(1.1)}
+    .image-break .bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(139,0,0,0.1) 0%,transparent 50%,rgba(30,90,140,0.08) 100%)}
+    .image-break .quote{position:relative;z-index:2;text-align:center}
+    .image-break .quote-cn{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,4vw,48px);letter-spacing:10px;margin-bottom:12px}
+    .image-break .quote-en{font-size:13px;opacity:0.45;letter-spacing:5px;text-transform:uppercase;font-family:'Orbitron',sans-serif}
+
+    /* === Gallery === */
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{font-family:'ZCOOL XiaoWei',serif;text-align:center;font-size:clamp(28px,3vw,38px);margin-bottom:48px;letter-spacing:8px}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .gallery-item{position:relative;overflow:hidden;border-radius:10px;cursor:pointer;border:1px solid rgba(212,168,67,0.06)}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .gallery-item:hover img{transform:scale(1.08)}
+
+    /* === Dashboard === */
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dashboard h2{font-family:'ZCOOL XiaoWei',serif;text-align:center;font-size:clamp(28px,3vw,38px);margin-bottom:48px;letter-spacing:8px}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .dash-card{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:28px 20px;text-align:center;transition:transform 0.3s,border-color 0.3s}
+    .dash-card:hover{transform:translateY(-4px);border-color:var(--secondary)}
+    .dash-icon{font-size:26px;margin-bottom:10px;opacity:0.7}
+    .dash-value{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:700;color:var(--secondary);margin-bottom:4px}
+    .dash-label{font-size:12px;opacity:0.5;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif}
+
+    /* === CTA === */
+    .cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:center/cover;filter:brightness(0.28) saturate(0.85)}
+    .cta-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(139,0,0,0.08) 0%,transparent 50%,rgba(30,90,140,0.06) 100%)}
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{font-family:'Orbitron',sans-serif;font-size:clamp(60px,10vw,120px);font-weight:900;letter-spacing:8px;opacity:0.1;margin-bottom:-24px;color:var(--secondary)}
+    .cta-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3vw,36px);letter-spacing:8px;margin-bottom:32px}
+    .cta-btn{display:inline-block;padding:14px 48px;border:1px solid rgba(255,255,255,0.2);border-radius:30px;font-size:14px;letter-spacing:4px;text-decoration:none;color:var(--text);transition:all 0.3s;font-family:'Noto Sans SC',sans-serif;font-weight:300}
+    .cta-btn:hover{background:rgba(212,168,67,0.1);border-color:var(--secondary);color:var(--secondary)}
+
+    /* === Footer === */
+    .footer{padding:40px;text-align:center;opacity:0.3;font-size:13px;letter-spacing:3px;border-top:1px solid rgba(212,168,67,0.06)}
+
+    /* === Animations === */
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    /* === Responsive === */
+    @media(max-width:768px){
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .gallery-grid{grid-template-columns:1fr}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+      .hud-item{padding:6px 12px;min-width:60px}
+      .hud-value{font-size:16px}
+      .hud-label{font-size:9px}
+      .hero-title{letter-spacing:8px}
+      .content-text p{font-size:15px}
+      .dash-card{padding:20px 14px}
+      .dash-value{font-size:22px}
+      .deco-corner{display:none}
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="golden-glow"></div>
+    <div class="hero-overlay"></div>
+    <div class="deco-corner deco-corner-tl"></div>
+    <div class="deco-corner deco-corner-br"></div>
+    <div class="hero-content">
+      <div class="hero-divider"></div>
+      <h1 class="hero-title">National Palace Museum</h1>
+      <p class="hero-sub">Chinese Heritage · Generations of Legacy</p>
+      <p class="hero-tagline">NATIONAL PALACE MUSEUM · TAIPEI</p>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- HUD -->
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">697,000+</div><div class="hud-label">Total Collections</div></div>
+    <div class="hud-item"><div class="hud-value">5000</div><div class="hud-label">Exhibits on Display</div></div>
+    <div class="hud-item"><div class="hud-value">3,500,000+</div><div class="hud-label">Annual Visitors</div></div>
+  </div>
+
+  <!-- Content 1 -->
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="images/nationalpalacemuseum/img1.png" alt="National Palace Museum Panoramic View" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>A Treasure Hall of Chinese Civilization</h2>
+      <div class="content-divider"></div>
+      <p>Located in Waishuangxi, Shilin District, Taipei City, the National Palace Museum is a museum built in the architectural style of a Chinese palace. Nestled against the mountains, it presents a magnificent presence. The museum houses nearly 700,000 exquisite Chinese cultural artifacts, making it a treasured repository of ancient Chinese art and culture. Most of these artifacts were originally part of the precious collections from the former Beijing Palace Museum, the Shenyang Imperial Palace, and the Chengde Mountain Resort.</p>
+      <p>The National Palace Museum was established in 1965, with its main building designed in the style of the Beijing Imperial Palace. Its light blue glazed tile roof rests atop cream-colored walls, appearing solemn and elegant amidst the surrounding green mountains. The Jadeite Cabbage, Meat-shaped Stone, and Mao Gong Ding are hailed as the "Three Treasures of the Museum," must-see national treasures for every visitor.</p>
+      <div class="content-tags">
+        <span class="content-tag">Palace-Style Architecture</span>
+        <span class="content-tag">Nearly 700,000 Artifacts</span>
+        <span class="content-tag">Three Treasures</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Image Break -->
+  <section class="image-break">
+    <div class="bg" style="background-image:url('images/nationalpalacemuseum/img2.jpg')"></div>
+    <div class="quote">
+      <div class="quote-cn">Chinese Heritage · Generations of Legacy</div>
+      <div class="quote-en">NATIONAL PALACE MUSEUM · TAIPEI</div>
+    </div>
+  </section>
+
+  <!-- Content 2 (reverse) -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="images/nationalpalacemuseum/img3.jpg" alt="National Palace Museum Artifacts Exhibition" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>A Dialogue with National Treasures Across Millennia</h2>
+      <div class="content-divider"></div>
+      <p>The collections of the National Palace Museum span seven thousand years of Chinese civilization, from the Neolithic Age to the Ming and Qing dynasties. They include bronze vessels, jade artifacts, ceramics, calligraphy and paintings, ancient books, enamelware, and various other categories. The museum's holdings of Ru kiln ceramics from the Song dynasty, official kiln ceramics from the Ming and Qing dynasties, ancient calligraphy and paintings, and rare ancient books rank among the finest in the world.</p>
+      <p>The museum employs a rotation exhibition system, displaying approximately 5,000 artifacts at a time. Even with intensive visits, it would take three months to see one full rotation. The museum regularly hosts special exhibitions and collaborates with world-renowned museums, bringing Chinese culture to the international stage. Nearby, the Zhishan Garden and Zhide Garden, two traditional Chinese gardens, offer visitors an ideal place to appreciate the beauty of Chinese garden art after viewing the artifacts.</p>
+      <div class="content-tags">
+        <span class="content-tag">Seven Thousand Years of Civilization</span>
+        <span class="content-tag">Rotation Exhibition System</span>
+        <span class="content-tag">Zhishan Garden</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" data-animate>
+    <h2>Visual Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="height:500px"><img src="images/nationalpalacemuseum/g1.jpg" alt="" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:220px"><img src="images/nationalpalacemuseum/g2.png" alt="" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:260px"><img src="images/nationalpalacemuseum/g3.jpeg" alt="" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:280px"><img src="images/nationalpalacemuseum/g4.jpeg" alt="" style="height:100%" loading="lazy"/></div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="dashboard" data-animate>
+    <h2>Data Overview</h2>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🏺</div><div class="dash-value">697,000+</div><div class="dash-label">Total Artifacts</div></div>
+      <div class="dash-card"><div class="dash-icon">🖼️</div><div class="dash-value">5000</div><div class="dash-label">Exhibits on Display</div></div>
+      <div class="dash-card"><div class="dash-icon">👥</div><div class="dash-value">3,500,000+</div><div class="dash-label">Annual Visitors</div></div>
+      <div class="dash-card"><div class="dash-icon">📅</div><div class="dash-value">1965</div><div class="dash-label">Year Opened</div></div>
+      <div class="dash-card"><div class="dash-icon">🏺</div><div class="dash-value">Ru Kiln</div><div class="dash-label">Largest Collection</div></div>
+      <div class="dash-card"><div class="dash-icon">👑</div><div class="dash-value">Three Treasures</div><div class="dash-label">National Treasures</div></div>
+      <div class="dash-card"><div class="dash-icon">🥬</div><div class="dash-value">Jadeite Cabbage</div><div class="dash-label">Treasure of the Museum</div></div>
+      <div class="dash-card"><div class="dash-icon">🥩</div><div class="dash-value">Meat-shaped Stone</div><div class="dash-label">Treasure of the Museum</div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-bg" style="background-image:url('images/nationalpalacemuseum/hero.jpg')"></div>
+    <div class="cta-content">
+      <div class="cta-num">1965</div>
+      <div class="cta-title">Explore the Treasures of Seven Thousand Years of Chinese Civilization</div>
+      <a href="../index.html?prov=台湾省" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>National Palace Museum · Taipei City · Taiwan 5A Scenic Spot</p>
+  </footer>
+
+  <script>
+    (function(){var i=new Image();i.onload=function(){document.getElementById('heroBg').style.backgroundImage="url('images/nationalpalacemuseum/hero.jpg')"};i.src='images/nationalpalacemuseum/hero.jpg'})();
+    window.addEventListener('scroll',function(){var s=document.getElementById('scrollHud');if(s)s.style.opacity=window.scrollY>100?'0':'1'});
+    document.querySelector('.hero').addEventListener('mousemove',function(e){var x=(e.clientX/window.innerWidth-0.5)*10,y=(e.clientY/window.innerHeight-0.5)*10;document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)'});
+    var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});
+    document.querySelectorAll('[data-animate]').forEach(function(e){o.observe(e)});
+  </script>
+</body>
+</html>

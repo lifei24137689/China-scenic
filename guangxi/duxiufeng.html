@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Solitary Beauty Peak · Prince City · Pillar Under Heaven | 5A Scenic Area Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #c62828;
+      --secondary: #d4a843;
+      --bg: #1a0a0a;
+      --surface: rgba(196,30,58,0.12);
+      --text: #f5e6d3;
+      --text-dim: rgba(245,230,211,0.55);
+      --glow: rgba(212,168,67,0.25);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    /* === Hero === */
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:url('img/duxiufeng/桂林市独秀峰·王城景区_01.jpg') center/cover;filter:brightness(0.4) saturate(1.3);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,10,10,0.7) 0%,rgba(26,10,10,0.3) 50%,rgba(26,10,10,0.6) 100%)}
+    .golden-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(212,168,67,0.12) 0%,transparent 70%);animation:goldenPulse 4s ease-in-out infinite;z-index:1}
+    @keyframes goldenPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.5}50%{transform:translate(-50%,-50%) scale(1.3);opacity:1}}
+    .hero-content{position:relative;z-index:3;text-align:center}
+    .hero-imperial-line{width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:0 auto 20px}
+    .hero-title{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(48px,8vw,88px);letter-spacing:20px;color:var(--text);text-shadow:0 0 40px rgba(212,168,67,0.15)}
+    .hero-sub{font-family:'Noto Serif SC',serif;font-size:clamp(14px,1.8vw,20px);opacity:0.7;margin-top:16px;letter-spacing:8px;color:var(--secondary)}
+    .hero-imperial-line-bottom{width:200px;height:1px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:20px auto 0}
+
+    /* === HUD === */
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:8px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid rgba(212,168,67,0.15);border-radius:8px;padding:10px 16px;text-align:center;min-width:64px}
+    .hud-value{font-family:'Noto Serif SC',serif;font-size:20px;font-weight:700;color:var(--secondary)}
+    .hud-label{font-size:10px;opacity:0.55;margin-top:3px;letter-spacing:2px;color:var(--text)}
+
+    /* === Scroll Hint === */
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-size:11px;letter-spacing:3px;opacity:0.45;color:var(--secondary)}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--secondary),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.2}50%{opacity:0.7}}
+
+    /* === Content === */
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:4px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.5);position:relative;border:1px solid rgba(212,168,67,0.1)}
+    .content-image img{width:100%;height:400px;object-fit:cover;display:block;transition:transform 0.6s}
+    .content-image:hover img{transform:scale(1.04)}
+    .content-text{text-align:left}
+    .content-text h2{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(28px,4vw,42px);margin-bottom:16px;letter-spacing:6px;color:var(--text)}
+    .content-text h2 .gold{color:var(--secondary)}
+    .imperial-divider{width:80px;height:1px;background:linear-gradient(90deg,var(--secondary),transparent);margin-bottom:20px}
+    .content-text p{font-size:15px;line-height:2;opacity:0.75;margin-bottom:14px}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .content-tag{padding:5px 16px;border:1px solid rgba(212,168,67,0.2);font-size:12px;letter-spacing:2px;color:var(--secondary);background:rgba(212,168,67,0.06)}
+    .content-tag:hover{background:rgba(212,168,67,0.12)}
+
+    /* === Image Break === */
+    .image-break{height:50vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:url('img/duxiufeng/桂林市独秀峰·王城景区_04.jpg') center/cover fixed;filter:brightness(0.35) saturate(1.3)}
+    .image-break .ol{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,10,10,0.6),transparent 30%,transparent 70%,rgba(26,10,10,0.7) 100%)}
+    .image-break .quote{position:relative;z-index:2;text-align:center;max-width:600px}
+    .image-break .quote .ornament{font-size:24px;color:var(--secondary);opacity:0.4;margin-bottom:12px;letter-spacing:12px}
+    .image-break .quote-cn{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(28px,4vw,48px);letter-spacing:10px;color:var(--text);text-shadow:0 2px 20px rgba(0,0,0,0.4)}
+    .image-break .quote-en{font-size:13px;opacity:0.45;letter-spacing:5px;margin-top:12px;color:var(--secondary)}
+
+    /* === Gallery === */
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{text-align:center;font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(24px,3vw,36px);margin-bottom:48px;letter-spacing:8px;color:var(--text)}
+    .gallery h2 .gold{color:var(--secondary)}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;max-width:1200px;margin:0 auto}
+    .gallery-item{position:relative;overflow:hidden;cursor:pointer;border:1px solid rgba(212,168,67,0.1);transition:border-color 0.3s}
+    .gallery-item:hover{border-color:var(--secondary)}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .gallery-item:hover img{transform:scale(1.06)}
+    .gallery-item:first-child{grid-column:span 2;grid-row:span 2}
+
+    /* === Dashboard === */
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dash-header{text-align:center;margin-bottom:48px}
+    .dash-header .ornament{font-size:20px;color:var(--secondary);opacity:0.3;letter-spacing:10px}
+    .dash-header h2{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(24px,3vw,34px);letter-spacing:6px;margin-top:8px}
+    .dash-header h2 .gold{color:var(--secondary)}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .dash-card{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid rgba(212,168,67,0.1);padding:28px 20px;text-align:center;transition:all 0.3s;position:relative}
+    .dash-card::after{content:'';position:absolute;bottom:0;left:30%;right:30%;height:1px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);opacity:0;transition:opacity 0.3s}
+    .dash-card:hover::after{opacity:1}
+    .dash-card:hover{border-color:rgba(212,168,67,0.25);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+    .dash-icon{font-size:24px;margin-bottom:10px}
+    .dash-value{font-family:'Noto Serif SC',serif;font-size:28px;font-weight:700;color:var(--secondary);margin-bottom:4px}
+    .dash-label{font-size:11px;opacity:0.5;letter-spacing:3px;color:var(--text)}
+
+    /* === CTA === */
+    .cta{height:50vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:url('img/duxiufeng/桂林市独秀峰·王城景区_13.jpeg') center/cover;filter:brightness(0.3) saturate(1.2)}
+    .cta-ol{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,10,10,0.6),transparent 30%,transparent 70%,rgba(26,10,10,0.7) 100%)}
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(64px,10vw,120px);font-weight:900;letter-spacing:12px;opacity:0.1;margin-bottom:-20px;color:var(--secondary)}
+    .cta-title{font-family:'ZCOOL XiaoWei','Noto Serif SC',serif;font-size:clamp(24px,3vw,36px);letter-spacing:8px;margin-bottom:32px;color:var(--text)}
+    .cta-btn{display:inline-block;padding:12px 44px;border:1px solid rgba(212,168,67,0.3);font-size:14px;letter-spacing:4px;text-decoration:none;color:var(--text);background:rgba(196,30,58,0.1);backdrop-filter:blur(12px);transition:all 0.3s}
+    .cta-btn:hover{background:rgba(212,168,67,0.15);border-color:var(--secondary);box-shadow:0 0 30px rgba(212,168,67,0.1)}
+
+    /* === Footer === */
+    .footer{padding:32px;text-align:center;border-top:1px solid rgba(212,168,67,0.08);font-size:12px;opacity:0.35;letter-spacing:3px}
+
+    /* === Animation === */
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    /* === Responsive === */
+    @media(max-width:768px){
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .content-image img{height:260px}
+      .gallery-grid{grid-template-columns:1fr 1fr}
+      .gallery-item:first-child{grid-column:span 2;grid-row:auto;height:260px}
+      .gallery-item{height:180px}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:4px}
+      .hud-item{padding:6px 10px;min-width:50px}
+      .hud-value{font-size:16px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="golden-glow"></div>
+    <div class="hero-content">
+      <div class="hero-imperial-line"></div>
+      <h1 class="hero-title">Solitary Beauty Peak · Prince City</h1>
+      <p class="hero-sub">Guilin's landscapes reign supreme; explore Prince City to know Guilin</p>
+      <div class="hero-imperial-line-bottom"></div>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- HUD -->
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">66m</div><div class="hud-label">Peak Elevation</div></div>
+    <div class="hud-item"><div class="hud-value">20ha</div><div class="hud-label">Total Area</div></div>
+    <div class="hud-item"><div class="hud-value">4.5</div><div class="hud-label">Rating</div></div>
+    <div class="hud-item"><div class="hud-value">明</div><div class="hud-label">Prince Palace</div></div>
+  </div>
+
+  <!-- Content 1 -->
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="img/duxiufeng/桂林市独秀峰·王城景区_05.jpg" alt="Jingjiang Prince Palace" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Jingjiang <span class="gold">Prince Palace</span></h2>
+      <div class="imperial-divider"></div>
+      <p>The Jingjiang Prince Palace was built in the fifth year of the Hongwu reign of the Ming Dynasty (1372 AD), 44 years earlier than the Forbidden City in Beijing. It is the largest and best-preserved Ming Dynasty princely palace in China. The palace covers about 20 hectares, with a city wall approximately 1.5 km in circumference, featuring red walls and yellow glazed tiles in a magnificent style.</p>
+      <p>As the residence of the Jingjiang princes of the Ming Dynasty, it was home to 14 generations of Jingjiang princes over 280 years. The palace features a rigorous architectural layout with richly decorated beams and pillars, fully reflecting the artistic achievements of Ming imperial architecture. Today, Prince City has become an important carrier of Guilin's historical culture.</p>
+      <div class="content-tags">
+        <span class="content-tag">Ming Prince Palace</span>
+        <span class="content-tag">Red Walls, Yellow Tiles</span>
+        <span class="content-tag">National Heritage Site</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Image Break -->
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="ol"></div>
+    <div class="quote">
+      <div class="quote"><div class="ornament">═══ ◈ ═══</div></div>
+      <div class="quote-cn">Pillar Under Heaven, Purple Robe Gold Sash</div>
+      <div class="quote-en">—— Solitary Beauty Peak · Guilin's First Peak</div>
+    </div>
+  </section>
+
+  <!-- Content 2 reverse -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="img/duxiufeng/桂林市独秀峰·王城景区_07.png" alt="Solitary Beauty Peak" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Solitary <span class="gold">Peak</span></h2>
+      <div class="imperial-divider"></div>
+      <p>Solitary Beauty Peak is located within the Jingjiang Prince Palace, with an elevation of 216 meters and a relative height of 66 meters, making it the highest point in Guilin's urban area. Rising abruptly as a solitary peak, steep and lofty, it has long been known as the "Pillar Under Heaven." Climbing 306 steps leads to the summit, offering a panoramic view of Guilin's mountain and river scenery.</p>
+      <p>The peak is composed of limestone, shaped by hundreds of millions of years of wind and rain erosion, forming a unique karst solitary peak landform. There are 136 cliff inscriptions from various dynasties on the mountain, among which the most famous is the original source of the timeless phrase "Guilin's landscapes reign supreme under heaven."</p>
+      <div class="content-tags">
+        <span class="content-tag">Pillar Under Heaven</span>
+        <span class="content-tag">Cliff Inscriptions</span>
+        <span class="content-tag">City Landmark</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content 3 -->
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="img/duxiufeng/桂林市独秀峰·王城景区_08.jpg" alt="Examination Hall" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Examination <span class="gold">Hall</span></h2>
+      <div class="imperial-divider"></div>
+      <p>The Guangxi Examination Hall within the Prince City was the venue for the provincial imperial examinations during the Qing Dynasty. From the early Qing period until the abolition of the imperial examination system in the 31st year of the Guangxu reign (1905 AD), it hosted examinations for over 200 years, producing countless successful candidates and scholars, making it an important symbol of Guangxi's cultural heritage.</p>
+      <p>The examination hall complex is well-preserved, with neatly arranged examination cells, allowing visitors to feel as if they have traveled back to the era of imperial examinations a century ago. Standing within the hall, one can sense the weight and solemnity of ancient China's imperial examination culture.</p>
+      <div class="content-tags">
+        <span class="content-tag">Examination Culture</span>
+        <span class="content-tag">Qing Examination Hall</span>
+        <span class="content-tag">Historical Heritage</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" data-animate>
+    <h2><span class="gold">Prince City</span> Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="img/duxiufeng/桂林市独秀峰·王城景区_09.jpg" alt="Panoramic View of Prince City" loading="lazy"/></div>
+      <div class="gallery-item"><img src="img/duxiufeng/桂林市独秀峰·王城景区_10.jpg" alt="Prince City Architecture" loading="lazy"/></div>
+      <div class="gallery-item"><img src="img/duxiufeng/桂林市独秀峰·王城景区_11.jpg" alt="Crescent Moon Pond" loading="lazy"/></div>
+      <div class="gallery-item"><img src="img/duxiufeng/桂林市独秀峰·王城景区_12.jpg" alt="Reading Rock Cave" loading="lazy"/></div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="dashboard" data-animate>
+    <div class="dash-header">
+      <div class="ornament">═══ ✦ ═══</div>
+      <h2>Prince City <span class="gold">Data</span></h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🏔</div><div class="dash-value">66m</div><div class="dash-label">Peak Height</div></div>
+      <div class="dash-card"><div class="dash-icon">🏯</div><div class="dash-value">20ha</div><div class="dash-label">Palace Area</div></div>
+      <div class="dash-card"><div class="dash-icon">⭐</div><div class="dash-value">4.5</div><div class="dash-label">Rating</div></div>
+      <div class="dash-card"><div class="dash-icon">📜</div><div class="dash-value">1372</div><div class="dash-label">Year Built</div></div>
+      <div class="dash-card"><div class="dash-icon">🪨</div><div class="dash-value">136</div><div class="dash-label">Cliff Inscriptions</div></div>
+      <div class="dash-card"><div class="dash-icon">📏</div><div class="dash-value">306</div><div class="dash-label">Steps to Summit</div></div>
+      <div class="dash-card"><div class="dash-icon">🏛️</div><div class="dash-value">14</div><div class="dash-label">Generations of Princes</div></div>
+      <div class="dash-card"><div class="dash-icon">🌸</div><div class="dash-value">All Year</div><div class="dash-label">Best Season</div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-ol"></div>
+    <div class="cta-content">
+      <div class="cta-num">Prince City</div>
+      <div class="cta-title">Scale the Peak, Survey the City</div>
+      <a href="../index.html?prov=%E5%B9%BF%E8%A5%BF%E5%A3%AE%E6%97%8F%E8%87%AA%E6%B2%BB%E5%8C%BA" class="cta-btn">Back to Map</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Solitary Beauty Peak · Prince City Scenic Area · National 5A Tourist Attraction · Guilin, Guangxi</p>
+  </footer>
+
+  <script>
+    (function(){
+      var heroBg = document.getElementById('heroBg');
+      var bgUrl = 'img/duxiufeng/桂林市独秀峰·王城景区_01.jpg';
+      var img = new Image();
+      img.onload = function(){ heroBg.style.backgroundImage = 'url(' + bgUrl + ')' };
+      img.src = bgUrl;
+
+      window.addEventListener('scroll', function(){
+        var s = document.getElementById('scrollHud');
+        if(s) s.style.opacity = window.scrollY > 100 ? '0' : '1';
+      });
+
+      document.querySelector('.hero').addEventListener('mousemove', function(e){
+        var x = (e.clientX / window.innerWidth - 0.5) * 10;
+        var y = (e.clientY / window.innerHeight - 0.5) * 10;
+        document.getElementById('heroBg').style.transform = 'translate(' + x + 'px,' + y + 'px)';
+      });
+
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting) e.target.classList.add('visible');
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('[data-animate]').forEach(function(e){ observer.observe(e); });
+    })();
+  </script>
+</body>
+</html>

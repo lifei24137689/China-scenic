@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Shenyang Botanical Garden · Green Gem of Northeast China | 5A Scenic Immersive Tour</title>
+<style>
+:root {
+  --primary: #2e7d32;
+  --secondary: #a5d6a7;
+  --bg: #050a05;
+  --surface: rgba(46,125,50,.06);
+  --text: #e8f5e9;
+  --text-dim: rgba(232,245,233,.55);
+  --text-faint: rgba(232,245,233,.25);
+  --glow: rgba(46,125,50,.25);
+  --accent: #e91e63;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+.loading-overlay{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s ease}
+.loading-overlay.hidden{opacity:0;pointer-events:none}
+.loading-spinner{width:40px;height:40px;border:2px solid rgba(46,125,50,.1);border-top:2px solid rgba(46,125,50,.5);border-radius:50%;animation:spin 1.5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay p{margin-top:20px;font-size:13px;color:var(--text-dim);letter-spacing:3px;font-family:'Courier New',monospace}
+.hero{position:relative;width:100%;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:-10px;background-size:cover;background-position:center;filter:brightness(.65) saturate(1.15);transition:transform .1s ease-out;will-change:transform;background-image:url('liaoning/沈阳植物园（沈阳世博园）/沈阳植物园（沈阳世博园）_01.jpg')}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 30%,var(--bg) 80%)}
+.hero .scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(46,125,50,.008) 2px,rgba(46,125,50,.008) 4px)}
+.hero .top-fade{position:absolute;top:0;left:0;right:0;height:30vh;background:linear-gradient(180deg,var(--bg) 0%,transparent 100%)}
+.hero .bottom-fade{position:absolute;bottom:0;left:0;right:0;height:40vh;background:linear-gradient(0deg,var(--bg) 0%,var(--bg)aa 20%,transparent 100%)}
+.hud{position:absolute;inset:0;z-index:10;padding:28px 40px;display:flex;flex-direction:column}
+.hud-top{display:flex;justify-content:space-between;align-items:flex-start}
+.back-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:20px;background:rgba(5,10,5,.5);border:1px solid rgba(46,125,50,.15);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--text-dim);font-size:13px;cursor:pointer;transition:all .3s;width:fit-content}
+.back-btn:hover{border-color:var(--glow);color:var(--text)}
+.back-btn .arrow{display:inline-block;transition:transform .3s}
+.back-btn:hover .arrow{transform:translateX(-3px)}
+.title-group{margin-top:20px}
+.title-group h1{font-size:clamp(36px,6vw,64px);font-weight:700;letter-spacing:3px;text-shadow:0 0 60px rgba(0,0,0,.5);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.title-group h1 .badge{font-size:12px;padding:4px 16px;border-radius:14px;background:rgba(46,125,50,.15);border:1px solid rgba(46,125,50,.25);color:var(--secondary);letter-spacing:1px;font-weight:400;font-size:11px}
+.title-group h1 .stars{font-size:16px;color:rgba(255,215,0,.4);letter-spacing:2px;font-weight:400}
+.title-group .subtitle{font-size:14px;color:var(--text-dim);letter-spacing:6px;margin-top:4px}
+.data-panel{display:flex;gap:8px}
+.data-item{text-align:center;padding:10px 18px;border-radius:10px;background:rgba(5,10,5,.5);border:1px solid rgba(46,125,50,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);min-width:72px}
+.data-item .num{font-size:20px;font-weight:700}
+.data-item .num.cyan{color:var(--secondary)}
+.data-item .num.green{color:#81c784}
+.data-item .num.pink{color:var(--accent)}
+.data-item .label{font-size:9px;color:var(--text-dim);margin-top:2px;letter-spacing:1px}
+.hero-info{position:absolute;left:40px;bottom:130px;z-index:11;max-width:440px}
+.hero-info .card{background:rgba(5,10,5,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-radius:14px;border:1px solid rgba(46,125,50,.1);padding:22px 28px}
+.hero-info .card p{font-size:14px;line-height:1.8;color:var(--text-dim)}
+.hero-info .tags{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+.hero-info .tags span{padding:4px 14px;border-radius:14px;font-size:11px;letter-spacing:1px;border:1px solid}
+.tag-green{background:rgba(129,199,132,.08);border-color:rgba(129,199,132,.2);color:#81c784}
+.tag-pink{background:rgba(233,30,99,.08);border-color:rgba(233,30,99,.2);color:var(--accent)}
+.tag-gold{background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.2);color:#ffd700}
+.tag-cyan{background:rgba(165,214,167,.08);border-color:rgba(165,214,167,.2);color:var(--secondary)}
+.scroll-hint{position:absolute;bottom:40px;left:50%;z-index:11;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-faint);font-size:10px;letter-spacing:2px;font-family:'Courier New',monospace}
+.scroll-hint .line{width:1px;height:30px;background:linear-gradient(180deg,rgba(46,125,50,.3),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:.3;transform:scaleY(.5)}50%{opacity:1;transform:scaleY(1)}}
+.section{position:relative;min-height:80vh;display:flex;align-items:center;padding:80px 40px}
+.section-inner{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.section-inner.reverse{direction:rtl}
+.section-inner.reverse>*{direction:ltr}
+.section-image{border-radius:14px;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.4);opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.section-image.visible{opacity:1;transform:translateY(0)}
+.section-image img{width:100%;height:400px;object-fit:cover;display:block;transition:transform .6s ease}
+.section-image:hover img{transform:scale(1.03)}
+.section-image .img-overlay{position:absolute;bottom:0;left:0;right:0;height:60%;background:linear-gradient(0deg,var(--bg) 0%,transparent 100%);pointer-events:none}
+.section-image .img-label{position:absolute;bottom:16px;left:20px;font-size:11px;color:var(--text-dim);letter-spacing:2px;font-family:'Courier New',monospace}
+.section-content{opacity:0;transform:translateY(30px);transition:all .8s cubic-bezier(.16,1,.3,1) .15s}
+.section-content.visible{opacity:1;transform:translateY(0)}
+.section-content .numeral{font-family:'Courier New',monospace;font-size:13px;color:rgba(46,125,50,.4);letter-spacing:3px;margin-bottom:12px}
+.section-content h2{font-size:32px;font-weight:700;letter-spacing:2px;margin-bottom:20px;line-height:1.3}
+.section-content h2 .highlight{background:linear-gradient(135deg,var(--secondary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-content p{font-size:15px;line-height:1.9;color:var(--text-dim);margin-bottom:20px}
+.section-content .stat-row{display:flex;gap:24px;margin-top:24px;flex-wrap:wrap}
+.section-content .stat-item{text-align:center;padding:16px 24px;border-radius:10px;background:rgba(46,125,50,.05);border:1px solid rgba(46,125,50,.08);min-width:100px}
+.section-content .stat-item .num{font-size:28px;font-weight:700;color:var(--secondary)}
+.section-content .stat-item .lbl{font-size:10px;color:var(--text-dim);margin-top:4px;letter-spacing:1px}
+.image-break{position:relative;width:100%;height:60vh;overflow:hidden}
+.image-break .bg{position:absolute;inset:-10px;background-size:cover;background-position:center;background-attachment:fixed;filter:brightness(.5);background-image:url('liaoning/沈阳植物园（沈阳世博园）/沈阳植物园（沈阳世博园）_05.jpg')}
+.image-break .overlay{position:absolute;inset:0;background:linear-gradient(180deg,var(--bg) 0%,transparent 20%,transparent 80%,var(--bg) 100%)}
+.image-break .quote{position:absolute;bottom:60px;left:40px;right:40px;z-index:2;max-width:600px}
+.image-break .quote p{font-size:22px;font-weight:300;line-height:1.6;color:var(--text-dim);letter-spacing:2px}
+.image-break .quote .author{font-size:12px;color:var(--text-faint);letter-spacing:3px;margin-top:12px;font-family:'Courier New',monospace}
+.gallery-section{padding:100px 40px}
+.gallery-section .section-header{max-width:1200px;margin:0 auto 40px}
+.gallery-section .section-header .numeral{font-family:'Courier New',monospace;font-size:13px;color:rgba(46,125,50,.4);letter-spacing:3px;margin-bottom:12px}
+.gallery-section .section-header h2{font-size:32px;font-weight:700;letter-spacing:2px}
+.gallery-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr;gap:12px}
+.gallery-grid .col{display:flex;flex-direction:column;gap:12px}
+.gallery-item{border-radius:12px;overflow:hidden;position:relative;opacity:0;transform:translateY(30px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.gallery-item.visible{opacity:1;transform:translateY(0)}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.gallery-item:hover img{transform:scale(1.05)}
+.gallery-item .item-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(0deg,var(--bg) 0%,transparent 100%)}
+.gallery-item .item-overlay span{font-size:12px;color:var(--text-dim);letter-spacing:1px}
+.dashboard-section{padding:100px 40px;background:linear-gradient(180deg,var(--bg),#0a120a,var(--bg))}
+.dashboard-section .section-header{max-width:1200px;margin:0 auto 50px}
+.dashboard-section .section-header .numeral{font-family:'Courier New',monospace;font-size:13px;color:rgba(46,125,50,.4);letter-spacing:3px;margin-bottom:12px}
+.dashboard-section .section-header h2{font-size:32px;font-weight:700;letter-spacing:2px}
+.dashboard-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.dashboard-card{padding:28px 24px;border-radius:14px;background:rgba(46,125,50,.03);border:1px solid rgba(46,125,50,.06);text-align:center;opacity:0;transform:translateY(20px);transition:all .6s cubic-bezier(.16,1,.3,1)}
+.dashboard-card.visible{opacity:1;transform:translateY(0)}
+.dashboard-card .icon{font-size:28px;margin-bottom:12px}
+.dashboard-card .d-num{font-size:32px;font-weight:700;letter-spacing:1px}
+.dashboard-card .d-label{font-size:10px;color:var(--text-dim);letter-spacing:2px;margin-top:6px;font-family:'Courier New',monospace}
+.dashboard-card.cyan .d-num{color:var(--secondary)}
+.dashboard-card.green .d-num{color:#81c784}
+.dashboard-card.purple .d-num{color:var(--accent)}
+.dashboard-card.pink .d-num{color:#f48fb1}
+.dashboard-card.gold .d-num{color:#ffd700}
+.cta-section{padding:120px 40px;text-align:center;position:relative}
+.cta-section .bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.3);background-image:url('liaoning/沈阳植物园（沈阳世博园）/沈阳植物园（沈阳世博园）_13.jpg')}
+.cta-section .overlay{position:absolute;inset:0;background:linear-gradient(180deg,var(--bg) 0%,transparent 30%,transparent 70%,var(--bg) 100%)}
+.cta-section .content{position:relative;z-index:2;max-width:600px;margin:0 auto}
+.cta-section .content .numeral{font-family:'Courier New',monospace;font-size:13px;color:rgba(46,125,50,.4);letter-spacing:3px;margin-bottom:16px}
+.cta-section .content h2{font-size:36px;font-weight:700;letter-spacing:2px;margin-bottom:16px}
+.cta-section .content p{font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:30px}
+.cta-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;border:1px solid rgba(46,125,50,.3);background:rgba(46,125,50,.1);backdrop-filter:blur(12px);border-radius:12px;color:var(--secondary);font-size:14px;cursor:pointer;transition:all .3s;letter-spacing:1px}
+.cta-btn:hover{background:rgba(46,125,50,.2);box-shadow:0 0 40px var(--glow);transform:translateY(-2px)}
+footer{padding:40px;text-align:center;border-top:1px solid rgba(46,125,50,.05)}
+footer p{font-size:11px;color:var(--text-faint);letter-spacing:2px;font-family:'Courier New',monospace}
+.corner{position:fixed;z-index:100;pointer-events:none}
+.corner-h{position:absolute;width:20px;height:1px;background:rgba(46,125,50,.06)}
+.corner-v{position:absolute;width:1px;height:20px;background:rgba(46,125,50,.06)}
+.corner-tl{top:10px;left:10px}.corner-tr{top:10px;right:10px}.corner-bl{bottom:10px;left:10px}.corner-br{bottom:10px;right:10px}
+.corner-tl .corner-h{top:0;left:0}.corner-tl .corner-v{top:0;left:0}
+.corner-tr .corner-h{top:0;right:0}.corner-tr .corner-v{top:0;right:0}
+.corner-bl .corner-h{bottom:0;left:0}.corner-bl .corner-v{bottom:0;left:0}
+.corner-br .corner-h{bottom:0;right:0}.corner-br .corner-v{bottom:0;right:0}
+.scroll-hud{position:fixed;top:0;left:0;right:0;z-index:50;padding:12px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(5,10,5,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(46,125,50,.06);transform:translateY(-100%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.scroll-hud.active{transform:translateY(0)}
+.scroll-hud .site-name{font-size:13px;color:var(--text-dim);letter-spacing:2px;font-family:'Orbitron','PingFang SC',sans-serif}
+.scroll-hud .site-name strong{color:var(--text-dim)}
+.scroll-hud .right span{font-size:10px;color:var(--text-faint);letter-spacing:2px}
+.scroll-progress{position:fixed;top:0;left:0;right:0;z-index:60;height:2px;background:rgba(46,125,50,.05)}
+.scroll-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--secondary),var(--accent));transition:width .1s linear}
+.scroll-progress-pct{position:fixed;top:8px;right:42px;z-index:60;font-size:9px;color:rgba(46,125,50,.15);font-family:'Courier New',monospace;letter-spacing:1px}
+.chapter-nav{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:55;display:flex;flex-direction:column;align-items:center;gap:10px}
+.chapter-dot{width:6px;height:6px;border-radius:50%;background:rgba(46,125,50,.12);cursor:pointer;transition:all .3s;position:relative}
+.chapter-dot:hover{background:rgba(46,125,50,.35);transform:scale(1.4)}
+.chapter-dot.active{background:rgba(46,125,50,.7);transform:scale(1.5);box-shadow:0 0 10px var(--glow)}
+.chapter-dot .chapter-label{position:absolute;right:14px;top:50%;transform:translateY(-50%);white-space:nowrap;font-size:9px;color:var(--text-faint);letter-spacing:2px;font-family:'Courier New',monospace;opacity:0;transition:opacity .3s;pointer-events:none}
+.chapter-dot:hover .chapter-label{opacity:1}
+.chapter-counter{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:45;font-size:10px;color:rgba(46,125,50,.1);font-family:'Courier New',monospace;letter-spacing:3px;transition:opacity .4s;opacity:0;pointer-events:none}
+.chapter-counter.visible{opacity:1}
+@keyframes target-lock{0%{box-shadow:0 0 0 0 var(--glow)}100%{box-shadow:0 0 0 8px rgba(46,125,50,0)}}
+.back-btn:hover,.cta-btn:hover,.chapter-dot:hover,.dashboard-card:hover{animation:target-lock .6s ease-out}
+.page-transition{position:fixed;inset:0;z-index:9999;pointer-events:none;background:var(--bg);opacity:0;transition:opacity .5s cubic-bezier(.16,1,.3,1)}
+.page-transition.active{opacity:1}
+/* Garden special: falling petals */
+@keyframes petalFall{0%{transform:translateY(-10vh) rotate(0deg) translateX(0);opacity:0}10%{opacity:.3}90%{opacity:.2}100%{transform:translateY(110vh) rotate(360deg) translateX(60px);opacity:0}}
+.petal{position:fixed;z-index:5;pointer-events:none;width:8px;height:8px;background:var(--secondary);border-radius:50% 0 50% 0;opacity:0}
+@media(max-width:768px){
+  .hud{padding:16px 20px}.hud-top{flex-direction:column}.data-panel{margin-top:12px;gap:4px}
+  .data-item{padding:6px 12px;min-width:56px}.data-item .num{font-size:16px}
+  .title-group h1{font-size:28px;flex-wrap:wrap}.hero-info{left:20px;right:20px;bottom:100px}
+  .hero-info .card{padding:16px 20px}.hero-info .card p{font-size:12px}
+  .section{padding:60px 20px;min-height:auto}.section-inner{grid-template-columns:1fr;gap:30px}
+  .section-inner.reverse{direction:ltr}.section-image img{height:250px}.section-content h2{font-size:24px}
+  .section-content .stat-row{flex-wrap:wrap}.gallery-section{padding:60px 20px}
+  .gallery-grid{grid-template-columns:1fr}.dashboard-grid{grid-template-columns:repeat(2,1fr)}
+  .dashboard-section{padding:60px 20px}.cta-section{padding:80px 20px}
+  .cta-section .content h2{font-size:26px}.image-break .quote p{font-size:16px}
+  .scroll-hud{padding:10px 20px}
+}
+</style>
+</head>
+<body>
+<div class="loading-overlay" id="loading"><div class="loading-spinner"></div><p>Establishing green link ...</p></div>
+
+<div class="corner corner-tl"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-tr"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-bl"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-br"><div class="corner-h"></div><div class="corner-v"></div></div>
+
+<div class="scroll-progress" id="scrollProgress"><div class="scroll-progress-fill" id="scrollProgressFill"></div><span class="scroll-progress-pct" id="scrollPct">0%</span></div>
+
+<div class="scroll-hud" id="scrollHud">
+  <div class="left"><span class="site-name"><strong>5A</strong> · Immersive Tour</span></div>
+  <div class="right"><span>Liaoning · Shenyang Botanical Garden</span></div>
+</div>
+
+<div class="chapter-nav" id="chapterNav"></div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="scanlines"></div>
+  <div class="top-fade"></div>
+  <div class="bottom-fade"></div>
+  <div class="hud">
+    <div class="hud-top">
+      <div>
+        
+        <div class="title-group">
+          <h1><span>Shenyang Botanical Garden</span><span class="badge">5A</span><span class="stars">★★★★★</span></h1>
+          <div class="subtitle">Liaoning · Shenyang</div>
+        </div>
+      </div>
+      <div class="data-panel">
+        <div class="data-item"><div class="num cyan">50</div><div class="label">Elevation (m)</div></div>
+        <div class="data-item"><div class="num green">2.1</div><div class="label">Area (km²)</div></div>
+        <div class="data-item"><div class="num pink">2006</div><div class="label">Expo Year</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-info">
+    <div class="card">
+      <p><span style="color:rgba(165,214,167,.5);font-size:11px;letter-spacing:2px;display:block;margin-bottom:8px;">◈ Satellite Brief · Shenyang Botanical Garden</span><span style="color:rgba(255,255,255,.75);">"The largest botanical kingdom in Northeast China — the green legacy of the 2006 World Horticultural Expo, where a sea of flowers blooms beneath the Lily Tower."</span></p>
+      <div class="tags">
+        <span class="tag-green">🌿 Botanical Garden</span>
+        <span class="tag-pink">🌸 Expo Park</span>
+        <span class="tag-gold">🏆 Flower Exhibition</span>
+        <span class="tag-cyan">🌲 Eco-Garden</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scroll to explore</span><div class="line"></div></div>
+</section>
+
+<!-- SECTION 1 -->
+<section class="section" data-chapter="Expo Memories">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="liaoning/沈阳植物园（沈阳世博园）/沈阳植物园（沈阳世博园）_02.jpg" alt="Shenyang Botanical Garden" loading="lazy"/>
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">/// 01</div>
+      <h2><span class="highlight">Green Heart</span> of Northeast China</h2>
+      <p>Also known as Shenyang Expo Garden, Shenyang Botanical Garden was the venue for the 2006 Shenyang World Horticultural Expo. Covering an area of 2.1 km², it gathers botanical treasures from around the world, making it the largest and most diverse plant sanctuary in Northeast China.</p>
+      <p>The 100-meter-tall Lily Tower stands at the heart of the garden, an iconic landmark of the Shenyang Expo. Climb to the top for a panoramic view of lush greenery — the Rose Garden, Peony Garden, International Pavilions, and other themed areas unfold like a green scroll beneath you.</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="num">5A</div><div class="lbl">Scenic Rating</div></div>
+        <div class="stat-item"><div class="num">2.1km²</div><div class="lbl">Park Area</div></div>
+        <div class="stat-item"><div class="num">2006</div><div class="lbl">Expo Year</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMAGE BREAK -->
+<div class="image-break">
+  <div class="bg"></div>
+  <div class="overlay"></div>
+  <div class="quote">
+    <p>"A flower is a world, a garden is a paradise — at Shenyang Botanical Garden, every bloom tells its own story."</p>
+    <div class="author">—— Shenyang Botanical Garden · Green Gem of Northeast China</div>
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<section class="section" data-chapter="Flower Kingdom">
+  <div class="section-inner reverse">
+    <div class="section-image" data-animate>
+      <img src="liaoning/沈阳植物园（沈阳世博园）/沈阳植物园（沈阳世博园）_06.jpg" alt="Iris" loading="lazy"/>
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">/// 02</div>
+      <h2>A <span class="highlight">Grand Floral</span> Pantheon</h2>
+      <p>Shenyang Botanical Garden features dozens of specialized plant zones, including the Rose Garden, Peony Garden, Azalea Garden, and Iris Garden. In late spring and early summer, a dazzling symphony of colors unfolds — the most spectacular floral feast in Northeast China.</p>
+      <p>The garden hosts rare plants from five continents — from Japanese red pine to Siberian iris, from Korean mountain magnolia to Chinese peony. Each plant is a green emissary that has crossed mountains and rivers to find its home here.</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="num">100+</div><div class="lbl">Specialized Gardens</div></div>
+        <div class="stat-item"><div class="num">5000+</div><div class="lbl">Plant Species</div></div>
+        <div class="stat-item"><div class="num">May-Oct</div><div class="lbl">Best Season</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 -->
+<section class="section" data-chapter="Four Seasons">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="liaoning/沈阳植物园（沈阳世博园）/沈阳植物园（沈阳世博园）_07.jpg" alt="Beauty Bush" loading="lazy"/>
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">/// 03</div>
+      <h2>Harmony Between <span class="highlight">People and Nature</span></h2>
+      <p>Shenyang Botanical Garden is more than a botanical museum — it is an ecological paradise. Forest adventure zones, wetland landscapes, and lake systems weave together, offering visitors a green sanctuary to get close to nature and unwind.</p>
+      <p>Peonies in spring, lotuses in summer, crimson leaves in autumn, and snow-draped pines in winter — as the seasons turn, the garden reveals ever-changing natural vistas. The international pavilions allow visitors to experience garden art from around the world in a single day.</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="num">85%</div><div class="lbl">Vegetation Coverage</div></div>
+        <div class="stat-item"><div class="num">Temperate</div><div class="lbl">Climate Type</div></div>
+        <div class="stat-item"><div class="num">5A</div><div class="lbl">Protection Level</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" data-chapter="Gallery">
+  <div class="section-header">
+    <div class="numeral">/// Gallery</div>
+    <h2>Botanical <span style="background:linear-gradient(135deg,#a5d6a7,#e91e63);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Panorama</span></h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="col">
+      <div class="gallery-item" data-animate style="grid-row:span 2;height:100%;">
+        <img src="liaoning/沈阳植物园（沈阳世博园）/沈阳植物园（沈阳世博园）_08.jpg" alt="Weigela" style="height:100%;min-height:500px;" loading="lazy"/>
+        <div class="item-overlay"><span>Weigela · Early Summer Bloom</span></div>
+      </div>
+      <div class="gallery-item" data-animate style="height:200px;">
+        <img src="liaoning/沈阳植物园（沈阳世博园）/沈阳植物园（沈阳世博园）_09.jpg" alt="Japanese Red Pine" style="height:100%;" loading="lazy"/>
+        <div class="item-overlay"><span>Japanese Red Pine · Evergreen Grace</span></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="gallery-item" data-animate style="height:240px;">
+        <img src="liaoning/沈阳植物园（沈阳世博园）/沈阳植物园（沈阳世博园）_11.jpg" alt="Mountain Magnolia" style="height:100%;" loading="lazy"/>
+        <div class="item-overlay"><span>Mountain Magnolia · Sacred Blossom</span></div>
+      </div>
+      <div class="gallery-item" data-animate style="height:260px;">
+        <img src="liaoning/沈阳植物园（沈阳世博园）/沈阳植物园（沈阳世博园）_12.jpeg" alt="Beauty Bush" style="height:100%;" loading="lazy"/>
+        <div class="item-overlay"><span>Beauty Bush · Rare Ornamental</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="dashboard-section" data-chapter="Dashboard">
+  <div class="section-header">
+    <div class="numeral">/// Dashboard</div>
+    <h2>Key <span class="highlight">Indicators</span></h2>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dashboard-card cyan" data-animate><div class="icon">🏆</div><div class="d-num">5A Class</div><div class="d-label">Scenic Rating</div></div>
+    <div class="dashboard-card green" data-animate><div class="icon">🌍</div><div class="d-num">Expo</div><div class="d-label">World-Class Event</div></div>
+    <div class="dashboard-card purple" data-animate><div class="icon">🌸</div><div class="d-num">5000+</div><div class="d-label">Plant Species</div></div>
+    <div class="dashboard-card pink" data-animate><div class="icon">🌲</div><div class="d-num">85%</div><div class="d-label">Green Coverage</div></div>
+    <div class="dashboard-card gold" data-animate><div class="icon">🗺️</div><div class="d-num">2.1km²</div><div class="d-label">Park Area</div></div>
+    <div class="dashboard-card cyan" data-animate><div class="icon">🏘️</div><div class="d-num">100+</div><div class="d-label">Themed Gardens</div></div>
+    <div class="dashboard-card green" data-animate><div class="icon">🌺</div><div class="d-num">Flowers</div><div class="d-label">Signature Feature</div></div>
+    <div class="dashboard-card purple" data-animate><div class="icon">📐</div><div class="d-num">Lily Tower</div><div class="d-label">Iconic Landmark</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="bg"></div>
+  <div class="overlay"></div>
+  <div class="content">
+    <div class="numeral">/// Explore Next</div>
+    <h2>Wander Through the <span style="background:linear-gradient(135deg,#a5d6a7,#e91e63);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Green Galaxy</span></h2>
+    <p>From Shenyang Botanical Garden, discover the unique charm of more Liaoning 5A scenic spots.<br/>Every exploration is a new journey.</p>
+    <div class="cta-btn"><span>← Back to Satellite Overview</span></div>
+  </div>
+</section>
+
+<footer><p>5A Immersive Tour · SATELLITE TOUR · Data sources: Wikimedia Commons/OpenStreetMap</p></footer>
+
+<div class="page-transition" id="pageTransition"></div>
+
+<script>
+(function(){
+  var SPOT_NAME='Shenyang Botanical Garden',PROV_NAME='Liaoning';
+
+  function navTo(url){
+    var t=document.getElementById('pageTransition');
+    if(t)t.classList.add('active');
+    setTimeout(function(){window.location.href=url},400);
+  }
+
+  window.addEventListener('load',function(){
+    setTimeout(function(){
+      var l=document.getElementById('loading');
+      if(l)l.classList.add('hidden');
+    },600);
+  });
+
+  window.addEventListener('scroll',function(){
+    var sy=window.scrollY;
+    var h=document.getElementById('scrollHud');
+    if(h)h.classList.toggle('active',sy>window.innerHeight*.6);
+    var pf=document.getElementById('scrollProgressFill');
+    var dh=document.documentElement.scrollHeight-window.innerHeight;
+    if(pf&&dh>0){var p=Math.min(100,Math.round(sy/dh*100));pf.style.width=p+'%';}
+    var pe=document.getElementById('scrollPct');
+    if(pe&&dh>0)pe.textContent=Math.min(100,Math.round(sy/dh*100))+'%';
+  });
+
+  var ob=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('visible')})},{threshold:.15,rootMargin:'0px 0px -50px 0px'});
+  document.querySelectorAll('[data-animate]').forEach(function(el){ob.observe(el)});
+
+  var dob=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){var n=en.target.querySelector('.d-num');if(n&&!n.dataset.c){n.dataset.c='1';var t=n.textContent.trim(),m=t.match(/^([\d.]+)/);if(m){var v=parseInt(m[1])||0,st=performance.now();function tk(ts){var p=Math.min(1,(ts-st)/1000),ev=1-Math.pow(1-p,3);n.textContent=Math.round(v*ev)+t.replace(/^[\d.]+/,'');if(p<1)requestAnimationFrame(tk)}requestAnimationFrame(tk)}}}})},{threshold:.3});
+  document.querySelectorAll('.dashboard-card').forEach(function(c){dob.observe(c)});
+
+  document.querySelector('.cta-btn').addEventListener('click',function(){navTo('../index.html?prov='+encodeURIComponent(PROV_NAME))});
+
+  // Chapter nav
+  var cn=document.getElementById('chapterNav'),chs=document.querySelectorAll('[data-chapter]'),cnm=[];
+  chs.forEach(function(s,i){
+    var nm=s.getAttribute('data-chapter');cnm.push(nm);
+    var d=document.createElement('div');d.className='chapter-dot';if(i===0)d.classList.add('active');
+    var l=document.createElement('span');l.className='chapter-label';l.textContent=nm;d.appendChild(l);
+    d.addEventListener('click',function(){s.scrollIntoView({behavior:'smooth'})});
+    cn.appendChild(d);
+  });
+  var cob=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting){var idx=Array.from(chs).indexOf(en.target);document.querySelectorAll('.chapter-dot').forEach(function(d,i){d.classList.toggle('active',i===idx)})}})},{threshold:.3,rootMargin:'-80px 0px 0px 0px'});
+  chs.forEach(function(s){cob.observe(s)});
+
+  // Petal effect
+  function createPetals(){
+    for(var i=0;i<12;i++){
+      var p=document.createElement('div');p.className='petal';p.style.left=Math.random()*100+'%';
+      p.style.animation='petalFall '+(8+Math.random()*12)+'s linear infinite';
+      p.style.animationDelay=Math.random()*10+'s';
+      p.style.width=(4+Math.random()*8)+'px';p.style.height=(4+Math.random()*8)+'px';
+      document.body.appendChild(p);
+    }
+  }
+  createPetals();
+})();
+</script>
+</body>
+</html>

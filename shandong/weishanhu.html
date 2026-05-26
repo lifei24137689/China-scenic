@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Weishan Lake · Jining | 5A Scenic Area Immersive Exploration</title>
+<style>
+:root {
+  --primary: #6b8c5c;
+  --secondary: #d4a843;
+  --bg: #0d1a0d;
+  --surface: rgba(107,140,92,0.12);
+  --text: #f0f5e8;
+  --text-dim: rgba(240,245,232,0.55);
+  --glow: rgba(212,168,67,0.2);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Serif SC','STSong','SimSun','Songti SC','SimHei','Microsoft YaHei',serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+
+/* === 1. Hero === */
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:-20px;background:url('images/济宁市微山湖旅游区/济宁市微山湖旅游区_02.jpg') center/cover;filter:brightness(0.48) saturate(1.1);transition:transform 0.15s ease-out}
+.hero-overlay{position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 30%,rgba(107,140,92,0.1) 0%,transparent 55%),
+    radial-gradient(ellipse at 50% 70%,rgba(212,168,67,0.06) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 90%,rgba(107,140,92,0.08) 0%,transparent 40%);
+  z-index:1
+}
+.hero-content{position:relative;z-index:2;text-align:center}
+.hero-magazine-label{font-size:12px;letter-spacing:8px;color:var(--secondary);margin-bottom:24px;opacity:0.7;text-transform:uppercase}
+.hero-title{font-size:clamp(44px,7vw,90px);letter-spacing:16px;color:var(--text);font-weight:700;margin-bottom:8px;
+  text-shadow:
+    0 1px 0 rgba(240,245,232,0.06),
+    0 2px 0 rgba(0,0,0,0.5),
+    0 3px 8px rgba(0,0,0,0.6),
+    0 0 60px rgba(107,140,92,0.3);
+  line-height:1.1}
+.hero-title-en{font-size:13px;letter-spacing:10px;color:var(--secondary);opacity:0.55;margin-bottom:28px;font-weight:300}
+.hero-line{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:0 auto 24px}
+.hero-tagline{font-size:clamp(14px,1.5vw,18px);letter-spacing:8px;color:var(--text-dim);line-height:2;opacity:0.7}
+
+/* === 2. HUD Panel === */
+.hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.4s}
+.hud-item{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:var(--surface);border:1px solid rgba(107,140,92,0.2);border-radius:12px;padding:14px 22px;text-align:center;transition:border-color 0.3s,transform 0.3s}
+.hud-item:hover{border-color:rgba(107,140,92,0.5);transform:translateY(-2px)}
+.hud-value{font-size:22px;font-weight:700;color:var(--secondary);letter-spacing:1px}
+.hud-label{font-size:10px;opacity:0.5;margin-top:4px;letter-spacing:3px}
+
+/* === 3. Scroll Hint === */
+.scroll-hint{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;transition:opacity 0.4s}
+.scroll-hint span{font-size:11px;letter-spacing:6px;opacity:0.4;color:var(--secondary)}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--secondary),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:0.2}50%{opacity:1}}
+
+/* === 4. Magazine Strip === */
+.magazine-strip{padding:80px 40px 60px;text-align:center;position:relative;z-index:1}
+.magazine-strip .strip-line-top{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:0 auto 20px}
+.magazine-strip .strip-date{font-size:30px;letter-spacing:12px;color:var(--secondary);font-weight:300;margin-bottom:4px}
+.magazine-strip .strip-label{font-size:12px;letter-spacing:6px;opacity:0.35}
+.magazine-strip .strip-line-bottom{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:20px auto 0}
+
+/* === 5. Content === */
+.content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:1}
+.content-section.reverse{direction:rtl}
+.content-section.reverse .content-text{direction:ltr}
+.content-image{width:100%;border-radius:12px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.5),0 0 0 1px rgba(107,140,92,0.12);position:relative;
+  transform:perspective(800px) rotateY(-0.5deg);
+  transition:transform 0.5s ease}
+.content-image:hover{transform:perspective(800px) rotateY(0deg) translateY(-4px)}
+.content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+.content-image:hover img{transform:scale(1.05)}
+.content-text h2{font-size:clamp(26px,3.5vw,40px);margin-bottom:16px;letter-spacing:8px;color:var(--secondary)}
+.content-divider{width:80px;height:2px;background:linear-gradient(90deg,var(--primary),transparent);margin-bottom:28px}
+.content-text p{font-size:15px;line-height:2.1;opacity:0.78;margin-bottom:18px}
+.content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.content-tag{padding:6px 20px;border:1px solid rgba(107,140,92,0.3);border-radius:20px;font-size:12px;letter-spacing:3px;color:var(--primary);transition:all 0.3s}
+.content-tag:hover{background:rgba(107,140,92,0.12);border-color:rgba(107,140,92,0.55);color:var(--text)}
+
+/* === 6. Image Break === */
+.image-break{height:55vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.image-break .bg{position:absolute;inset:-10px;background:url('images/济宁市微山湖旅游区/济宁市微山湖旅游区_06.jpg') center/cover fixed;filter:brightness(0.3) saturate(0.9)}
+.image-break .quote{position:relative;z-index:2;text-align:center}
+.image-break .quote-cn{font-size:clamp(22px,3vw,42px);letter-spacing:10px;margin-bottom:14px;color:var(--secondary);text-shadow:0 0 40px var(--glow)}
+.image-break .quote-en{font-size:12px;opacity:0.4;letter-spacing:6px;text-transform:uppercase}
+
+/* === 7. Gallery === */
+.gallery{padding:80px 40px;max-width:1400px;margin:0 auto;position:relative;z-index:1}
+.gallery h2{text-align:center;font-size:clamp(22px,2.5vw,32px);margin-bottom:56px;letter-spacing:12px;color:var(--secondary);position:relative}
+.gallery h2::after{content:'';display:block;width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent);margin:16px auto 0}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gallery-item{position:relative;overflow:hidden;border-radius:10px;cursor:pointer;
+  transition:transform 0.4s ease,box-shadow 0.4s ease;
+  transform:perspective(800px) rotateX(0deg)}
+.gallery-item:hover{transform:perspective(800px) rotateX(1deg) translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5)}
+.gallery-item img{width:100%;object-fit:cover;transition:transform 0.6s;display:block}
+.gallery-item:hover img{transform:scale(1.06)}
+.gallery-item .item-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,26,13,0.78),transparent 60%);display:flex;align-items:flex-end;padding:18px;opacity:0;transition:opacity 0.4s;z-index:3}
+.gallery-item:hover .item-overlay{opacity:1}
+.item-overlay span{font-size:14px;letter-spacing:4px;color:var(--secondary)}
+
+/* === 8. Dashboard === */
+.dashboard{padding:80px 40px;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.dash-card{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid rgba(107,140,92,0.12);border-radius:16px;padding:36px 24px;text-align:center;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;cursor:default;
+  transform:perspective(600px) rotateX(0deg)}
+.dash-card:hover{transform:perspective(600px) rotateX(2deg) translateY(-5px);border-color:var(--primary);box-shadow:0 12px 40px var(--glow)}
+.dash-icon{font-size:30px;margin-bottom:14px}
+.dash-value{font-size:24px;font-weight:700;color:var(--secondary);margin-bottom:8px;letter-spacing:1px;line-height:1.3}
+.dash-label{font-size:12px;opacity:0.5;letter-spacing:3px}
+
+/* === 9. CTA === */
+.cta{height:55vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.cta-bg{position:absolute;inset:-10px;background:url('images/济宁市微山湖旅游区/济宁市微山湖旅游区_14.jpg') center/cover;filter:brightness(0.3) saturate(0.7)}
+.cta-content{position:relative;z-index:2;text-align:center}
+.cta-num{font-size:clamp(84px,14vw,160px);font-weight:900;letter-spacing:16px;opacity:0.08;margin-bottom:-32px;color:var(--secondary);line-height:1}
+.cta-title{font-size:clamp(18px,2.2vw,30px);letter-spacing:6px;margin-bottom:40px;color:var(--secondary);text-shadow:0 0 30px var(--glow);line-height:1.6}
+.cta-btn{display:inline-block;padding:14px 52px;border:1px solid rgba(107,140,92,0.35);border-radius:28px;font-size:14px;letter-spacing:5px;text-decoration:none;color:var(--text);transition:all 0.3s}
+.cta-btn:hover{background:rgba(107,140,92,0.15);border-color:var(--primary);box-shadow:0 0 30px var(--glow)}
+
+/* === 10. Footer === */
+.footer{padding:48px 40px;text-align:center;opacity:0.3;font-size:12px;letter-spacing:4px;border-top:1px solid rgba(107,140,92,0.06);position:relative;z-index:1}
+
+/* === 11. Animation === */
+[data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+[data-animate].visible{opacity:1;transform:translateY(0)}
+
+/* === 12. Responsive === */
+@media(max-width:768px){
+  .content-section{grid-template-columns:1fr;padding:60px 24px;gap:36px}
+  .content-section.reverse{direction:ltr}
+  .gallery-grid{grid-template-columns:1fr}
+  .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+  .hud{top:12px;right:12px;gap:6px}
+  .hud-item{padding:10px 14px}
+  .hud-value{font-size:17px}
+  .content-image{transform:none}
+  .content-image:hover{transform:translateY(-3px)}
+  .dash-card{transform:none}
+  .dash-card:hover{transform:translateY(-3px)}
+  .gallery-item{transform:none}
+  .gallery-item:hover{transform:translateY(-3px)}
+  .hero-title{font-size:clamp(32px,10vw,56px);letter-spacing:8px}
+  .hero-tagline{font-size:13px;letter-spacing:4px}
+  .hero-magazine-label{font-size:10px;letter-spacing:4px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-magazine-label">T R A V E L  ·   J O U R N A L</div>
+    <h1 class="hero-title">W E I S H A N  L A K E</h1>
+    <div class="hero-title-en">T H E   S U N   I S   S E T T I N G</div>
+    <div class="hero-line"></div>
+    <p class="hero-tagline">The sun is setting in the west<br/>Silence falls on Weishan Lake</p>
+  </div>
+  <div class="scroll-hint" id="scrollHud">
+    <span>S C R O L L  D O W N</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ===== HUD ===== -->
+<div class="hud" id="hud">
+  <div class="hud-item"><div class="hud-value">Largest Lake in N. China</div><div class="hud-label">1266km²</div></div>
+  <div class="hud-item"><div class="hud-value">Lotus Wonderland</div><div class="hud-label">Summer Bloom</div></div>
+  <div class="hud-item"><div class="hud-value">Rating 4.3</div><div class="hud-label">5A · 2022</div></div>
+</div>
+
+<!-- ===== Magazine Strip ===== -->
+<section class="magazine-strip" data-animate>
+  <div class="strip-line-top"></div>
+  <div class="strip-date">2 0 2 2  ·  0 5 A</div>
+  <div class="strip-label">N A T I O N A L  T O P  S C E N I C  A R E A</div>
+  <div class="strip-line-bottom"></div>
+</section>
+
+<!-- ===== Content 1: Weishan Lake ===== -->
+<section class="content-section" data-animate>
+  <div class="content-image"><img src="images/济宁市微山湖旅游区/济宁市微山湖旅游区_04.jpg" alt="Weishan Lake Panorama" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>L A R G E S T  F R E S H W A T E R  L A K E</h2>
+    <div class="content-divider"></div>
+    <p>Weishan Lake, the largest freshwater lake in northern China, covers an area of approximately 1,266 square kilometers, spanning the provinces of Shandong and Jiangsu. Its vast, misty waters have long been hailed as the "Pearl of Southern Shandong." The Beijing-Hangzhou Grand Canal flows through the lake, merging northern and southern cultures, while millennia of canal transport have left countless historical relics and legendary tales along its shores.</p>
+    <p>Weishan Lake is formed by four connected lakes — Weishan, Zhaoyang, Dushan, and Nanyang — dotted with islands, lush reeds, and flocks of waterbirds. It is the most brilliant ecological gem on the Huang-Huai-Hai Plain, serving as a vital reservoir for the South-to-North Water Diversion Eastern Route, nurturing millions of people along its banks.</p>
+    <div class="content-tags">
+      <span class="content-tag">1266km² Waters</span>
+      <span class="content-tag">Largest Freshwater Lake in N. China</span>
+      <span class="content-tag">Beijing-Hangzhou Grand Canal</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Image Break ===== -->
+<section class="image-break">
+  <div class="bg"></div>
+  <div class="quote">
+    <div class="quote-cn">L O T U S  L E A V E S  S T R E T C H  T O  T H E  S K Y</div>
+    <div class="quote-en">Endless lotus leaves stretch to the horizon — a summer dream on Weishan Lake</div>
+  </div>
+</section>
+
+<!-- ===== Content 2: Lotus Sea ===== -->
+<section class="content-section reverse" data-animate>
+  <div class="content-image"><img src="images/济宁市微山湖旅游区/济宁市微山湖旅游区_08.jpg" alt="Lotus Sea" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>L O T U S  S E A</h2>
+    <div class="content-divider"></div>
+    <p>In the height of summer, Weishan Lake's lotus blossoms burst into bloom across tens of thousands of mu, stretching for dozens of miles in a magnificent tapestry of green and pink. Red lotuses blaze, white lotuses shimmer, and a gentle breeze carries their intoxicating fragrance. Drifting on a small boat through the depths of the lotus fields, watching dragonflies skim the water and fish play among the leaves, you may feel as though you have stepped into a poetic dream of the Jiangnan water towns.</p>
+    <p>Weishan Lake is home to over a hundred lotus varieties, including unique local species such as "Weishan Red." The best viewing season runs from June to August each year, when all the lotus blooms seem to open at once, creating a breathtaking scene of "ten li of fragrance and a hundred li of gallery." During the Lotus Festival, visitors can enjoy traditional activities such as lotus picking, lotus banquets, and floating lotus lanterns.</p>
+    <div class="content-tags">
+      <span class="content-tag">Best Viewing Jun-Aug</span>
+      <span class="content-tag">100+ Lotus Varieties</span>
+      <span class="content-tag">Lotus Festival · Picking</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Content 3: Railway Guerrilla Memorial ===== -->
+<section class="content-section" data-animate>
+  <div class="content-image"><img src="images/济宁市微山湖旅游区/济宁市微山湖旅游区_09.jpg" alt="Railway Guerrilla Memorial Park" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>R A I L W A Y  G U E R R I L L A  H O M E L A N D</h2>
+    <div class="content-divider"></div>
+    <p>Weishan Lake is not only a treasure trove of natural ecology but also a land of red revolution. During the War of Resistance against Japan, the Railway Guerrillas used Weishan Lake as their base, launching ambushes along the Tianjin-Pukou Railway, striking at the Japanese invaders and writing heroic chapters of resistance. The 1956 film "Railway Guerrilla" brought the song "The sun is setting in the west, silence falls on Weishan Lake" to households across China.</p>
+    <p>The Railway Guerrilla Memorial Park is located on Weishan Island, featuring a monument, a museum, and grand sculptural groups that vividly recreate the legendary feats of the guerrillas as they boarded trains, blew up bridges, and fought the enemy. As a national patriotic education base, it attracts countless visitors each year who come to honor the martyrs and relive those stirring times.</p>
+    <div class="content-tags">
+      <span class="content-tag">Railway Guerrillas</span>
+      <span class="content-tag">Red Education Base</span>
+      <span class="content-tag">1956 Film</span>
+      <span class="content-tag">Weishan Island</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Gallery ===== -->
+<section class="gallery" data-animate>
+  <h2>L A K E   S C E N E R Y</h2>
+  <div class="gallery-grid">
+    <div class="gallery-item" style="height:420px">
+      <img src="images/济宁市微山湖旅游区/济宁市微山湖旅游区_10.jpg" alt="Weishan Lake Wetland Panorama" style="height:100%" loading="lazy"/>
+      <div class="item-overlay"><span>Weishan Lake Wetland · Aerial View</span></div>
+    </div>
+    <div class="gallery-item" style="height:190px">
+      <img src="images/济宁市微山湖旅游区/济宁市微山湖旅游区_11.jpg" alt="Weishan Island Scenery" style="height:100%" loading="lazy"/>
+      <div class="item-overlay"><span>Weishan Island · Jewel of the Lake</span></div>
+    </div>
+    <div class="gallery-item" style="height:220px">
+      <img src="images/济宁市微山湖旅游区/济宁市微山湖旅游区_12.jpg" alt="Lotus Close-up" style="height:100%" loading="lazy"/>
+      <div class="item-overlay"><span>Lotus Blooms · Fragrance for Miles</span></div>
+    </div>
+    <div class="gallery-item" style="height:230px">
+      <img src="images/济宁市微山湖旅游区/济宁市微山湖旅游区_13.jpg" alt="Nanyang Ancient Town" style="height:100%" loading="lazy"/>
+      <div class="item-overlay"><span>Nanyang Ancient Town · Canal Legacy</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Dashboard ===== -->
+<section class="dashboard" data-animate>
+  <div class="dashboard-grid">
+    <div class="dash-card">
+      <div class="dash-icon">🌊</div>
+      <div class="dash-value">Weishan Lake</div>
+      <div class="dash-label">1266km² · Largest Freshwater Lake</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🪷</div>
+      <div class="dash-value">Lotus Sea</div>
+      <div class="dash-label">100+ Varieties · Peak Jun-Aug</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🚂</div>
+      <div class="dash-value">Railway Guerrillas</div>
+      <div class="dash-label">Red Heritage · 1956 Film</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🏝</div>
+      <div class="dash-value">Weishan Island</div>
+      <div class="dash-label">Lake's Jewel · Memorial Site</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-content">
+    <div class="cta-num">1956</div>
+    <div class="cta-title">The sun is setting in the west<br/>Silence falls on Weishan Lake</div>
+    <a href="../index.html?prov=%E5%B1%B1%E4%B8%9C%E7%9C%81" class="cta-btn">←  B A C K  T O  S C E N I C  M A P</a>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <p>Weishan Lake · Jining · National 5A Scenic Area (2022) · Largest Freshwater Lake in Northern China · Homeland of the Railway Guerrillas · Jining, Shandong Province</p>
+</footer>
+
+<script>
+(function(){
+  // Image preload
+  var img=new Image();
+  img.onload=function(){
+    document.getElementById('heroBg').style.backgroundImage="url('images/济宁市微山湖旅游区/济宁市微山湖旅游区_02.jpg')";
+  };
+  img.src='images/济宁市微山湖旅游区/济宁市微山湖旅游区_02.jpg';
+
+  // Scroll HUD + scroll hint
+  window.addEventListener('scroll',function(){
+    var s=document.getElementById('scrollHud');
+    if(s) s.style.opacity=window.scrollY>100?'0':'1';
+  });
+
+  // Hero mouse parallax
+  var hero=document.querySelector('.hero');
+  if(hero){
+    hero.addEventListener('mousemove',function(e){
+      var x=(e.clientX/window.innerWidth-0.5)*12;
+      var y=(e.clientY/window.innerHeight-0.5)*12;
+      var bg=document.getElementById('heroBg');
+      if(bg) bg.style.transform='translate('+x+'px,'+y+'px)';
+    });
+  }
+
+  // IntersectionObserver scroll animation
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+      }
+    });
+  },{threshold:0.15,rootMargin:'0px 0px -40px 0px'});
+
+  document.querySelectorAll('[data-animate]').forEach(function(el){
+    observer.observe(el);
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Slender West Lake · Yangzhou Charm | 5A Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@300;400;600;700&family=Orbitron:wght@400;600;700&family=Rajdhani:wght@300;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Serif SC','PingFang SC','Microsoft YaHei',serif;
+      background: #0a1418;
+      color: #c8dce8;
+      overflow-x: hidden;
+    }
+
+    :root {
+      --primary: #00838f;
+      --secondary: #c9a84c;
+      --bg: #0a1418;
+      --surface: rgba(0,131,143,0.06);
+      --text: #c8dce8;
+      --text-dim: rgba(200,220,232,0.55);
+      --text-faint: rgba(200,220,232,0.25);
+      --glow: rgba(0,131,143,0.25);
+    }
+
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: #0a1418;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 2px solid rgba(0,131,143,.1);
+      border-top: 2px solid rgba(0,131,143,.5);
+      border-radius: 50%; animation: spin 1.5s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p {
+      margin-top: 20px; font-size: 13px;
+      color: rgba(200,220,232,.3);
+      letter-spacing: 3px; font-family: 'Courier New',monospace;
+    }
+
+    .hero {
+      position: relative; width: 100%; height: 100vh;
+      overflow: hidden; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      filter: brightness(0.45) saturate(1.1);
+      transition: transform 0.1s ease-out; will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 25%, #0a1418 80%);
+    }
+    .hero .water-layer {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 40%, rgba(0,131,143,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 30% 60%, rgba(201,168,76,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 30%, rgba(0,131,143,0.05) 0%, transparent 40%);
+      animation: waterGlow 12s ease-in-out infinite;
+    }
+    @keyframes waterGlow {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+    .hero .top-fade {
+      position: absolute; top: 0; left: 0; right: 0; height: 30vh;
+      background: linear-gradient(180deg,#0a1418 0%,transparent 100%);
+    }
+    .hero .bottom-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40vh;
+      background: linear-gradient(0deg,#0a1418 0%,#0a1418aa 20%,transparent 100%);
+    }
+
+    .hud {
+      position: absolute; inset: 0; z-index: 10;
+      padding: 28px 40px;
+      display: flex; flex-direction: column;
+    }
+    .hud-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 18px; border-radius: 20px;
+      background: rgba(10,20,24,.5);
+      border: 1px solid rgba(0,131,143,.15);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      color: rgba(200,220,232,.5); font-size: 13px; cursor: pointer;
+      transition: all .3s; width: fit-content; text-decoration: none;
+    }
+    .back-btn:hover { border-color: rgba(0,131,143,.3); color: #c8dce8; }
+    .back-btn .arrow { display: inline-block; transition: transform .3s; }
+    .back-btn:hover .arrow { transform: translateX(-3px); }
+
+    .title-group { margin-top: 20px; }
+    .title-group h1 {
+      font-size: 52px; font-weight: 700; letter-spacing: 8px;
+      text-shadow: 0 0 60px rgba(0,0,0,.5);
+      display: flex; align-items: baseline; gap: 14px;
+      font-family: 'ZCOOL XiaoWei','Noto Serif SC',serif;
+    }
+    .title-group h1 .badge {
+      font-size: 12px; padding: 4px 16px; border-radius: 14px;
+      background: rgba(0,131,143,.15);
+      border: 1px solid rgba(0,131,143,.25);
+      color: rgba(128,222,234,.8); letter-spacing: 1px;
+      font-weight: 400; font-size: 11px;
+    }
+    .title-group h1 .stars {
+      font-size: 16px; color: rgba(201,168,76,.4);
+      letter-spacing: 2px; font-weight: 400;
+    }
+    .title-group .subtitle {
+      font-size: 14px; color: rgba(200,220,232,.35);
+      letter-spacing: 6px; margin-top: 4px;
+    }
+
+    .data-panel { display: flex; gap: 8px; }
+    .data-item {
+      text-align: center; padding: 10px 18px; border-radius: 10px;
+      background: rgba(10,20,24,.5);
+      border: 1px solid rgba(0,131,143,.08);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      min-width: 72px;
+    }
+    .data-item .num { font-size: 20px; font-weight: 700; }
+    .data-item .num.cyan { color: #4dd0e1; }
+    .data-item .num.green { color: #80cbc4; }
+    .data-item .num.pink { color: #c9a84c; }
+    .data-item .label { font-size: 9px; color: rgba(200,220,232,.3); margin-top: 2px; letter-spacing: 1px; }
+
+    .hero-info {
+      position: absolute; left: 40px; bottom: 130px; z-index: 11;
+      max-width: 440px;
+    }
+    .hero-info .card {
+      background: rgba(10,20,24,.55);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 14px; border: 1px solid rgba(0,131,143,.1);
+      padding: 22px 28px;
+    }
+    .hero-info .card p {
+      font-size: 14px; line-height: 1.8; color: rgba(200,220,232,.6);
+    }
+    .hero-info .tags { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-info .tags span {
+      padding: 4px 14px; border-radius: 14px; font-size: 11px;
+      letter-spacing: 1px; border: 1px solid;
+    }
+    .tag-blue { background: rgba(77,208,225,.08); border-color: rgba(77,208,225,.2); color: #80deea; }
+    .tag-amber { background: rgba(201,168,76,.08); border-color: rgba(201,168,76,.2); color: #ffe082; }
+    .tag-teal { background: rgba(0,150,136,.08); border-color: rgba(0,150,136,.2); color: #4db6ac; }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%; z-index: 11;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(200,220,232,.2);
+      font-size: 10px; letter-spacing: 2px;
+      font-family: 'Courier New',monospace;
+    }
+    .scroll-hint .line {
+      width: 1px; height: 30px;
+      background: linear-gradient(180deg,rgba(0,131,143,.3),transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.3; transform: scaleY(0.5); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    .section {
+      position: relative; min-height: 80vh;
+      display: flex; align-items: center;
+      padding: 80px 40px;
+    }
+    .section-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    .section-inner.reverse { direction: rtl; }
+    .section-inner.reverse > * { direction: ltr; }
+
+    .section-image {
+      border-radius: 14px; overflow: hidden; position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      opacity: 0; transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .section-image.visible { opacity: 1; transform: translateY(0); }
+    .section-image img {
+      width: 100%; height: 400px; object-fit: cover;
+      display: block; transition: transform 0.6s ease;
+    }
+    .section-image:hover img { transform: scale(1.03); }
+    .section-image .img-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 60%;
+      background: linear-gradient(0deg,#0a1418 0%,transparent 100%);
+      pointer-events: none;
+    }
+    .section-image .img-label {
+      position: absolute; bottom: 16px; left: 20px;
+      font-size: 11px; color: rgba(200,220,232,.3);
+      letter-spacing: 2px; font-family: 'Courier New',monospace;
+    }
+
+    .section-content {
+      opacity: 0; transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1) 0.15s;
+    }
+    .section-content.visible { opacity: 1; transform: translateY(0); }
+    .section-content .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(0,131,143,.4);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .section-content h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+      margin-bottom: 20px; line-height: 1.3;
+    }
+    .section-content h2 .highlight {
+      background: linear-gradient(135deg,#4dd0e1,#c9a84c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-content p {
+      font-size: 15px; line-height: 1.9;
+      color: rgba(200,220,232,.55);
+      margin-bottom: 20px;
+    }
+    .section-content .stat-row {
+      display: flex; gap: 24px; margin-top: 24px;
+    }
+    .section-content .stat-item {
+      text-align: center; padding: 16px 24px; border-radius: 10px;
+      background: rgba(0,131,143,.05);
+      border: 1px solid rgba(0,131,143,.08);
+      min-width: 100px;
+    }
+    .section-content .stat-item .num {
+      font-size: 28px; font-weight: 700; color: #4dd0e1;
+    }
+    .section-content .stat-item .lbl {
+      font-size: 10px; color: rgba(200,220,232,.3);
+      margin-top: 4px; letter-spacing: 1px;
+    }
+
+    .image-break {
+      position: relative; width: 100%; height: 60vh; overflow: hidden;
+    }
+    .image-break .bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      background-attachment: fixed;
+      filter: brightness(0.35);
+    }
+    .image-break .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,#0a1418 0%,transparent 20%,transparent 80%,#0a1418 100%);
+    }
+    .image-break .quote {
+      position: absolute; bottom: 60px; left: 40px; right: 40px; z-index: 2;
+      max-width: 600px;
+    }
+    .image-break .quote p {
+      font-size: 22px; font-weight: 300; line-height: 1.6;
+      color: rgba(200,220,232,.6); letter-spacing: 2px;
+    }
+    .image-break .quote .author {
+      font-size: 12px; color: rgba(200,220,232,.25);
+      letter-spacing: 3px; margin-top: 12px;
+      font-family: 'Courier New',monospace;
+    }
+
+    .gallery-section { padding: 100px 40px; }
+    .gallery-section .section-header {
+      max-width: 1200px; margin: 0 auto 40px;
+    }
+    .gallery-section .section-header .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(0,131,143,.4);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .gallery-section .section-header h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+    }
+    .gallery-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr; gap: 12px;
+    }
+    .gallery-grid .col { display: flex; flex-direction: column; gap: 12px; }
+    .gallery-grid .col:first-child { grid-row: span 2; }
+    .gallery-item {
+      border-radius: 12px; overflow: hidden; position: relative;
+      opacity: 0; transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .gallery-item.visible { opacity: 1; transform: translateY(0); }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block; transition: transform 0.6s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item .item-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px;
+      background: linear-gradient(0deg,#0a1418 0%,transparent 100%);
+    }
+    .gallery-item .item-overlay span {
+      font-size: 12px; color: rgba(200,220,232,.4);
+      letter-spacing: 1px;
+    }
+
+    .dashboard-section {
+      padding: 100px 40px;
+      background: linear-gradient(180deg,#0a1418,#0a141e,#0a1418);
+    }
+    .dashboard-section .section-header {
+      max-width: 1200px; margin: 0 auto 50px;
+    }
+    .dashboard-section .section-header .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(0,131,143,.4);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .dashboard-section .section-header h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+    }
+    .dashboard-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+    }
+    .dashboard-card {
+      padding: 28px 24px; border-radius: 14px;
+      background: rgba(0,131,143,.03);
+      border: 1px solid rgba(0,131,143,.06);
+      text-align: center;
+      opacity: 0; transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(.16,1,.3,1);
+    }
+    .dashboard-card.visible { opacity: 1; transform: translateY(0); }
+    .dashboard-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .dashboard-card .d-num { font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+    .dashboard-card .d-label {
+      font-size: 10px; color: rgba(200,220,232,.3);
+      letter-spacing: 2px; margin-top: 6px;
+      font-family: 'Courier New',monospace;
+    }
+    .dashboard-card.cyan .d-num { color: #4dd0e1; }
+    .dashboard-card.green .d-num { color: #80cbc4; }
+    .dashboard-card.purple .d-num { color: #c9a84c; }
+    .dashboard-card.pink .d-num { color: #ffe082; }
+    .dashboard-card.gold .d-num { color: #c9a84c; }
+
+    .cta-section {
+      padding: 120px 40px; text-align: center; position: relative;
+    }
+    .cta-section .bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      filter: brightness(0.2);
+    }
+    .cta-section .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,#0a1418 0%,transparent 30%,transparent 70%,#0a1418 100%);
+    }
+    .cta-section .content {
+      position: relative; z-index: 2;
+      max-width: 600px; margin: 0 auto;
+    }
+    .cta-section .content .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(0,131,143,.4);
+      letter-spacing: 3px; margin-bottom: 16px;
+    }
+    .cta-section .content h2 {
+      font-size: 36px; font-weight: 700; letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .cta-section .content p {
+      font-size: 15px; color: rgba(200,220,232,.4);
+      line-height: 1.8; margin-bottom: 30px;
+    }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px;
+      border: 1px solid rgba(0,131,143,.3);
+      background: rgba(0,131,143,.1);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      color: #4dd0e1; font-size: 14px;
+      cursor: pointer; transition: all .3s;
+      letter-spacing: 1px; text-decoration: none;
+    }
+    .cta-btn:hover {
+      background: rgba(0,131,143,.2);
+      box-shadow: 0 0 40px rgba(0,131,143,.1);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      padding: 40px; text-align: center;
+      border-top: 1px solid rgba(0,131,143,.05);
+    }
+    footer p {
+      font-size: 11px; color: rgba(200,220,232,.15);
+      letter-spacing: 2px;
+      font-family: 'Courier New',monospace;
+    }
+
+    .corner { position: fixed; z-index: 100; pointer-events: none; }
+    .corner-h { position: absolute; width: 20px; height: 1px; background: rgba(0,131,143,.06); }
+    .corner-v { position: absolute; width: 1px; height: 20px; background: rgba(0,131,143,.06); }
+    .corner-tl { top: 10px; left: 10px; }
+    .corner-tr { top: 10px; right: 10px; }
+    .corner-bl { bottom: 10px; left: 10px; }
+    .corner-br { bottom: 10px; right: 10px; }
+    .corner-tl .corner-h { top: 0; left: 0; }
+    .corner-tl .corner-v { top: 0; left: 0; }
+    .corner-tr .corner-h { top: 0; right: 0; }
+    .corner-tr .corner-v { top: 0; right: 0; }
+    .corner-bl .corner-h { bottom: 0; left: 0; }
+    .corner-bl .corner-v { bottom: 0; left: 0; }
+    .corner-br .corner-h { bottom: 0; right: 0; }
+    .corner-br .corner-v { bottom: 0; right: 0; }
+
+    .scroll-hud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 12px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(10,20,24,.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,131,143,.06);
+      transform: translateY(-100%);
+      transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+    }
+    .scroll-hud.active { transform: translateY(0); }
+    .scroll-hud .left { display: flex; align-items: center; gap: 16px; }
+    .scroll-hud .site-name {
+      font-size: 13px; color: rgba(200,220,232,.4);
+      letter-spacing: 2px;
+      font-family: 'Orbitron','PingFang SC',sans-serif;
+    }
+    .scroll-hud .site-name strong { color: rgba(200,220,232,.6); }
+    .scroll-hud .right span {
+      font-size: 10px; color: rgba(200,220,232,.2);
+      letter-spacing: 2px;
+      font-family: 'Orbitron','Courier New',monospace;
+    }
+
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 2px; background: rgba(0,131,143,.05);
+    }
+    .scroll-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #4dd0e1, #c9a84c);
+      transition: width 0.1s linear;
+    }
+    .scroll-progress-pct {
+      position: fixed; top: 8px; right: 42px; z-index: 60;
+      font-size: 9px; color: rgba(0,131,143,.15);
+      font-family: 'Courier New',monospace; letter-spacing: 1px;
+    }
+
+    .chapter-nav {
+      position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 55;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .chapter-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(0,131,143,.12);
+      cursor: pointer; transition: all .3s; position: relative;
+    }
+    .chapter-dot:hover { background: rgba(0,131,143,.35); transform: scale(1.4); }
+    .chapter-dot.active { background: rgba(0,131,143,.7); transform: scale(1.5); box-shadow: 0 0 10px rgba(0,131,143,.3); }
+    .chapter-dot .chapter-label {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      white-space: nowrap; font-size: 9px; color: rgba(200,220,232,.15);
+      letter-spacing: 2px; font-family: 'Courier New',monospace;
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+    }
+    .chapter-dot:hover .chapter-label { opacity: 1; }
+
+    @keyframes target-lock {
+      0% { box-shadow: 0 0 0 0 rgba(0,131,143,.15); }
+      100% { box-shadow: 0 0 0 8px rgba(0,131,143,0); }
+    }
+    .back-btn:hover, .cta-btn:hover, .chapter-dot:hover, .dashboard-card:hover {
+      animation: target-lock 0.6s ease-out;
+    }
+
+    .page-transition {
+      position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none; background: #0a1418;
+      opacity: 0; transition: opacity 0.5s cubic-bezier(.16,1,.3,1);
+    }
+    .page-transition.active { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .hud { padding: 16px 20px; }
+      .hud-top { flex-direction: column; }
+      .data-panel { margin-top: 12px; gap: 4px; }
+      .data-item { padding: 6px 12px; min-width: 56px; }
+      .data-item .num { font-size: 16px; }
+      .title-group h1 { font-size: 32px; flex-wrap: wrap; }
+      .hero-info { left: 20px; right: 20px; bottom: 100px; }
+      .hero-info .card { padding: 16px 20px; }
+      .hero-info .card p { font-size: 12px; }
+      .section { padding: 60px 20px; min-height: auto; }
+      .section-inner { grid-template-columns: 1fr; gap: 30px; }
+      .section-inner.reverse { direction: ltr; }
+      .section-image img { height: 250px; }
+      .section-content h2 { font-size: 24px; }
+      .section-content .stat-row { flex-wrap: wrap; }
+      .gallery-section { padding: 60px 20px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid .col:first-child { grid-row: auto; }
+      .dashboard-grid { grid-template-columns: repeat(2,1fr); }
+      .dashboard-section { padding: 60px 20px; }
+      .cta-section { padding: 80px 20px; }
+      .cta-section .content h2 { font-size: 26px; }
+      .image-break .quote p { font-size: 16px; }
+      .scroll-hud { padding: 10px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="loading-overlay" id="loading">
+    <div class="loading-spinner"></div>
+    <p>Establishing satellite link ...</p>
+  </div>
+
+  <div class="corner corner-tl"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-tr"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-bl"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-br"><div class="corner-h"></div><div class="corner-v"></div></div>
+
+  <div class="scroll-progress" id="scrollProgress">
+    <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+    <span class="scroll-progress-pct" id="scrollPct">0%</span>
+  </div>
+
+  <div class="scroll-hud" id="scrollHud">
+    <div class="left">
+      <span class="site-name"><strong>5A</strong> · Immersive Exploration</span>
+    </div>
+    <div class="right">
+      <span id="hudLocation">Jiangsu · Slender West Lake</span>
+    </div>
+  </div>
+
+  <div class="chapter-nav" id="chapterNav"></div>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="water-layer"></div>
+    <div class="top-fade"></div>
+    <div class="bottom-fade"></div>
+
+    <div class="hud">
+      <div class="hud-top">
+        <div>
+          
+          <div class="title-group">
+            <h1>
+              <span>Slender West Lake</span>
+              <span class="badge">5A</span>
+              <span class="stars">★★★★★</span>
+            </h1>
+            <div class="subtitle">Jiangsu · Yangzhou · Hanjiang District</div>
+          </div>
+        </div>
+        <div class="data-panel">
+          <div class="data-item"><div class="num cyan">Qing Dynasty</div><div class="label">Golden Era</div></div>
+          <div class="data-item"><div class="num green">4.7</div><div class="label">Visitor Rating</div></div>
+          <div class="data-item"><div class="num pink">100 ha</div><div class="label">Area</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-info">
+      <div class="card">
+        <p>
+          <span style="color:rgba(77,208,225,.5);font-size:11px;letter-spacing:2px;display:block;margin-bottom:8px;">◈ Satellite Briefing</span>
+          <span style="color:rgba(200,220,232,.75);">Slender West Lake is located in Hanjiang District, Yangzhou. Originally known as Baozhang Lake, it was renamed during the Qianlong reign of the Qing Dynasty after a poem by Wang Hang. The scenic area blends the elegance of the south with the grandeur of the north, and is a national 5A tourist attraction.</span>
+        </p>
+        <div class="tags">
+          <span class="tag-blue">Garden Lake</span>
+          <span class="tag-amber">Classical Gardens</span>
+          <span class="tag-teal">Yangzhou Charm</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll Down to Explore</span>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <section class="section" data-chapter="Lakeside Gardens">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_02.jpg" alt="Slender West Lake" loading="lazy" />
+        <div class="img-overlay"></div>
+        
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 01</div>
+        <h2>Lakeside <span class="highlight">Gardens</span></h2>
+        <p>Slender West Lake, originally known as Baozhang Lake, is located in the northwestern suburbs of Yangzhou. During the Qianlong reign of the Qing Dynasty, the Hangzhou poet Wang Hang visited Baozhang Lake and composed a poem praising it: "Willows stretch endlessly along the remnants of grass, the rainbow bridge stands like a painting. A place where fortunes are spent, it should be called Slender West Lake." Hence the name was born.</p>
+        <p>Slender West Lake spans 4.3 kilometers in length, with a tourist area of over 100 hectares. The lake is characterized by its "slender" shape, with varying widths, lush trees on both banks, and elegant garden architecture, creating a picturesque lakeside garden landscape where "blossoms and willows line the shores, and pavilions stretch all the way to the hills."</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">5A</div><div class="lbl">Rating Level</div></div>
+          <div class="stat-item"><div class="num">4.3km</div><div class="lbl">Total Length</div></div>
+          <div class="stat-item"><div class="num">100 ha</div><div class="lbl">Tourist Area</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="image-break">
+    <div class="bg" style="background-image:url('江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_03.jpg');"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <p>"Willows stretch endlessly along the remnants of grass, the rainbow bridge stands like a painting. A place where fortunes are spent, it should be called Slender West Lake."</p>
+      <div class="author">—— Qing Dynasty · Wang Hang, "Ode to Baozhang Lake"</div>
+    </div>
+  </div>
+
+  <section class="section" data-chapter="Five-Pavilion Bridge">
+    <div class="section-inner reverse">
+      <div class="section-image" data-animate>
+        <img src="江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_04.jpg" alt="Five-Pavilion Bridge" loading="lazy" />
+        <div class="img-overlay"></div>
+        
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 02</div>
+        <h2>Five-Pavilion <span class="highlight">Bridge</span></h2>
+        <p>The Five-Pavilion Bridge is the iconic landmark of Slender West Lake, built in the 22nd year of the Qianlong reign (1757). It was modeled after the Five-Dragon Pavilion and the Seventeen-Arch Bridge of Beihai in Beijing. The bridge features five elegant pavilions connected in a row, making it a masterpiece of ancient Chinese bridge architecture.</p>
+        <p>Also known as the Lotus Bridge, it has fifteen arches beneath, all interconnected. On Mid-Autumn Festival nights, locals have the tradition of "viewing the moon under the Five-Pavilion Bridge," where each of the fifteen arches holds a reflection of the moon, creating the wondrous spectacle of "fifteen moons on the sixteenth night."</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">1757</div><div class="lbl">Year Built</div></div>
+          <div class="stat-item"><div class="num">5</div><div class="lbl">Pavilions</div></div>
+          <div class="stat-item"><div class="num">15</div><div class="lbl">Arches</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-chapter="Twenty-Four Bridge">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_05.jpg" alt="Twenty-Four Bridge" loading="lazy" />
+        <div class="img-overlay"></div>
+        
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 03</div>
+        <h2>Twenty-Four <span class="highlight">Bridge</span></h2>
+        <p>The Twenty-Four Bridge gained fame from the Tang Dynasty poet Du Mu's verse: "On the Twenty-Four Bridge on a moonlit night, where does the jade beauty teach the flute?" The bridge within the scenic area is a single-arch bridge with white marble railings, measuring 24 meters long, 2.4 meters wide, with 24 pillars and 24 steps — every detail echoes the number "twenty-four."</p>
+        <p>Slender West Lake also features many other attractions, including the White Pagoda, Fishing Terrace, Little Golden Hill, Xu Garden, and Xichun Terrace. The White Pagoda was modeled after the White Pagoda in Beihai, Beijing. The Fishing Terrace is a quintessential example of Chinese garden "framed scenery" art, while Little Golden Hill is the largest island on the lake, offering different scenery each season.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">24 m</div><div class="lbl">Bridge Length</div></div>
+          <div class="stat-item"><div class="num">Tang</div><div class="lbl">Poem Origin</div></div>
+          <div class="stat-item"><div class="num">Pagoda</div><div class="lbl">Famous Site</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section" data-chapter="Gallery">
+    <div class="section-header">
+      <div class="numeral">/// Gallery</div>
+      <h2>Slender West Lake <span style="background:linear-gradient(135deg,#4dd0e1,#c9a84c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Panoramic Views</span></h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="col">
+        <div class="gallery-item tall" data-animate style="grid-row:span 2;height:100%;">
+          <img src="江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_06.jpg" alt="Slender West Lake Panorama" style="height:100%;min-height:500px;" loading="lazy" />
+          
+        </div>
+        <div class="gallery-item" data-animate style="height:200px;">
+          <img src="江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_07.jpg" alt="Pavilions and Towers" style="height:100%;" loading="lazy" />
+          
+        </div>
+      </div>
+      <div class="col">
+        <div class="gallery-item" data-animate style="height:240px;">
+          <img src="江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_08.jpg" alt="Garden Pavilion" style="height:100%;" loading="lazy" />
+          
+        </div>
+        <div class="gallery-item" data-animate style="height:260px;">
+          <img src="江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_09.jpg" alt="Lake and Mountains" style="height:100%;" loading="lazy" />
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dashboard-section" data-chapter="Dashboard">
+    <div class="section-header">
+      <div class="numeral">/// Dashboard</div>
+      <h2>Key <span class="highlight">Indicators</span></h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dashboard-card cyan" data-animate>
+        <div class="icon">🏛️</div>
+        <div class="d-num">5A</div>
+        <div class="d-label">Rating Level</div>
+      </div>
+      <div class="dashboard-card green" data-animate>
+        <div class="icon">📏</div>
+        <div class="d-num">4.3km</div>
+        <div class="d-label">Total Length</div>
+      </div>
+      <div class="dashboard-card purple" data-animate>
+        <div class="icon">📸</div>
+        <div class="d-num">100 ha</div>
+        <div class="d-label">Tourist Area</div>
+      </div>
+      <div class="dashboard-card pink" data-animate>
+        <div class="icon">🌉</div>
+        <div class="d-num">1757</div>
+        <div class="d-label">Bridge Built</div>
+      </div>
+      <div class="dashboard-card gold" data-animate>
+        <div class="icon">🏯</div>
+        <div class="d-num">5</div>
+        <div class="d-label">Pavilions</div>
+      </div>
+      <div class="dashboard-card cyan" data-animate>
+        <div class="icon">🌙</div>
+        <div class="d-num">15</div>
+        <div class="d-label">Arches</div>
+      </div>
+      <div class="dashboard-card green" data-animate>
+        <div class="icon">📜</div>
+        <div class="d-num">Tang</div>
+        <div class="d-label">Poem Origin</div>
+      </div>
+      <div class="dashboard-card purple" data-animate>
+        <div class="icon">🏞️</div>
+        <div class="d-num">Qing</div>
+        <div class="d-label">Golden Era</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="bg" style="background-image:url('江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_01.jpg');"></div>
+    <div class="overlay"></div>
+    <div class="content">
+      <div class="numeral">/// Explore Next</div>
+      <h2>Wander Through the <span style="background:linear-gradient(135deg,#4dd0e1,#c9a84c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Misty Waters</span> of Slender West Lake</h2>
+      <p>Start from Slender West Lake and discover the unique charm of more 5A scenic spots.<br/>Every exploration is a poetic journey through time and space.</p>
+      <a class="cta-btn" href="../index.html?prov=%E6%B1%9F%E8%8B%8F%E7%9C%81">
+        <span>← Return to Satellite Overview</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>5A Immersive Exploration · SATELLITE TOUR · Data Source: Pexels/OpenStreetMap</p>
+  </footer>
+
+  <div class="page-transition" id="pageTransition"></div>
+
+  <script>
+    (function() {
+      var heroBg = document.getElementById('heroBg');
+      var img = new Image();
+      img.onload = function() {
+        heroBg.style.backgroundImage = "url('江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_01.jpg')";
+        document.getElementById('loading').classList.add('hidden');
+      };
+      img.onerror = function() {
+        heroBg.style.backgroundImage = "url('江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_01.jpg')";
+        document.getElementById('loading').classList.add('hidden');
+      };
+      img.src = '江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_01.jpg';
+
+      setTimeout(function() {
+        if (!document.getElementById('loading').classList.contains('hidden')) {
+          heroBg.style.backgroundImage = "url('江苏/扬州市瘦西湖风景区/扬州市瘦西湖风景区_01.jpg')";
+          document.getElementById('loading').classList.add('hidden');
+        }
+      }, 3000);
+
+      var scrollHud = document.getElementById('scrollHud');
+      window.addEventListener('scroll', function() {
+        var scrollY = window.scrollY;
+        if (scrollY > 300) {
+          scrollHud.classList.add('active');
+        } else {
+          scrollHud.classList.remove('active');
+        }
+
+        var docH = document.documentElement.scrollHeight - window.innerHeight;
+        var pct = docH > 0 ? Math.round((scrollY / docH) * 100) : 0;
+        document.getElementById('scrollProgressFill').style.width = pct + '%';
+        document.getElementById('scrollPct').textContent = pct + '%';
+      });
+
+      var hero = document.getElementById('hero');
+      hero.addEventListener('mousemove', function(e) {
+        var x = (e.clientX / window.innerWidth - 0.5) * 8;
+        var y = (e.clientY / window.innerHeight - 0.5) * 8;
+        heroBg.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+      });
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('[data-animate]').forEach(function(el) {
+        observer.observe(el);
+      });
+
+      var chapters = document.querySelectorAll('[data-chapter]');
+      var chapterNav = document.getElementById('chapterNav');
+      chapters.forEach(function(ch, i) {
+        var dot = document.createElement('div');
+        dot.className = 'chapter-dot';
+        dot.innerHTML = '<span class="chapter-label">' + ch.getAttribute('data-chapter') + '</span>';
+        dot.addEventListener('click', function() {
+          ch.scrollIntoView({ behavior: 'smooth' });
+        });
+        chapterNav.appendChild(dot);
+      });
+
+      var chapterObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var idx = Array.from(chapters).indexOf(entry.target);
+            var dots = chapterNav.querySelectorAll('.chapter-dot');
+            dots.forEach(function(d, i) {
+              d.classList.toggle('active', i === idx);
+            });
+          }
+        });
+      }, { threshold: 0.5 });
+
+      chapters.forEach(function(ch) {
+        chapterObserver.observe(ch);
+      });
+
+      var backBtn = document.querySelector('.back-btn');
+      if (backBtn) {
+        backBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          var transition = document.getElementById('pageTransition');
+          transition.classList.add('active');
+          setTimeout(function() {
+            window.location.href = '../index.html?prov=江苏省';
+          }, 500);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

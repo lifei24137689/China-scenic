@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fenjiezhou Island · Hainan 5A Scenic Area</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'PingFang SC','Microsoft YaHei','Helvetica Neue',sans-serif;
+      background: #0a1a2e;
+      color: #e8f8ff;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a1a2e; }
+    ::-webkit-scrollbar-thumb { background: #00b4d8; border-radius: 3px; }
+
+    /* ===== Loading ===== */
+    .loading {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #0a1a2e;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loading.hide { opacity: 0; pointer-events: none; }
+    .loading-logo {
+      font-size: 28px; font-weight: 700;
+      color: #00b4d8; letter-spacing: 4px;
+      margin-bottom: 24px;
+    }
+    .loading-bar-wrap {
+      width: 200px; height: 3px;
+      background: rgba(0,180,216,0.15);
+      border-radius: 2px; overflow: hidden;
+    }
+    .loading-bar {
+      width: 0%; height: 100%;
+      background: linear-gradient(90deg,#00b4d8,#06d6a0);
+      border-radius: 2px;
+      animation: loadBar 1.8s ease forwards;
+    }
+    @keyframes loadBar { to { width: 100%; } }
+
+    /* ===== Hero ===== */
+    .hero {
+      position: relative; width: 100%; height: 100vh;
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .hero-img {
+      position: absolute; inset: -20px;
+      background: url('images/fenjiezhou/海口市分界洲岛旅游区_01.jpg') center/cover no-repeat;
+      filter: brightness(0.55) saturate(1.15);
+      transform: scale(1.05);
+      animation: heroZoom 20s ease-in-out infinite alternate;
+    }
+    @keyframes heroZoom {
+      0% { transform: scale(1.05); }
+      100% { transform: scale(1.15); }
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #0a1a2e 0%, transparent 40%, transparent 70%, #0a1a2e 100%);
+    }
+    .hero-overlay2 {
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, #0a1a2e 0%, rgba(10,26,46,0.3) 40%, transparent 60%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center; padding: 20px;
+      max-width: 900px;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 24px; margin-bottom: 20px;
+      border: 1px solid rgba(0,180,216,0.3);
+      background: rgba(0,180,216,0.1);
+      backdrop-filter: blur(10px);
+      font-size: 12px; letter-spacing: 6px; color: #00b4d8;
+      text-transform: uppercase; border-radius: 2px;
+    }
+    .hero h1 {
+      font-size: clamp(52px, 10vw, 110px);
+      font-weight: 700; letter-spacing: 8px;
+      background: linear-gradient(135deg, #00b4d8 0%, #06d6a0 50%, #ffd166 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.15;
+      text-shadow: none;
+      margin-bottom: 12px;
+    }
+    .hero-sub {
+      font-size: clamp(14px, 2vw, 20px);
+      color: rgba(232,248,255,0.6);
+      letter-spacing: 4px; font-weight: 300;
+      margin-bottom: 36px;
+    }
+    .hero-scroll {
+      display: inline-flex; align-items: center; gap: 10px;
+      color: rgba(0,180,216,0.5); font-size: 12px; letter-spacing: 3px;
+      animation: bounceDown 2s ease infinite;
+    }
+    @keyframes bounceDown {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+    .hero-scroll::after {
+      content: ''; display: block;
+      width: 1px; height: 30px;
+      background: linear-gradient(180deg,#00b4d8,transparent);
+    }
+
+    /* ===== Section Base ===== */
+    section { position: relative; }
+    .section-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 100px 24px;
+      position: relative; z-index: 1;
+    }
+    .section-label {
+      font-size: 11px; letter-spacing: 6px;
+      color: rgba(0,180,216,0.4);
+      margin-bottom: 12px; font-weight: 500;
+    }
+    .section-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700; line-height: 1.2;
+      margin-bottom: 24px;
+    }
+    .section-title .highlight {
+      background: linear-gradient(135deg,#00b4d8,#06d6a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ===== Diagonal Divider ===== */
+    .divider-diag {
+      position: relative; height: 120px; overflow: hidden;
+      margin-top: -1px;
+    }
+    .divider-diag::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #0a1a2e;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0%);
+    }
+    .divider-diag-rev {
+      position: relative; height: 120px; overflow: hidden;
+    }
+    .divider-diag-rev::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #0a1a2e;
+      clip-path: polygon(0 100%, 100% 0, 100% 100%, 0 100%);
+    }
+    .divider-diag-r {
+      position: relative; height: 120px; overflow: hidden;
+    }
+    .divider-diag-r::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #0a1a2e;
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    }
+    .divider-diag-rr {
+      position: relative; height: 120px; overflow: hidden;
+    }
+    .divider-diag-rr::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #0a1a2e;
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+    }
+
+    /* ===== Dashboard ===== */
+    .dashboard {
+      background: #0a1a2e;
+      padding: 60px 0;
+      position: relative;
+    }
+    .dashboard::before {
+      content: ''; position: absolute;
+      top: -60px; left: 0; right: 0; height: 60px;
+      background: #0a1a2e;
+      clip-path: polygon(0 100%, 100% 0, 100% 100%, 0% 100%);
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px; max-width: 1000px;
+      margin: 0 auto; padding: 0 24px;
+    }
+    .dash-card {
+      background: rgba(0,180,216,0.08);
+      border: 1px solid rgba(0,180,216,0.12);
+      padding: 28px 16px; text-align: center;
+      position: relative; overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .dash-card:hover {
+      background: rgba(0,180,216,0.15);
+      transform: translateY(-4px);
+      border-color: rgba(0,180,216,0.3);
+    }
+    .dash-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; width: 3px; height: 0;
+      background: linear-gradient(180deg,#00b4d8,#06d6a0);
+      transition: height 0.4s ease;
+    }
+    .dash-card:hover::before { height: 100%; }
+    .dash-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+    .dash-num {
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 700; letter-spacing: 1px;
+    }
+    .dash-num.tiffany { color: #00b4d8; }
+    .dash-num.coral { color: #ff8c42; }
+    .dash-num.yellow { color: #ffd166; }
+    .dash-num.green { color: #06d6a0; }
+    .dash-label {
+      font-size: 11px; color: rgba(232,248,255,0.4);
+      letter-spacing: 2px; margin-top: 4px;
+    }
+
+    /* ===== Content Section (Collage) ===== */
+    .content-section {
+      background: #0f2440;
+      overflow: hidden;
+    }
+    .content-section.alt {
+      background: #0a1a2e;
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    .content-grid.reverse {
+      direction: rtl;
+    }
+    .content-grid.reverse > * {
+      direction: ltr;
+    }
+    .content-text p {
+      font-size: 15px; line-height: 1.9;
+      color: rgba(232,248,255,0.75);
+      margin-bottom: 16px;
+    }
+    .content-text .tag-row {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 20px;
+    }
+    .content-text .tag {
+      padding: 4px 16px;
+      border: 1px solid rgba(0,180,216,0.2);
+      background: rgba(0,180,216,0.06);
+      font-size: 11px; color: rgba(0,180,216,0.7);
+      letter-spacing: 1px;
+      border-radius: 2px;
+    }
+    .content-image {
+      position: relative;
+    }
+    .content-image .img-wrap {
+      position: relative; overflow: hidden;
+      clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+    }
+    .content-image .img-wrap img {
+      width: 100%; height: 420px; object-fit: cover;
+      display: block;
+      transition: transform 0.8s ease;
+    }
+    .content-image .img-wrap:hover img {
+      transform: scale(1.05);
+    }
+    .content-image .img-accent {
+      position: absolute;
+      bottom: -16px; right: -16px;
+      width: 60%; height: 60%;
+      border: 2px solid rgba(255,140,66,0.2);
+      z-index: -1;
+      clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+    }
+
+    /* ===== Break Image ===== */
+    .break-section {
+      position: relative; height: 60vh; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .break-img {
+      position: absolute; inset: -20px;
+      background: url('images/fenjiezhou/海口市分界洲岛旅游区_05.jpg') center/cover no-repeat;
+      filter: brightness(0.5) saturate(1.1);
+      transform: scale(1.05);
+      transition: transform 12s ease;
+    }
+    .break-section:hover .break-img {
+      transform: scale(1.12);
+    }
+    .break-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, #0a1a2e 0%, transparent 30%, transparent 70%, #0a1a2e 100%);
+    }
+    .break-quote {
+      position: relative; z-index: 2;
+      text-align: center; max-width: 700px; padding: 20px;
+    }
+    .break-quote blockquote {
+      font-size: clamp(20px, 3vw, 36px);
+      font-weight: 300; letter-spacing: 3px;
+      color: #e8f8ff; line-height: 1.5;
+      font-style: italic;
+    }
+    .break-quote cite {
+      display: block; margin-top: 16px;
+      font-size: 12px; letter-spacing: 4px;
+      color: rgba(0,180,216,0.5);
+      font-style: normal;
+    }
+    .break-quote .quote-mark {
+      font-size: 60px; line-height: 0;
+      color: rgba(0,180,216,0.15);
+      vertical-align: middle;
+    }
+
+    /* ===== Gallery ===== */
+    .gallery-section {
+      background: #0f2440;
+      padding: 100px 0;
+    }
+    .gallery-header {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 24px 50px;
+    }
+    .gallery-masonry {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+    }
+    .gallery-masonry .col {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .gallery-masonry .col2 {
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 16px;
+    }
+    .gallery-item {
+      position: relative; overflow: hidden;
+      cursor: pointer;
+    }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      transition: transform 0.8s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.06);
+    }
+    .gallery-item.tall {
+      grid-row: span 2;
+    }
+    .gallery-item .img-clip {
+      overflow: hidden;
+      clip-path: polygon(2% 0, 100% 0, 98% 100%, 0% 100%);
+    }
+    .gallery-item .img-clip img {
+      height: 500px;
+    }
+    .gallery-item.small .img-clip img {
+      height: 220px;
+    }
+    .gallery-item.medium .img-clip img {
+      height: 260px;
+    }
+    .gallery-item.large .img-clip img {
+      height: 280px;
+    }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      position: relative; height: 80vh; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cta-img {
+      position: absolute; inset: -20px;
+      background: url('images/fenjiezhou/海口市分界洲岛旅游区_01.jpg') center/cover no-repeat;
+      filter: brightness(0.35) saturate(1.1);
+      transform: scale(1.05);
+    }
+    .cta-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #0a1a2e 0%, transparent 40%, transparent 60%, #0a1a2e 100%);
+    }
+    .cta-content {
+      position: relative; z-index: 2;
+      text-align: center; max-width: 700px; padding: 20px;
+    }
+    .cta-year {
+      display: inline-block;
+      font-size: 72px; font-weight: 700;
+      background: linear-gradient(135deg, #00b4d8, #ff8c42);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: 4px;
+      font-family: 'Georgia', serif;
+    }
+    .cta-label {
+      font-size: 11px; letter-spacing: 6px;
+      color: rgba(232,248,255,0.3); margin-bottom: 20px;
+    }
+    .cta-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700; letter-spacing: 2px;
+      line-height: 1.3; margin-bottom: 24px;
+    }
+    .cta-btn {
+      display: inline-block;
+      padding: 14px 48px;
+      border: 1px solid rgba(0,180,216,0.3);
+      background: rgba(0,180,216,0.1);
+      backdrop-filter: blur(8px);
+      color: #00b4d8; font-size: 14px;
+      letter-spacing: 4px; cursor: pointer;
+      transition: all 0.4s ease;
+      text-decoration: none;
+      clip-path: polygon(3% 0, 100% 0, 97% 100%, 0% 100%);
+    }
+    .cta-btn:hover {
+      background: rgba(0,180,216,0.25);
+      border-color: rgba(0,180,216,0.6);
+      transform: translateY(-2px);
+    }
+
+    /* ===== Tags ===== */
+    .tags-bar {
+      background: #0f2440;
+      padding: 30px 0;
+      border-top: 1px solid rgba(0,180,216,0.06);
+      border-bottom: 1px solid rgba(0,180,216,0.06);
+    }
+    .tags-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 24px;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center;
+    }
+    .tags-inner .tag {
+      padding: 6px 20px;
+      font-size: 12px; letter-spacing: 2px;
+      border: 1px solid rgba(0,180,216,0.12);
+      background: rgba(0,180,216,0.04);
+      color: rgba(232,248,255,0.5);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .tags-inner .tag:hover {
+      border-color: rgba(0,180,216,0.3);
+      color: #00b4d8;
+      background: rgba(0,180,216,0.08);
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      background: #071220;
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .footer p {
+      font-size: 12px; letter-spacing: 2px;
+      color: rgba(232,248,255,0.2);
+    }
+    .footer .sep {
+      display: inline-block; margin: 0 12px;
+      color: rgba(0,180,216,0.2);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .content-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .content-grid.reverse {
+        direction: ltr;
+      }
+      .content-grid.reverse > * {
+        direction: ltr;
+      }
+      .content-image .img-wrap img {
+        height: 280px;
+      }
+      .gallery-masonry {
+        grid-template-columns: 1fr;
+      }
+      .gallery-item .img-clip img {
+        height: 300px !important;
+      }
+      .break-section {
+        height: 40vh;
+      }
+      .cta-section {
+        height: 60vh;
+      }
+      .cta-year {
+        font-size: 48px;
+      }
+      .section-inner {
+        padding: 60px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .dash-card {
+        padding: 20px 12px;
+      }
+      .hero h1 {
+        letter-spacing: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <div class="loading-logo">✦ Fenjiezhou Island</div>
+    <div class="loading-bar-wrap">
+      <div class="loading-bar"></div>
+    </div>
+  </div>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="hero-img"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-overlay2"></div>
+    <div class="hero-content">
+      <div class="hero-badge">✦ National 5A Tourist Attraction</div>
+      <h1>Fenjiezhou Island</h1>
+      <p class="hero-sub">The Climatic Divide of Northern and Southern Hainan · The Island That Divides the Soul</p>
+      <div class="hero-scroll">Scroll Down</div>
+    </div>
+  </section>
+
+  <!-- ===== Dashboard ===== -->
+  <section class="dashboard">
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <span class="dash-icon">🏖</span>
+        <div class="dash-num tiffany">0.41km²</div>
+        <div class="dash-label">Island Area</div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-icon">🌊</span>
+        <div class="dash-num coral">8-15m</div>
+        <div class="dash-label">Water Visibility</div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-icon">⭐</span>
+        <div class="dash-num yellow">5A</div>
+        <div class="dash-label">5A Level Scenic Area</div>
+      </div>
+      <div class="dash-card">
+        <span class="dash-icon">📅</span>
+        <div class="dash-num green">2013</div>
+        <div class="dash-label">Year Rated</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Content 1: The Beauty of Division ===== -->
+  <div class="divider-diag-r"></div>
+  <section class="content-section">
+    <div class="section-inner">
+      <div class="content-grid">
+        <div class="content-text">
+          <div class="section-label">01 · Geographic Wonder</div>
+          <h2 class="section-title">
+            The Beauty of <span class="highlight">Division</span>
+          </h2>
+          <p>Fenjiezhou Island is located in Lingshui Li Autonomous County, Hainan. Due to its special geographical location, it serves as the climatic dividing line between northern and southern Hainan, hence the name "Fenjiezhou" (Dividing Island). It boasts unique tropical island landforms and abundant marine biological resources, making it one of Hainan's most suitable islands for diving and exploring the underwater world, and is hailed as "The Island That Divides the Soul."</p>
+          <p>Its unique location creates the peculiar meteorological phenomenon where "it rains at Ox Head while the sun shines at Ox Tail" — on a single island, one can experience two completely different climates.</p>
+          <div class="tag-row">
+            <span class="tag">Dividing Line</span>
+            <span class="tag">Natural Wonder</span>
+            <span class="tag">Vacation Destination</span>
+          </div>
+        </div>
+        <div class="content-image">
+          <div class="img-wrap">
+            <img src="images/fenjiezhou/海口市分界洲岛旅游区_03.jpg" alt="Panoramic View of Fenjiezhou Island" loading="lazy">
+          </div>
+          <div class="img-accent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Content 2: Underwater World ===== -->
+  <div class="divider-diag"></div>
+  <section class="content-section alt">
+    <div class="section-inner">
+      <div class="content-grid reverse">
+        <div class="content-text">
+          <div class="section-label">02 · Ocean Wonderland</div>
+          <h2 class="section-title">
+            <span class="highlight">Underwater</span> World
+          </h2>
+          <p>Fenjiezhou Island boasts exceptional diving conditions. In its crystal-clear waters, colorful coral reefs and tropical fish abound. The island offers not only marine tourism activities such as diving, sea fishing, and jet skiing, but also features a marine theater where visitors can interact closely with dolphins, sea lions, sea turtles, and other marine animals.</p>
+          <p>Whether deep-diving to explore the mysterious underwater world or riding a semi-submersible sightseeing boat to admire coral and fish through glass windows, one cannot help but be captivated by this vast blue expanse.</p>
+          <div class="tag-row">
+            <span class="tag">Diving Paradise</span>
+            <span class="tag">Marine World</span>
+            <span class="tag">Coral Reef</span>
+            <span class="tag">Dolphin Interaction</span>
+          </div>
+        </div>
+        <div class="content-image">
+          <div class="img-wrap">
+            <img src="images/fenjiezhou/海口市分界洲岛旅游区_07.jpg" alt="Underwater World of Fenjiezhou Island" loading="lazy">
+          </div>
+          <div class="img-accent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Content 3: Romantic Island ===== -->
+  <div class="divider-diag-rr"></div>
+  <section class="content-section">
+    <div class="section-inner">
+      <div class="content-grid">
+        <div class="content-text">
+          <div class="section-label">03 · Picturesque Resort</div>
+          <h2 class="section-title">
+            <span class="highlight">Romantic</span> Island
+          </h2>
+          <p>The island's unique geographical location, climate, and regional culture attract many couples to hold romantic underwater weddings here. Exchanging vows in the blue sea, with colorful fish and coral as witnesses to their love, has established Fenjiezhou Island's distinctive brand of "Romantic Underwater Wedding."</p>
+          <p>White sandy beaches, azure waters, and swaying coconut groves create a picturesque natural landscape on Fenjiezhou Island. Strolling along the beach, listening to the waves, feeling the sea breeze — this is paradise on earth.</p>
+          <div class="tag-row">
+            <span class="tag">Tropical Island</span>
+            <span class="tag">Underwater Wedding</span>
+            <span class="tag">Romantic Getaway</span>
+          </div>
+        </div>
+        <div class="content-image">
+          <div class="img-wrap">
+            <img src="images/fenjiezhou/海口市分界洲岛旅游区_06.jpg" alt="Romantic Coastline of Fenjiezhou Island" loading="lazy">
+          </div>
+          <div class="img-accent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Break / Quote ===== -->
+  <section class="break-section">
+    <div class="break-img"></div>
+    <div class="break-overlay"></div>
+    <div class="break-quote">
+      <blockquote>
+        <span class="quote-mark">"</span> Soul Dividing Line · Tropical Island Dream <span class="quote-mark">"</span>
+      </blockquote>
+      <cite>Fenjiezhou · Where Dreams Meet the Sea</cite>
+    </div>
+  </section>
+
+  <!-- ===== Tags Bar ===== -->
+  <div class="tags-bar">
+    <div class="tags-inner">
+      <span class="tag">Tropical Island</span>
+      <span class="tag">Diving Paradise</span>
+      <span class="tag">Marine World</span>
+      <span class="tag">Underwater Wedding</span>
+      <span class="tag">Coral Reef</span>
+      <span class="tag">Dolphin Interaction</span>
+      <span class="tag">Dividing Line</span>
+      <span class="tag">Natural Wonder</span>
+      <span class="tag">Vacation Destination</span>
+    </div>
+  </div>
+
+  <!-- ===== Gallery ===== -->
+  <section class="gallery-section">
+    <div class="gallery-header">
+      <div class="section-label">✦ Gallery of Light & Shadow</div>
+      <h2 class="section-title">
+        <span class="highlight">Island</span> Impressions
+      </h2>
+    </div>
+    <div class="gallery-masonry">
+      <div class="gallery-item tall">
+        <div class="img-clip">
+          <img src="images/fenjiezhou/海口市分界洲岛旅游区_02.png" alt="Fenjiezhou Island Landscape" loading="lazy">
+        </div>
+      </div>
+      <div class="col2">
+        <div class="gallery-item small">
+          <div class="img-clip">
+            <img src="images/fenjiezhou/海口市分界洲岛旅游区_04.jpg" alt="Fenjiezhou Island Scenery" loading="lazy">
+          </div>
+        </div>
+        <div class="gallery-item medium">
+          <div class="img-clip">
+            <img src="images/fenjiezhou/海口市分界洲岛旅游区_09.jpg" alt="Fenjiezhou Island Seaview" loading="lazy">
+          </div>
+        </div>
+        <div class="gallery-item large">
+          <div class="img-clip">
+            <img src="images/fenjiezhou/海口市分界洲岛旅游区_11.png" alt="Fenjiezhou Island Beach" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <div class="cta-img"></div>
+    <div class="cta-overlay"></div>
+    <div class="cta-content">
+      <div class="cta-year">2013</div>
+      <div class="cta-label">✦ National 5A Tourist Attraction Designation</div>
+      <h2 class="cta-title">Fenjiezhou Island, Encounter the Magic of the Tropical Ocean</h2>
+      <a href="#" class="cta-btn">Explore the Island</a>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <p>
+      Hainan Fenjiezhou Island Tourist Area
+      <span class="sep">·</span>
+      National 5A Tourist Attraction
+      <span class="sep">·</span>
+      Lingshui, Hainan
+    </p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        document.getElementById('loading').classList.add('hide');
+      }, 1800);
+    });
+  </script>
+
+
+<a href="../index.html?prov=海南省" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Scenic Area Map</a>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Huangyao Ancient Town · Dreamlike Home | 5A Scenic Area Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&family=Noto+Serif+SC:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #c47a3a;
+      --secondary: #e8c86a;
+      --bg: #f5f0e8;
+      --surface: #faf6ee;
+      --text: #3c2415;
+      --text-dim: rgba(60,36,21,0.55);
+      --accent: #d4453a;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    .vintage-noise{position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.025}
+    .vintage-noise svg{width:100%;height:100%}
+
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:url('img/huangyao/贺州市黄姚古镇景区_01.jpg') center/cover;filter:brightness(0.5) saturate(1.1) sepia(0.15);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,240,232,0.25) 0%,rgba(245,240,232,0.05) 40%,rgba(60,36,21,0.5) 100%)}
+    .hero-vignette{position:absolute;inset:0;box-shadow:inset 0 0 200px rgba(60,36,21,0.4);pointer-events:none;z-index:1}
+    .hero-content{position:relative;z-index:2;text-align:center}
+    .hero-badge{display:inline-block;padding:6px 28px;border:2px solid rgba(196,122,58,0.25);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;letter-spacing:6px;color:var(--secondary);margin-bottom:24px}
+    .hero-title{font-family:'ZCOOL QingKe HuangYou',cursive;font-size:clamp(48px,8vw,88px);letter-spacing:12px;color:#f5f0e8;text-shadow:0 2px 30px rgba(60,36,21,0.5)}
+    .hero-sub{font-family:'Noto Serif SC',serif;font-size:clamp(16px,2vw,22px);letter-spacing:10px;color:#f5f0e8;opacity:0.75;margin-top:16px}
+    .hero-ornament{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--secondary);opacity:0.5;margin-top:12px;letter-spacing:4px}
+
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:8px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(250,246,238,0.85);border:1px solid rgba(196,122,58,0.15);padding:10px 16px;text-align:center;min-width:64px}
+    .hud-value{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;color:var(--primary)}
+    .hud-label{font-family:'Noto Serif SC',serif;font-size:10px;opacity:0.5;margin-top:3px;letter-spacing:2px;color:var(--text)}
+
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;letter-spacing:4px;opacity:0.4;color:var(--secondary)}
+    .scroll-line{width:2px;height:40px;background:linear-gradient(to bottom,var(--secondary),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.15}50%{opacity:0.6}}
+
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;overflow:hidden;position:relative;border:2px solid rgba(196,122,58,0.12);box-shadow:0 8px 32px rgba(60,36,21,0.08)}
+    .content-image::before{content:'';position:absolute;inset:0;border:1px solid rgba(196,122,58,0.06);z-index:1;pointer-events:none;margin:4px}
+    .content-image img{width:100%;height:420px;object-fit:cover;display:block;transition:transform 0.6s;filter:sepia(0.08) saturate(0.95)}
+    .content-image:hover img{transform:scale(1.05)}
+    .content-text{background:linear-gradient(135deg,var(--surface),#f5f0e8);padding:32px;border:1px solid rgba(196,122,58,0.08);box-shadow:0 4px 20px rgba(60,36,21,0.06)}
+    .content-text h2{font-family:'ZCOOL QingKe HuangYou',cursive;font-size:clamp(26px,4vw,40px);margin-bottom:12px;letter-spacing:6px;color:var(--primary)}
+    .content-text h2 .accent{color:var(--accent)}
+    .content-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--secondary),var(--primary));margin-bottom:20px}
+    .content-text p{font-family:'Noto Serif SC',serif;font-size:15px;line-height:2;opacity:0.75;margin-bottom:14px}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .content-tag{padding:5px 18px;border:1px solid rgba(196,122,58,0.15);font-family:'Noto Serif SC',serif;font-size:12px;letter-spacing:2px;color:var(--primary);background:rgba(196,122,58,0.05)}
+
+    .image-break{height:50vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:url('img/huangyao/贺州市黄姚古镇景区_07.jpg') center/cover fixed;filter:brightness(0.4) saturate(1.0) sepia(0.2)}
+    .image-break .ol{position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,240,232,0.3),transparent 30%,transparent 70%,rgba(60,36,21,0.6) 100%)}
+    .image-break .frame{position:absolute;inset:24px;border:1px solid rgba(232,200,106,0.15);pointer-events:none;z-index:1}
+    .image-break .quote{position:relative;z-index:2;text-align:center}
+    .image-break .quote-cn{font-family:'ZCOOL QingKe HuangYou',cursive;font-size:clamp(32px,5vw,52px);letter-spacing:14px;color:#f5f0e8;text-shadow:0 2px 20px rgba(60,36,21,0.5)}
+    .image-break .quote-en{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;opacity:0.35;letter-spacing:6px;margin-top:12px;color:var(--secondary)}
+
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{text-align:center;font-family:'ZCOOL QingKe HuangYou',cursive;font-size:clamp(24px,3vw,36px);margin-bottom:48px;letter-spacing:8px;color:var(--primary)}
+    .gallery h2 .accent{color:var(--accent)}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:1200px;margin:0 auto}
+    .gallery-item{position:relative;overflow:hidden;cursor:pointer;border:1px solid rgba(196,122,58,0.08)}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block;filter:sepia(0.12) saturate(0.9)}
+    .gallery-item:hover img{transform:scale(1.06);filter:sepia(0.05) saturate(1.0)}
+    .gallery-item:first-child{grid-column:span 2;height:440px}
+    .gallery-item:nth-child(2){height:270px}
+    .gallery-item:nth-child(3){height:270px}
+    .gallery-item:nth-child(4){height:290px}
+
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dash-header{text-align:center;margin-bottom:48px}
+    .dash-header .dash-label-top{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--secondary);opacity:0.4;letter-spacing:8px;margin-bottom:8px}
+    .dash-header h2{font-family:'ZCOOL QingKe HuangYou',cursive;font-size:clamp(24px,3vw,34px);letter-spacing:6px;color:var(--primary)}
+    .dash-header h2 .accent{color:var(--accent)}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .dash-card{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(250,246,238,0.8);border:1px solid rgba(196,122,58,0.06);padding:28px 20px;text-align:center;transition:all 0.3s;position:relative;box-shadow:0 4px 16px rgba(60,36,21,0.04)}
+    .dash-card::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);opacity:0;transition:opacity 0.3s}
+    .dash-card:hover::after{opacity:0.6}
+    .dash-card:hover{border-color:rgba(196,122,58,0.12);transform:translateY(-3px)}
+    .dash-icon{font-size:24px;margin-bottom:10px;opacity:0.5}
+    .dash-value{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:30px;color:var(--primary);margin-bottom:4px}
+    .dash-label{font-family:'Noto Serif SC',serif;font-size:11px;opacity:0.4;letter-spacing:3px}
+
+    .cta{height:50vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:url('img/huangyao/贺州市黄姚古镇景区_10.jpg') center/cover;filter:brightness(0.35) saturate(0.9) sepia(0.2)}
+    .cta-ol{position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,240,232,0.2),transparent 30%,transparent 70%,rgba(60,36,21,0.6) 100%)}
+    .cta-frame{position:absolute;inset:24px;border:1px solid rgba(232,200,106,0.08);pointer-events:none;z-index:1}
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{font-family:'Cormorant Garamond',serif;font-size:clamp(64px,10vw,120px);font-weight:600;letter-spacing:12px;opacity:0.08;margin-bottom:-24px;color:var(--secondary)}
+    .cta-title{font-family:'ZCOOL QingKe HuangYou',cursive;font-size:clamp(24px,3vw,36px);letter-spacing:8px;margin-bottom:32px;color:#f5f0e8}
+    .cta-btn{display:inline-block;padding:12px 44px;border:2px solid rgba(232,200,106,0.15);font-family:'Noto Serif SC',serif;font-size:13px;letter-spacing:5px;text-decoration:none;color:#f5f0e8;background:rgba(196,122,58,0.08);backdrop-filter:blur(12px);transition:all 0.3s}
+    .cta-btn:hover{background:rgba(196,122,58,0.15);border-color:var(--secondary);color:var(--secondary)}
+
+    .footer{padding:32px;text-align:center;border-top:1px solid rgba(196,122,58,0.08);font-family:'Noto Serif SC',serif;font-size:12px;opacity:0.3;letter-spacing:4px}
+
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.9s ease,transform 0.9s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:768px){
+      .hero-title{font-size:clamp(36px,10vw,56px);letter-spacing:6px}
+      .hero-sub{font-size:14px;letter-spacing:6px}
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .content-image img{height:260px}
+      .content-text{padding:24px}
+      .gallery-grid{grid-template-columns:1fr 1fr}
+      .gallery-item:first-child{grid-column:span 2;height:220px}
+      .gallery-item{height:160px!important}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+      .hud{top:12px;right:12px;gap:4px}
+      .hud-item{padding:6px 10px;min-width:50px}
+      .hud-value{font-size:18px}
+    }
+
+    @media(max-width:480px){
+      .gallery-grid{grid-template-columns:1fr}
+      .gallery-item:first-child{grid-column:span 1}
+      .gallery-item{height:220px!important}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="vintage-noise">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <filter id="noise">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+        <feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.15 0"/>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noise)" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-content">
+      <div class="hero-badge">✦ SINCE ANCIENT TIMES ✦</div>
+      <h1 class="hero-title">Huangyao Ancient Town</h1>
+      <p class="hero-sub">Dreamlike Home · Millennia-Old Town</p>
+      <p class="hero-ornament">— Huangyao Ancient Town —</p>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">3.2km²</div><div class="hud-label">Area</div></div>
+    <div class="hud-item"><div class="hud-value">~1000 yrs</div><div class="hud-label">History</div></div>
+    <div class="hud-item"><div class="hud-value">4.5</div><div class="hud-label">Rating</div></div>
+  </div>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="img/huangyao/贺州市黄姚古镇景区_03.jpg" alt="Panoramic view of Huangyao Ancient Town" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Millennia-Old Town · <span class="accent">Dreamlike Home</span></h2>
+      <div class="content-divider"></div>
+      <p>Huangyao Ancient Town is located in Zhaoping County, Hezhou City, Guangxi. It originated during the Kaibao period of the Song Dynasty, with a history of nearly a thousand years. Nestled amidst karst peaks and featuring exquisite layout surrounded by mountains and rivers, it is renowned as a "Dreamlike Home." Blue stone paths, ancient bridges over flowing water, brick carvings and wood engravings — every detail showcases the unique charm of this ancient Lingnan town.</p>
+      <p>Over 300 well-preserved Lingnan-style residential buildings from the Ming and Qing dynasties, along with 8 crisscrossing blue stone streets, create a poetic picture of "small bridges over flowing streams." With its intact ancient architectural cluster and rich cultural atmosphere, Huangyao Ancient Town was rated as a National 5A Scenic Area in 2022.</p>
+      <div class="content-tags">
+        <span class="content-tag">Dailong Bridge</span>
+        <span class="content-tag">Immortal Ancient Well</span>
+        <span class="content-tag">Ancient Stage</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="ol"></div>
+    <div class="frame"></div>
+    <div class="quote">
+      <div class="quote-cn">Small Bridges, Flowing Water — Dreamlike Huangyao</div>
+      <div class="quote-en">— Bridges & Water · Dreamlike Huangyao —</div>
+    </div>
+  </section>
+
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="img/huangyao/贺州市黄姚古镇景区_05.jpg" alt="Huangyao Stone Street" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Blue Stone Ancient Alley · <span class="accent">Traces of Time</span></h2>
+      <div class="content-divider"></div>
+      <p>The blue stone streets are the soul of Huangyao Ancient Town. All eight main streets are paved with blue stone slabs. After centuries of wind and rain, the stone surfaces have been polished smooth as mirrors by countless footsteps. The Lingnan-style residences lining the streets are simple yet elegant, with upturned eaves, carved window lattices — every detail tells stories of bygone years.</p>
+      <p>The Guo Family Mansion is one of the most representative ancient buildings in Huangyao. It features a classic Lingnan courtyard layout with blue bricks, black tiles, and exquisite wood carvings. The courtyard's patios, corridors, and halls are meticulously arranged, showcasing the living scenes and cultural tastes of wealthy Lingnan families during the Ming and Qing dynasties.</p>
+      <div class="content-tags">
+        <span class="content-tag">Guo Family Mansion</span>
+        <span class="content-tag">Stone Street</span>
+        <span class="content-tag">Lingnan Architecture</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="img/huangyao/贺州市黄姚古镇景区_09.jpg" alt="Dailong Bridge" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>By Dailong Bridge · <span class="accent">Mountains and Water Reflect</span></h2>
+      <div class="content-divider"></div>
+      <p>Dailong Bridge is the iconic landmark of Huangyao Ancient Town. Built during the Ming Dynasty, it spans across the Yao River. This three-arch stone bridge features a simple yet elegant form, with vines winding around its body, creating a delightful contrast with the clear water below. The ancient banyan trees by the bridge, with their towering canopies, together with the old street and flowing water, form the most representative scene of Huangyao.</p>
+      <p>The Immortal Ancient Well is another wonder of Huangyao Ancient Town. Its water is clear, sweet, and flows year-round without cease. The well consists of five pools with different functions, used respectively for drinking, washing vegetables, laundry, and more, reflecting the wisdom of ancient water usage. The old trees and stone steps beside the well add a touch of antiquity and vitality to this millennia-old town.</p>
+      <div class="content-tags">
+        <span class="content-tag">Dailong Bridge</span>
+        <span class="content-tag">Immortal Ancient Well</span>
+        <span class="content-tag">Yao River</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" data-animate>
+    <h2><span class="accent">Huangyao</span> Photo Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="img/huangyao/贺州市黄姚古镇景区_02.jpg" alt="Panoramic view of Huangyao Ancient Town" loading="lazy"/></div>
+      <div class="gallery-item"><img src="img/huangyao/贺州市黄姚古镇景区_04.jpeg" alt="Ancient town alley" loading="lazy"/></div>
+      <div class="gallery-item"><img src="img/huangyao/贺州市黄姚古镇景区_06.jpg" alt="Yao River scenery" loading="lazy"/></div>
+      <div class="gallery-item"><img src="img/huangyao/贺州市黄姚古镇景区_08.jpg" alt="Ancient architectural complex" loading="lazy"/></div>
+    </div>
+  </section>
+
+  <section class="dashboard" data-animate>
+    <div class="dash-header">
+      <div class="dash-label-top">✦ DATA ✦</div>
+      <h2><span class="accent">Huangyao</span> Data</h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🏘</div><div class="dash-value">3.2km²</div><div class="dash-label">Scenic Area</div></div>
+      <div class="dash-card"><div class="dash-icon">📜</div><div class="dash-value">~1000 yrs</div><div class="dash-label">History</div></div>
+      <div class="dash-card"><div class="dash-icon">⭐</div><div class="dash-value">4.5</div><div class="dash-label">Overall Rating</div></div>
+      <div class="dash-card"><div class="dash-icon">📅</div><div class="dash-value">2022</div><div class="dash-label">5A Certified</div></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-ol"></div>
+    <div class="cta-frame"></div>
+    <div class="cta-content">
+      <div class="cta-num">Huangyao</div>
+      <div class="cta-title">Step into the Millennia-Old Dream Home</div>
+      <a href="../index.html?prov=%E5%B9%BF%E8%A5%BF%E5%A3%AE%E6%97%8F%E8%87%AA%E6%B2%BB%E5%8C%BA" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Huangyao Ancient Town · National 5A Scenic Area · Hezhou, Guangxi</p>
+  </footer>
+
+  <script>
+    (function(){
+      var heroBg = document.getElementById('heroBg');
+      var bgUrl = 'img/huangyao/贺州市黄姚古镇景区_01.jpg';
+      var img = new Image();
+      img.onload = function(){ heroBg.style.backgroundImage = 'url(' + bgUrl + ')' };
+      img.src = bgUrl;
+
+      window.addEventListener('scroll', function(){
+        var s = document.getElementById('scrollHud');
+        if(s) s.style.opacity = window.scrollY > 100 ? '0' : '1';
+      });
+
+      document.querySelector('.hero').addEventListener('mousemove', function(e){
+        var x = (e.clientX / window.innerWidth - 0.5) * 10;
+        var y = (e.clientY / window.innerHeight - 0.5) * 10;
+        document.getElementById('heroBg').style.transform = 'translate(' + x + 'px,' + y + 'px)';
+      });
+
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting) e.target.classList.add('visible');
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('[data-animate]').forEach(function(e){ observer.observe(e); });
+    })();
+  </script>
+</body>
+</html>

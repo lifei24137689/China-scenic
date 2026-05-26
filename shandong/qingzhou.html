@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Qingzhou Ancient City · One of the Nine Ancient Provinces | 5A Scenic Immersive Exploration</title>
+  <style>
+    /* ===== T13 国风插画·敦煌壁画 配色 ===== */
+    :root {
+      --primary: #c4513a;
+      --secondary: #d4a843;
+      --bg: #1a0f0a;
+      --surface: rgba(196,81,58,0.1);
+      --text: #f5e6d3;
+      --text-dim: rgba(245,230,211,0.55);
+      --glow: rgba(212,168,67,0.2);
+      --stone-green: #2d8c6c;
+      --stone-blue: #1e5a8c;
+      --ochre: #c47a3a;
+    }
+
+    /* ===== Reset & Base ===== */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'STSong','SimSun','Songti SC','Noto Serif SC','宋体',serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+      line-height:1.9;
+    }
+
+    /* ===== 壁画肌理背景 ===== */
+    body::before{
+      content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:
+        radial-gradient(ellipse at 15% 20%, rgba(196,81,58,0.06) 0%, transparent 45%),
+        radial-gradient(ellipse at 75% 35%, rgba(212,168,67,0.05) 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 60%, rgba(45,140,108,0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 25% 80%, rgba(30,90,140,0.04) 0%, transparent 40%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(196,81,58,0.02) 2px,
+          rgba(196,81,58,0.02) 4px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 3px,
+          rgba(212,168,67,0.015) 3px,
+          rgba(212,168,67,0.015) 6px
+        );
+    }
+
+    /* 壁画裂纹纹理 */
+    body::after{
+      content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(196,81,58,0.07) 0%, transparent 5%),
+        radial-gradient(circle at 65% 45%, rgba(212,168,67,0.05) 0%, transparent 4%),
+        radial-gradient(circle at 40% 70%, rgba(45,140,108,0.06) 0%, transparent 6%),
+        radial-gradient(circle at 70% 80%, rgba(196,122,58,0.05) 0%, transparent 5%);
+      opacity:0.6;
+    }
+
+    /* ===== Hero ===== */
+    .hero{
+      height:100vh;
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .hero-bg{
+      position:absolute;inset:-20px;
+      background:url('images/潍坊市青州古城景区/潍坊市青州古城景区_01.jpg') center/cover no-repeat;
+      filter:brightness(0.35) saturate(0.65);
+      transition:transform 0.1s ease-out;
+      will-change:transform;
+    }
+
+    /* 壁画暖光叠加 */
+    .mural-overlay{
+      position:absolute;inset:0;z-index:1;pointer-events:none;
+      background:
+        radial-gradient(ellipse at 50% 35%, rgba(212,168,67,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 70%, rgba(196,81,58,0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at center, transparent 15%, var(--bg) 80%);
+    }
+
+    /* 祥云装饰 */
+    .auspicious-clouds{
+      position:absolute;inset:0;z-index:1;pointer-events:none;
+    }
+    .cloud{
+      position:absolute;
+      border-radius:50%;
+      background:radial-gradient(ellipse at center, rgba(212,168,67,0.12) 0%, transparent 70%);
+      animation:cloudDrift 12s ease-in-out infinite;
+    }
+    .cloud.c1{width:180px;height:70px;top:18%;left:8%;animation-delay:0s}
+    .cloud.c2{width:220px;height:80px;top:12%;right:6%;animation-delay:-4s}
+    .cloud.c3{width:150px;height:55px;top:30%;left:70%;animation-delay:-8s}
+    .cloud.c4{width:200px;height:65px;bottom:25%;left:5%;animation-delay:-2s}
+    @keyframes cloudDrift{
+      0%,100%{transform:translateX(0) scale(1);opacity:0.5}
+      50%{transform:translateX(25px) scale(1.15);opacity:0.8}
+    }
+
+    /* 飞天装饰 */
+    .feitian{
+      position:absolute;z-index:1;pointer-events:none;
+      font-size:48px;
+      opacity:0.06;
+      animation:feitianFloat 10s ease-in-out infinite;
+      text-shadow:0 0 30px var(--glow);
+    }
+    .feitian.f1{top:15%;left:12%;animation-delay:0s}
+    .feitian.f2{top:20%;right:14%;animation-delay:-3s;font-size:56px}
+    .feitian.f3{bottom:20%;left:18%;animation-delay:-6s;font-size:40px}
+    .feitian.f4{bottom:15%;right:10%;animation-delay:-9s;font-size:52px}
+    @keyframes feitianFloat{
+      0%,100%{transform:translateY(0) rotate(0deg);opacity:0.04}
+      50%{transform:translateY(-18px) rotate(3deg);opacity:0.08}
+    }
+
+    /* 莲花纹 */
+    .lotus{
+      position:absolute;z-index:1;pointer-events:none;
+      width:60px;height:60px;
+      border:1px solid rgba(212,168,67,0.08);
+      border-radius:50%;
+      animation:lotusPulse 8s ease-in-out infinite;
+    }
+    .lotus.l1{top:40%;left:8%;animation-delay:0s}
+    .lotus.l2{bottom:35%;right:12%;animation-delay:-4s;width:50px;height:50px}
+    .lotus::before{
+      content:'';position:absolute;inset:4px;
+      border:1px solid rgba(212,168,67,0.06);
+      border-radius:50%;
+    }
+    @keyframes lotusPulse{
+      0%,100%{transform:scale(1);opacity:0.4}
+      50%{transform:scale(1.3);opacity:0.7}
+    }
+
+    .hero-overlay{
+      position:absolute;inset:0;z-index:1;
+      background:radial-gradient(ellipse at center,transparent 25%,var(--bg) 80%);
+      pointer-events:none;
+    }
+
+    /* Hero内容 */
+    .hero-content{
+      position:relative;z-index:3;text-align:center;
+      display:flex;flex-direction:column;align-items:center;
+      gap:18px;
+    }
+
+    /* 竖排标题 */
+    .hero-title-wrap{
+      display:flex;align-items:flex-start;gap:14px;
+    }
+    .hero-title{
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      font-size:clamp(44px,7vw,76px);
+      letter-spacing:10px;
+      color:var(--text);
+      text-shadow:0 0 40px rgba(0,0,0,0.5),0 0 18px var(--glow);
+      writing-mode:vertical-rl;
+      line-height:1.15;
+    }
+    .hero-divider-vertical{
+      width:1px;
+      height:clamp(120px,18vw,200px);
+      background:linear-gradient(to bottom, transparent, var(--secondary), var(--primary), var(--secondary), transparent);
+      opacity:0.5;
+    }
+    .hero-sub{
+      font-size:clamp(14px,1.6vw,19px);
+      letter-spacing:10px;
+      opacity:0.55;
+      writing-mode:vertical-rl;
+    }
+    .hero-badge{
+      display:inline-block;
+      margin-top:12px;
+      padding:8px 26px;
+      border:1px solid rgba(212,168,67,0.3);
+      border-radius:2px;
+      font-size:13px;
+      letter-spacing:6px;
+      color:var(--secondary);
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      position:relative;
+    }
+    .hero-badge::before,
+    .hero-badge::after{
+      content:'◆';
+      position:absolute;top:50%;transform:translateY(-50%);
+      font-size:6px;color:var(--secondary);opacity:0.5;
+    }
+    .hero-badge::before{left:-16px}
+    .hero-badge::after{right:-16px}
+
+    /* ===== 滚动提示 ===== */
+    .scroll-hint{
+      position:absolute;bottom:44px;left:50%;transform:translateX(-50%);
+      z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;
+      transition:opacity 0.4s;
+    }
+    .scroll-line{
+      width:1px;height:44px;
+      background:linear-gradient(to bottom,var(--secondary),transparent);
+      animation:scrollPulse 2s ease-in-out infinite;
+    }
+    .scroll-hint span{
+      font-size:11px;letter-spacing:4px;color:var(--text-dim);
+      writing-mode:vertical-rl;
+    }
+    @keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(0.6)}50%{opacity:1;transform:scaleY(1)}}
+
+    /* ===== HUD 数据面板 ===== */
+    .hud{
+      position:fixed;top:24px;right:24px;z-index:100;
+      display:flex;gap:10px;
+      transition:opacity 0.4s;
+    }
+    .hud-item{
+      backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      background:var(--surface);
+      border:1px solid rgba(212,168,67,0.12);
+      border-radius:8px;
+      padding:14px 20px;
+      text-align:center;
+      min-width:72px;
+    }
+    .hud-value{
+      font-size:22px;font-weight:700;
+      color:var(--secondary);
+      font-family:'STSong','SimSun',serif;
+      letter-spacing:1px;
+    }
+    .hud-label{
+      font-size:10px;color:var(--text-dim);
+      margin-top:4px;letter-spacing:3px;
+    }
+
+    /* ===== 内容区 ===== */
+    .content-section{
+      max-width:1140px;margin:0 auto;
+      padding:100px 40px;
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:64px;align-items:center;
+      position:relative;z-index:1;
+    }
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+
+    /* 内容区壁画边框 */
+    .content-image{
+      width:100%;border-radius:6px;overflow:hidden;
+      box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(212,168,67,0.12);
+      position:relative;
+    }
+    .content-image::before{
+      content:'';position:absolute;inset:6px;z-index:1;pointer-events:none;
+      border:1px solid rgba(212,168,67,0.12);
+      border-radius:3px;
+    }
+    .content-image img{
+      width:100%;height:420px;object-fit:cover;display:block;
+      transition:transform 0.8s ease;
+      filter:brightness(0.85) saturate(1.15);
+    }
+    .content-image:hover img{transform:scale(1.05)}
+
+    /* 竖排标题区 */
+    .content-text h2{
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      font-size:clamp(28px,4vw,44px);
+      letter-spacing:8px;
+      margin-bottom:16px;
+      color:var(--secondary);
+      position:relative;
+    }
+    .content-text h2::after{
+      content:'';display:block;
+      width:40px;height:2px;
+      margin-top:10px;
+      background:linear-gradient(90deg,var(--primary),var(--secondary),transparent);
+      opacity:0.6;
+    }
+    .content-divider{
+      width:50px;height:1px;
+      background:linear-gradient(90deg,var(--secondary),transparent);
+      margin-bottom:24px;
+    }
+    .content-text p{
+      font-size:15px;line-height:2.1;opacity:0.7;
+      margin-bottom:14px;
+    }
+    .content-text .vertical-quote{
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      font-size:20px;
+      color:var(--secondary);
+      letter-spacing:4px;
+      writing-mode:vertical-rl;
+      float:right;
+      margin-left:16px;
+      margin-bottom:8px;
+      opacity:0.8;
+      border-left:1px solid rgba(212,168,67,0.25);
+      padding-left:12px;
+    }
+    .content-tags{
+      display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;
+    }
+    .content-tag{
+      padding:4px 18px;
+      border:1px solid rgba(212,168,67,0.18);
+      border-radius:2px;
+      font-size:12px;letter-spacing:3px;
+      color:var(--text-dim);
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      transition:all 0.3s;
+    }
+    .content-tag:hover{
+      border-color:var(--secondary);
+      color:var(--secondary);
+      background:rgba(212,168,67,0.05);
+    }
+
+    /* ===== 图片分隔区 ===== */
+    .image-break{
+      height:60vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .image-break .bg{
+      position:absolute;inset:-10px;
+      background:url('images/潍坊市青州古城景区/潍坊市青州古城景区_05.jpg') center/cover fixed no-repeat;
+      filter:brightness(0.35) saturate(0.55);
+    }
+    .image-break .overlay{
+      position:absolute;inset:0;
+      background:
+        linear-gradient(180deg,var(--bg) 0%,transparent 30%,transparent 70%,var(--bg) 100%),
+        radial-gradient(ellipse at center, rgba(212,168,67,0.05) 0%, transparent 60%);
+    }
+    .image-break .quote{
+      position:relative;z-index:2;text-align:center;
+    }
+    .image-break .stamp{
+      width:76px;height:76px;
+      border:2px solid var(--primary);
+      border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 24px;
+      color:var(--primary);
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      font-size:20px;
+      letter-spacing:2px;
+      opacity:0.55;
+      writing-mode:vertical-rl;
+      text-shadow:0 0 10px var(--glow);
+    }
+    .image-break .quote-cn{
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      font-size:clamp(20px,3vw,36px);
+      letter-spacing:6px;
+      color:var(--secondary);
+      margin-bottom:10px;
+    }
+    .image-break .quote-sub{
+      font-size:clamp(14px,1.6vw,18px);
+      opacity:0.4;
+      letter-spacing:4px;
+    }
+    .image-break .quote-en{
+      font-size:12px;opacity:0.28;letter-spacing:6px;
+      text-transform:uppercase;margin-top:4px;
+    }
+
+    /* ===== 画廊 ===== */
+    .gallery{padding:100px 40px;max-width:1340px;margin:0 auto;position:relative;z-index:1}
+    .gallery h2{
+      text-align:center;
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      font-size:clamp(24px,3vw,38px);
+      letter-spacing:10px;
+      color:var(--secondary);
+      margin-bottom:52px;
+    }
+    .gallery h2::after{
+      content:'';display:block;
+      width:80px;height:2px;
+      margin:16px auto 0;
+      background:linear-gradient(90deg,transparent,var(--primary),var(--secondary),var(--primary),transparent);
+      opacity:0.5;
+    }
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      grid-template-rows:330px 260px;
+      gap:12px;
+    }
+    .gallery-item{
+      position:relative;overflow:hidden;
+      border-radius:6px;
+      cursor:pointer;
+      border:1px solid rgba(212,168,67,0.08);
+      transition:border-color 0.4s;
+    }
+    .gallery-item:hover{border-color:rgba(212,168,67,0.3)}
+    .gallery-item img{
+      width:100%;height:100%;object-fit:cover;display:block;
+      transition:transform 0.8s ease;
+      filter:brightness(0.82) saturate(1.1);
+    }
+    .gallery-item:hover img{transform:scale(1.08)}
+    .gallery-item.item-main{grid-row:span 2}
+    .gallery-item .item-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(to top,rgba(26,15,10,0.85),transparent 55%);
+      display:flex;align-items:flex-end;
+      padding:20px 22px;
+      opacity:0;
+      transition:opacity 0.5s;
+    }
+    .gallery-item:hover .item-overlay{opacity:1}
+    .item-overlay span{
+      font-size:14px;letter-spacing:4px;
+      color:var(--secondary);
+      font-family:'STKaiti','KaiTi','楷体',serif;
+    }
+
+    /* ===== 仪表盘 ===== */
+    .dashboard{padding:100px 40px;max-width:1140px;margin:0 auto;position:relative;z-index:1}
+    .dashboard h2{
+      text-align:center;
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      font-size:clamp(24px,3vw,38px);
+      letter-spacing:10px;
+      color:var(--secondary);
+      margin-bottom:52px;
+    }
+    .dashboard h2::after{
+      content:'';display:block;
+      width:80px;height:2px;
+      margin:16px auto 0;
+      background:linear-gradient(90deg,transparent,var(--primary),var(--secondary),var(--primary),transparent);
+      opacity:0.5;
+    }
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+    .dash-card{
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      background:var(--surface);
+      border:1px solid rgba(212,168,67,0.08);
+      border-radius:8px;
+      padding:34px 20px;
+      text-align:center;
+      transition:transform 0.4s,border-color 0.4s,box-shadow 0.4s;
+      position:relative;
+      overflow:hidden;
+    }
+    .dash-card::before{
+      content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+      width:30px;height:2px;
+      background:linear-gradient(90deg,transparent,var(--secondary),transparent);
+      opacity:0;transition:opacity 0.4s;
+    }
+    .dash-card:hover::before{opacity:0.6}
+    .dash-card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(212,168,67,0.3);
+      box-shadow:0 8px 32px var(--glow);
+    }
+    .dash-icon{font-size:30px;margin-bottom:14px}
+    .dash-value{
+      font-size:28px;font-weight:700;
+      color:var(--secondary);
+      font-family:'STSong','SimSun',serif;
+      letter-spacing:2px;
+      margin-bottom:6px;
+      line-height:1.3;
+    }
+    .dash-label{
+      font-size:12px;color:var(--text-dim);
+      letter-spacing:3px;
+      font-family:'STKaiti','KaiTi','楷体',serif;
+    }
+
+    /* ===== CTA ===== */
+    .cta{
+      height:65vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .cta-bg{
+      position:absolute;inset:-10px;
+      background:url('images/潍坊市青州古城景区/潍坊市青州古城景区_15.jpg') center/cover no-repeat;
+      filter:brightness(0.28) saturate(0.35);
+    }
+    .cta-overlay{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at center,transparent 10%,var(--bg) 80%),
+        radial-gradient(ellipse at 50% 30%, rgba(212,168,67,0.06) 0%, transparent 60%);
+    }
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{
+      font-size:clamp(80px,14vw,160px);
+      font-weight:900;letter-spacing:16px;
+      color:var(--secondary);
+      opacity:0.06;
+      margin-bottom:-32px;
+      font-family:'STSong','SimSun',serif;
+    }
+    .cta-title{
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      font-size:clamp(20px,2.6vw,34px);
+      letter-spacing:8px;
+      margin-bottom:40px;
+      color:var(--text);
+      line-height:1.5;
+    }
+    .cta-btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:14px 44px;
+      border:1px solid rgba(212,168,67,0.3);
+      border-radius:2px;
+      font-size:14px;letter-spacing:5px;
+      text-decoration:none;
+      color:var(--secondary);
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      transition:all 0.4s;
+      cursor:pointer;
+    }
+    .cta-btn:hover{
+      background:rgba(212,168,67,0.08);
+      border-color:var(--secondary);
+      box-shadow:0 0 30px var(--glow);
+      transform:translateY(-2px);
+    }
+    .cta-btn .arrow{display:inline-block;transition:transform 0.3s}
+    .cta-btn:hover .arrow{transform:translateX(-3px)}
+
+    /* ===== Footer ===== */
+    .footer{
+      padding:40px;text-align:center;
+      opacity:0.22;font-size:12px;letter-spacing:3px;
+      position:relative;z-index:1;
+    }
+    .footer .seal{
+      display:inline-block;
+      width:56px;height:56px;
+      border:1px solid var(--primary);
+      border-radius:50%;
+      line-height:56px;
+      font-family:'STKaiti','KaiTi','楷体',serif;
+      color:var(--primary);
+      font-size:15px;
+      margin-bottom:16px;
+      opacity:0.45;
+    }
+    .footer p{margin-top:6px}
+
+    /* ===== 动画 ===== */
+    [data-animate]{
+      opacity:0;transform:translateY(40px);
+      transition:opacity 0.8s cubic-bezier(.16,1,.3,1),transform 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    /* 仪表盘延迟 */
+    .dash-card:nth-child(1){transition-delay:0.05s}
+    .dash-card:nth-child(2){transition-delay:0.15s}
+    .dash-card:nth-child(3){transition-delay:0.25s}
+    .dash-card:nth-child(4){transition-delay:0.35s}
+
+    /* 画廊延迟 */
+    .gallery-item:nth-child(1){transition-delay:0.05s}
+    .gallery-item:nth-child(2){transition-delay:0.15s}
+    .gallery-item:nth-child(3){transition-delay:0.25s}
+    .gallery-item:nth-child(4){transition-delay:0.35s}
+
+    /* ===== 响应式 ===== */
+    @media(max-width:768px){
+      .hero-title{font-size:clamp(36px,12vw,52px);letter-spacing:6px}
+      .hero-divider-vertical{height:clamp(90px,16vw,140px)}
+      .cloud.c1,.cloud.c2,.cloud.c3,.cloud.c4{display:none}
+      .feitian.f2,.feitian.f4{display:none}
+      .content-section{grid-template-columns:1fr;padding:64px 24px;gap:36px}
+      .content-section.reverse{direction:ltr}
+      .content-image img{height:260px}
+      .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:8px}
+      .gallery-item.item-main{grid-row:span 1;grid-column:span 2}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+      .hud{top:10px;right:10px;gap:6px}
+      .hud-item{padding:10px 14px;min-width:56px}
+      .hud-value{font-size:17px}
+      .content-text .vertical-quote{float:none;display:block;writing-mode:horizontal-tb;border-left:none;border-bottom:1px solid rgba(212,168,67,0.25);padding:0 0 8px 0;margin:0 0 12px 0}
+      .cta-num{font-size:clamp(56px,20vw,90px)}
+      .image-break .quote-cn{font-size:clamp(16px,3.5vw,26px)}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="mural-overlay"></div>
+
+    <!-- 祥云 -->
+    <div class="auspicious-clouds">
+      <div class="cloud c1"></div>
+      <div class="cloud c2"></div>
+      <div class="cloud c3"></div>
+      <div class="cloud c4"></div>
+    </div>
+
+    <!-- 飞天装饰 -->
+    <div class="feitian f1">&#9758;</div>
+    <div class="feitian f2">&#9758;</div>
+    <div class="feitian f3">&#9758;</div>
+    <div class="feitian f4">&#9758;</div>
+
+    <!-- 莲花纹 -->
+    <div class="lotus l1"></div>
+    <div class="lotus l2"></div>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-title-wrap">
+        <h1 class="hero-title">Qingzhou Ancient City</h1>
+        <div class="hero-divider-vertical"></div>
+      </div>
+      <p class="hero-sub">One of the Nine Ancient Provinces</p>
+      <div class="hero-badge">· National 5A Scenic Area ·</div>
+    </div>
+
+    <div class="scroll-hint" id="scrollHint">
+      <span>Unfold</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ===== HUD ===== -->
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">Ancient Nine</div><div class="hud-label">Historical Origin</div></div>
+    <div class="hud-item"><div class="hud-value">7000<span style="font-size:13px">yr</span></div><div class="hud-label">Civilization</div></div>
+    <div class="hud-item"><div class="hud-value">4.5</div><div class="hud-label">Rating</div></div>
+  </div>
+
+  <!-- ===== 内容区1：偶园 ===== -->
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="images/潍坊市青州古城景区/潍坊市青州古城景区_02.jpg" alt="Ou Garden" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Ou Garden</h2>
+      <div class="content-divider"></div>
+      <span class="vertical-quote">Finest Garden North of the Yangtze</span>
+      <p>Ou Garden, originally the private garden of Feng Pu, Grand Secretary of the Wenhua Hall during the Kangxi reign of the Qing Dynasty, is renowned as a "famous garden north of the Yangtze." Its rockeries were crafted by the master rockery artist Zhang Ran, exquisite and ingenious, standing as a northern exemplar of Chinese garden art.</p>
+      <p>Within the garden, lush trees, scattered pavilions, and rockeries with ponds create delightful scenes. The four-character stone screens of "Fu" (Blessing), "Shou" (Longevity), "Kang" (Health), and "Ning" (Tranquility) are the garden's treasures, embodying the profound heritage of Chinese traditional culture and the spiritual aspirations of literati.</p>
+      <div class="content-tags">
+        <span class="content-tag">Northern Garden</span>
+        <span class="content-tag">Kangxi Era</span>
+        <span class="content-tag">Blessings &amp; Longevity</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 图片分隔 ===== -->
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <div class="stamp">Qing</div>
+      <div class="quote-cn">Ancient lords dwelling by mountains and seas</div>
+      <div class="quote-sub">Truly the finest prefecture in the East</div>
+      <div class="quote-en">Qingzhou · One of the Nine Ancient Provinces</div>
+    </div>
+  </section>
+
+  <!-- ===== 内容区2：青州博物馆 ===== -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image">
+      <img src="images/潍坊市青州古城景区/潍坊市青州古城景区_03.jpg" alt="Qingzhou Museum" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Qingzhou Museum</h2>
+      <div class="content-divider"></div>
+      <span class="vertical-quote">Seven Millennia of Civilization</span>
+      <p>The Qingzhou Museum is China's only county-level national first-class museum, housing over 40,000 cultural relics. The most stunning are the Buddhist statues unearthed from the Longxing Temple site, hailed as "a major discovery that rewrites the history of Eastern art."</p>
+      <p>Its collection spans from the Neolithic Age to the Ming and Qing dynasties, fully presenting the 7,000-year thread of Qingzhou civilization. The stone Buddhist statues from the Northern Wei to Northern Song dynasties bear gentle smiles, known as the "Qingzhou Smile," with artistic value unrivaled in the world.</p>
+      <div class="content-tags">
+        <span class="content-tag">National First-Class</span>
+        <span class="content-tag">Longxing Temple Statues</span>
+        <span class="content-tag">Qingzhou Smile</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 内容区3：昭德古街 ===== -->
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="images/潍坊市青州古城景区/潍坊市青州古城景区_04.jpg" alt="Zhaode Ancient Street" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Zhaode Ancient Street</h2>
+      <div class="content-divider"></div>
+      <span class="vertical-quote">Millennia-Old Street Endures</span>
+      <p>Zhaode Ancient Street is one of the best-preserved Ming-Qing streets in Qingzhou Ancient City, with blue flagstone roads winding for hundreds of meters flanked by rows of historic buildings. Once a bustling hub of merchants, it bears witness to Qingzhou's glorious history as a major commercial center in the East.</p>
+      <p>Strolling along the street, every step treads upon seven hundred years of history. The Zhenjiao Mosque stands along the way, blending traditional Chinese architecture with Islamic cultural elements — a nationally protected cultural heritage site and a precious testament to multicultural integration.</p>
+      <div class="content-tags">
+        <span class="content-tag">Ming-Qing Street</span>
+        <span class="content-tag">Zhenjiao Mosque</span>
+        <span class="content-tag">National Heritage Site</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 画廊 ===== -->
+  <section class="gallery" data-animate>
+    <h2>· Ancient City Gallery ·</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item item-main" data-animate>
+        <img src="images/潍坊市青州古城景区/潍坊市青州古城景区_06.jpg" alt="Qingzhou Ancient City Panorama" loading="lazy"/>
+        <div class="item-overlay"><span>City Panorama</span></div>
+      </div>
+      <div class="gallery-item" data-animate>
+        <img src="images/潍坊市青州古城景区/潍坊市青州古城景区_07.jpg" alt="Fangong Pavilion" loading="lazy"/>
+        <div class="item-overlay"><span>Fangong Pavilion</span></div>
+      </div>
+      <div class="gallery-item" data-animate>
+        <img src="images/潍坊市青州古城景区/潍坊市青州古城景区_10.jpg" alt="Ancient City Streets" loading="lazy"/>
+        <div class="item-overlay"><span>Ancient Streets</span></div>
+      </div>
+      <div class="gallery-item" data-animate style="grid-column:span 2">
+        <img src="images/潍坊市青州古城景区/潍坊市青州古城景区_14.jpg" alt="Qingzhou Architecture" loading="lazy"/>
+        <div class="item-overlay"><span>Qingzhou Architecture</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 仪表盘 ===== -->
+  <section class="dashboard" data-animate>
+    <h2>· City Impressions ·</h2>
+    <div class="dashboard-grid">
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">🏛️</div>
+        <div class="dash-value">Ancient Nine</div>
+        <div class="dash-label">One of the Nine Provinces</div>
+      </div>
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">📜</div>
+        <div class="dash-value">History &amp; Culture</div>
+        <div class="dash-label">National Historic City</div>
+      </div>
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">🏡</div>
+        <div class="dash-value">Ou Garden</div>
+        <div class="dash-label">Garden North of Yangtze</div>
+      </div>
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">🕌</div>
+        <div class="dash-value">Zhaode Street</div>
+        <div class="dash-label">Ancient Street</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-overlay"></div>
+    <div class="cta-content">
+      <div class="cta-num">7000</div>
+      <div class="cta-title">Ancient lords by mountains and seas &nbsp;The finest prefecture in the East</div>
+      <a href="../index.html?prov=%E5%B1%B1%E4%B8%9C%E7%9C%81" class="cta-btn">
+        <span class="arrow">←</span> Back to Map
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="seal">Qing</div>
+    <p>Qingzhou Ancient City, Weifang · National 5A Scenic Area · Shandong Province</p>
+    <p>One of the Nine Ancient Provinces · National Historic City · 7,000-Year Civilization</p>
+  </footer>
+
+  <script>
+    // ===== 图片预加载 =====
+    (function(){
+      var heroImg=new Image();
+      heroImg.onload=function(){
+        document.getElementById('heroBg').style.backgroundImage="url('images/潍坊市青州古城景区/潍坊市青州古城景区_01.jpg')";
+      };
+      heroImg.src='images/潍坊市青州古城景区/潍坊市青州古城景区_01.jpg';
+    })();
+
+    // ===== 滚动HUD隐藏 =====
+    window.addEventListener('scroll',function(){
+      var hint=document.getElementById('scrollHint');
+      if(hint)hint.style.opacity=window.scrollY>100?'0':'1';
+    });
+
+    // ===== Hero鼠标视差 =====
+    document.querySelector('.hero').addEventListener('mousemove',function(e){
+      var x=(e.clientX/window.innerWidth-0.5)*8;
+      var y=(e.clientY/window.innerHeight-0.5)*8;
+      document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)';
+    });
+
+    // ===== IntersectionObserver 滚动动画 =====
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+        }
+      });
+    },{threshold:0.15,rootMargin:'0px 0px -40px 0px'});
+
+    document.querySelectorAll('[data-animate]').forEach(function(el){
+      io.observe(el);
+    });
+  </script>
+</body>
+</html>

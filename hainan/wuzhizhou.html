@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wuzhizhou Island Tourist Area · Lover's Island</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", "Times New Roman", serif;
+    background: #f0f7f5;
+    color: #2c4a3e;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    background: url('images/wuzhizhou/三亚市蜈支洲岛旅游区_02.jpg') center / cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(240,247,245,0.15) 0%, rgba(240,247,245,0.3) 50%, rgba(42,74,62,0.5) 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 24px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.85);
+    background: rgba(74,144,217,0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 8px 24px;
+    border-radius: 30px;
+    margin-bottom: 32px;
+    font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .hero h1 {
+    font-size: clamp(42px, 8vw, 80px);
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 4px 40px rgba(0,0,0,0.3);
+    letter-spacing: 8px;
+    margin-bottom: 16px;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 22px);
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 4px;
+    font-weight: 300;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+  }
+
+  .hero-divider {
+    width: 60px;
+    height: 2px;
+    background: #e8c86a;
+    margin: 24px auto;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    letter-spacing: 3px;
+    font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    animation: bounceDown 2s infinite;
+  }
+
+  @keyframes bounceDown {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ===== Section Common ===== */
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .section-label {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: #4a90d9;
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 600;
+    color: #2c4a3e;
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+  }
+
+  .section-divider {
+    width: 50px;
+    height: 2px;
+    background: #7ab8a5;
+    margin-bottom: 28px;
+  }
+
+  .section-text {
+    font-size: 16px;
+    line-height: 2;
+    color: #4a6b5e;
+    text-align: justify;
+  }
+
+  /* ===== Dashboard ===== */
+  .dashboard {
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 40px 48px;
+    margin-top: -60px;
+    position: relative;
+    z-index: 3;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    box-shadow: 0 8px 40px rgba(74,144,217,0.08);
+  }
+
+  .dash-item {
+    text-align: center;
+  }
+
+  .dash-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .dash-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #4a90d9;
+    font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .dash-label {
+    font-size: 13px;
+    color: rgba(44,74,62,0.5);
+    margin-top: 4px;
+    font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* ===== Content Block ===== */
+  .content-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .content-block.reverse {
+    direction: rtl;
+  }
+
+  .content-block.reverse > * {
+    direction: ltr;
+  }
+
+  .content-image {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(74,144,217,0.12);
+  }
+
+  .content-image img {
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s ease;
+  }
+
+  .content-image:hover img {
+    transform: scale(1.04);
+  }
+
+  /* ===== Break Section (quote) ===== */
+  .break-section {
+    max-width: 100%;
+    padding: 0;
+    position: relative;
+  }
+
+  .break-inner {
+    position: relative;
+    width: 100%;
+    height: 460px;
+    background: url('images/wuzhizhou/三亚市蜈支洲岛旅游区_02.jpg') center / cover no-repeat fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .break-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(42,74,62,0.55);
+  }
+
+  .break-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 24px;
+  }
+
+  .break-quote {
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 400;
+    color: #fff;
+    letter-spacing: 5px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .break-quote small {
+    display: block;
+    font-size: clamp(13px, 1.5vw, 16px);
+    font-weight: 300;
+    letter-spacing: 3px;
+    margin-top: 16px;
+    color: rgba(255,255,255,0.7);
+    font-style: normal;
+  }
+
+  /* ===== Gallery ===== */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 260px 260px;
+    gap: 16px;
+  }
+
+  .gallery-grid .g-item:first-child {
+    grid-row: span 2;
+  }
+
+  .g-item {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(74,144,217,0.10);
+  }
+
+  .g-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s ease;
+  }
+
+  .g-item:hover img {
+    transform: scale(1.05);
+  }
+
+  /* ===== Tags ===== */
+  .tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 40px;
+    justify-content: center;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    background: rgba(122,184,165,0.15);
+    color: #4a90d9;
+    border: 1px solid rgba(74,144,217,0.15);
+  }
+
+  .tag.outline {
+    background: transparent;
+    border-color: rgba(122,184,165,0.3);
+    color: #7ab8a5;
+  }
+
+  /* ===== CTA ===== */
+  .cta-section {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    background: url('images/wuzhizhou/三亚市蜈支洲岛旅游区_02.jpg') center / cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(42,74,62,0.6), rgba(74,144,217,0.4));
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 24px;
+  }
+
+  .cta-year {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 6px;
+    color: #e8c86a;
+    border: 1px solid rgba(232,200,106,0.3);
+    padding: 6px 20px;
+    border-radius: 30px;
+    margin-bottom: 24px;
+    font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .cta-title {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 5px;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.2);
+  }
+
+  .cta-divider {
+    width: 50px;
+    height: 2px;
+    background: #e8c86a;
+    margin: 24px auto;
+  }
+
+  .cta-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 2px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    background: #2c4a3e;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    .dashboard {
+      grid-template-columns: repeat(2, 1fr);
+      padding: 28px 20px;
+      margin-top: -40px;
+    }
+
+    .content-block {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .content-block.reverse {
+      direction: ltr;
+    }
+
+    .content-image img {
+      height: 280px;
+    }
+
+    .gallery-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+
+    .gallery-grid .g-item:first-child {
+      grid-row: span 1;
+    }
+
+    .g-item {
+      height: 220px;
+    }
+
+    .break-inner {
+      height: 360px;
+      background-attachment: scroll;
+    }
+
+    .cta-section {
+      height: 380px;
+    }
+
+    section {
+      padding: 48px 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .dashboard {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      padding: 22px 16px;
+    }
+
+    .dash-value {
+      font-size: 18px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">NATIONAL 5A TOURIST ATTRACTION</div>
+    <h1>Wuzhizhou Island</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">The Maldives of China · Lover's Island</p>
+  </div>
+  <div class="scroll-hint">— SCROLL —</div>
+</header>
+
+<!-- ===== Dashboard ===== -->
+<div class="dashboard">
+  <div class="dash-item">
+    <span class="dash-icon">🏖</span>
+    <div class="dash-value">1.48km²</div>
+    <div class="dash-label">Island Area</div>
+  </div>
+  <div class="dash-item">
+    <span class="dash-icon">🌊</span>
+    <div class="dash-value">6-18m</div>
+    <div class="dash-label">Diving Depth</div>
+  </div>
+  <div class="dash-item">
+    <span class="dash-icon">⭐</span>
+    <div class="dash-value">AAAAA</div>
+    <div class="dash-label">5A Scenic Area</div>
+  </div>
+  <div class="dash-item">
+    <span class="dash-icon">📅</span>
+    <div class="dash-value">2016</div>
+    <div class="dash-label">Year Rated</div>
+  </div>
+</div>
+
+<!-- ===== Content 1 ===== -->
+<section>
+  <div class="content-block">
+    <div class="content-image">
+      <img src="images/wuzhizhou/三亚市蜈支洲岛旅游区_05.jpg" alt="Wuzhizhou Island Scenery">
+    </div>
+    <div>
+      <div class="section-label">PARADISE BAY</div>
+      <h2 class="section-title">Lover's Paradise</h2>
+      <div class="section-divider"></div>
+      <p class="section-text">
+        Nestled within Haitang Bay on the northern coast of Sanya, Wuzhizhou Island is one of the few islands around Hainan with abundant freshwater resources and lush vegetation. Blessed with exceptional diving conditions and a full range of sea, land, and air water activities, it is renowned as the "Maldives of China" — an island resort destination that integrates marine recreation, signature diving experiences, and premium hotels.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Content 2 ===== -->
+<section>
+  <div class="content-block reverse">
+    <div class="content-image">
+      <img src="images/wuzhizhou/三亚市蜈支洲岛旅游区_09.jpg" alt="Diving at Wuzhizhou Island">
+    </div>
+    <div>
+      <div class="section-label">DIVING HEAVEN</div>
+      <h2 class="section-title">Diving Paradise</h2>
+      <div class="section-divider"></div>
+      <p class="section-text">
+        Wuzhizhou Island is acclaimed as "China's Premier Diving Base" and is one of the few islands in the world free of rocks or pebbles. With crystal-clear waters, dazzling coral reefs, and an abundance of marine life, it presents a dreamlike underwater world for diving enthusiasts.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Break / Quote ===== -->
+<div class="break-section">
+  <div class="break-inner">
+    <div class="break-content">
+      <div class="break-quote">
+        The Romance of China's Maldives · Lover's Island
+        <small>Wuzhizhou · Paradise on Sea</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Content 3 ===== -->
+<section>
+  <div class="content-block">
+    <div class="content-image">
+      <img src="images/wuzhizhou/三亚市蜈支洲岛旅游区_08.jpg" alt="Water Sports at Wuzhizhou Island">
+    </div>
+    <div>
+      <div class="section-label">ISLAND CARNIVAL</div>
+      <h2 class="section-title">Island Carnival</h2>
+      <div class="section-divider"></div>
+      <p class="section-text">
+        The island offers over 30 sea and land activities including diving, jet skiing, parasailing, banana boats, and flying fish — creating a unique four-dimensional experience spanning "underwater, surface, air, and land". With pleasant weather year-round, it is an ideal destination for vacations, leisure, winter escapes, swimming, and entertainment.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Gallery ===== -->
+<section>
+  <div style="text-align:center;margin-bottom:40px">
+    <div class="section-label">GALLERY</div>
+    <h2 class="section-title">Wuzhizhou in Light & Shadow</h2>
+    <div class="section-divider" style="margin-left:auto;margin-right:auto"></div>
+  </div>
+  <div class="gallery-grid">
+    <div class="g-item" style="height:500px">
+      <img src="images/wuzhizhou/三亚市蜈支洲岛旅游区_01.png" alt="Panoramic View of Wuzhizhou Island">
+    </div>
+    <div class="g-item" style="height:220px">
+      <img src="images/wuzhizhou/三亚市蜈支洲岛旅游区_03.png" alt="Wuzhizhou Island Beach">
+    </div>
+    <div class="g-item" style="height:260px">
+      <img src="images/wuzhizhou/三亚市蜈支洲岛旅游区_10.jpg" alt="Coconut Grove on Wuzhizhou Island">
+    </div>
+    <div class="g-item" style="height:280px">
+      <img src="images/wuzhizhou/三亚市蜈支洲岛旅游区_12.jpg" alt="Sunset at Wuzhizhou Island">
+    </div>
+  </div>
+
+  <div class="tags-wrap">
+    <span class="tag">Lover's Island</span>
+    <span class="tag">Diving Paradise</span>
+    <span class="tag">Tropical Island</span>
+    <span class="tag outline">Water Sports</span>
+    <span class="tag outline">Coral Reef</span>
+    <span class="tag outline">Underwater World</span>
+    <span class="tag outline">Vacation Paradise</span>
+    <span class="tag outline">Wedding Photography</span>
+    <span class="tag outline">Romantic Getaway</span>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<div class="cta-section">
+  <div class="cta-content">
+    <div class="cta-year">— 2016 · AAAAA —</div>
+    <h2 class="cta-title">Wuzhizhou Island · Experience the Romance of a Tropical Paradise</h2>
+    <div class="cta-divider"></div>
+    <p class="cta-desc">
+      Houhai Village, Linwang Town, Haitang District, Sanya City, Hainan Province
+    </p>
+  </div>
+</div>
+
+<!-- ===== Footer ===== -->
+<footer>
+  Wuzhizhou Island Tourist Area · National 5A Tourist Attraction · Sanya, Hainan
+</footer>
+
+
+<a href="../index.html?prov=海南省" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Map</a>
+</body>
+</html>

@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alishan · Sea of Clouds & Sunrise · Forest Railway | 5A Scenic Area Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@200;400;600;700&family=Noto+Sans+SC:wght@200;300;400;500&family=Ma+Shan+Zheng&family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #c9a96e;
+      --secondary: #8b0000;
+      --bg: #1a1a1a;
+      --surface: rgba(255,255,255,0.04);
+      --text: #e8e0d5;
+      --text-dim: rgba(232,224,213,0.55);
+      --text-faint: rgba(232,224,213,0.25);
+      --glow: rgba(201,169,110,0.2);
+      --ink: #0d0d0d;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Serif SC', 'Noto Sans SC', serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); opacity: 0.3; border-radius: 2px; }
+
+    /* ===== Hero ===== */
+    .hero {
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: -20px;
+      background: url('images/alishan/hero.png') center/cover;
+      filter: brightness(0.5) saturate(1.05);
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,
+        rgba(26,26,26,0.3) 0%,
+        rgba(26,26,26,0.6) 100%
+      );
+    }
+    .mist-layer {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 40%, rgba(255,255,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 30%, rgba(201,169,110,0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(200,180,140,0.06) 0%, transparent 40%);
+      animation: mistDrift 20s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes mistDrift {
+      0%, 100% { transform: translateX(0) scale(1); }
+      50% { transform: translateX(25px) scale(1.02); }
+    }
+    .mountain-silhouette {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 200'%3E%3Cpath d='M0,200 L0,120 Q180,40 360,100 Q540,160 720,80 Q900,0 1080,60 Q1260,120 1440,40 L1440,200 Z' fill='%230d0d0d' opacity='0.6'/%3E%3C/svg%3E") bottom/cover no-repeat;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .mountain-silhouette-2 {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 140px;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 140'%3E%3Cpath d='M0,140 L0,80 Q240,30 480,70 Q720,110 960,40 Q1200,0 1440,60 L1440,140 Z' fill='%230d0d0d' opacity='0.4'/%3E%3C/svg%3E") bottom/cover no-repeat;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .vertical-title {
+      writing-mode: vertical-rl;
+      font-family: 'Ma Shan Zheng', serif;
+      font-size: clamp(48px, 7vw, 88px);
+      color: var(--primary);
+      letter-spacing: 12px;
+      text-shadow: 0 0 60px rgba(201,169,110,0.15);
+      line-height: 1.4;
+    }
+    .hero-text-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hero-text-group .seal {
+      width: 56px;
+      height: 56px;
+      border: 2px solid var(--secondary);
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Ma Shan Zheng', serif;
+      font-size: 18px;
+      transform: rotate(-6deg);
+      margin-bottom: 8px;
+    }
+    .hero-text-group .sub-cn {
+      font-size: clamp(16px, 1.8vw, 24px);
+      letter-spacing: 8px;
+      color: var(--text-dim);
+    }
+    .hero-text-group .sub-en {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+    }
+    .hero-text-group .hero-divider {
+      width: 60px;
+      height: 1px;
+      background: var(--primary);
+      opacity: 0.4;
+      margin: 8px 0;
+    }
+
+    /* ===== Scroll Hint ===== */
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.4s;
+    }
+    .scroll-hint span {
+      font-size: 10px;
+      letter-spacing: 3px;
+      opacity: 0.4;
+      font-family: 'Noto Sans SC', sans-serif;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--text), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ===== HUD ===== */
+    .hud {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      gap: 8px;
+      transition: opacity 0.4s;
+    }
+    .hud-item {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: var(--surface);
+      border: 1px solid rgba(201,169,110,0.12);
+      border-radius: 10px;
+      padding: 10px 16px;
+      text-align: center;
+      min-width: 60px;
+    }
+    .hud-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      font-family: 'Noto Sans SC', sans-serif;
+    }
+    .hud-label {
+      font-size: 9px;
+      opacity: 0.45;
+      margin-top: 3px;
+      letter-spacing: 2px;
+    }
+
+    /* ===== Section common ===== */
+    .section {
+      position: relative;
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 40px;
+    }
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .section-inner.reverse {
+      direction: rtl;
+    }
+    .section-inner.reverse > * {
+      direction: ltr;
+    }
+
+    /* ===== Section Image ===== */
+    .section-image {
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .section-image.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .section-image img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .section-image:hover img {
+      transform: scale(1.04);
+    }
+    .section-image::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(0deg, var(--bg) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    /* ===== Section Content ===== */
+    .section-content {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1) 0.15s;
+    }
+    .section-content.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .section-content .chinese-seal {
+      display: inline-block;
+      padding: 4px 16px;
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+      font-family: 'Ma Shan Zheng', serif;
+      font-size: 14px;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+    .section-content h2 {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: clamp(28px, 3.5vw, 40px);
+      letter-spacing: 6px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+      color: var(--primary);
+    }
+    .section-divider {
+      width: 50px;
+      height: 2px;
+      background: var(--secondary);
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+    .section-content p {
+      font-size: 15px;
+      line-height: 2;
+      opacity: 0.7;
+      margin-bottom: 16px;
+      text-align: justify;
+    }
+    .section-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .section-tag {
+      padding: 5px 16px;
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 0;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+    }
+
+    /* ===== Image Break (Quote) ===== */
+    .image-break {
+      height: 60vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .image-break .bg {
+      position: absolute;
+      inset: -10px;
+      background: url('images/alishan/img2.jpg') center/cover fixed;
+      filter: brightness(0.4) saturate(1.1);
+    }
+    .image-break .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,
+        var(--bg) 0%,
+        transparent 20%,
+        transparent 80%,
+        var(--bg) 100%
+      );
+    }
+    .image-break .quote-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .image-break .quote-cn {
+      font-family: 'Ma Shan Zheng', serif;
+      font-size: clamp(28px, 4vw, 48px);
+      letter-spacing: 12px;
+      color: var(--primary);
+      margin-bottom: 12px;
+      text-shadow: 0 0 40px rgba(201,169,110,0.1);
+    }
+    .image-break .quote-en {
+      font-size: 12px;
+      letter-spacing: 6px;
+      opacity: 0.4;
+      text-transform: uppercase;
+    }
+    .image-break .quote-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--primary);
+      opacity: 0.3;
+      margin: 16px auto;
+    }
+
+    /* ===== Gallery ===== */
+    .gallery-section {
+      padding: 100px 40px;
+    }
+    .gallery-header {
+      max-width: 1200px;
+      margin: 0 auto 48px;
+      text-align: center;
+    }
+    .gallery-header .gallery-seal {
+      display: inline-block;
+      padding: 4px 16px;
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+      font-family: 'Ma Shan Zheng', serif;
+      font-size: 14px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+    .gallery-header h2 {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: clamp(24px, 3vw, 36px);
+      letter-spacing: 8px;
+      color: var(--primary);
+    }
+    .gallery-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 10px;
+    }
+    .gallery-grid .col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .gallery-grid .col:first-child {
+      grid-row: span 2;
+    }
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .gallery-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.06);
+    }
+
+    /* ===== Dashboard ===== */
+    .dashboard-section {
+      padding: 100px 40px;
+      background: var(--ink);
+      position: relative;
+    }
+    .dashboard-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      opacity: 0.15;
+    }
+    .dashboard-header {
+      max-width: 1200px;
+      margin: 0 auto 48px;
+      text-align: center;
+    }
+    .dashboard-header h2 {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: clamp(24px, 3vw, 36px);
+      letter-spacing: 8px;
+      color: var(--primary);
+    }
+    .dashboard-header .dash-sub {
+      font-size: 12px;
+      color: var(--text-faint);
+      letter-spacing: 4px;
+      margin-top: 8px;
+    }
+    .dashboard-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .dash-card {
+      padding: 28px 20px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid rgba(201,169,110,0.06);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(.16,1,.3,1);
+    }
+    .dash-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .dash-card:hover {
+      border-color: rgba(201,169,110,0.2);
+      transform: translateY(-2px);
+    }
+    .dash-icon {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+    .dash-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+      font-family: 'Noto Sans SC', sans-serif;
+      letter-spacing: 1px;
+    }
+    .dash-label {
+      font-size: 10px;
+      color: var(--text-faint);
+      letter-spacing: 2px;
+      margin-top: 6px;
+    }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      height: 60vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cta-section .cta-bg {
+      position: absolute;
+      inset: -10px;
+      background: url('images/alishan/img3.jpg') center/cover;
+      filter: brightness(0.35) saturate(0.9);
+    }
+    .cta-section .cta-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,
+        var(--bg) 0%,
+        transparent 30%,
+        transparent 70%,
+        var(--bg) 100%
+      );
+    }
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .cta-number {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(64px, 10vw, 120px);
+      font-weight: 900;
+      opacity: 0.08;
+      letter-spacing: 8px;
+      margin-bottom: -24px;
+      color: var(--primary);
+    }
+    .cta-title {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: clamp(24px, 3vw, 38px);
+      letter-spacing: 8px;
+      margin-bottom: 32px;
+    }
+    .cta-btn {
+      display: inline-block;
+      padding: 14px 48px;
+      border: 1px solid rgba(201,169,110,0.25);
+      border-radius: 0;
+      font-size: 14px;
+      letter-spacing: 4px;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.3s;
+      font-family: 'Noto Sans SC', sans-serif;
+    }
+    .cta-btn:hover {
+      background: rgba(201,169,110,0.1);
+      border-color: var(--primary);
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid rgba(201,169,110,0.06);
+    }
+    footer p {
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 3px;
+    }
+    footer .footer-seal {
+      display: inline-block;
+      margin-top: 12px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+      font-family: 'Ma Shan Zheng', serif;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 12px auto 0;
+      opacity: 0.3;
+    }
+
+    /* ===== Animations ===== */
+    [data-animate] {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    [data-animate].visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    [data-animate-delay].visible {
+      transition-delay: 0.15s;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .hero-content {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .vertical-title {
+        writing-mode: horizontal-tb;
+        font-size: clamp(36px, 8vw, 52px);
+        letter-spacing: 8px;
+      }
+      .hero-text-group {
+        align-items: center;
+        text-align: center;
+      }
+      .hero-text-group .seal {
+        margin: 0 auto 8px;
+      }
+      .hero-text-group .hero-divider {
+        margin: 8px auto;
+      }
+      .hud {
+        top: 12px;
+        right: 12px;
+        gap: 4px;
+      }
+      .hud-item {
+        padding: 6px 10px;
+        min-width: 48px;
+      }
+      .hud-value {
+        font-size: 15px;
+      }
+      .hud-label {
+        font-size: 8px;
+      }
+      .section {
+        padding: 60px 20px;
+        min-height: auto;
+      }
+      .section-inner {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .section-inner.reverse {
+        direction: ltr;
+      }
+      .section-image img {
+        height: 220px;
+      }
+      .section-content h2 {
+        font-size: 24px;
+      }
+      .section-content p {
+        font-size: 14px;
+      }
+      .gallery-section {
+        padding: 60px 20px;
+      }
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      .gallery-grid .col:first-child {
+        grid-row: auto;
+      }
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .dashboard-section {
+        padding: 60px 20px;
+      }
+      .image-break .quote-cn {
+        font-size: 24px;
+        letter-spacing: 8px;
+      }
+      .cta-section {
+        height: 50vh;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="mist-layer"></div>
+    <div class="mountain-silhouette"></div>
+    <div class="mountain-silhouette-2"></div>
+
+    <div class="hero-content">
+      <div class="vertical-title">Alishan</div>
+      <div class="hero-text-group">
+        <div class="seal">Wonderland</div>
+        <div class="hero-divider"></div>
+        <div class="sub-cn">Above the Sea of Clouds · Forest Mystery</div>
+        <div class="sub-en">ALISHAN · MISTY MOUNTAIN PARADISE</div>
+      </div>
+    </div>
+
+    <div class="scroll-hint" id="scrollHint">
+      <span>EXPLORE</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ===== HUD ===== -->
+  <div class="hud" id="hud">
+    <div class="hud-item">
+      <div class="hud-value">2216m</div>
+      <div class="hud-label">Elevation</div>
+    </div>
+    <div class="hud-item">
+      <div class="hud-value">1400ha</div>
+      <div class="hud-label">Area</div>
+    </div>
+    <div class="hud-item">
+      <div class="hud-value">10.6°C</div>
+      <div class="hud-label">Avg Temp</div>
+    </div>
+  </div>
+
+  <!-- ===== Content 1 ===== -->
+  <section class="section" data-animate>
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="images/alishan/img1.jpg" alt="Alishan Sea of Clouds and Forest" loading="lazy" />
+      </div>
+      <div class="section-content" data-animate>
+        <div class="chinese-seal">Five Wonders</div>
+        <h2>A Forest Wonderland Above the Clouds</h2>
+        <div class="section-divider"></div>
+        <p>Located in northeastern Chiayi County, Taiwan, Alishan is one of Taiwan's most famous mountain tourist destinations. The Alishan Forest Recreation Area sits at an elevation of approximately 2,216 meters, covering a total area of about 1,400 hectares. It is renowned for its "Five Wonders": sunrise, sea of clouds, sunset glow, forests, and the railway.</p>
+        <p>The area boasts extremely rich forest resources, with millennium-old red cypress giant trees reaching over 50 meters in height. The air is filled with refreshing phytoncides, making it a natural forest oxygen bar. During the cherry blossom season from March to April each year, thousands of cherry trees—including Yoshino cherry, mountain cherry, and double-flowered cherry—bloom in succession, painting the entire mountain in a sea of pink and white. It is Taiwan's most iconic cherry blossom viewing destination.</p>
+        <p>Alishan is also home to one of only three remaining alpine forest railways in the world. Along the journey, you can experience the changing landscapes of four types of forest vegetation: tropical, subtropical, temperate, and alpine.</p>
+        <div class="section-tags">
+          <span class="section-tag">Sunrise & Sea of Clouds</span>
+          <span class="section-tag">Millennium Red Cypress</span>
+          <span class="section-tag">Cherry Blossom Season</span>
+          <span class="section-tag">Forest Railway</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Image Break ===== -->
+  <section class="image-break">
+    <div class="bg" id="breakBg"></div>
+    <div class="overlay"></div>
+    <div class="quote-content">
+      <div class="quote-cn">Sea of Clouds & Sunrise · Forest Railway</div>
+      <div class="quote-divider"></div>
+      <div class="quote-en">ALISHAN · MISTY MOUNTAIN PARADISE</div>
+    </div>
+  </section>
+
+  <!-- ===== Content 2 (Reverse) ===== -->
+  <section class="section" data-animate>
+    <div class="section-inner reverse">
+      <div class="section-image" data-animate>
+        <img src="images/alishan/img2.jpg" alt="Alishan Forest Railway" loading="lazy" />
+      </div>
+      <div class="section-content" data-animate>
+        <div class="chinese-seal">Century-Old Railway</div>
+        <h2>A Timeless Journey on the Century-Old Railway</h2>
+        <div class="section-divider"></div>
+        <p>The Alishan Forest Railway stretches approximately 71.4 kilometers. Built in 1912, it was originally constructed for timber transportation and has since become a world-renowned scenic railway. The line climbs from Chiayi City at an elevation of 30 meters all the way up to Alishan Station at 2,216 meters, passing through 49 tunnels, 77 bridges, and spiral routes along the way. It is known as the "Railway in the Clouds."</p>
+        <p>The Zhushan branch line is Taiwan's most famous sunrise-viewing railway. Every morning, it carries visitors to the Zhushan sunrise platform to welcome the first rays of sunlight over Taiwan. The Alishan Scenic Area also includes attractions such as Sister Ponds, Shouzhen Temple, Ciyun Temple, and the Giant Tree Boardwalk.</p>
+        <p>Sister Ponds consists of two natural alpine lakes of different sizes, with water as still as a mirror, reflecting the surrounding ancient trees in a scene full of poetic charm. Alishan offers distinct scenery across all four seasons—spring and summer for flower viewing and firefly watching, autumn and winter for maple leaves and cloud vistas—making it a year-round tourist destination.</p>
+        <div class="section-tags">
+          <span class="section-tag">71.4km Railway</span>
+          <span class="section-tag">Built in 1912</span>
+          <span class="section-tag">Zhushan Sunrise</span>
+          <span class="section-tag">Sister Ponds</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Gallery ===== -->
+  <section class="gallery-section" data-animate>
+    <div class="gallery-header">
+      <div class="gallery-seal">Gallery</div>
+      <h2>Images of Alishan</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="height:500px" data-animate>
+        <img src="images/alishan/g4.png" alt="Alishan Mist and Clouds" style="height:100%" loading="lazy" />
+      </div>
+      <div class="gallery-item" style="height:240px" data-animate>
+        <img src="images/alishan/g1.jpg" alt="Alishan Forest" style="height:100%" loading="lazy" />
+      </div>
+      <div class="gallery-item" style="height:250px" data-animate>
+        <img src="images/alishan/g2.jpg" alt="Alishan Train" style="height:100%" loading="lazy" />
+      </div>
+      <div class="gallery-item" style="height:260px" data-animate>
+        <img src="images/alishan/g3.jpg" alt="Alishan Sunset Glow" style="height:100%" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Dashboard ===== -->
+  <section class="dashboard-section" data-animate>
+    <div class="dashboard-header">
+      <h2>Alishan Data</h2>
+      <div class="dash-sub">DATA · Alishan National Scenic Area</div>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">🏔</div>
+        <div class="dash-value">2216m</div>
+        <div class="dash-label">Highest Elevation</div>
+      </div>
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">🌲</div>
+        <div class="dash-value">1400ha</div>
+        <div class="dash-label">Forest Area</div>
+      </div>
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">🌡</div>
+        <div class="dash-value">10.6°C</div>
+        <div class="dash-label">Avg Annual Temp</div>
+      </div>
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">🚂</div>
+        <div class="dash-value">71km</div>
+        <div class="dash-label">Forest Railway</div>
+      </div>
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">📅</div>
+        <div class="dash-value">1912</div>
+        <div class="dash-label">Railway Built</div>
+      </div>
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">🌳</div>
+        <div class="dash-value">Millennia</div>
+        <div class="dash-label">Red Cypress Age</div>
+      </div>
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">✨</div>
+        <div class="dash-value">Five</div>
+        <div class="dash-label">Scenic Wonders</div>
+      </div>
+      <div class="dash-card" data-animate>
+        <div class="dash-icon">🌸</div>
+        <div class="dash-value">Mar-Apr</div>
+        <div class="dash-label">Cherry Blossom Season</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <div class="cta-bg" id="ctaBg"></div>
+    <div class="cta-overlay"></div>
+    <div class="cta-content">
+      <div class="cta-number">1912</div>
+      <div class="cta-title">Century-Old Alishan · Legend Above the Clouds</div>
+      <a href="../index.html?prov=台湾省" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <p>Alishan · National 5A Scenic Area · Chiayi County, Taiwan</p>
+    <div class="footer-seal">Mountain</div>
+  </footer>
+
+  <script>
+    // Image preload
+    (function() {
+      var img = new Image();
+      img.onload = function() {
+        document.getElementById('heroBg').style.backgroundImage = "url('images/alishan/hero.png')";
+      };
+      img.src = 'images/alishan/hero.png';
+
+      var brk = new Image();
+      brk.onload = function() {
+        document.getElementById('breakBg').style.backgroundImage = "url('images/alishan/img2.jpg')";
+      };
+      brk.src = 'images/alishan/img2.jpg';
+
+      var cta = new Image();
+      cta.onload = function() {
+        document.getElementById('ctaBg').style.backgroundImage = "url('images/alishan/img3.jpg')";
+      };
+      cta.src = 'images/alishan/img3.jpg';
+    })();
+
+    // Scroll HUD visibility
+    window.addEventListener('scroll', function() {
+      var hint = document.getElementById('scrollHint');
+      if (hint) {
+        hint.style.opacity = window.scrollY > 100 ? '0' : '1';
+      }
+    });
+
+    // Mouse parallax on hero
+    document.querySelector('.hero').addEventListener('mousemove', function(e) {
+      var x = (e.clientX / window.innerWidth - 0.5) * 12;
+      var y = (e.clientY / window.innerHeight - 0.5) * 12;
+      document.getElementById('heroBg').style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    });
+
+    // Intersection Observer for scroll animations
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('[data-animate]').forEach(function(el) {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

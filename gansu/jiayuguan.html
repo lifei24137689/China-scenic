@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Jiayuguan · The First Pass Under Heaven | 5A Scenic Area Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Serif+SC:wght@300;400;600;700;900&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #b8860b;
+      --secondary: #d4a373;
+      --bg: #f5f0e8;
+      --surface: #faf6ee;
+      --text: #3c2415;
+      --text-dim: rgba(60,36,21,0.55);
+      --accent: #c47a3a;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Noto Serif SC','Noto Sans SC',serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden
+    }
+
+    /* Noise texture */
+    body::before{
+      content:'';position:fixed;inset:0;z-index:9999;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none;mix-blend-mode:multiply
+    }
+
+    /* Hero */
+    .hero{
+      height:100vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center
+    }
+    .hero-bg{
+      position:absolute;inset:-20px;
+      background:url('images/jiayuguan/嘉峪关市嘉峪关文物景区_05.jpg') center/cover;
+      filter:brightness(0.6) saturate(1.1) sepia(0.15);
+      transition:transform 0.1s ease-out
+    }
+    .hero-overlay{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at center, transparent 30%, rgba(245,240,232,0.5) 80%),
+        linear-gradient(180deg, rgba(245,240,232,0.3) 0%, transparent 40%, transparent 60%, rgba(245,240,232,0.4) 100%)
+    }
+    .hero .top-fade{position:absolute;top:0;left:0;right:0;height:30vh;background:linear-gradient(180deg,var(--bg) 0%,transparent 100%)}
+    .hero .bottom-fade{position:absolute;bottom:0;left:0;right:0;height:40vh;background:linear-gradient(0deg,var(--bg) 0%,rgba(245,240,232,0.8) 20%,transparent 100%)}
+    .hero-content{position:relative;z-index:2;text-align:center;max-width:900px;padding:0 40px}
+    .hero-content h1{
+      font-family:'ZCOOL QingKe HuangYou','Playfair Display',serif;
+      font-size:clamp(48px,8vw,88px);
+      letter-spacing:14px;
+      color:var(--text);
+      text-shadow:2px 2px 0 rgba(212,163,115,0.3),0 4px 30px rgba(245,240,232,0.5);
+      margin-bottom:12px
+    }
+    .hero-content .subtitle{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(16px,2vw,22px);
+      letter-spacing:8px;
+      color:var(--text-dim);
+      font-style:italic
+    }
+    .hero-content .hero-tags{
+      display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px
+    }
+    .hero-content .hero-tags span{
+      padding:6px 20px;
+      border:1px solid rgba(60,36,21,0.2);
+      border-radius:20px;
+      font-size:13px;
+      letter-spacing:2px;
+      color:var(--text-dim);
+      font-family:'Noto Serif SC',serif
+    }
+    .scroll-hint{
+      position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;
+      display:flex;flex-direction:column;align-items:center;gap:8px;
+      transition:opacity 0.4s
+    }
+    .scroll-hint span{font-size:11px;letter-spacing:4px;opacity:0.4;color:var(--text)}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.2}50%{opacity:0.7}}
+
+    /* HUD */
+    .hud{
+      position:fixed;top:24px;right:24px;z-index:100;
+      display:flex;gap:10px;transition:opacity 0.4s
+    }
+    .hud-item{
+      backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      background:rgba(250,246,238,0.75);
+      border:1px solid rgba(60,36,21,0.12);
+      border-radius:10px;
+      padding:10px 18px;
+      text-align:center;
+      min-width:80px
+    }
+    .hud-value{
+      font-family:'Playfair Display','Noto Serif SC',serif;
+      font-size:22px;font-weight:700;color:var(--primary);letter-spacing:1px
+    }
+    .hud-label{font-size:10px;opacity:0.5;margin-top:2px;letter-spacing:2px;color:var(--text)}
+
+    /* Content Section */
+    .content-section{
+      max-width:1200px;margin:0 auto;padding:100px 40px;
+      display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center
+    }
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{
+      width:100%;border-radius:8px;overflow:hidden;
+      position:relative;
+      box-shadow:0 8px 40px rgba(60,36,21,0.1);
+      border:2px solid rgba(60,36,21,0.06)
+    }
+    .content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .content-image:hover img{transform:scale(1.04)}
+    .content-text h2{
+      font-family:'ZCOOL QingKe HuangYou','Noto Serif SC',serif;
+      font-size:clamp(28px,4vw,40px);
+      letter-spacing:6px;
+      color:var(--primary);
+      margin-bottom:16px
+    }
+    .content-divider{
+      width:60px;height:2px;
+      background:linear-gradient(90deg,var(--secondary),transparent);
+      margin-bottom:24px
+    }
+    .content-text p{
+      font-size:16px;line-height:2.1;opacity:0.78;margin-bottom:14px;
+      color:var(--text)
+    }
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .content-tag{
+      padding:5px 16px;
+      border:1px solid rgba(60,36,21,0.15);
+      border-radius:16px;
+      font-size:12px;
+      letter-spacing:1px;
+      color:var(--text-dim);
+      background:rgba(250,246,238,0.5)
+    }
+
+    /* Image Break */
+    .image-break{
+      height:60vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center
+    }
+    .image-break .bg{
+      position:absolute;inset:-10px;
+      background:url('images/jiayuguan/嘉峪关市嘉峪关文物景区_02.png') center/cover fixed;
+      filter:brightness(0.5) saturate(1.05) sepia(0.2)
+    }
+    .image-break .overlay{
+      position:absolute;inset:0;
+      background:rgba(245,240,232,0.2)
+    }
+    .image-break .quote{position:relative;z-index:2;text-align:center;padding:0 40px}
+    .image-break .quote-cn{
+      font-family:'ZCOOL QingKe HuangYou','Noto Serif SC',serif;
+      font-size:clamp(30px,5vw,52px);
+      letter-spacing:10px;
+      color:#fff;
+      text-shadow:0 2px 20px rgba(0,0,0,0.4);
+      margin-bottom:12px
+    }
+    .image-break .quote-en{
+      font-family:'Playfair Display',serif;
+      font-size:15px;letter-spacing:5px;
+      color:rgba(255,255,255,0.6);
+      text-transform:uppercase
+    }
+
+    /* Gallery */
+    .gallery-section{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery-section .section-header{text-align:center;margin-bottom:48px}
+    .gallery-section .section-header .numeral{
+      font-family:'Playfair Display',serif;
+      font-size:14px;letter-spacing:6px;color:var(--text-dim);margin-bottom:8px
+    }
+    .gallery-section .section-header h2{
+      font-family:'ZCOOL QingKe HuangYou','Noto Serif SC',serif;
+      font-size:clamp(24px,3vw,36px);letter-spacing:6px;color:var(--primary)
+    }
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .gallery-item{position:relative;overflow:hidden;border-radius:6px;border:1px solid rgba(60,36,21,0.08)}
+    .gallery-item img{width:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .gallery-item:hover img{transform:scale(1.06)}
+    .item-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(to top,rgba(60,36,21,0.6),transparent 50%);
+      opacity:0;transition:opacity 0.4s
+    }
+    .gallery-item:hover .item-overlay{opacity:1}
+
+    /* Dashboard */
+    .dashboard-section{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dashboard-section .section-header{text-align:center;margin-bottom:48px}
+    .dashboard-section .section-header .numeral{
+      font-family:'Playfair Display',serif;
+      font-size:14px;letter-spacing:6px;color:var(--text-dim);margin-bottom:8px
+    }
+    .dashboard-section .section-header h2{
+      font-family:'ZCOOL QingKe HuangYou','Noto Serif SC',serif;
+      font-size:clamp(24px,3vw,36px);letter-spacing:6px;color:var(--primary)
+    }
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .dashboard-card{
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      background:rgba(250,246,238,0.8);
+      border:1px solid rgba(60,36,21,0.08);
+      border-radius:12px;
+      padding:32px 20px;
+      text-align:center;
+      transition:transform 0.3s,border-color 0.3s
+    }
+    .dashboard-card:hover{transform:translateY(-4px);border-color:var(--secondary)}
+    .dashboard-card .icon{font-size:28px;margin-bottom:12px}
+    .dashboard-card .d-num{
+      font-family:'Playfair Display',serif;
+      font-size:28px;font-weight:700;color:var(--primary);margin-bottom:6px
+    }
+    .dashboard-card .d-label{font-size:12px;opacity:0.5;letter-spacing:2px;color:var(--text)}
+
+    /* CTA */
+    .cta-section{
+      height:60vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center
+    }
+    .cta-bg{
+      position:absolute;inset:-10px;
+      background:url('images/jiayuguan/嘉峪关市嘉峪关文物景区_05.jpg') center/cover;
+      filter:brightness(0.35) saturate(0.8) sepia(0.2)
+    }
+    .cta-overlay{position:absolute;inset:0;background:rgba(245,240,232,0.15)}
+    .cta-content{position:relative;z-index:2;text-align:center;padding:0 40px}
+    .cta-num{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(72px,12vw,140px);
+      font-weight:900;
+      letter-spacing:10px;
+      color:rgba(255,255,255,0.08);
+      margin-bottom:-24px
+    }
+    .cta-title{
+      font-family:'ZCOOL QingKe HuangYou','Noto Serif SC',serif;
+      font-size:clamp(24px,3vw,36px);
+      letter-spacing:8px;
+      color:#fff;
+      margin-bottom:32px;
+      text-shadow:0 2px 20px rgba(0,0,0,0.3)
+    }
+    .cta-btn{
+      display:inline-block;padding:14px 48px;
+      border:1px solid rgba(255,255,255,0.25);
+      border-radius:30px;
+      font-size:14px;letter-spacing:4px;
+      text-decoration:none;color:rgba(255,255,255,0.8);
+      transition:all 0.3s;
+      font-family:'Noto Serif SC',serif
+    }
+    .cta-btn:hover{background:rgba(255,255,255,0.08);border-color:var(--secondary);color:#fff}
+
+    /* Footer */
+    .footer{
+      padding:40px;text-align:center;
+      opacity:0.4;font-size:13px;letter-spacing:3px;
+      color:var(--text);border-top:1px solid rgba(60,36,21,0.06)
+    }
+
+    /* Animations */
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    /* Vintage paper effect */
+    .vintage-texture{
+      position:relative
+    }
+    .vintage-texture::after{
+      content:'';position:absolute;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events:none;mix-blend-mode:multiply
+    }
+
+    /* Vintage border decoration */
+    .vintage-border{
+      border:2px solid rgba(60,36,21,0.08);
+      border-radius:4px;
+      position:relative
+    }
+    .vintage-border::before{
+      content:'✦';position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+      color:var(--secondary);font-size:16px;background:var(--bg);padding:0 12px
+    }
+
+    /* Responsive */
+    @media(max-width:768px){
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .gallery-grid{grid-template-columns:1fr}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:6px}
+      .hud-item{padding:8px 12px;min-width:60px}
+      .hud-value{font-size:18px}
+      .hud-label{font-size:9px}
+      .image-break .bg{background-attachment:scroll}
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="top-fade"></div>
+    <div class="bottom-fade"></div>
+    <div class="hero-content">
+      <h1>Jiayuguan</h1>
+      <p class="subtitle">The Impregnable Pass of the Great Wall</p>
+      <div class="hero-tags">
+        <span>The First Pass Under Heaven</span>
+        <span>Ming Great Wall</span>
+        <span>Silk Road</span>
+      </div>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>EXPLORE</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- HUD -->
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">1372</div><div class="hud-label">Year Built</div></div>
+    <div class="hud-item"><div class="hud-value">33,500m²</div><div class="hud-label">Fortress Area</div></div>
+    <div class="hud-item"><div class="hud-value">3.80M</div><div class="hud-label">Annual Visitors</div></div>
+  </div>
+
+  <!-- Content Section 1 -->
+  <section class="content-section" data-animate>
+    <div class="content-image vintage-border"><img src="images/jiayuguan/嘉峪关市嘉峪关文物景区_03.jpg" alt="Jiayuguan Pass" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Millennium of the Great Pass</h2>
+      <div class="content-divider"></div>
+      <p>Jiayuguan, first built in the fifth year of Hongwu reign of the Ming Dynasty (1372 AD), stands as the western terminus of the Ming Great Wall and the best-preserved, most magnificent military fortress along its entire length. Situated at the narrowest point of the Hexi Corridor, flanked by the Qilian Mountains to the south and the Black Mountain to the north, its strategic location has made it a coveted military stronghold since ancient times.</p>
+      <p>After more than six centuries of wind and rain, Jiayuguan still stands majestically. From the pass, one can gaze upon the snow-capped Qilian Mountains, the vast Gobi Desert, and almost hear the camel bells of the Silk Road echoing through time. This "First Pass Under Heaven" bears witness to the resilience and wisdom of the Chinese nation.</p>
+      <div class="content-tags">
+        <span class="content-tag">Ming Great Wall</span>
+        <span class="content-tag">Military Fortress</span>
+        <span class="content-tag">Hexi Corridor</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Image Break -->
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <div class="quote-cn">The First Pass Under Heaven</div>
+      <div class="quote-en">The First Pass Under Heaven</div>
+    </div>
+  </section>
+
+  <!-- Content Section 2 (Reverse) -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image vintage-border"><img src="images/jiayuguan/嘉峪关市嘉峪关文物景区_08.jpg" alt="Overhanging Great Wall" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Great Wall Wonder</h2>
+      <div class="content-divider"></div>
+      <p>The Jiayuguan Scenic Area comprises the Pass itself, the First Mound of the Great Wall, and the Overhanging Great Wall. Built along the ridge of the Black Mountain, the Overhanging Great Wall is steep and precipitous, a remarkable example of Ming Dynasty engineering. The First Mound stands by the Taolai River as the westernmost beacon tower of the Great Wall.</p>
+      <p>Each of these three sites has its unique character, together forming Jiayuguan's complete military defense system. In 2007, it was rated a National 5A Tourist Attraction, and in 1987, it was inscribed on the UNESCO World Heritage List as a precious treasure of human civilization.</p>
+      <div class="content-tags">
+        <span class="content-tag">Overhanging Great Wall</span>
+        <span class="content-tag">First Mound</span>
+        <span class="content-tag">World Heritage</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Section 3 -->
+  <section class="content-section" data-animate>
+    <div class="content-image vintage-border"><img src="images/jiayuguan/嘉峪关市嘉峪关文物景区_10.jpg" alt="Jiayuguan Panorama" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Silk Road Legacy</h2>
+      <div class="content-divider"></div>
+      <p>Jiayuguan was not only a military stronghold but also a vital hub on the ancient Silk Road. Westward beyond the pass lay the vast expanse of the Western Regions; eastward through the pass led to the prosperous heartland of the Central Plains. Merchants, envoys, and monks from all directions once gathered here, where Eastern and Western civilizations converged and blended.</p>
+      <p>Today, Jiayuguan shines as a brilliant gem on the Silk Road tourism route. In 2024, it received 3.80 million visitors from around the world, all drawn to experience the grandeur of this great pass and the depth of its history. Within and beyond the fortress, camel bells and train whistles resonate together — a dialogue between ancient and modern.</p>
+      <div class="content-tags">
+        <span class="content-tag">Silk Road</span>
+        <span class="content-tag">Civilization Convergence</span>
+        <span class="content-tag">Historical Dialogue</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery-section" data-animate>
+    <div class="section-header">
+      <div class="numeral">✦ Gallery ✦</div>
+      <h2>Fortress · Four Seasons Panorama</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="height:500px">
+        <img src="images/jiayuguan/嘉峪关市嘉峪关文物景区_02.png" alt="Jiayuguan Panoramic View" style="height:100%" loading="lazy"/>
+        <div class="item-overlay"></div>
+      </div>
+      <div class="gallery-item" style="height:220px">
+        <img src="images/jiayuguan/嘉峪关市嘉峪关文物景区_04.jpg" alt="Pass Wall" style="height:100%" loading="lazy"/>
+        <div class="item-overlay"></div>
+      </div>
+      <div class="gallery-item" style="height:260px">
+        <img src="images/jiayuguan/嘉峪关市嘉峪关文物景区_06.jpg" alt="Tower Detail" style="height:100%" loading="lazy"/>
+        <div class="item-overlay"></div>
+      </div>
+      <div class="gallery-item" style="height:280px">
+        <img src="images/jiayuguan/嘉峪关市嘉峪关文物景区_07.jpg" alt="Jiayuguan in Snow" style="height:100%" loading="lazy"/>
+        <div class="item-overlay"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="dashboard-section" data-animate>
+    <div class="section-header">
+      <div class="numeral">✦ Data Panel ✦</div>
+      <h2>Great Pass · Key Metrics</h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dashboard-card">
+        <div class="icon">🏛️</div>
+        <div class="d-num">5A</div>
+        <div class="d-label">Scenic Area Level</div>
+      </div>
+      <div class="dashboard-card">
+        <div class="icon">📜</div>
+        <div class="d-num">1987</div>
+        <div class="d-label">World Heritage Year</div>
+      </div>
+      <div class="dashboard-card">
+        <div class="icon">🏗️</div>
+        <div class="d-num">33,500m²</div>
+        <div class="d-label">Fortress Area</div>
+      </div>
+      <div class="dashboard-card">
+        <div class="icon">📅</div>
+        <div class="d-num">1372</div>
+        <div class="d-label">Year Built</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-bg"></div>
+    <div class="cta-overlay"></div>
+    <div class="cta-content">
+      <div class="cta-num">1372</div>
+      <div class="cta-title">Six Centuries of Vigilance</div>
+      <a href="../index.html?prov=%E7%94%98%E8%82%83%E7%9C%81" class="cta-btn">Back to Map</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Jiayuguan Pass Scenic Area · National 5A Tourist Attraction · Jiayuguan City, Gansu Province</p>
+  </footer>
+
+  <script>
+    (function(){
+      var img = new Image();
+      img.onload = function(){
+        document.getElementById('heroBg').style.backgroundImage = "url('images/jiayuguan/嘉峪关市嘉峪关文物景区_05.jpg')";
+      };
+      img.src = 'images/jiayuguan/嘉峪关市嘉峪关文物景区_05.jpg';
+    })();
+
+    window.addEventListener('scroll', function(){
+      var sh = document.getElementById('scrollHud');
+      if(sh) sh.style.opacity = window.scrollY > 100 ? '0' : '1';
+    });
+
+    document.querySelector('.hero').addEventListener('mousemove', function(e){
+      var x = (e.clientX / window.innerWidth - 0.5) * 10;
+      var y = (e.clientY / window.innerHeight - 0.5) * 10;
+      document.getElementById('heroBg').style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    });
+
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('[data-animate]').forEach(function(el){ observer.observe(el); });
+  </script>
+</body>
+</html>

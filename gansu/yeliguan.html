@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Yeliguan · Gannan Secret Land | 5A Scenic Area Immersive Tour</title>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700;900&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --primary:#8b1a1a;
+  --secondary:#d4a843;
+  --bg:#1a0a0a;
+  --surface:rgba(139,26,26,0.12);
+  --text:#f5e6d3;
+  --text-dim:rgba(245,230,211,0.55);
+  --accent:#2d7d4a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Serif SC','PingFang SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* === 民族纹样装饰 === */
+.ethnic-border-h{border:none;border-top:3px solid var(--secondary);position:relative;height:6px;margin:16px 0;overflow:visible}
+.ethnic-border-h::before{content:'◆';position:absolute;top:-10px;left:50%;transform:translateX(-50%);color:var(--secondary);font-size:14px}
+.ethnic-border-h::after{content:'';position:absolute;top:-6px;left:5%;right:5%;height:1px;background:repeating-linear-gradient(90deg,var(--secondary) 0,var(--secondary) 6px,transparent 6px,transparent 12px);opacity:0.4}
+
+.ethnic-border-frame{border:2px solid var(--secondary);position:relative;padding:8px}
+.ethnic-border-frame::before{content:'';position:absolute;top:-2px;left:10%;right:10%;height:2px;background:repeating-linear-gradient(90deg,var(--secondary) 0,var(--secondary) 8px,transparent 8px,transparent 16px)}
+.ethnic-border-frame::after{content:'';position:absolute;bottom:-2px;left:10%;right:10%;height:2px;background:repeating-linear-gradient(90deg,var(--secondary) 0,var(--secondary) 8px,transparent 8px,transparent 16px)}
+
+.ethnic-diamond{display:inline-block;width:10px;height:10px;transform:rotate(45deg);border:1px solid var(--secondary);margin:0 8px;opacity:0.5}
+
+/* 经幡动画 */
+.prayer-flag{position:absolute;top:0;right:50px;width:2px;height:160px;z-index:3;pointer-events:none}
+.prayer-flag .flag-line{position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(to bottom,#2196f3,#fff,#f44336,#4caf50,#ffeb3b);animation:flagWave 3s ease-in-out infinite;transform-origin:top center}
+.prayer-flag .flag-line::before{content:'';position:absolute;top:0;left:-3px;width:8px;height:8px;background:var(--secondary);border-radius:50%}
+.prayer-flag .flag-line::after{content:'⟡';position:absolute;bottom:-20px;left:-6px;color:var(--secondary);font-size:12px;opacity:0.5}
+@keyframes flagWave{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+
+.prayer-flag-left{position:absolute;top:0;left:50px;width:2px;height:120px;z-index:3;pointer-events:none}
+.prayer-flag-left .flag-line{position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(to bottom,#ffeb3b,#4caf50,#fff,#f44336,#2196f3);animation:flagWaveLeft 3.5s ease-in-out infinite;transform-origin:top center}
+.prayer-flag-left .flag-line::before{content:'';position:absolute;top:0;left:-3px;width:8px;height:8px;background:var(--secondary);border-radius:50%}
+@keyframes flagWaveLeft{0%,100%{transform:rotate(3deg)}50%{transform:rotate(-3deg)}}
+
+/* 纹样分隔线 */
+.pattern-divider{display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0;opacity:0.5}
+.pattern-divider .line{flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--secondary) 0,var(--secondary) 4px,transparent 4px,transparent 8px)}
+.pattern-divider .diamond{width:8px;height:8px;transform:rotate(45deg);border:1px solid var(--secondary)}
+
+/* 三角纹样带 */
+.triangle-band{display:flex;gap:0;overflow:hidden;height:16px;justify-content:center;margin-bottom:8px}
+.triangle-band span{display:block;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:16px solid var(--secondary);opacity:0.15}
+.triangle-band span:nth-child(2n){border-bottom-color:var(--accent);opacity:0.1}
+
+/* === 1. Hero === */
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:-20px;background:center/cover;filter:brightness(0.45) saturate(1.15);transition:transform 0.1s ease-out}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(139,26,26,0.2) 0%,transparent 50%,rgba(45,125,74,0.1) 100%)}
+.hero-content{position:relative;z-index:2;text-align:center}
+.hero-badge{font-family:'Ma Shan Zheng',cursive;font-size:20px;color:var(--secondary);letter-spacing:8px;margin-bottom:16px}
+.hero-title{font-family:'Ma Shan Zheng',cursive;font-size:clamp(56px,9vw,100px);letter-spacing:12px;color:#fff;text-shadow:0 2px 40px rgba(0,0,0,0.6);line-height:1.2}
+.hero-sub{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(16px,2vw,24px);opacity:0.7;margin-top:20px;letter-spacing:8px}
+.hero-tags{display:flex;gap:16px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+.hero-tag{font-family:'Ma Shan Zheng',cursive;font-size:18px;color:var(--text-dim);letter-spacing:4px;position:relative}
+.hero-tag:not(:last-child)::after{content:'⟡';margin-left:16px;color:var(--secondary);opacity:0.4}
+
+/* === 2. HUD === */
+.hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:8px;transition:opacity 0.4s}
+.hud-item{backdrop-filter:blur(16px);background:var(--surface);border:1px solid rgba(212,168,67,0.25);padding:10px 18px;text-align:center;min-width:72px}
+.hud-value{font-size:22px;font-weight:700;color:var(--secondary);font-family:'Noto Serif SC',serif}
+.hud-label{font-size:10px;opacity:0.5;margin-top:4px;letter-spacing:3px}
+
+/* === 3. Scroll Hint === */
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+.scroll-hint span{font-family:'Ma Shan Zheng',cursive;font-size:16px;color:var(--secondary);opacity:0.5;letter-spacing:4px}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--secondary),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+/* === 4. Content Sections === */
+.content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.content-section.reverse{direction:rtl}
+.content-section.reverse .content-text{direction:ltr}
+.content-image{width:100%;overflow:hidden;position:relative}
+.content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+.content-image:hover img{transform:scale(1.04)}
+.content-text h2{font-family:'Ma Shan Zheng',cursive;font-size:clamp(32px,4vw,48px);margin-bottom:8px;letter-spacing:6px;color:var(--secondary)}
+.content-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--secondary),transparent);margin-bottom:20px}
+.content-text p{font-size:16px;line-height:2;opacity:0.78;margin-bottom:14px}
+.content-tags{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.content-tag{font-family:'Ma Shan Zheng',cursive;font-size:16px;color:var(--text-dim);letter-spacing:2px;position:relative;padding-left:16px}
+.content-tag::before{content:'◆';position:absolute;left:0;top:2px;font-size:8px;color:var(--secondary);opacity:0.5}
+
+/* === 5. Image Break === */
+.image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.image-break .bg{position:absolute;inset:-10px;background-size:cover;background-attachment:fixed;filter:brightness(0.35) saturate(1.1)}
+.image-break .break-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg),transparent 40%,transparent 60%,var(--bg))}
+.image-break .quote{position:relative;z-index:2;text-align:center}
+.image-break .quote-cn{font-family:'Ma Shan Zheng',cursive;font-size:clamp(32px,4.5vw,52px);letter-spacing:10px;margin-bottom:12px;color:var(--secondary)}
+.image-break .quote-en{font-family:'ZCOOL XiaoWei',serif;font-size:14px;opacity:0.45;letter-spacing:6px}
+
+/* === 6. Gallery === */
+.gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+.gallery .gallery-header{text-align:center;margin-bottom:48px}
+.gallery h2{font-family:'Ma Shan Zheng',cursive;font-size:clamp(32px,4vw,48px);letter-spacing:8px;color:var(--secondary)}
+.gallery .gallery-sub{font-family:'ZCOOL XiaoWei',serif;font-size:13px;opacity:0.4;margin-top:8px;letter-spacing:6px}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gallery-item{position:relative;overflow:hidden;cursor:pointer;border:2px solid var(--secondary);padding:4px;background:var(--surface)}
+.gallery-item img{width:100%;object-fit:cover;transition:transform 0.6s;display:block}
+.gallery-item:hover img{transform:scale(1.06)}
+.gallery-item .gallery-corner{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:2}
+.gallery-item .gallery-corner::before{content:'◆';position:absolute;top:8px;right:8px;font-size:10px;color:var(--secondary);opacity:0;transition:opacity 0.4s}
+.gallery-item:hover .gallery-corner::before{opacity:0.6}
+
+/* === 7. Dashboard === */
+.dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.dash-card{border:2px solid rgba(212,168,67,0.2);padding:32px 20px;text-align:center;position:relative;transition:border-color 0.3s,transform 0.3s;background:var(--surface)}
+.dash-card:hover{border-color:var(--secondary);transform:translateY(-4px)}
+.dash-card .dash-top-border{position:absolute;top:-2px;left:20%;right:20%;height:2px;background:repeating-linear-gradient(90deg,var(--secondary) 0,var(--secondary) 6px,transparent 6px,transparent 12px);opacity:0;transition:opacity 0.3s}
+.dash-card:hover .dash-top-border{opacity:1}
+.dash-icon{font-size:26px;margin-bottom:12px;opacity:0.7}
+.dash-value{font-size:30px;font-weight:700;color:var(--secondary);margin-bottom:6px;font-family:'Noto Serif SC',serif}
+.dash-label{font-size:12px;opacity:0.5;letter-spacing:3px}
+.dash-sublabel{font-family:'Ma Shan Zheng',cursive;font-size:15px;color:var(--text-dim);margin-top:6px}
+
+/* === 8. CTA === */
+.cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.cta-bg{position:absolute;inset:-10px;background-size:cover;background-position:center;filter:brightness(0.25) saturate(0.9)}
+.cta-overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg),transparent 50%)}
+.cta-content{position:relative;z-index:2;text-align:center}
+.cta-num{font-family:'Ma Shan Zheng',cursive;font-size:clamp(80px,14vw,150px);font-weight:400;letter-spacing:12px;opacity:0.08;margin-bottom:-24px;color:var(--secondary)}
+.cta-title{font-family:'Ma Shan Zheng',cursive;font-size:clamp(28px,3.5vw,42px);letter-spacing:8px;margin-bottom:36px;color:var(--secondary)}
+.cta-btn{display:inline-block;padding:14px 48px;border:2px solid rgba(212,168,67,0.3);font-family:'Ma Shan Zheng',cursive;font-size:20px;letter-spacing:6px;text-decoration:none;color:var(--text);transition:all 0.3s;position:relative}
+.cta-btn::before{content:'⟡ ';opacity:0.5}
+.cta-btn::after{content:' ⟡';opacity:0.5}
+.cta-btn:hover{background:rgba(212,168,67,0.08);border-color:var(--secondary);color:var(--secondary)}
+
+/* === 9. Footer === */
+.footer{padding:40px;text-align:center;border-top:2px solid rgba(212,168,67,0.15);font-size:13px;opacity:0.4;letter-spacing:3px;font-family:'Ma Shan Zheng',cursive;font-size:16px}
+.footer .footer-diamond{color:var(--secondary);margin:0 12px;opacity:0.5}
+
+/* === 10. Animations === */
+[data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+[data-animate].visible{opacity:1;transform:translateY(0)}
+
+/* === 11. Responsive === */
+@media(max-width:768px){
+  .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+  .content-section.reverse{direction:ltr}
+  .gallery-grid{grid-template-columns:1fr}
+  .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+  .hud{top:12px;right:12px;gap:6px}
+  .hud-item{padding:6px 12px;min-width:56px}
+  .hud-value{font-size:16px}
+  .hud-label{font-size:9px}
+  .hero-title{letter-spacing:6px}
+  .prayer-flag{right:20px;height:100px}
+  .prayer-flag-left{left:20px;height:80px}
+}
+@media(max-width:480px){
+  .dashboard-grid{grid-template-columns:1fr 1fr}
+  .hero-tags{gap:8px;flex-direction:column;align-items:center}
+  .hero-tag:not(:last-child)::after{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="prayer-flag"><div class="flag-line"></div></div>
+  <div class="prayer-flag-left"><div class="flag-line"></div></div>
+  <div class="hero-content">
+    <div class="hero-badge">⟡ Gannan Secret Land ⟡</div>
+    <h1 class="hero-title">Yeliguan</h1>
+    <p class="hero-sub">Highland Views · Tibetan Culture</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Gannan Secret Land</span>
+      <span class="hero-tag">Highland Scenery</span>
+      <span class="hero-tag">Tibetan Culture</span>
+      <span class="hero-tag">Eco Paradise</span>
+    </div>
+  </div>
+  <div class="scroll-hint" id="scrollHud">
+    <span>Scroll to Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- HUD -->
+<div class="hud" id="hud">
+  <div class="hud-item"><div class="hud-value">20.2</div><div class="hud-label">Area km²</div></div>
+  <div class="hud-item"><div class="hud-value">2610</div><div class="hud-label">Altitude m</div></div>
+  <div class="hud-item"><div class="hud-value">2024</div><div class="hud-label">5A Rating</div></div>
+  <div class="hud-item"><div class="hud-value">59.9K</div><div class="hud-label">May Day Visitors</div></div>
+</div>
+
+<!-- Content 1 -->
+<section class="content-section" data-animate>
+  <div class="content-image">
+    <div class="ethnic-border-frame">
+      <img src="images/yeliguan/甘南州冶力关旅游区_02.png" alt="Red Cliff Valley" loading="lazy"/>
+    </div>
+  </div>
+  <div class="content-text">
+    <h2>Red Cliff Valley · Danxia Wonder</h2>
+    <div class="triangle-band"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <p>Red Cliff Valley is one of the core attractions of Yeliguan Scenic Area, renowned for its magnificent Danxia landform. Over millions of years, wind and rain have sculpted the red sandstone into steep crimson cliffs, unique pinnacles, and deep gorges, like a red scar torn open on the earth.</p>
+    <p>Dense vegetation and babbling brooks fill the valley, where red cliffs and lush forests create a stunning contrast. Strolling through, you can feel the wonders of nature while experiencing the unique charm of the highland Danxia landscape.</p>
+    <div class="content-tags">
+      <span class="content-tag">Red Cliff Valley</span>
+      <span class="content-tag">Danxia Landform</span>
+      <span class="content-tag">Canyon Wonders</span>
+    </div>
+  </div>
+</section>
+
+<!-- Image Break -->
+<section class="image-break">
+  <div class="bg" style="background-image:url('images/yeliguan/甘南州冶力关旅游区_03.jpg')"></div>
+  <div class="break-overlay"></div>
+  <div class="prayer-flag" style="z-index:4"><div class="flag-line"></div></div>
+  <div class="quote">
+    <div class="quote-cn">Heavenly Lake · Highland Jewel</div>
+    <div class="quote-en">— A Pure Realm at 2610m Elevation —</div>
+  </div>
+</section>
+
+<!-- Content 2 (Reverse) -->
+<section class="content-section reverse" data-animate>
+  <div class="content-image">
+    <div class="ethnic-border-frame">
+      <img src="images/yeliguan/甘南州冶力关旅游区_04.png" alt="Heavenly Lake Ye" loading="lazy"/>
+    </div>
+  </div>
+  <div class="content-text">
+    <h2>Heavenly Lake · Sacred Lake Charm</h2>
+    <div class="triangle-band"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <p>Heavenly Lake Ye is nestled atop a mountain at 2,610 meters above sea level, the most famous alpine lake of Yeliguan. Its crystal-clear blue waters are surrounded by rolling mountains, carpet-like meadows dotted with yaks and sheep—a true "Jewel of Gannan."</p>
+    <p>For the Tibetan people, Heavenly Lake Ye holds sacred significance. Prayer flags flutter along its shores, and mani stone piles are scattered everywhere. The clear lake mirrors the blue sky, white clouds, and distant snow-capped mountains, creating a breathtaking highland tableau.</p>
+    <div class="content-tags">
+      <span class="content-tag">Heavenly Lake</span>
+      <span class="content-tag">Alpine Lake</span>
+      <span class="content-tag">Sacred Lake</span>
+    </div>
+  </div>
+</section>
+
+<!-- Content 3 -->
+<section class="content-section" data-animate>
+  <div class="content-image">
+    <div class="ethnic-border-frame">
+      <img src="images/yeliguan/甘南州冶力关旅游区_06.png" alt="Subalpine Meadow" loading="lazy"/>
+    </div>
+  </div>
+  <div class="content-text">
+    <h2>Highland Meadow · Eco Paradise</h2>
+    <div class="triangle-band"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <p>The Yeliguan Scenic Area integrates alpine lakes, Danxia landforms, and subalpine meadows, making it one of the most biodiverse regions in Gannan. The vast subalpine meadows change colors with the seasons—lush green in spring and summer, golden yellow in autumn.</p>
+    <p>This is also a paradise for wildlife. Under the blue sky and white clouds, yaks and sheep leisurely graze across the meadows while eagles soar overhead. The fresh air, magnificent scenery, and simple local customs make every visitor feel nature's generous gift.</p>
+    <div class="content-tags">
+      <span class="content-tag">Alpine Meadow</span>
+      <span class="content-tag">Eco Paradise</span>
+      <span class="content-tag">Highland Scenery</span>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="gallery" data-animate>
+  <div class="gallery-header">
+    <div class="triangle-band"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <h2>⟡ Visual Exploration ⟡</h2>
+    <p class="gallery-sub">— YELIGUAN GALLERY —</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item" style="height:500px">
+      <img src="images/yeliguan/甘南州冶力关旅游区_07.png" alt="Yeliguan Scenery" style="height:100%" loading="lazy"/>
+      <div class="gallery-corner"></div>
+    </div>
+    <div class="gallery-item" style="height:220px">
+      <img src="images/yeliguan/甘南州冶力关旅游区_08.jpeg" alt="Yeliguan Canyon" style="height:100%" loading="lazy"/>
+      <div class="gallery-corner"></div>
+    </div>
+    <div class="gallery-item" style="height:260px">
+      <img src="images/yeliguan/甘南州冶力关旅游区_09.jpg" alt="Yeliguan Meadow" style="height:100%" loading="lazy"/>
+      <div class="gallery-corner"></div>
+    </div>
+    <div class="gallery-item" style="height:280px">
+      <img src="images/yeliguan/甘南州冶力关旅游区_10.jpg" alt="Yeliguan Panorama" style="height:100%" loading="lazy"/>
+      <div class="gallery-corner"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Dashboard -->
+<section class="dashboard" data-animate>
+  <div class="dashboard-grid">
+    <div class="dash-card">
+      <div class="dash-top-border"></div>
+      <div class="dash-icon">🏔</div>
+      <div class="dash-value">20.2 km²</div>
+      <div class="dash-label">Total Area</div>
+      <div class="dash-sublabel">Red Cliff Valley · Heavenly Lake</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-top-border"></div>
+      <div class="dash-icon">🏞</div>
+      <div class="dash-value">2610 m</div>
+      <div class="dash-label">Lake Altitude</div>
+      <div class="dash-sublabel">Crown of Alpine Lakes</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-top-border"></div>
+      <div class="dash-icon">⭐</div>
+      <div class="dash-value">2024</div>
+      <div class="dash-label">5A Rating</div>
+      <div class="dash-sublabel">Newly Rated · 5A Status</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-top-border"></div>
+      <div class="dash-icon">👥</div>
+      <div class="dash-value">59.9K</div>
+      <div class="dash-label">May Day Visitors</div>
+      <div class="dash-sublabel">2026 May Day Holiday</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-bg" style="background-image:url('images/yeliguan/甘南州冶力关旅游区_11.png')"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <div class="cta-num">Yeliguan</div>
+    <div class="cta-title">Explore Gannan · Embrace Highland Paradise</div>
+    <a href="../index.html?prov=%E7%94%98%E8%82%83%E7%9C%81" class="cta-btn">Back to Scenic Map</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>Yeliguan Scenic Area <span class="footer-diamond">⟡</span> National 5A Tourist Attraction <span class="footer-diamond">⟡</span> Gannan Prefecture, Gansu Province</p>
+</footer>
+
+<script>
+(function(){
+  var img=new Image();
+  img.onload=function(){
+    document.getElementById('heroBg').style.backgroundImage="url('images/yeliguan/甘南州冶力关旅游区_01.png')"
+  };
+  img.src='images/yeliguan/甘南州冶力关旅游区_01.png';
+})();
+
+window.addEventListener('scroll',function(){
+  var s=document.getElementById('scrollHud');
+  if(s)s.style.opacity=window.scrollY>100?'0':'1'
+});
+
+document.querySelector('.hero').addEventListener('mousemove',function(e){
+  var x=(e.clientX/window.innerWidth-0.5)*12;
+  var y=(e.clientY/window.innerHeight-0.5)*12;
+  document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)'
+});
+
+var observer=new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting)entry.target.classList.add('visible')
+  })
+},{threshold:0.15});
+
+document.querySelectorAll('[data-animate]').forEach(function(el){
+  observer.observe(el)
+});
+</script>
+</body>
+</html>

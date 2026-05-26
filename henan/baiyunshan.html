@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baiyun Mountain · Dreamlike Wonderland</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Serif SC','PingFang SC',serif;
+      background: #042f2e;
+      color: #e0f5f0;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #042f2e; }
+    ::-webkit-scrollbar-thumb { background: rgba(13,148,136,0.3); border-radius: 2px; }
+
+    :root {
+      --primary: #0d9488;
+      --secondary: #06b6d4;
+      --bg: #042f2e;
+      --surface: rgba(13,148,136,0.12);
+      --text: #e0f5f0;
+      --text-dim: rgba(224,245,240,0.55);
+      --glow: rgba(13,148,136,0.25);
+    }
+
+    /* ===== Mist Overlay ===== */
+    .mist-layer {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(6,182,212,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 80% 70%, rgba(13,148,136,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 40% at 50% 50%, rgba(6,182,212,0.03) 0%, transparent 50%);
+      animation: mistDrift 20s ease-in-out infinite alternate;
+    }
+    @keyframes mistDrift {
+      0% { transform: translate(0,0) scale(1); opacity: 0.6; }
+      50% { transform: translate(30px,-20px) scale(1.05); opacity: 0.9; }
+      100% { transform: translate(-20px,10px) scale(0.95); opacity: 0.7; }
+    }
+
+    /* ===== Loading ===== */
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: #042f2e;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-ring {
+      width: 50px; height: 50px;
+      border: 2px solid rgba(13,148,136,0.08);
+      border-top: 2px solid #0d9488;
+      border-radius: 50%;
+      animation: spin 1.2s cubic-bezier(0.4,0,0.2,1) infinite;
+      box-shadow: 0 0 25px rgba(13,148,136,0.15);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p {
+      margin-top: 22px; font-size: 12px;
+      color: rgba(224,245,240,0.3);
+      letter-spacing: 4px;
+      font-family: 'ZCOOL XiaoWei',serif;
+    }
+    .loading-bar-wrap {
+      margin-top: 14px; width: 160px; height: 2px;
+      background: rgba(13,148,136,0.08);
+      border-radius: 1px; overflow: hidden;
+    }
+    .loading-bar-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg,#0d9488,#06b6d4);
+      border-radius: 1px;
+      animation: loadBar 1.8s ease-in-out forwards;
+    }
+    @keyframes loadBar {
+      0% { width: 0%; }
+      60% { width: 70%; }
+      100% { width: 100%; }
+    }
+
+    /* ===== Water Ripple ===== */
+    .water-ripple {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(13,148,136,0.08) 3px,
+        rgba(13,148,136,0.08) 6px
+      );
+      animation: ripple 8s linear infinite;
+      z-index: 3;
+    }
+    @keyframes ripple {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-20px); }
+    }
+
+    /* ===== Glass Panel ===== */
+    .glass-panel {
+      background: rgba(13,148,136,0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(13,148,136,0.2);
+      border-radius: 16px;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      position: relative; z-index: 1;
+      width: 100%; height: 100vh;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: -10px;
+      background-image: url('images/baiyunshan/洛阳市白云山景区_01.jpg');
+      background-size: cover; background-position: center;
+      filter: brightness(0.45) saturate(0.8) hue-rotate(-5deg);
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at center, transparent 20%, #042f2e 85%),
+        radial-gradient(ellipse at 30% 20%, rgba(13,148,136,0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(6,182,212,0.1) 0%, transparent 50%);
+      z-index: 1;
+    }
+    .hero .top-fade {
+      position: absolute; top: 0; left: 0; right: 0; height: 30vh;
+      background: linear-gradient(180deg,#042f2e 0%,transparent 100%);
+      z-index: 2;
+    }
+    .hero .bottom-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 25vh;
+      background: linear-gradient(0deg,#042f2e 0%,transparent 100%);
+      z-index: 2;
+    }
+
+    .hero-center {
+      position: relative; z-index: 3;
+      text-align: center;
+    }
+    .hero-center .hero-badge {
+      display: inline-block;
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 14px;
+      letter-spacing: 6px;
+      color: rgba(6,182,212,0.7);
+      background: rgba(13,148,136,0.1);
+      border: 1px solid rgba(13,148,136,0.25);
+      padding: 6px 24px;
+      border-radius: 30px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-center h1 {
+      font-family: 'ZCOOL XiaoWei',serif;
+      font-size: 72px;
+      font-weight: 400;
+      letter-spacing: 8px;
+      color: #e0f5f0;
+      text-shadow: 0 0 60px rgba(13,148,136,0.3), 0 0 120px rgba(6,182,212,0.15);
+    }
+    .hero-center h1 .sub {
+      display: block;
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 18px;
+      letter-spacing: 12px;
+      color: rgba(224,245,240,0.4);
+      margin-top: 8px;
+      font-weight: 400;
+    }
+    .hero-center .hero-stars {
+      margin-top: 18px;
+      font-size: 18px;
+      letter-spacing: 8px;
+      color: rgba(6,182,212,0.5);
+    }
+
+    .hero-info-card {
+      position: absolute;
+      left: 5%; bottom: 100px;
+      max-width: 420px;
+      z-index: 3;
+    }
+    .hero-info-card .card {
+      background: rgba(13,148,136,0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(13,148,136,0.2);
+      border-radius: 16px;
+      padding: 20px 24px;
+    }
+    .hero-info-card .card .label {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 12px;
+      color: rgba(6,182,212,0.6);
+      letter-spacing: 3px;
+      margin-bottom: 8px;
+    }
+    .hero-info-card .card p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: rgba(224,245,240,0.8);
+    }
+    .hero-info-card .hero-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 12px;
+    }
+    .hero-info-card .hero-tags span {
+      font-size: 11px;
+      padding: 3px 12px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+    }
+    .hero-info-card .hero-tags .tag-primary {
+      background: rgba(13,148,136,0.15);
+      border: 1px solid rgba(13,148,136,0.3);
+      color: rgba(13,148,136,0.9);
+    }
+    .hero-info-card .hero-tags .tag-secondary {
+      background: rgba(6,182,212,0.1);
+      border: 1px solid rgba(6,182,212,0.2);
+      color: rgba(6,182,212,0.7);
+    }
+    .hero-info-card .hero-tags .tag-accent {
+      background: rgba(13,148,136,0.08);
+      border: 1px solid rgba(13,148,136,0.15);
+      color: rgba(224,245,240,0.6);
+    }
+
+    .hud {
+      position: absolute; top: 24px; right: 5%; z-index: 4;
+    }
+    .hud .data-panel {
+      display: flex; gap: 6px;
+      background: rgba(13,148,136,0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(13,148,136,0.15);
+      border-radius: 12px;
+      padding: 8px 10px;
+    }
+    .hud .data-item {
+      text-align: center;
+      padding: 6px 12px;
+      min-width: 56px;
+    }
+    .hud .data-item .num {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 18px;
+      font-weight: 400;
+    }
+    .hud .data-item .num.cyan { color: #06b6d4; }
+    .hud .data-item .num.green { color: #0d9488; }
+    .hud .data-item .num.pink { color: rgba(6,182,212,0.7); }
+    .hud .data-item .label {
+      font-size: 8px;
+      color: rgba(224,245,240,0.35);
+      letter-spacing: 1px;
+      margin-top: 2px;
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      text-align: center;
+    }
+    .scroll-hint span {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 12px;
+      color: rgba(224,245,240,0.25);
+      letter-spacing: 3px;
+    }
+    .scroll-hint .line {
+      width: 1px; height: 30px;
+      background: linear-gradient(180deg,rgba(13,148,136,0.3),transparent);
+      margin: 6px auto 0;
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0% { transform: scaleY(0); opacity: 0; transform-origin: top; }
+      50% { transform: scaleY(1); opacity: 1; transform-origin: top; }
+      100% { transform: scaleY(0); opacity: 0; transform-origin: bottom; }
+    }
+
+    /* ===== Scroll HUD ===== */
+    .scroll-hud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 12px 5%;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(4,47,46,0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(13,148,136,0.08);
+      transform: translateY(-100%);
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .scroll-hud.active { transform: translateY(0); }
+    .scroll-hud .left {
+      font-family: 'ZCOOL XiaoWei',serif;
+      font-size: 16px;
+      color: rgba(224,245,240,0.8);
+    }
+    .scroll-hud .left strong { color: #0d9488; }
+    .scroll-hud .right {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 14px;
+      color: rgba(224,245,240,0.4);
+    }
+
+    /* ===== Scroll Progress ===== */
+    .scroll-progress {
+      position: fixed; right: 0; top: 0; bottom: 0; width: 3px; z-index: 99;
+    }
+    .scroll-progress-fill {
+      width: 100%; height: 0%;
+      background: linear-gradient(180deg,#0d9488,#06b6d4);
+      transition: height 0.1s ease;
+    }
+    .scroll-progress-pct {
+      position: absolute; right: 10px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 12px;
+      color: rgba(224,245,240,0.15);
+      writing-mode: vertical-lr;
+      letter-spacing: 4px;
+      pointer-events: none;
+    }
+
+    /* ===== Chapter Nav ===== */
+    .chapter-nav {
+      position: fixed; right: 16px; top: 50%; transform: translateY(-50%);
+      z-index: 98; display: flex; flex-direction: column; gap: 12px;
+    }
+    .chapter-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(13,148,136,0.15);
+      border: 1px solid rgba(13,148,136,0.15);
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+    .chapter-dot.active {
+      background: #0d9488;
+      box-shadow: 0 0 12px rgba(13,148,136,0.3);
+      border-color: #0d9488;
+    }
+    .chapter-dot:hover {
+      background: rgba(13,148,136,0.3);
+    }
+    .chapter-label {
+      position: absolute; right: 18px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 11px;
+      color: rgba(224,245,240,0.3);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .chapter-dot:hover .chapter-label {
+      opacity: 1;
+      color: rgba(224,245,240,0.6);
+    }
+
+    /* ===== Common Sections ===== */
+    .section {
+      position: relative; z-index: 1;
+      padding: 100px 5%;
+      min-height: 70vh;
+      display: flex; align-items: center;
+    }
+    .section-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      align-items: center;
+    }
+    .section-inner.reverse { direction: rtl; }
+    .section-inner.reverse > * { direction: ltr; }
+
+    .section-image {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4,0,0.2,1);
+    }
+    .section-image.visible { opacity: 1; transform: translateY(0); }
+    .section-image img {
+      width: 100%; height: 420px;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.7) saturate(0.9);
+      transition: filter 0.6s ease, transform 0.6s ease;
+    }
+    .section-image:hover img {
+      filter: brightness(0.85) saturate(1);
+      transform: scale(1.03);
+    }
+    .section-image .img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(13,148,136,0.2), transparent 60%);
+      pointer-events: none;
+    }
+    .section-image::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 16px;
+      border: 1px solid rgba(13,148,136,0.1);
+      pointer-events: none;
+    }
+
+    .section-content {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4,0,0.2,1) 0.15s;
+    }
+    .section-content.visible { opacity: 1; transform: translateY(0); }
+    .section-content .numeral {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 13px;
+      color: rgba(6,182,212,0.4);
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+    }
+    .section-content h2 {
+      font-family: 'ZCOOL XiaoWei',serif;
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 20px;
+      color: #e0f5f0;
+    }
+    .section-content h2 .highlight {
+      background: linear-gradient(135deg,#0d9488,#06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-content p {
+      font-size: 16px;
+      line-height: 2;
+      color: rgba(224,245,240,0.7);
+      margin-bottom: 16px;
+    }
+    .section-content .stat-row {
+      display: flex; gap: 16px;
+      margin-top: 20px;
+    }
+    .section-content .stat-item {
+      background: rgba(13,148,136,0.06);
+      border: 1px solid rgba(13,148,136,0.1);
+      border-radius: 10px;
+      padding: 12px 20px;
+      text-align: center;
+      min-width: 80px;
+    }
+    .section-content .stat-item .num {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 22px;
+      color: #06b6d4;
+    }
+    .section-content .stat-item .lbl {
+      font-size: 10px;
+      color: rgba(224,245,240,0.35);
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* ===== Image Break ===== */
+    .image-break {
+      position: relative; z-index: 1;
+      height: 60vh;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .image-break .bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      filter: brightness(0.35) saturate(0.7);
+    }
+    .image-break .overlay {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at center, transparent 30%, #042f2e 80%),
+        linear-gradient(180deg, rgba(13,148,136,0.1), transparent 40%, rgba(6,182,212,0.05));
+    }
+    .image-break .quote {
+      position: relative; z-index: 2;
+      text-align: center;
+      max-width: 600px;
+      padding: 40px;
+    }
+    .image-break .quote .label {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 13px;
+      color: rgba(6,182,212,0.5);
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+    }
+    .image-break .quote p {
+      font-family: 'ZCOOL XiaoWei',serif;
+      font-size: 22px;
+      line-height: 1.8;
+      color: rgba(224,245,240,0.7);
+    }
+    .image-break .quote .author {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 15px;
+      color: rgba(224,245,240,0.3);
+      margin-top: 16px;
+    }
+
+    /* ===== Gallery ===== */
+    .gallery-section {
+      position: relative; z-index: 1;
+      padding: 100px 5%;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-header .numeral {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 13px;
+      color: rgba(6,182,212,0.4);
+      letter-spacing: 4px;
+      margin-bottom: 12px;
+    }
+    .section-header h2 {
+      font-family: 'ZCOOL XiaoWei',serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: #e0f5f0;
+    }
+    .section-header h2 .highlight {
+      background: linear-gradient(135deg,#0d9488,#06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .gallery-grid .col {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .gallery-item.visible { opacity: 1; transform: translateY(0); }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.75) saturate(0.85);
+      transition: filter 0.6s ease, transform 0.6s ease;
+    }
+    .gallery-item:hover img {
+      filter: brightness(0.9) saturate(1);
+      transform: scale(1.05);
+    }
+    .gallery-item .item-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(13,148,136,0.15), transparent);
+      pointer-events: none;
+    }
+    .gallery-item::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 12px;
+      border: 1px solid rgba(13,148,136,0.1);
+      pointer-events: none;
+    }
+
+    /* ===== Dashboard ===== */
+    .dashboard-section {
+      position: relative; z-index: 1;
+      padding: 100px 5%;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .dashboard-card {
+      background: rgba(13,148,136,0.06);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(13,148,136,0.12);
+      border-radius: 14px;
+      padding: 24px 16px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .dashboard-card.visible { opacity: 1; transform: translateY(0); }
+    .dashboard-card:nth-child(2) { transition-delay: 0.05s; }
+    .dashboard-card:nth-child(3) { transition-delay: 0.1s; }
+    .dashboard-card:nth-child(4) { transition-delay: 0.15s; }
+    .dashboard-card:nth-child(5) { transition-delay: 0.2s; }
+    .dashboard-card:nth-child(6) { transition-delay: 0.25s; }
+    .dashboard-card:nth-child(7) { transition-delay: 0.3s; }
+    .dashboard-card:nth-child(8) { transition-delay: 0.35s; }
+    .dashboard-card .icon { font-size: 26px; display: block; margin-bottom: 10px; opacity: 0.7; }
+    .dashboard-card .d-num {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 28px;
+      color: #06b6d4;
+      transition: text-shadow 0.3s ease;
+    }
+    .dashboard-card .d-label {
+      font-size: 11px;
+      color: rgba(224,245,240,0.35);
+      letter-spacing: 2px;
+      margin-top: 6px;
+    }
+    .dashboard-card:hover { border-color: rgba(13,148,136,0.25); }
+    .dashboard-card:hover .d-num {
+      text-shadow: 0 0 20px rgba(13,148,136,0.2);
+    }
+
+    /* ===== CTA ===== */
+    .cta-section {
+      position: relative; z-index: 1;
+      padding: 120px 5%;
+      text-align: center;
+      overflow: hidden;
+    }
+    .cta-section .bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      filter: brightness(0.25) saturate(0.6);
+    }
+    .cta-section .overlay {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at center, rgba(13,148,136,0.15) 0%, #042f2e 80%),
+        linear-gradient(180deg, #042f2e 0%, transparent 30%, transparent 70%, #042f2e 100%);
+    }
+    .cta-section .content {
+      position: relative; z-index: 2;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .cta-section .content .numeral {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 13px;
+      color: rgba(6,182,212,0.4);
+      letter-spacing: 4px;
+      margin-bottom: 16px;
+    }
+    .cta-section .content h2 {
+      font-family: 'ZCOOL XiaoWei',serif;
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: #e0f5f0;
+      margin-bottom: 20px;
+    }
+    .cta-section .content h2 .highlight {
+      background: linear-gradient(135deg,#0d9488,#06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-section .content p {
+      font-size: 16px;
+      line-height: 2;
+      color: rgba(224,245,240,0.6);
+      margin-bottom: 30px;
+    }
+    .cta-section .cta-btn {
+      display: inline-block;
+      padding: 14px 40px;
+      background: rgba(13,148,136,0.1);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(13,148,136,0.25);
+      border-radius: 40px;
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 16px;
+      letter-spacing: 3px;
+      color: rgba(224,245,240,0.7);
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+    .cta-section .cta-btn:hover {
+      background: rgba(13,148,136,0.2);
+      border-color: rgba(13,148,136,0.4);
+      box-shadow: 0 0 30px rgba(13,148,136,0.15);
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      position: relative; z-index: 1;
+      padding: 40px 5%;
+      text-align: center;
+      border-top: 1px solid rgba(13,148,136,0.06);
+    }
+    footer p {
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 13px;
+      letter-spacing: 6px;
+      color: rgba(224,245,240,0.15);
+    }
+
+    /* ===== Chapter Counter ===== */
+    .chapter-counter {
+      position: fixed; left: 5%; bottom: 30px; z-index: 97;
+      font-family: 'Ma Shan Zheng',cursive;
+      font-size: 12px;
+      color: rgba(224,245,240,0.12);
+      letter-spacing: 3px;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .chapter-counter.visible { opacity: 1; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .hero-center h1 { font-size: 40px; letter-spacing: 4px; }
+      .hero-center h1 .sub { font-size: 14px; letter-spacing: 6px; }
+      .hero-info-card { left: 16px; right: 16px; bottom: 85px; max-width: none; }
+      .hero-info-card .card { padding: 14px 16px; }
+      .hero-info-card .card p { font-size: 12px; }
+
+      .hud { top: 16px; right: 16px; }
+      .hud .data-panel { gap: 3px; padding: 5px 4px; }
+      .hud .data-item { padding: 4px 8px; min-width: 44px; }
+      .hud .data-item .num { font-size: 14px; }
+      .hud .data-item .label { font-size: 7px; }
+
+      .section { padding: 60px 20px; min-height: auto; }
+      .section-inner { grid-template-columns: 1fr; gap: 28px; }
+      .section-inner.reverse { direction: ltr; }
+      .section-image img { height: 240px; }
+      .section-content h2 { font-size: 24px; }
+      .section-content .stat-row { flex-wrap: wrap; gap: 8px; }
+
+      .image-break { height: 40vh; }
+      .image-break .quote p { font-size: 17px; }
+
+      .gallery-section { padding: 60px 20px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+
+      .dashboard-grid { grid-template-columns: repeat(2,1fr); }
+      .dashboard-section { padding: 60px 20px; }
+
+      .cta-section { padding: 80px 20px; }
+      .cta-section .content h2 { font-size: 24px; }
+
+      .scroll-hud { padding: 8px 16px; }
+      .chapter-nav { right: 8px; }
+      .chapter-dot { width: 5px; height: 5px; }
+      .chapter-counter { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-center h1 { font-size: 30px; }
+      .hero-center .hero-badge { font-size: 11px; padding: 4px 16px; }
+      .hero-center .hero-stars { font-size: 13px; }
+      .hud .data-item { min-width: 36px; padding: 3px 6px; }
+      .hud .data-item .num { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Mist Layer ===== -->
+  <div class="mist-layer"></div>
+
+  <!-- ===== Loading ===== -->
+  <div class="loading-overlay" id="loading">
+    <div class="loading-ring"></div>
+    <div class="loading-bar-wrap"><div class="loading-bar-fill"></div></div>
+    <p>Deep in the clouds ...</p>
+  </div>
+
+  <!-- ===== Scroll Progress ===== -->
+  <div class="scroll-progress" id="scrollProgress">
+    <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+    <span class="scroll-progress-pct" id="scrollPct">0%</span>
+  </div>
+
+  <!-- ===== Fixed HUD ===== -->
+  <div class="scroll-hud" id="scrollHud">
+    <div class="left"><strong>✦</strong> Baiyun Mountain</div>
+    <div class="right">Henan · Luoyang</div>
+  </div>
+
+  <!-- ===== Chapter Nav ===== -->
+  <div class="chapter-nav" id="chapterNav"></div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="top-fade"></div>
+    <div class="bottom-fade"></div>
+    <div class="water-ripple"></div>
+
+    <div class="hud">
+      <div class="data-panel">
+        <div class="data-item"><div class="num cyan">2216</div><div class="label">Elevation (m)</div></div>
+        <div class="data-item"><div class="num green">168</div><div class="label">Area (km²)</div></div>
+        <div class="data-item"><div class="num pink">4.5</div><div class="label">Rating</div></div>
+      </div>
+    </div>
+
+    <div class="hero-center">
+      <div class="hero-badge">WORLD GEOPARK · 2011</div>
+      <h1>
+        Baiyun Mountain
+        <span class="sub">BAIYUN MOUNTAIN</span>
+      </h1>
+      <div class="hero-stars">✦ ✦ ✦ ✦ ✧</div>
+    </div>
+
+    <div class="hero-info-card">
+      <div class="card">
+        <div class="label">◈ Wonderland Brief</div>
+        <p>The "Central Plains Summit" — the main peak of Funiu Mountain, renowned for its sea of clouds and the highest waterfall in Central China.</p>
+        <div class="hero-tags">
+          <span class="tag-primary">World Geopark</span>
+          <span class="tag-secondary">Central Plains Summit</span>
+          <span class="tag-accent">Forest Oxygen Bar</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll to explore</span>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 1: Central Plains Summit ===== -->
+  <section class="section" data-chapter="Central Plains Summit">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="images/baiyunshan/洛阳市白云山景区_04.jpg" alt="Baiyun Mountain Yuhuang Peak" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 01</div>
+        <h2>Summit of Central Plains · <span class="highlight">Yuhuang Peak</span></h2>
+        <p>Yuhuang Peak, the main summit of Baiyun Mountain, stands at 2,216 meters above sea level — the highest peak in the Central Plains region. From the top, the view opens up to rolling green mountains and surging seas of clouds, as if stepping into a fairyland. Named after the Jade Emperor Pavilion built on its summit, Yuhuang Peak has been a sacred site for Taoist pilgrimage since ancient times.</p>
+        <p>Baiyun Mountain is a UNESCO World Geopark, nestled deep in the Funiu Mountain range. The terrain is majestic and steep, celebrated for its abundant and spectacular cloud formations. The Funiu Mountains stretch across western Henan, with Baiyun Mountain as their crown jewel and the geographical apex of the Central China plain.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">2216</div><div class="lbl">Elevation (m)</div></div>
+          <div class="stat-item"><div class="num">5A</div><div class="lbl">Scenic Level</div></div>
+          <div class="stat-item"><div class="num">2011</div><div class="lbl">Year Listed</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FULL WIDTH IMAGE BREAK ===== -->
+  <div class="image-break">
+    <div class="bg" style="background-image:url('images/baiyunshan/洛阳市白云山景区_06.jpg');"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <div class="label">✦ Millennia of Poetry</div>
+      <p>"White clouds drift atop Baiyun Mountain, white clouds surround below.<br/>When clouds depart, green hills remain; when clouds return, they accompany travelers home."</p>
+      <div class="author">—— Ancient Poem on Baiyun Mountain</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: Sea of Clouds ===== -->
+  <section class="section" data-chapter="Sea of Clouds">
+    <div class="section-inner reverse">
+      <div class="section-image" data-animate>
+        <img src="images/baiyunshan/洛阳市白云山景区_05.jpg" alt="Baiyun Mountain Sea of Clouds" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 02</div>
+        <h2>Rolling Sea of Clouds · <span class="highlight">Finest Waterfall in Central Plains</span></h2>
+        <p>Baiyun Mountain is famed for its abundant and wondrous clouds. With ample moisture in the air, the peaks are shrouded in mist year-round. After a rainfall clears, seas of clouds surge from the valleys, cresting over the summits to create a breathtaking spectacle. Standing atop Yuhuang Peak, with waves of clouds churning beneath and mist swirling around, one feels transported to a celestial realm.</p>
+        <p>Jiulong Waterfall plunges 103 meters, making it one of the most famous waterfalls in Central China. The water roars down the cliff, sending up clouds of mist. When sunlight breaks through the spray, rainbows often arch across the valley, adding a touch of grace to the rugged grandeur of the mountains.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">103</div><div class="lbl">Waterfall Drop (m)</div></div>
+          <div class="stat-item"><div class="num">Finest</div><div class="lbl">in Central Plains</div></div>
+          <div class="stat-item"><div class="num">Cloud Sea</div><div class="lbl">Sky Wonder</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: Forest Oxygen Bar ===== -->
+  <section class="section" data-chapter="Forest Oxygen Bar">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="images/baiyunshan/洛阳市白云山景区_07.jpg" alt="Baiyun Mountain Forest" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 03</div>
+        <h2>Natural Oxygen Bar · <span class="highlight">Forest Hidden Realm</span></h2>
+        <p>With a forest coverage rate of 98.5%, Baiyun Mountain is a true natural forest oxygen bar. In the dense primeval woods, the concentration of negative oxygen ions is exceptionally high, making every breath refreshing and invigorating. Walking through the forest, you are surrounded by towering ancient trees, twisting vines, babbling streams, and melodious birdsong.</p>
+        <p>Luhua Valley is a serene valley within Baiyun Mountain. In late summer and early autumn, the valley is covered with flying reeds like snow, creating a picturesque scene against the green hills and clear waters. It is an ideal summer retreat, with an average temperature of only 24°C, earning it the reputation of being the "Central Plains Summer Paradise."</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">98.5</div><div class="lbl">Forest Cover %</div></div>
+          <div class="stat-item"><div class="num">168</div><div class="lbl">Area km²</div></div>
+          <div class="stat-item"><div class="num">Jun–Aug</div><div class="lbl">Best for Escape</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section class="gallery-section" data-chapter="Gallery">
+    <div class="section-header">
+      <div class="numeral">/// Gallery</div>
+      <h2>Wonderland <span class="highlight">Panorama</span></h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="col">
+        <div class="gallery-item" data-animate style="height:340px;">
+          <img src="images/baiyunshan/洛阳市白云山景区_08.jpg" alt="Baiyun Mountain Scenery" style="height:100%;" loading="lazy" />
+          <div class="item-overlay"></div>
+        </div>
+        <div class="gallery-item" data-animate style="height:220px;">
+          <img src="images/baiyunshan/洛阳市白云山景区_10.jpg" alt="Baiyun Mountain View" style="height:100%;" loading="lazy" />
+          <div class="item-overlay"></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="gallery-item" data-animate style="height:250px;">
+          <img src="images/baiyunshan/洛阳市白云山景区_11.jpg" alt="Baiyun Mountain Beauty" style="height:100%;" loading="lazy" />
+          <div class="item-overlay"></div>
+        </div>
+        <div class="gallery-item" data-animate style="height:310px;">
+          <img src="images/baiyunshan/洛阳市白云山景区_12.jpg" alt="Baiyun Mountain Landscape" style="height:100%;" loading="lazy" />
+          <div class="item-overlay"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DATA DASHBOARD ===== -->
+  <section class="dashboard-section" data-chapter="Dashboard">
+    <div class="section-header">
+      <div class="numeral">/// Dashboard</div>
+      <h2>Scenic Area <span class="highlight">Key Metrics</span></h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dashboard-card" data-animate>
+        <span class="icon">🏔️</span>
+        <div class="d-num">5A</div>
+        <div class="d-label">Scenic Level</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <span class="icon">🌍</span>
+        <div class="d-num">2011</div>
+        <div class="d-label">World Geopark</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <span class="icon">💧</span>
+        <div class="d-num">168</div>
+        <div class="d-label">Area (km²)</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <span class="icon">⛰️</span>
+        <div class="d-num">2216</div>
+        <div class="d-label">Elevation (m)</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <span class="icon">⭐</span>
+        <div class="d-num">4.5</div>
+        <div class="d-label">Visitor Rating</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <span class="icon">🌿</span>
+        <div class="d-num">98.5</div>
+        <div class="d-label">Forest Cover %</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <span class="icon">🌸</span>
+        <div class="d-num">Summer</div>
+        <div class="d-label">Best Season</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <span class="icon">📏</span>
+        <div class="d-num">103</div>
+        <div class="d-label">Waterfall Drop (m)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <div class="bg" style="background-image:url('images/baiyunshan/洛阳市白云山景区_15.jpg');"></div>
+    <div class="overlay"></div>
+    <div class="content">
+      <div class="numeral">/// Explore Wonderland</div>
+      <h2>Strolling through the <span class="highlight">Sea of Clouds</span> atop the Central Plains</h2>
+      <p>From the vast sea of clouds at Yuhuang Peak to the cascading spray of Jiulong Waterfall,<br/>every glance is a journey of communion between heaven and earth.</p>
+      <div class="cta-btn">
+        <span>✦ Henan · Luoyang · Baiyun Mountain</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>BAIYUN MOUNTAIN · WORLD GEOPARK</p>
+  </footer>
+
+  <div class="chapter-counter" id="chapterCounter"></div>
+
+  <script>
+    // ===== Loading =====
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loading').classList.add('hidden');
+      }, 1200);
+    });
+
+    // ===== Hero Parallax =====
+    const heroBg = document.getElementById('heroBg');
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      heroBg.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
+      const hud = document.getElementById('scrollHud');
+      if (scrollY > window.innerHeight * 0.5) {
+        hud.classList.add('active');
+      } else {
+        hud.classList.remove('active');
+      }
+    });
+
+    // ===== IntersectionObserver animations =====
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('[data-animate]').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ===== Scroll progress =====
+    const progressFill = document.getElementById('scrollProgressFill');
+    const scrollPctEl = document.getElementById('scrollPct');
+    function updateScrollProgress() {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return;
+      const pct = Math.min(100, Math.round((window.scrollY / docHeight) * 100));
+      if (progressFill) progressFill.style.width = pct + '%';
+      if (scrollPctEl) scrollPctEl.textContent = pct + '%';
+    }
+    window.addEventListener('scroll', updateScrollProgress);
+
+    // ===== Chapter navigation =====
+    const chapterNav = document.getElementById('chapterNav');
+    const chapters = document.querySelectorAll('[data-chapter]');
+    const chapterNames = [];
+
+    chapters.forEach((section, i) => {
+      const name = section.getAttribute('data-chapter');
+      chapterNames.push(name);
+      const dot = document.createElement('div');
+      dot.className = 'chapter-dot';
+      if (i === 0) dot.classList.add('active');
+      const label = document.createElement('span');
+      label.className = 'chapter-label';
+      label.textContent = name;
+      dot.appendChild(label);
+      dot.addEventListener('click', () => {
+        section.scrollIntoView({ behavior: 'smooth' });
+      });
+      chapterNav.appendChild(dot);
+    });
+
+    const chapterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(chapters).indexOf(entry.target);
+          document.querySelectorAll('.chapter-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === idx);
+          });
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-80px 0px 0px 0px' });
+
+    chapters.forEach(section => chapterObserver.observe(section));
+
+    // ===== Chapter counter =====
+    const chapterCounter = document.getElementById('chapterCounter');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(chapters).indexOf(entry.target);
+          chapterCounter.textContent = 'Ch. ' + (idx + 1) + ' / ' + chapters.length + ' · ' + chapterNames[idx];
+          chapterCounter.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-80px 0px 0px 0px' });
+
+    chapters.forEach(section => counterObserver.observe(section));
+
+    // ===== Counter animation for dashboard =====
+    function animateCounter(el, target, suffix, duration) {
+      const numTarget = parseInt(target) || 0;
+      suffix = suffix || '';
+      const startTime = performance.now();
+      function tick(now) {
+        const p = Math.min((now - startTime) / (duration || 1000), 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(numTarget * eased) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    const dashboardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const numEl = entry.target.querySelector('.d-num');
+          if (numEl && !numEl.dataset.counted) {
+            numEl.dataset.counted = 'true';
+            const text = numEl.textContent.trim();
+            const match = text.match(/^([\d.]+)([M%+]|\+)?/);
+            if (match) {
+              animateCounter(numEl, match[1], match[2] || '', 1000);
+            }
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.dashboard-card').forEach(card => {
+      dashboardObserver.observe(card);
+    });
+
+    // ===== Mist particles =====
+    (function createMistParticles() {
+      const container = document.querySelector('.mist-layer');
+      for (let i = 0; i < 20; i++) {
+        const dot = document.createElement('div');
+        const size = 20 + Math.random() * 60;
+        dot.style.cssText = [
+          'position:absolute',
+          'width:' + size + 'px',
+          'height:' + size + 'px',
+          'background:radial-gradient(circle,rgba(6,182,212,0.04),transparent)',
+          'border-radius:50%',
+          'left:' + (Math.random() * 100) + '%',
+          'top:' + (Math.random() * 100) + '%',
+          'opacity:' + (0.1 + Math.random() * 0.2),
+          'filter:blur(' + (4 + Math.random() * 8) + 'px)',
+          'animation:mistFloat ' + (12 + Math.random() * 15) + 's ease-in-out ' + (Math.random() * 10) + 's infinite',
+          'pointer-events:none'
+        ].join(';');
+        container.appendChild(dot);
+      }
+      const style = document.createElement('style');
+      style.textContent = '@keyframes mistFloat { 0%,100% { transform: translate(0,0) scale(1); opacity: 0.1; } 33% { transform: translate(40px,-20px) scale(1.3); opacity: 0.25; } 66% { transform: translate(-30px,15px) scale(0.8); opacity: 0.15; } }';
+      document.head.appendChild(style);
+    })();
+  </script>
+
+<a href="../index.html?prov=河南省" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Map</a>
+</body>
+</html>

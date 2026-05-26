@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Jade Dragon Snow Mountain · The Southernmost Glacier in the Northern Hemisphere | 5A Scenic Area Immersive Tour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Noto+Serif+SC:wght@300;400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Serif SC','PingFang SC','Microsoft YaHei',serif;
+      background: #020510;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    :root {
+      --primary: #ffffff;
+      --secondary: #87ceeb;
+      --bg: #020510;
+      --surface: rgba(135,206,235,0.06);
+      --text: #e8f0f8;
+      --text-dim: rgba(232,240,248,0.5);
+      --text-faint: rgba(232,240,248,0.2);
+      --glow: rgba(135,206,235,0.2);
+      --accent: #b0c4de;
+    }
+
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: #020510;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 2px solid rgba(135,206,235,.1);
+      border-top: 2px solid rgba(135,206,235,.5);
+      border-radius: 50%; animation: spin 1.5s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p {
+      margin-top: 20px; font-size: 13px;
+      color: rgba(232,240,248,.25);
+      letter-spacing: 3px; font-family: 'Courier New',monospace;
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: -10px;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.6) saturate(0.9);
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 25%, #020510 80%);
+    }
+    .hero .scanlines {
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(135,206,235,.006) 2px,rgba(135,206,235,.006) 4px);
+    }
+    .hero .top-fade {
+      position: absolute; top: 0; left: 0; right: 0; height: 30vh;
+      background: linear-gradient(180deg,#020510 0%,transparent 100%);
+    }
+    .hero .bottom-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40vh;
+      background: linear-gradient(0deg,#020510 0%,#020510aa 20%,transparent 100%);
+    }
+
+    .snow-particles {
+      position: absolute; inset: 0; z-index: 5; pointer-events: none;
+      overflow: hidden;
+    }
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 50%;
+      animation: snowFall linear infinite;
+    }
+    @keyframes snowFall {
+      0% { transform: translateY(-10px) translateX(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(105vh) translateX(60px) rotate(360deg); opacity: 0; }
+    }
+
+    .glacier-glow {
+      position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%);
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse, rgba(135,206,235,0.08) 0%, transparent 70%);
+      animation: glacierPulse 5s ease-in-out infinite;
+      pointer-events: none; z-index: 4;
+    }
+    @keyframes glacierPulse {
+      0%,100% { opacity: 0.4; transform: translate(-50%,-50%) scale(1); }
+      50% { opacity: 0.8; transform: translate(-50%,-50%) scale(1.2); }
+    }
+
+    .hud {
+      position: absolute; inset: 0; z-index: 10;
+      padding: 28px 40px;
+      display: flex; flex-direction: column;
+    }
+    .hud-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 18px; border-radius: 20px;
+      background: rgba(2,5,16,.45);
+      border: 1px solid rgba(135,206,235,.12);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      color: rgba(232,240,248,.45); font-size: 13px; cursor: pointer;
+      transition: all .3s; width: fit-content; text-decoration: none;
+    }
+    .back-btn:hover { border-color: rgba(135,206,235,.3); color: #fff; }
+    .back-btn .arrow { display: inline-block; transition: transform .3s; }
+    .back-btn:hover .arrow { transform: translateX(-3px); }
+
+    .title-group { margin-top: 20px; }
+    .title-group h1 {
+      font-size: 52px; font-weight: 300; letter-spacing: 8px;
+      text-shadow: 0 0 60px rgba(0,0,0,.5);
+      display: flex; align-items: baseline; gap: 14px;
+      font-family: 'ZCOOL XiaoWei','Noto Serif SC',serif;
+    }
+    .title-group h1 .badge {
+      font-size: 12px; padding: 4px 16px; border-radius: 14px;
+      background: rgba(135,206,235,.1);
+      border: 1px solid rgba(135,206,235,.2);
+      color: rgba(135,206,235,.75); letter-spacing: 1px;
+      font-weight: 400; font-size: 11px; font-family: 'Noto Serif SC',serif;
+    }
+    .title-group h1 .stars {
+      font-size: 16px; color: rgba(135,206,235,.35);
+      letter-spacing: 2px; font-weight: 400;
+    }
+    .title-group .subtitle {
+      font-size: 14px; color: rgba(232,240,248,.3);
+      letter-spacing: 6px; margin-top: 4px;
+    }
+
+    .data-panel { display: flex; gap: 8px; }
+    .data-item {
+      text-align: center; padding: 10px 18px; border-radius: 10px;
+      background: rgba(2,5,16,.4);
+      border: 1px solid rgba(135,206,235,.06);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      min-width: 72px;
+    }
+    .data-item .num { font-size: 20px; font-weight: 700; font-family: 'Orbitron',monospace; }
+    .data-item .num.cyan { color: #87ceeb; }
+    .data-item .num.green { color: #b0c4de; }
+    .data-item .num.pink { color: #e0e8f0; }
+    .data-item .label { font-size: 9px; color: rgba(232,240,248,.25); margin-top: 2px; letter-spacing: 1px; }
+
+    .hero-info {
+      position: absolute; left: 40px; bottom: 130px; z-index: 11;
+      max-width: 440px;
+    }
+    .hero-info .card {
+      background: rgba(2,5,16,.5);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 14px; border: 1px solid rgba(135,206,235,.08);
+      padding: 22px 28px;
+    }
+    .hero-info .card p {
+      font-size: 14px; line-height: 1.8; color: rgba(232,240,248,.55);
+    }
+    .hero-info .tags { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-info .tags span {
+      padding: 4px 14px; border-radius: 14px; font-size: 11px;
+      letter-spacing: 1px; border: 1px solid;
+    }
+    .tag-snow { background: rgba(135,206,235,.06); border-color: rgba(135,206,235,.15); color: #87ceeb; }
+    .tag-naxi { background: rgba(176,196,222,.06); border-color: rgba(176,196,222,.15); color: #b0c4de; }
+    .tag-glacier { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.7); }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%; z-index: 11;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(232,240,248,.18);
+      font-size: 10px; letter-spacing: 2px;
+      font-family: 'Courier New',monospace;
+    }
+    .scroll-hint .line {
+      width: 1px; height: 30px;
+      background: linear-gradient(180deg,rgba(135,206,235,.25),transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.3; transform: scaleY(0.5); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    .section {
+      position: relative;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      padding: 80px 40px;
+    }
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .section-inner.reverse { direction: rtl; }
+    .section-inner.reverse > * { direction: ltr; }
+
+    .section-image {
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .section-image.visible { opacity: 1; transform: translateY(0); }
+    .section-image img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .section-image:hover img { transform: scale(1.03); }
+    .section-image .img-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 60%;
+      background: linear-gradient(0deg,#020510 0%,transparent 100%);
+      pointer-events: none;
+    }
+    .section-image .img-label {
+      position: absolute; bottom: 16px; left: 20px;
+      font-size: 11px; color: rgba(232,240,248,.25);
+      letter-spacing: 2px; font-family: 'Courier New',monospace;
+    }
+
+    .section-content {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1) 0.15s;
+    }
+    .section-content.visible { opacity: 1; transform: translateY(0); }
+    .section-content .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(135,206,235,.35);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .section-content h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+      margin-bottom: 20px; line-height: 1.3;
+    }
+    .section-content h2 .highlight {
+      background: linear-gradient(135deg,#ffffff,#87ceeb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-content p {
+      font-size: 15px; line-height: 1.9;
+      color: rgba(232,240,248,.5);
+      margin-bottom: 20px;
+    }
+    .section-content .stat-row {
+      display: flex; gap: 24px; margin-top: 24px;
+    }
+    .section-content .stat-item {
+      text-align: center;
+      padding: 16px 24px;
+      border-radius: 10px;
+      background: rgba(135,206,235,.04);
+      border: 1px solid rgba(135,206,235,.06);
+      min-width: 100px;
+    }
+    .section-content .stat-item .num {
+      font-size: 28px; font-weight: 700; color: #87ceeb;
+    }
+    .section-content .stat-item .lbl {
+      font-size: 10px; color: rgba(232,240,248,.25);
+      margin-top: 4px; letter-spacing: 1px;
+    }
+
+    .image-break {
+      position: relative;
+      width: 100%;
+      height: 60vh;
+      overflow: hidden;
+    }
+    .image-break .bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      background-attachment: fixed;
+      filter: brightness(0.45);
+    }
+    .image-break .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,#020510 0%,transparent 20%,transparent 80%,#020510 100%);
+    }
+    .image-break .quote {
+      position: absolute; bottom: 60px; left: 40px; right: 40px; z-index: 2;
+      max-width: 600px;
+    }
+    .image-break .quote p {
+      font-size: 22px; font-weight: 300; line-height: 1.6;
+      color: rgba(232,240,248,.55);
+      letter-spacing: 2px;
+    }
+    .image-break .quote .author {
+      font-size: 12px; color: rgba(232,240,248,.2);
+      letter-spacing: 3px; margin-top: 12px;
+      font-family: 'Courier New',monospace;
+    }
+
+    .gallery-section { padding: 100px 40px; }
+    .gallery-section .section-header {
+      max-width: 1200px; margin: 0 auto 40px;
+    }
+    .gallery-section .section-header .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(135,206,235,.35);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .gallery-section .section-header h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+    }
+    .gallery-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+    }
+    .gallery-grid .col {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .gallery-grid .col:first-child { grid-row: span 2; }
+    .gallery-item {
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .gallery-item.visible { opacity: 1; transform: translateY(0); }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.6s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item .item-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px;
+      background: linear-gradient(0deg,#020510 0%,transparent 100%);
+    }
+    .gallery-item .item-overlay span {
+      font-size: 12px; color: rgba(232,240,248,.35);
+      letter-spacing: 1px;
+    }
+
+    .dashboard-section {
+      padding: 100px 40px;
+      background: linear-gradient(180deg,#020510,#050c1a,#020510);
+    }
+    .dashboard-section .section-header {
+      max-width: 1200px; margin: 0 auto 50px;
+    }
+    .dashboard-section .section-header .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(135,206,235,.35);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .dashboard-section .section-header h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+    }
+    .dashboard-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 12px;
+    }
+    .dashboard-card {
+      padding: 28px 24px;
+      border-radius: 14px;
+      background: rgba(135,206,235,.02);
+      border: 1px solid rgba(135,206,235,.05);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(.16,1,.3,1);
+    }
+    .dashboard-card.visible { opacity: 1; transform: translateY(0); }
+    .dashboard-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .dashboard-card .d-num {
+      font-size: 32px; font-weight: 700; letter-spacing: 1px;
+    }
+    .dashboard-card .d-label {
+      font-size: 10px; color: rgba(232,240,248,.25);
+      letter-spacing: 2px; margin-top: 6px;
+      font-family: 'Courier New',monospace;
+    }
+    .dashboard-card.cyan .d-num { color: #87ceeb; }
+    .dashboard-card.green .d-num { color: #b0c4de; }
+    .dashboard-card.purple .d-num { color: #e0e8f0; }
+    .dashboard-card.pink .d-num { color: #ffd700; }
+    .dashboard-card.gold .d-num { color: #f0f8ff; }
+
+    .cta-section {
+      padding: 120px 40px;
+      text-align: center;
+      position: relative;
+    }
+    .cta-section .bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      filter: brightness(0.25);
+    }
+    .cta-section .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,#020510 0%,transparent 30%,transparent 70%,#020510 100%);
+    }
+    .cta-section .content {
+      position: relative; z-index: 2;
+      max-width: 600px; margin: 0 auto;
+    }
+    .cta-section .content .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(135,206,235,.35);
+      letter-spacing: 3px; margin-bottom: 16px;
+    }
+    .cta-section .content h2 {
+      font-size: 36px; font-weight: 700; letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .cta-section .content p {
+      font-size: 15px; color: rgba(232,240,248,.35);
+      line-height: 1.8; margin-bottom: 30px;
+    }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px;
+      border: 1px solid rgba(135,206,235,.25);
+      background: rgba(135,206,235,.08);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      color: #87ceeb; font-size: 14px;
+      cursor: pointer; transition: all .3s;
+      letter-spacing: 1px; text-decoration: none;
+    }
+    .cta-btn:hover {
+      background: rgba(135,206,235,.18);
+      box-shadow: 0 0 40px rgba(135,206,235,.08);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      padding: 40px;
+      text-align: center;
+      border-top: 1px solid rgba(135,206,235,.04);
+    }
+    footer p {
+      font-size: 11px; color: rgba(232,240,248,.12);
+      letter-spacing: 2px;
+      font-family: 'Courier New',monospace;
+    }
+
+    .corner { position: fixed; z-index: 100; pointer-events: none; }
+    .corner-h { position: absolute; width: 20px; height: 1px; background: rgba(135,206,235,.04); }
+    .corner-v { position: absolute; width: 1px; height: 20px; background: rgba(135,206,235,.04); }
+    .corner-tl { top: 10px; left: 10px; }
+    .corner-tr { top: 10px; right: 10px; }
+    .corner-bl { bottom: 10px; left: 10px; }
+    .corner-br { bottom: 10px; right: 10px; }
+    .corner-tl .corner-h { top: 0; left: 0; }
+    .corner-tl .corner-v { top: 0; left: 0; }
+    .corner-tr .corner-h { top: 0; right: 0; }
+    .corner-tr .corner-v { top: 0; right: 0; }
+    .corner-bl .corner-h { bottom: 0; left: 0; }
+    .corner-bl .corner-v { bottom: 0; left: 0; }
+    .corner-br .corner-h { bottom: 0; right: 0; }
+    .corner-br .corner-v { bottom: 0; right: 0; }
+
+    .scroll-hud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 12px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(2,5,16,.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(135,206,235,.04);
+      transform: translateY(-100%);
+      transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+    }
+    .scroll-hud.active { transform: translateY(0); }
+    .scroll-hud .left {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .scroll-hud .site-name {
+      font-size: 13px; color: rgba(232,240,248,.35);
+      letter-spacing: 2px;
+      font-family: 'Orbitron','PingFang SC',sans-serif;
+    }
+    .scroll-hud .site-name strong { color: rgba(232,240,248,.55); }
+    .scroll-hud .right span {
+      font-size: 10px; color: rgba(232,240,248,.18);
+      letter-spacing: 2px;
+      font-family: 'Orbitron','Courier New',monospace;
+    }
+
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 2px; background: rgba(135,206,235,.04);
+    }
+    .scroll-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #87ceeb, #b0c4de);
+      transition: width 0.1s linear;
+    }
+    .scroll-progress-pct {
+      position: fixed; top: 8px; right: 42px; z-index: 60;
+      font-size: 9px; color: rgba(135,206,235,.12);
+      font-family: 'Courier New',monospace;
+      letter-spacing: 1px;
+    }
+
+    .chapter-nav {
+      position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 55;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .chapter-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(135,206,235,.1);
+      cursor: pointer;
+      transition: all .3s;
+      position: relative;
+    }
+    .chapter-dot:hover { background: rgba(135,206,235,.3); transform: scale(1.4); }
+    .chapter-dot.active { background: rgba(135,206,235,.65); transform: scale(1.5); box-shadow: 0 0 10px rgba(135,206,235,.25); }
+    .chapter-dot .chapter-label {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      white-space: nowrap; font-size: 9px; color: rgba(232,240,248,.12);
+      letter-spacing: 2px; font-family: 'Courier New',monospace;
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+    }
+    .chapter-dot:hover .chapter-label { opacity: 1; }
+
+    .chapter-counter {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      z-index: 45; font-size: 10px; color: rgba(135,206,235,.08);
+      font-family: 'Courier New',monospace; letter-spacing: 3px;
+      transition: opacity 0.4s; opacity: 0; pointer-events: none;
+    }
+    .chapter-counter.visible { opacity: 1; }
+
+    @keyframes target-lock {
+      0% { box-shadow: 0 0 0 0 rgba(135,206,235,.12); }
+      100% { box-shadow: 0 0 0 8px rgba(135,206,235,0); }
+    }
+    .back-btn:hover, .cta-btn:hover, .chapter-dot:hover, .dashboard-card:hover {
+      animation: target-lock 0.6s ease-out;
+    }
+
+    .page-transition {
+      position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none;
+      background: #020510;
+      opacity: 0;
+      transition: opacity 0.5s cubic-bezier(.16,1,.3,1);
+    }
+    .page-transition.active { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .hud { padding: 16px 20px; }
+      .hud-top { flex-direction: column; }
+      .data-panel { margin-top: 12px; gap: 4px; }
+      .data-item { padding: 6px 12px; min-width: 56px; }
+      .data-item .num { font-size: 16px; }
+      .title-group h1 { font-size: 32px; flex-wrap: wrap; }
+      .hero-info { left: 20px; right: 20px; bottom: 100px; }
+      .hero-info .card { padding: 16px 20px; }
+      .hero-info .card p { font-size: 12px; }
+      .section { padding: 60px 20px; min-height: auto; }
+      .section-inner { grid-template-columns: 1fr; gap: 30px; }
+      .section-inner.reverse { direction: ltr; }
+      .section-image img { height: 250px; }
+      .section-content h2 { font-size: 24px; }
+      .section-content .stat-row { flex-wrap: wrap; }
+      .gallery-section { padding: 60px 20px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid .col:first-child { grid-row: auto; }
+      .dashboard-grid { grid-template-columns: repeat(2,1fr); }
+      .dashboard-section { padding: 60px 20px; }
+      .cta-section { padding: 80px 20px; }
+      .cta-section .content h2 { font-size: 26px; }
+      .image-break .quote p { font-size: 16px; }
+      .scroll-hud { padding: 10px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+  <p>Establishing Glacier Link ...</p>
+</div>
+
+<div class="corner corner-tl"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-tr"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-bl"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-br"><div class="corner-h"></div><div class="corner-v"></div></div>
+
+<div class="scroll-progress" id="scrollProgress">
+  <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+  <span class="scroll-progress-pct" id="scrollPct">0%</span>
+</div>
+
+<div class="scroll-hud" id="scrollHud">
+  <div class="left">
+    <span class="site-name"><strong>5A</strong> · Immersive Tour</span>
+  </div>
+  <div class="right">
+    <span>Yunnan · Lijiang</span>
+  </div>
+</div>
+
+<div class="chapter-nav" id="chapterNav"></div>
+
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="scanlines"></div>
+  <div class="glacier-glow"></div>
+  <div class="snow-particles" id="snowParticles"></div>
+  <div class="top-fade"></div>
+  <div class="bottom-fade"></div>
+
+  <div class="hud">
+    <div class="hud-top">
+      <div>
+        
+        <div class="title-group">
+          <h1>
+            <span>Jade Dragon Snow Mountain</span>
+            <span class="badge">5A</span>
+            <span class="stars">★★★★★</span>
+          </h1>
+          <div class="subtitle">Yunnan Province · Lijiang City</div>
+        </div>
+      </div>
+      <div class="data-panel">
+        <div class="data-item"><div class="num cyan">5596</div><div class="label">Elevation (m)</div></div>
+        <div class="data-item"><div class="num green">415</div><div class="label">Area (km²)</div></div>
+        <div class="data-item"><div class="num pink">13</div><div class="label">Snow Peaks</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-info">
+    <div class="card">
+      <p>
+        <span style="color:rgba(135,206,235,.45);font-size:11px;letter-spacing:2px;display:block;margin-bottom:8px;">◈ Glacier Briefing</span>
+        <span style="color:rgba(232,240,248,.7);">The southernmost snow-capped mountain in the Northern Hemisphere, with 13 peaks stretching like a silver dragon in flight. A sacred mountain in the hearts of the Naxi people, where the 5,596-meter glaciers and the turquoise waters of Blue Moon Valley weave the purest poetry between heaven and earth.</span>
+      </p>
+      <div class="tags">
+        <span class="tag-snow">❄ Snow Glacier</span>
+        <span class="tag-naxi">🏔 Naxi Sacred Mountain</span>
+        <span class="tag-glacier">💎 Blue Moon Valley</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll to Explore</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<section class="section" data-chapter="Sacred Mountain">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_02.png" alt="Jade Dragon Snow Mountain Panorama" loading="lazy"/>
+      <div class="img-overlay"></div>
+      
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">/// 01</div>
+      <h2>The Naxi <span class="highlight">Sacred Mountain</span></h2>
+      <p>Jade Dragon Snow Mountain is located within Lijiang City, Yunnan Province, and is the closest perennially snow-capped mountain range to the equator in the Northern Hemisphere. Its 13 snow peaks stretch from south to north in a row, resembling a silver-white dragon leaping through the sea of clouds — hence the name "Jade Dragon."</p>
+      <p>The Naxi people call the mountain "Olu," meaning silver mountain rock. For thousands of years, Jade Dragon Snow Mountain has been a sacred mountain in the hearts of the Naxi people, guarding this highland pure land. The main peak, Shanzidou, at 5,596 meters, remains unclimbed to this day, preserving its primeval solemnity and mystery.</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="num">5A</div><div class="lbl">Rating Level</div></div>
+        <div class="stat-item"><div class="num">415</div><div class="lbl">Area (km²)</div></div>
+        <div class="stat-item"><div class="num">5596</div><div class="lbl">Main Peak (m)</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="image-break">
+  <div class="bg" style="background-image:url('yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_03.png');"></div>
+  <div class="overlay"></div>
+  <div class="quote">
+    <p>"The Naxi say the mountain is silver left on earth by the gods — thirteen snow peaks, thirteen drawn swords."</p>
+    <div class="author">—— Jade Dragon Snow Mountain · Ancient Naxi Ballad</div>
+  </div>
+</div>
+
+<section class="section" data-chapter="Glacier">
+  <div class="section-inner reverse">
+    <div class="section-image" data-animate>
+      <img src="yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_04.jpeg" alt="Jade Dragon Snow Mountain Main Peak" loading="lazy"/>
+      <div class="img-overlay"></div>
+      
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">/// 02</div>
+      <h2>Glacial <span class="highlight">Wonder</span></h2>
+      <p>Jade Dragon Snow Mountain is home to 19 modern glaciers, covering a total area of 11.61 square kilometers. The main cable car takes visitors directly to the Glacier Park at an elevation of 4,506 meters, offering an up-close encounter with the majestic and ancient glaciers.</p>
+      <p>The waters of Blue Moon Valley originate from snowmelt and are rich in copper ions, giving them a dreamlike Tiffany blue hue on sunny days. The Baishui River rushes through the valley, while yaks graze leisurely on the meadows of Ganhaizi — ice and fire, snow and grass coexist here in wondrous harmony.</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="num">19</div><div class="lbl">Glaciers</div></div>
+        <div class="stat-item"><div class="num">4506</div><div class="lbl">Cable Car (m)</div></div>
+        <div class="stat-item"><div class="num">11-3</div><div class="lbl">Best Months</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" data-chapter="Culture">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_05.png" alt="Yak Meadow Scenery" loading="lazy"/>
+      <div class="img-overlay"></div>
+      
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">/// 03</div>
+      <h2>At the Foot of <span class="highlight">the Mountain</span></h2>
+      <p>Spruce Meadow is considered the entrance to the "Third Kingdom of Jade Dragon" in Naxi mythology — where lovers who die for love are said to find eternal happiness. Towering spruce forests encircle a high-altitude meadow, with the snow mountain appearing and disappearing through the mist.</p>
+      <p>Directed by Zhang Yimou, "Impression Lijiang" uses the snow mountain as its natural backdrop, with the theater at 3,100 meters being the highest open-air performance venue in the world. Over 500 local farmers and herders participate in the show, telling the legendary stories of the Ancient Tea Horse Road at the foot of the mountain.</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="num">3100</div><div class="lbl">Theater (m)</div></div>
+        <div class="stat-item"><div class="num">500+</div><div class="lbl">Performers</div></div>
+        <div class="stat-item"><div class="num">4.7</div><div class="lbl">Visitor Rating</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section" data-chapter="Gallery">
+  <div class="section-header">
+    <div class="numeral">/// Gallery</div>
+    <h2>Mountain <span style="background:linear-gradient(135deg,#ffffff,#87ceeb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Panorama</span></h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="col">
+      <div class="gallery-item tall" data-animate style="grid-row:span 2;height:100%;">
+        <img src="yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_06.jpg" alt="On the Climb" style="height:100%;min-height:500px;" loading="lazy"/>
+        
+      </div>
+      <div class="gallery-item" data-animate style="height:200px;">
+        <img src="yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_07.png" alt="View from Yak Meadow" style="height:100%;" loading="lazy"/>
+        
+      </div>
+    </div>
+    <div class="col">
+      <div class="gallery-item" data-animate style="height:240px;">
+        <img src="yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_08.png" alt="Glacier Visitors" style="height:100%;" loading="lazy"/>
+        
+      </div>
+      <div class="gallery-item" data-animate style="height:260px;">
+        <img src="yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_10.jpg" alt="Mountain Foothills" style="height:100%;" loading="lazy"/>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dashboard-section" data-chapter="Data Panel">
+  <div class="section-header">
+    <div class="numeral">/// Data Panel</div>
+    <h2>Mountain <span style="background:linear-gradient(135deg,#87ceeb,#b0c4de);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Key Metrics</span></h2>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dashboard-card cyan" data-animate>
+      <div class="icon">🏔️</div>
+      <div class="d-num">5A</div>
+      <div class="d-label">Rating</div>
+    </div>
+    <div class="dashboard-card green" data-animate>
+      <div class="icon">🗻</div>
+      <div class="d-num">5596</div>
+      <div class="d-label">Max Elevation (m)</div>
+    </div>
+    <div class="dashboard-card purple" data-animate>
+      <div class="icon">❄️</div>
+      <div class="d-num">19</div>
+      <div class="d-label">Glaciers</div>
+    </div>
+    <div class="dashboard-card pink" data-animate>
+      <div class="icon">🌍</div>
+      <div class="d-num">415</div>
+      <div class="d-label">Area (km²)</div>
+    </div>
+    <div class="dashboard-card gold" data-animate>
+      <div class="icon">🗺️</div>
+      <div class="d-num">5</div>
+      <div class="d-label">Key Attractions</div>
+    </div>
+    <div class="dashboard-card cyan" data-animate>
+      <div class="icon">🏘️</div>
+      <div class="d-num">4.7</div>
+      <div class="d-label">Visitor Rating</div>
+    </div>
+    <div class="dashboard-card green" data-animate>
+      <div class="icon">🌊</div>
+      <div class="d-num">Blue Moon</div>
+      <div class="d-label">Iconic View</div>
+    </div>
+    <div class="dashboard-card purple" data-animate>
+      <div class="icon">📏</div>
+      <div class="d-num">2007</div>
+      <div class="d-label">Year Rated</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="bg" style="background-image:url('yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_13.jpg');"></div>
+  <div class="overlay"></div>
+  <div class="content">
+    <div class="numeral">/// Next Destination</div>
+    <h2>Overlooking the Earth from <span style="background:linear-gradient(135deg,#ffffff,#87ceeb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">the Mountain Top</span></h2>
+    <p>From Jade Dragon Snow Mountain, discover more of Yunnan's 5A scenic wonders.<br/>Every ascent is a purification of the soul.</p>
+    
+  </div>
+</section>
+
+<footer>
+  <p>5A Immersive Tour · SATELLITE TOUR · Images: Wikimedia Commons (CC BY/CC BY-SA)</p>
+</footer>
+
+<div class="page-transition" id="pageTransition"></div>
+
+<script>
+(function(){
+  var heroBg = document.getElementById('heroBg');
+  var img = new Image();
+  img.onload = function(){
+    heroBg.style.backgroundImage = "url('yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_01.jpeg')";
+    document.getElementById('loading').classList.add('hidden');
+  };
+  img.onerror = function(){
+    heroBg.style.backgroundImage = "url('yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_01.jpeg')";
+    document.getElementById('loading').classList.add('hidden');
+  };
+  img.src = 'yunnan/丽江市玉龙雪山景区/丽江市玉龙雪山景区_01.jpeg';
+})();
+
+(function(){
+  var container = document.getElementById('snowParticles');
+  for(var i = 0; i < 50; i++){
+    var flake = document.createElement('div');
+    flake.className = 'snowflake';
+    var size = Math.random() * 3 + 1;
+    flake.style.width = size + 'px';
+    flake.style.height = size + 'px';
+    flake.style.left = Math.random() * 100 + '%';
+    flake.style.animationDuration = Math.random() * 8 + 6 + 's';
+    flake.style.animationDelay = Math.random() * 10 + 's';
+    flake.style.opacity = Math.random() * 0.5 + 0.3;
+    container.appendChild(flake);
+  }
+})();
+
+window.addEventListener('scroll', function(){
+  var scrollHud = document.getElementById('scrollHud');
+  scrollHud.classList.toggle('active', window.scrollY > window.innerHeight * 0.5);
+  var progressFill = document.getElementById('scrollProgressFill');
+  var scrollPct = document.getElementById('scrollPct');
+  var docH = document.documentElement.scrollHeight - window.innerHeight;
+  var pct = docH > 0 ? (window.scrollY / docH) * 100 : 0;
+  progressFill.style.width = pct + '%';
+  scrollPct.textContent = Math.round(pct) + '%';
+});
+
+document.getElementById('hero').addEventListener('mousemove', function(e){
+  var heroBg = document.getElementById('heroBg');
+  var x = (e.clientX / window.innerWidth - 0.5) * 10;
+  var y = (e.clientY / window.innerHeight - 0.5) * 10;
+  heroBg.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+});
+
+(function initChapters(){
+  var chapters = document.querySelectorAll('[data-chapter]');
+  var nav = document.getElementById('chapterNav');
+  var dots = [];
+  chapters.forEach(function(ch, i){
+    var dot = document.createElement('div');
+    dot.className = 'chapter-dot';
+    var label = document.createElement('span');
+    label.className = 'chapter-label';
+    label.textContent = ch.getAttribute('data-chapter');
+    dot.appendChild(label);
+    dot.addEventListener('click', function(){
+      ch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    nav.appendChild(dot);
+    dots.push({ dot: dot, el: ch });
+  });
+  var counter = document.createElement('div');
+  counter.className = 'chapter-counter';
+  document.body.appendChild(counter);
+  window.addEventListener('scroll', function(){
+    var scrollY = window.scrollY + window.innerHeight / 2;
+    var activeIdx = dots.length - 1;
+    for(var i = 0; i < dots.length; i++){
+      if(scrollY < dots[i].el.offsetTop + dots[i].el.offsetHeight / 2){
+        activeIdx = i; break;
+      }
+    }
+    dots.forEach(function(d, idx){
+      d.dot.classList.toggle('active', idx === activeIdx);
+    });
+    counter.textContent = (activeIdx + 1) + ' / ' + dots.length;
+    counter.classList.toggle('visible', window.scrollY > 300);
+  });
+})();
+
+(function initAnimations(){
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('[data-animate]').forEach(function(el){
+    observer.observe(el);
+  });
+})();
+</script>
+
+<a href="../index.html?prov=云南省" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Scenic Map</a>
+</body>
+</html>

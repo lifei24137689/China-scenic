@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Shanghai Wild Animal Park · Kingdom of Beasts | 5A Scenic Immersive Exploration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #2d5016;
+      --secondary: #e67e22;
+      --bg: #1a1a0f;
+      --surface: rgba(45,80,22,0.15);
+      --text: #f0f5e8;
+      --text-dim: rgba(240,245,232,0.55);
+      --accent: #f39c12;
+      --orange-glow: rgba(230,126,34,0.25);
+      --border-rough: #3a6b1e;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-30px;background:url('images/shanghaidongwuyuan/上海野生动物园_02.jpg') center/cover;filter:brightness(0.5) saturate(1.2);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(45,80,22,0.4) 0%,transparent 50%,rgba(26,26,15,0.6) 100%)}
+    .hero-frame{position:absolute;inset:40px;border:3px solid var(--border-rough);pointer-events:none;opacity:0.3}
+    .hero-frame::before{content:'';position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:120px;height:3px;background:var(--secondary)}
+    .hero-frame::after{content:'';position:absolute;bottom:-1px;right:50%;transform:translateX(50%);width:120px;height:3px;background:var(--secondary)}
+    .hero-content{position:relative;z-index:2;text-align:center}
+    .hero-sub-label{font-size:14px;letter-spacing:8px;opacity:0.5;margin-bottom:16px;text-transform:uppercase}
+    .hero-title{font-family:'Noto Sans SC',sans-serif;font-weight:900;font-size:clamp(48px,8vw,88px);letter-spacing:16px;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,0.6)}
+    .hero-divider{width:80px;height:3px;background:var(--secondary);margin:20px auto;border-radius:2px}
+    .hero-sub{font-size:clamp(14px,2vw,22px);opacity:0.75;margin-top:12px;letter-spacing:6px;font-weight:300}
+    .hero-tags{display:flex;justify-content:center;gap:16px;margin-top:28px;flex-wrap:wrap}
+    .hero-tag{padding:6px 20px;border:1px solid rgba(255,255,255,0.2);border-radius:20px;font-size:12px;letter-spacing:3px;opacity:0.6}
+
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-size:11px;letter-spacing:4px;opacity:0.4}
+    .scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(45,80,22,0.2);border:1px solid rgba(230,126,34,0.2);border-radius:10px;padding:10px 18px;text-align:center;min-width:80px}
+    .hud-value{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--secondary);line-height:1}
+    .hud-label{font-size:10px;opacity:0.5;margin-top:6px;letter-spacing:2px;text-transform:uppercase}
+
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:0;overflow:hidden;position:relative;border:2px solid var(--border-rough);padding:6px}
+    .content-image::before{content:'';position:absolute;inset:6px;border:1px solid rgba(230,126,34,0.15);z-index:1;pointer-events:none}
+    .content-image img{width:100%;height:450px;object-fit:cover;display:block;transition:transform 0.7s ease}
+    .content-image:hover img{transform:scale(1.06)}
+    .content-text h2{font-family:'Noto Sans SC',sans-serif;font-weight:900;font-size:clamp(28px,4vw,42px);margin-bottom:12px;letter-spacing:6px}
+    .content-divider{width:70px;height:3px;background:var(--secondary);margin-bottom:28px;border-radius:2px}
+    .content-text p{font-size:15px;line-height:2.1;opacity:0.78;margin-bottom:18px;font-weight:300}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .content-tag{padding:5px 16px;border:1px solid rgba(230,126,34,0.3);border-radius:0;font-size:12px;letter-spacing:3px;color:var(--secondary)}
+
+    .image-break{height:65vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-20px;background:url('images/shanghaidongwuyuan/上海野生动物园_04.jpg') center/cover fixed;filter:brightness(0.4) saturate(1.1)}
+    .image-break .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,26,15,0.4),transparent,rgba(26,26,15,0.2))}
+    .image-break .frame{position:absolute;inset:60px;border:3px solid rgba(230,126,34,0.15);pointer-events:none}
+    .image-break .frame-corner{position:absolute;width:40px;height:40px;border-color:var(--secondary);border-style:solid}
+    .image-break .frame-corner.tl{top:-3px;left:-3px;border-width:3px 0 0 3px}
+    .image-break .frame-corner.tr{top:-3px;right:-3px;border-width:3px 3px 0 0}
+    .image-break .frame-corner.bl{bottom:-3px;left:-3px;border-width:0 0 3px 3px}
+    .image-break .frame-corner.br{bottom:-3px;right:-3px;border-width:0 3px 3px 0}
+    .image-break .quote{position:relative;z-index:2;text-align:center}
+    .image-break .quote-cn{font-family:'Noto Sans SC',sans-serif;font-weight:900;font-size:clamp(32px,5vw,56px);letter-spacing:12px;margin-bottom:16px;text-shadow:0 4px 20px rgba(0,0,0,0.5)}
+    .image-break .quote-en{font-size:13px;opacity:0.4;letter-spacing:8px;text-transform:uppercase;font-weight:300}
+
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery-header{margin-bottom:48px}
+    .gallery-header h2{font-family:'Noto Sans SC',sans-serif;font-weight:900;font-size:clamp(24px,3vw,36px);letter-spacing:8px}
+    .gallery-header .divider{width:60px;height:3px;background:var(--secondary);margin-top:16px;border-radius:2px}
+    .gallery-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+    .gallery-grid .col{display:flex;flex-direction:column;gap:14px}
+    .gallery-grid .col:last-child{display:grid;grid-template-rows:1fr 1fr;gap:14px}
+    .gallery-item{position:relative;overflow:hidden;border:2px solid var(--border-rough);padding:5px;cursor:pointer}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.7s ease}
+    .gallery-item:hover img{transform:scale(1.08)}
+    .gallery-item.tall{grid-row:span 2}
+    .gallery-item.tall img{height:100%}
+
+    .dashboard{padding:80px 40px 100px;max-width:1200px;margin:0 auto}
+    .dashboard-header{margin-bottom:48px}
+    .dashboard-header h2{font-family:'Noto Sans SC',sans-serif;font-weight:900;font-size:clamp(24px,3vw,36px);letter-spacing:8px}
+    .dashboard-header .divider{width:60px;height:3px;background:var(--secondary);margin-top:16px;border-radius:2px}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .dash-card{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid rgba(230,126,34,0.1);padding:36px 24px;text-align:center;transition:transform 0.4s ease,border-color 0.4s,box-shadow 0.4s;position:relative}
+    .dash-card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--secondary);transform:scaleX(0);transition:transform 0.4s}
+    .dash-card:hover{transform:translateY(-6px);border-color:rgba(230,126,34,0.3);box-shadow:0 12px 40px rgba(230,126,34,0.1)}
+    .dash-card:hover::before{transform:scaleX(1)}
+    .dash-icon{font-size:32px;margin-bottom:14px}
+    .dash-value{font-family:'Oswald',sans-serif;font-size:36px;font-weight:700;color:var(--secondary);margin-bottom:8px;line-height:1}
+    .dash-label{font-size:13px;opacity:0.5;letter-spacing:3px;text-transform:uppercase;font-weight:300}
+
+    .cta{height:65vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-20px;background:url('images/shanghaidongwuyuan/上海野生动物园_02.jpg') center/cover;filter:brightness(0.3) saturate(0.9);transition:transform 0.3s ease-out}
+    .cta-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(45,80,22,0.5) 0%,transparent 60%,rgba(26,26,15,0.7) 100%)}
+    .cta-frame{position:absolute;inset:50px;border:3px solid rgba(230,126,34,0.12);pointer-events:none}
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{font-family:'Oswald',sans-serif;font-size:clamp(72px,12vw,140px);font-weight:700;letter-spacing:8px;opacity:0.1;color:var(--secondary);margin-bottom:-24px;line-height:1}
+    .cta-sub{font-size:13px;letter-spacing:6px;opacity:0.4;margin-bottom:16px;font-weight:300}
+    .cta-title{font-family:'Noto Sans SC',sans-serif;font-weight:900;font-size:clamp(24px,3.5vw,40px);letter-spacing:8px;margin-bottom:36px}
+    .cta-btn{display:inline-block;padding:14px 52px;border:2px solid rgba(230,126,34,0.4);font-size:14px;letter-spacing:5px;text-decoration:none;color:var(--text);transition:all 0.4s;font-family:'Noto Sans SC',sans-serif;font-weight:700;position:relative;overflow:hidden}
+    .cta-btn::before{content:'';position:absolute;inset:0;background:var(--secondary);transform:translateX(-100%);transition:transform 0.4s;z-index:-1}
+    .cta-btn:hover{color:var(--bg);border-color:var(--secondary)}
+    .cta-btn:hover::before{transform:translateX(0)}
+
+    .footer{padding:48px 40px;text-align:center;border-top:1px solid rgba(230,126,34,0.06)}
+    .footer p{font-size:12px;letter-spacing:3px;opacity:0.3;font-weight:300}
+    .footer-divider{width:40px;height:1px;background:rgba(230,126,34,0.15);margin:0 auto 12px}
+
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:768px){
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .content-image img{height:280px}
+      .gallery-grid{grid-template-columns:1fr;gap:12px}
+      .gallery-grid .col:last-child{grid-template-rows:auto auto;gap:12px}
+      .gallery-item.tall{grid-row:auto}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+      .hud{top:12px;right:12px;gap:6px}
+      .hud-item{padding:8px 12px;min-width:60px}
+      .hud-value{font-size:16px}
+      .hud-label{font-size:9px}
+      .hero-frame{inset:20px}
+      .hero-title{letter-spacing:8px}
+      .image-break .frame{inset:30px}
+      .cta-frame{inset:25px}
+      .dash-value{font-size:28px}
+      .dash-card{padding:28px 16px}
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-frame"></div>
+    <div class="hero-content">
+      <div class="hero-sub-label">National 5A Scenic Spot</div>
+      <h1 class="hero-title">Shanghai Wild Animal Park</h1>
+      <div class="hero-divider"></div>
+      <p class="hero-sub">Shanghai Wild Animal Park</p>
+      <div class="hero-tags">
+        <span class="hero-tag">Wild Animal Park</span>
+        <span class="hero-tag">Animal Conservation</span>
+        <span class="hero-tag">Family Fun</span>
+        <span class="hero-tag">Predator Zone</span>
+      </div>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">1.5</div><div class="hud-label">km² Area</div></div>
+    <div class="hud-item"><div class="hud-value">200+</div><div class="hud-label">Animal Species</div></div>
+    <div class="hud-item"><div class="hud-value">4.4</div><div class="hud-label">Rating</div></div>
+  </div>
+
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="images/shanghaidongwuyuan/上海野生动物园_03.jpg" alt="Shanghai Wild Animal Park - Kingdom of Beasts" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Kingdom of Beasts</h2>
+      <div class="content-divider"></div>
+      <p>Shanghai Wild Animal Park is located in Xuanqiao Town, Pudong New Area, covering an area of 153 hectares. Officially opened to the public in November 1995 and rated as a National 5A Tourist Attraction in 2007, it is China's first national-level wildlife park. The park is home to over 200 species and more than 10,000 rare wild animals from both China and abroad, including giant pandas, golden snub-nosed monkeys, golden takins, crested ibises, giraffes, and cheetahs. It is a comprehensive themed park integrating animal exhibition, science education, and leisure entertainment.</p>
+      <div class="content-tags">
+        <span class="content-tag">National Level</span>
+        <span class="content-tag">Rare Animals</span>
+        <span class="content-tag">Science Education</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="frame">
+      <div class="frame-corner tl"></div>
+      <div class="frame-corner tr"></div>
+      <div class="frame-corner bl"></div>
+      <div class="frame-corner br"></div>
+    </div>
+    <div class="quote">
+      <div class="quote-cn">Walk with the Beasts</div>
+      <div class="quote-en">Wild Encounters</div>
+    </div>
+  </section>
+
+  <section class="content-section reverse" data-animate>
+    <div class="content-image">
+      <img src="images/shanghaidongwuyuan/上海野生动物园_05.jpg" alt="Shanghai Wild Animal Park - Predator Crossing" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Predator Crossing</h2>
+      <div class="content-divider"></div>
+      <p>The drive-through zone is one of the most distinctive areas of Shanghai Wild Animal Park. Visitors board specially designed sightseeing buses to traverse the lion zone, tiger zone, bear zone, and cheetah zone, experiencing the thrill of passing predators at close range. Here, lions lounge lazily on the grassland, tigers patrol under the shade of trees, and black bears stand up to beg for food. Through the bus windows, visitors can take in the real life of the wild kingdom, experiencing an unprecedented sense of immersion.</p>
+      <div class="content-tags">
+        <span class="content-tag">Drive-Through Zone</span>
+        <span class="content-tag">Predator Free-Range</span>
+        <span class="content-tag">Immersive Experience</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="images/shanghaidongwuyuan/上海野生动物园_09.jpg" alt="Shanghai Wild Animal Park - Cute Animal Interaction" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Cute Animal Interaction</h2>
+      <div class="content-divider"></div>
+      <p>The walking area is more gentle and fun. In the Giant Panda Hall, the national treasures leisurely munch on bamboo; on the Golden Snub-Nosed Monkey Island, agile monkeys dart and leap through the trees; on the Lemur Island, ring-tailed lemurs actively approach visitors with their adorable charm. In the Water Exploration area, visitors can take a boat to watch flamingos, pelicans, and other water birds. At the Hundred Beasts Mountain Performance Arena, animal stars deliver exciting athletic shows. This is not only a paradise for animals but also an excellent destination for family trips, receiving over 2.8 million visitors annually.</p>
+      <div class="content-tags">
+        <span class="content-tag">Walking Area</span>
+        <span class="content-tag">Family Interaction</span>
+        <span class="content-tag">Water Exploration</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" data-animate>
+    <div class="gallery-header">
+      <h2>Highlights</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="gallery-grid">
+      <div class="col">
+        <div class="gallery-item tall" style="height:520px">
+          <img src="images/shanghaidongwuyuan/上海野生动物园_10.jpg" alt="Shanghai Wild Animal Park Gallery 1" style="height:100%" loading="lazy"/>
+        </div>
+      </div>
+      <div class="col">
+        <div class="gallery-item" style="height:250px">
+          <img src="images/shanghaidongwuyuan/上海野生动物园_11.jpg" alt="Shanghai Wild Animal Park Gallery 2" style="height:100%" loading="lazy"/>
+        </div>
+        <div class="gallery-item" style="height:250px">
+          <img src="images/shanghaidongwuyuan/上海野生动物园_12.jpg" alt="Shanghai Wild Animal Park Gallery 3" style="height:100%" loading="lazy"/>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px;height:300px;overflow:hidden;border:2px solid var(--border-rough);padding:5px">
+      <img src="images/shanghaidongwuyuan/上海野生动物园_13.jpg" alt="Shanghai Wild Animal Park Gallery 4" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.7s ease" loading="lazy" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'"/>
+    </div>
+  </section>
+
+  <section class="dashboard" data-animate>
+    <div class="dashboard-header">
+      <h2>Park Data</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🏞️</div><div class="dash-value">153</div><div class="dash-label">Hectares Area</div></div>
+      <div class="dash-card"><div class="dash-icon">🐾</div><div class="dash-value">200+</div><div class="dash-label">Animal Species</div></div>
+      <div class="dash-card"><div class="dash-icon">🦁</div><div class="dash-value">10000+</div><div class="dash-label">Animal Count</div></div>
+      <div class="dash-card"><div class="dash-icon">⭐</div><div class="dash-value">4.4</div><div class="dash-label">Rating</div></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-bg" id="ctaBg"></div>
+    <div class="cta-overlay"></div>
+    <div class="cta-frame"></div>
+    <div class="cta-content">
+      <div class="cta-num">2007</div>
+      <div class="cta-sub">China's First National Wildlife Park</div>
+      <div class="cta-title">The Call of Nature, A Tribute to Life</div>
+      <a href="../index.html?prov=%E4%B8%8A%E6%B5%B7%E5%B8%82" class="cta-btn">Back to Map</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-divider"></div>
+    <p>Shanghai Wild Animal Park · National 5A Scenic Spot · Shanghai</p>
+  </footer>
+
+  <script>
+    (function(){
+      var img=new Image();
+      img.onload=function(){
+        document.getElementById('heroBg').style.backgroundImage="url('images/shanghaidongwuyuan/上海野生动物园_02.jpg')";
+        document.getElementById('ctaBg').style.backgroundImage="url('images/shanghaidongwuyuan/上海野生动物园_02.jpg')";
+      };
+      img.src='images/shanghaidongwuyuan/上海野生动物园_02.jpg';
+    })();
+
+    window.addEventListener('scroll',function(){
+      var s=document.getElementById('scrollHud');
+      var h=document.getElementById('hud');
+      if(s)s.style.opacity=window.scrollY>100?'0':'1';
+      if(h)h.style.opacity=window.scrollY>80?'0':'1';
+    });
+
+    document.querySelector('.hero').addEventListener('mousemove',function(e){
+      var x=(e.clientX/window.innerWidth-0.5)*12;
+      var y=(e.clientY/window.innerHeight-0.5)*12;
+      document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)';
+    });
+
+    document.querySelector('.cta').addEventListener('mousemove',function(e){
+      var rect=this.getBoundingClientRect();
+      var x=(e.clientX-rect.left)/rect.width-0.5;
+      var y=(e.clientY-rect.top)/rect.height-0.5;
+      document.getElementById('ctaBg').style.transform='translate('+(x*8)+'px,'+(y*8)+'px)';
+    });
+
+    var observer=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting)entry.target.classList.add('visible');
+      });
+    },{threshold:0.15});
+    document.querySelectorAll('[data-animate]').forEach(function(el){observer.observe(el)});
+  </script>
+</body>
+</html>

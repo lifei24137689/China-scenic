@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Deng Xiaoping's Former Residence · The Story of Spring | 5A Scenic Area Immersive Exploration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #c41e3a;
+      --secondary: #c41e3a;
+      --bg: #1a1a2e;
+      --surface: rgba(255,255,255,0.04);
+      --text: #e8e0d5;
+      --text-dim: rgba(232,224,213,0.5);
+      --accent: #c41e3a;
+      --glow: rgba(196,30,58,0.12);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:url('images/dengxiaopingguli/广安市邓小平故里旅游区_01.jpg') center/cover;filter:brightness(0.45) saturate(1.05);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;z-index:1;
+      background:
+        radial-gradient(ellipse at 40% 50%, rgba(196,30,58,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 60% 30%, rgba(26,26,46,0.6) 0%, transparent 50%);
+    }
+    .hero-content{position:relative;z-index:2;text-align:center}
+    .hero-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(48px,8vw,88px);color:var(--text);letter-spacing:16px;text-shadow:0 0 60px rgba(196,30,58,0.2),0 4px 30px rgba(0,0,0,0.5)}
+    .hero-sub{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:clamp(16px,2vw,22px);opacity:0.7;margin-top:20px;letter-spacing:10px}
+    .hero-badge{margin-top:32px;display:inline-block;padding:8px 28px;border:1px solid rgba(196,30,58,0.25);border-radius:4px;font-size:13px;letter-spacing:4px;color:rgba(232,224,213,0.75);background:rgba(26,26,46,0.6)}
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:11px;letter-spacing:4px;opacity:0.45}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.2}50%{opacity:0.7}}
+
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(26,26,46,0.7);border:1px solid rgba(196,30,58,0.12);border-radius:8px;padding:12px 20px;text-align:center;min-width:80px}
+    .hud-value{font-size:22px;font-weight:400;color:var(--primary);font-family:'Noto Serif SC',serif}
+    .hud-label{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:11px;opacity:0.45;margin-top:4px;letter-spacing:3px}
+
+    .content-section{max-width:1200px;margin:0 auto;padding:120px 40px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:4px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+    .content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .content-image:hover img{transform:scale(1.05)}
+    .content-text h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,4vw,40px);margin-bottom:16px;letter-spacing:6px;color:var(--text)}
+    .content-divider{width:50px;height:2px;background:var(--primary);margin-bottom:24px;opacity:0.5}
+    .content-text p{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:16px;line-height:2.2;opacity:0.75;margin-bottom:16px}
+    .content-text p:last-of-type{margin-bottom:0}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .content-tag{padding:5px 16px;border:1px solid rgba(196,30,58,0.2);border-radius:4px;font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:12px;letter-spacing:2px;color:var(--primary)}
+
+    .image-break{height:55vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:url('images/dengxiaopingguli/广安市邓小平故里旅游区_07.jpg') center/cover fixed;filter:brightness(0.4) saturate(1.05)}
+    .image-break .overlay{position:absolute;inset:0;
+      background:radial-gradient(ellipse at 50% 50%, rgba(26,26,46,0.3) 0%, rgba(26,26,46,0.7) 100%);
+      z-index:1
+    }
+    .image-break .quote{position:relative;z-index:2;text-align:center;padding:0 40px}
+    .image-break .quote-cn{font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(28px,4.5vw,48px);letter-spacing:12px;margin-bottom:16px;color:var(--text);text-shadow:0 2px 30px rgba(0,0,0,0.4)}
+    .image-break .quote-en{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:13px;opacity:0.45;letter-spacing:8px}
+
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{text-align:center;font-family:'ZCOOL XiaoWei',serif;font-weight:400;font-size:clamp(26px,3vw,36px);margin-bottom:48px;letter-spacing:10px}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .gallery-item{position:relative;overflow:hidden;border-radius:4px;cursor:pointer;background:var(--surface)}
+    .gallery-item img{width:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .gallery-item:hover img{transform:scale(1.06)}
+
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .dash-card{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(255,255,255,0.04);border:1px solid rgba(196,30,58,0.08);border-radius:8px;padding:32px 24px;text-align:center;transition:transform 0.3s,border-color 0.3s}
+    .dash-card:hover{transform:translateY(-4px);border-color:rgba(196,30,58,0.2)}
+    .dash-icon{font-size:26px;margin-bottom:12px;opacity:0.7}
+    .dash-value{font-size:30px;font-weight:400;color:var(--primary);margin-bottom:6px;font-family:'Noto Serif SC',serif}
+    .dash-label{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:12px;opacity:0.45;letter-spacing:3px}
+
+    .cta{height:55vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:url('images/dengxiaopingguli/广安市邓小平故里旅游区_09.png') center/cover;filter:brightness(0.35) saturate(0.95)}
+    .cta .overlay{position:absolute;inset:0;
+      background:radial-gradient(ellipse at 50% 50%, rgba(26,26,46,0.2) 0%, rgba(26,26,46,0.6) 100%);
+      z-index:1
+    }
+    .cta-content{position:relative;z-index:2;text-align:center;padding:0 40px}
+    .cta-num{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(64px,10vw,120px);font-weight:400;letter-spacing:8px;opacity:0.1;margin-bottom:-20px;color:var(--primary)}
+    .cta-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(22px,3vw,34px);letter-spacing:10px;margin-bottom:32px}
+    .cta-btn{display:inline-block;padding:12px 44px;border:1px solid rgba(232,224,213,0.2);border-radius:4px;font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:14px;letter-spacing:4px;text-decoration:none;color:rgba(232,224,213,0.8);transition:all 0.3s;background:rgba(26,26,46,0.4)}
+    .cta-btn:hover{background:rgba(196,30,58,0.1);border-color:rgba(196,30,58,0.3);color:var(--text)}
+
+    .footer{padding:40px;text-align:center;opacity:0.35;font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:12px;letter-spacing:4px;border-top:1px solid rgba(196,30,58,0.06)}
+
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:768px){
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .gallery-grid{grid-template-columns:1fr}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:6px}
+      .hud-item{padding:8px 14px;min-width:60px}
+      .hud-value{font-size:18px}
+      .hero-title{letter-spacing:10px}
+      .hero-sub{letter-spacing:6px}
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Deng Xiaoping's Former Residence</h1>
+      <p class="hero-sub">The Story of Spring · Great Man of the Century</p>
+      <div class="hero-badge">National 5A Tourist Attraction · Guang'an, Sichuan</div>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Scroll Down</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">1904</div><div class="hud-label">Birth Year</div></div>
+    <div class="hud-item"><div class="hud-value">3.19km²</div><div class="hud-label">Scenic Area</div></div>
+    <div class="hud-item"><div class="hud-value">All Year</div><div class="hud-label">Best Season</div></div>
+  </div>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="images/dengxiaopingguli/广安市邓小平故里旅游区_02.jpg" alt="Deng Xiaoping's Former Residence" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Deng Xiaoping's Former Residence</h2>
+      <div class="content-divider"></div>
+      <p>Located in Paifang Village, Xiexing Town, Guang'an City, Sichuan Province, Deng Xiaoping's former residence is a typical eastern Sichuan farmhouse courtyard. With blue tiles, white walls, and lush greenery, it exudes simplicity and dignity. On August 22, 1904, Deng Xiaoping was born here and spent his childhood and youth in this very place.</p>
+      <p>The residence covers about 830 square meters with 17 rooms of various sizes, divided into three sections: the main hall, the left wing, and the right wing. The courtyard features lush bamboos and flourishing flowers and trees, with a clear stream flowing gently in front of the house, exuding the idyllic charm unique to eastern Sichuan farmhouses.</p>
+      <div class="content-tags">
+        <span class="content-tag">East Sichuan Courtyard</span>
+        <span class="content-tag">Blue Tiles, White Walls</span>
+        <span class="content-tag">Year 1904</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <div class="quote-cn">I am the son of the Chinese people, and I deeply love my motherland and my people</div>
+      <div class="quote-en">I am the son of the Chinese people, and I deeply love my motherland and my people</div>
+    </div>
+  </section>
+
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="images/dengxiaopingguli/广安市邓小平故里旅游区_03.jpg" alt="Bronze Statue Square" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Bronze Statue Square</h2>
+      <div class="content-divider"></div>
+      <p>The Bronze Statue Square is located in the core area of Deng Xiaoping's Former Residence. At the center stands a 6-meter-tall bronze statue of Deng Xiaoping, meticulously crafted by renowned sculptors. The statue captures the great man striding forward, symbolizing the monumental strides of China's reform and opening-up.</p>
+      <p>Surrounded by verdant pines and cypresses with clusters of blooming flowers, the square is both solemn and vibrant. Millions of domestic and international visitors come each year to pay homage, lay floral baskets, and remember the chief architect of reform, opening-up, and modernization.</p>
+      <div class="content-tags">
+        <span class="content-tag">Great Man Statue</span>
+        <span class="content-tag">Pilgrimage Site</span>
+        <span class="content-tag">Strolling the Square</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="images/dengxiaopingguli/广安市邓小平故里旅游区_04.jpg" alt="Memorial Exhibition Hall" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Memorial Exhibition Hall</h2>
+      <div class="content-divider"></div>
+      <p>The Deng Xiaoping Memorial Exhibition Hall covers about 10 mu (0.67 hectares) with a building area of nearly 4,000 square meters. Themed "I am the son of the Chinese people," the hall presents the magnificent life of Deng Xiaoping through a vast collection of precious historical photos, cultural relics, and multimedia displays.</p>
+      <p>The architectural design is unique, blending the style of eastern Sichuan folk houses with modern exhibition concepts. The hall features exhibition areas such as "Leaving Guang'an," "Military Career," and "Years of Reform," vividly recreating Deng Xiaoping's glorious journey from his student years to his revolutionary struggles and his leadership of reform and opening-up.</p>
+      <div class="content-tags">
+        <span class="content-tag">Precious Records</span>
+        <span class="content-tag">Multidimensional Exhibits</span>
+        <span class="content-tag">Era of Reform</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" data-animate>
+    <h2>Former Residence · Light & Shadow</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="height:500px"><img src="images/dengxiaopingguli/广安市邓小平故里旅游区_05.jpeg" alt="Hanlin Academy Courtyard" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:220px"><img src="images/dengxiaopingguli/广安市邓小平故里旅游区_06.jpeg" alt="Silkworm House Courtyard" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:260px"><img src="images/dengxiaopingguli/广安市邓小平故里旅游区_08.jpg" alt="Spring Scenery" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:280px"><img src="images/dengxiaopingguli/广安市邓小平故里旅游区_10.jpg" alt="Autumn Scenery" style="height:100%" loading="lazy"/></div>
+    </div>
+  </section>
+
+  <section class="dashboard" data-animate>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🏡</div><div class="dash-value">830m²</div><div class="dash-label">Residence Area</div></div>
+      <div class="dash-card"><div class="dash-icon">🗺</div><div class="dash-value">3.19km²</div><div class="dash-label">Scenic Area</div></div>
+      <div class="dash-card"><div class="dash-icon">📅</div><div class="dash-value">1904</div><div class="dash-label">Great Man Born</div></div>
+      <div class="dash-card"><div class="dash-icon">🌸</div><div class="dash-value">All Year</div><div class="dash-label">Best Season</div></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="overlay"></div>
+    <div class="cta-content">
+      <div class="cta-num">1904</div>
+      <div class="cta-title">The Story of Spring · Forever Xiaoping</div>
+      <a href="../index.html?prov=%E5%9B%9B%E5%B7%9D%E7%9C%81" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Deng Xiaoping's Former Residence · National 5A Tourist Attraction · Guang'an, Sichuan</p>
+  </footer>
+
+  <script>
+    (function(){var i=new Image();i.onload=function(){document.getElementById('heroBg').style.backgroundImage="url('images/dengxiaopingguli/广安市邓小平故里旅游区_01.jpg')"};i.src='images/dengxiaopingguli/广安市邓小平故里旅游区_01.jpg'})();
+    window.addEventListener('scroll',function(){var s=document.getElementById('scrollHud');if(s)s.style.opacity=window.scrollY>100?'0':'1'});
+    document.querySelector('.hero').addEventListener('mousemove',function(e){var x=(e.clientX/window.innerWidth-0.5)*10,y=(e.clientY/window.innerHeight-0.5)*10;document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)'});
+    var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});
+    document.querySelectorAll('[data-animate]').forEach(function(e){o.observe(e)});
+  </script>
+</body>
+</html>
