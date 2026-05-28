@@ -529,16 +529,17 @@
   <script>
     (function(){
       var heroImg = 'jilin/伪满皇宫博物院/伪满皇宫博物院_10.jpg';
+      var cosBase = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jilin/';
       var preload = new Image();
       preload.onload = function() {
-        document.getElementById('heroBg').style.backgroundImage = 'url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jilin/+ heroImg +')';
+        document.getElementById('heroBg').style.backgroundImage = 'url(' + cosBase + heroImg + ')';
         document.getElementById('loading').classList.add('hidden');
       };
       preload.onerror = function() {
-        document.getElementById('heroBg').style.backgroundImage = 'url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jilin/+ heroImg +')';
+        document.getElementById('heroBg').style.backgroundImage = 'url(' + cosBase + heroImg + ')';
         document.getElementById('loading').classList.add('hidden');
       };
-      preload.src = heroImg;
+      preload.src = cosBase + heroImg;
       setTimeout(function(){ document.getElementById('loading').classList.add('hidden'); }, 5000);
 
       var hero = document.getElementById('hero');

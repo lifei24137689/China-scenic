@@ -263,9 +263,10 @@
     (function(){
       var heroBg = document.getElementById('heroBg');
       var bgUrl = 'img/duxiufeng/桂林市独秀峰·王城景区_01.jpg';
+      var cosBase = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/';
       var img = new Image();
-      img.onload = function(){ heroBg.style.backgroundImage = 'url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/+ bgUrl +')' };
-      img.src = bgUrl;
+      img.onload = function(){ heroBg.style.backgroundImage = 'url(' + cosBase + bgUrl + ')' };
+      img.src = cosBase + bgUrl;
 
       window.addEventListener('scroll', function(){
         var s = document.getElementById('scrollHud');
