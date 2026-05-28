@@ -797,11 +797,11 @@
     var heroImage = '浙江/衢州市根宫佛国文化旅游区/衢州市根宫佛国文化旅游区_12.jpg';
     var img = new Image();
     img.onload = function() {
-      heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/" + heroImage + "')";
+      heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/" + heroImage + "')";
       document.getElementById('loading').classList.add('hidden');
     };
     img.onerror = function() {
-      heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/" + heroImage + "')";
+      heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/" + heroImage + "')";
       document.getElementById('loading').classList.add('hidden');
     };
     img.src = heroImage;

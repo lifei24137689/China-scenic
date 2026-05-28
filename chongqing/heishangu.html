@@ -19,7 +19,7 @@
     body::after {
       content: ''; position: fixed; inset: 0; z-index: 9999;
       pointer-events: none; opacity: 0.02;
-      background-image: url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/chongqing/"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/chongqing/%23n)'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
     :root {
       --primary: #84cc16;
@@ -343,14 +343,15 @@
   <div class="page-transition" id="pageTransition"></div>
 
   <script>
+    var cosBase='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/chongqing/';
     var heroImgUrl='images/heishangu/hero.jpg';
     var hi=new Image();hi.onload=function(){
       var d=document.getElementById('loading');
-      document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/chongqing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/chongqing/"+heroImgUrl+"')";
-      document.getElementById('imageBreakBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/chongqing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/chongqing/"+heroImgUrl+"')";
-      document.getElementById('ctaBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/chongqing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/chongqing/"+heroImgUrl+"')";
+      document.getElementById('heroBg').style.backgroundImage="url("+cosBase+heroImgUrl+")";
+      document.getElementById('imageBreakBg').style.backgroundImage="url("+cosBase+heroImgUrl+")";
+      document.getElementById('ctaBg').style.backgroundImage="url("+cosBase+heroImgUrl+")";
       if(d)d.classList.add('hidden');
-    };hi.onerror=function(){var d=document.getElementById('loading');if(d)d.classList.add('hidden');};hi.src=heroImgUrl;
+    };hi.onerror=function(){var d=document.getElementById('loading');if(d)d.classList.add('hidden');};hi.src=cosBase+heroImgUrl;
     setTimeout(function(){var d=document.getElementById('loading');if(d&&!d.classList.contains('hidden'))d.classList.add('hidden');},8000);
     var scrollHud=document.getElementById('scrollHud');window.addEventListener('scroll',function(){
       if(window.scrollY>300)scrollHud.classList.add('active');else scrollHud.classList.remove('active');

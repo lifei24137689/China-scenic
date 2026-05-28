@@ -797,11 +797,11 @@
     var heroImage = '浙江/温州市刘伯温故里景区/温州市刘伯温故里景区_10.jpg';
     var img = new Image();
     img.onload = function() {
-      heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/" + heroImage + "')";
+      heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/" + heroImage + "')";
       document.getElementById('loading').classList.add('hidden');
     };
     img.onerror = function() {
-      heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/" + heroImage + "')";
+      heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/zhejiang/" + heroImage + "')";
       document.getElementById('loading').classList.add('hidden');
     };
     img.src = heroImage;
