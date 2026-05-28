@@ -999,6 +999,7 @@
   </footer>
 
   <script>
+    const cosBase = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/';
     const images = [
       'images/qingmingshanghe/开封市清明上河园景区_01.jpg',
       'images/qingmingshanghe/开封市清明上河园景区_03.jpg',
@@ -1035,23 +1036,23 @@
 
     const sectionImgs = [];
     for (let i = 0; i < imgEls.length; i++) sectionImgs.push(pickImg());
-    imgEls.forEach((el, i) => { if (sectionImgs[i]) el.src = sectionImgs[i]; });
+    imgEls.forEach((el, i) => { if (sectionImgs[i]) el.src = cosBase + sectionImgs[i]; });
 
     const galleryImgs = [];
     for (let i = 0; i < galleryImgEls.length; i++) galleryImgs.push(pickImg());
-    galleryImgEls.forEach((el, i) => { if (galleryImgs[i]) el.src = galleryImgs[i]; });
+    galleryImgEls.forEach((el, i) => { if (galleryImgs[i]) el.src = cosBase + galleryImgs[i]; });
 
     const breakImg = pickImg() || images[1];
     const breakEl = document.getElementById('breakBg1');
     const tmp = new Image();
     tmp.onload = () => { breakEl.style.backgroundImage = `url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/${breakImg})`; };
-    tmp.src = breakImg;
+    tmp.src = cosBase + breakImg;
 
     const ctaImg = pickImg() || images[2];
     const ctaEl = document.getElementById('ctaBg');
     const tmp2 = new Image();
     tmp2.onload = () => { ctaEl.style.backgroundImage = `url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/${ctaImg})`; };
-    tmp2.src = ctaImg;
+    tmp2.src = cosBase + ctaImg;
 
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;

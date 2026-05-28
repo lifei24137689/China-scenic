@@ -808,6 +808,7 @@
     <p>Longmen Grottoes  World Heritage Site  Luoyang, Henan Province  One of China's Three Great Grottoes</p>
   </footer>
   <script>
+    const cosBase = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/';
     const images = [
       'images/longmen/洛阳市龙门石窟景区_02.jpg',
       'images/longmen/洛阳市龙门石窟景区_03.jpg',
@@ -839,20 +840,20 @@
     const galleryImgEls = document.querySelectorAll('.gallery-item img');
     const sectionImgs = [];
     for (let i = 0; i < imgEls.length; i++) sectionImgs.push(pickImg());
-    imgEls.forEach((el, i) => { if (sectionImgs[i]) el.src = sectionImgs[i]; });
+    imgEls.forEach((el, i) => { if (sectionImgs[i]) el.src = cosBase + sectionImgs[i]; });
     const galleryImgs = [];
     for (let i = 0; i < galleryImgEls.length; i++) galleryImgs.push(pickImg());
-    galleryImgEls.forEach((el, i) => { if (galleryImgs[i]) el.src = galleryImgs[i]; });
+    galleryImgEls.forEach((el, i) => { if (galleryImgs[i]) el.src = cosBase + galleryImgs[i]; });
     const breakImg = pickImg() || images[1];
     const breakEl = document.getElementById('breakBg1');
     const tmp = new Image();
     tmp.onload = () => { breakEl.style.backgroundImage = `url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/${breakImg})`; };
-    tmp.src = breakImg;
+    tmp.src = cosBase + breakImg;
     const ctaImg = pickImg() || images[2];
     const ctaEl = document.getElementById('ctaBg');
     const tmp2 = new Image();
     tmp2.onload = () => { ctaEl.style.backgroundImage = `url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/${ctaImg})`; };
-    tmp2.src = ctaImg;
+    tmp2.src = cosBase + ctaImg;
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
       heroBg.style.transform = `translateY(${scrollY * 0.35}px)`;
@@ -956,3 +957,4 @@
 <a href="../index.html?prov=河南省" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;"> Back to Map</a>
 </body>
 </html>
+
