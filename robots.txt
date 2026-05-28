@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lifei24137689.github.io/China-scenic/sitemap.xml
