@@ -21,7 +21,7 @@ html{scroll-behavior:smooth}
 body{font-family:'Noto Sans SC','Noto Serif SC',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
 
 .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/images/qinghaihu/青海湖风景区_01.jpg') center/cover;filter:brightness(0.6) saturate(1.1);transition:transform 0.1s ease-out}
+.hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/images/qinghaihu/青海湖风景区_01.jpg) center/cover;filter:brightness(0.6) saturate(1.1);transition:transform 0.1s ease-out}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(30,144,255,0.2),rgba(12,74,110,0.4))}
 .hero-content{position:relative;z-index:2;text-align:center}
 .hero-title{font-family:'Noto Serif SC',serif;font-size:clamp(48px,8vw,96px);font-weight:900;color:#fff;letter-spacing:16px;text-shadow:0 2px 30px rgba(0,0,0,0.5)}
@@ -46,7 +46,7 @@ body{font-family:'Noto Sans SC','Noto Serif SC',sans-serif;background:var(--bg);
 .content-tag{padding:6px 20px;border:1px solid rgba(30,144,255,0.3);border-radius:20px;font-size:13px;color:var(--secondary);letter-spacing:2px;background:rgba(30,144,255,0.05)}
 
 .image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/images/qinghaihu/青海湖风景区_01.jpg') center/cover fixed;filter:brightness(0.45) saturate(1.1)}
+.image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/images/qinghaihu/青海湖风景区_01.jpg) center/cover fixed;filter:brightness(0.45) saturate(1.1)}
 .image-break .bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(30,144,255,0.15),rgba(12,74,110,0.35))}
 .image-break .quote{position:relative;z-index:2;text-align:center;color:#fff}
 .image-break .quote-cn{font-family:'Noto Serif SC',serif;font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:10px;margin-bottom:16px;text-shadow:0 2px 20px rgba(0,0,0,0.4)}
@@ -69,7 +69,7 @@ body{font-family:'Noto Sans SC','Noto Serif SC',sans-serif;background:var(--bg);
 .dash-label{font-size:13px;color:var(--text-dim);letter-spacing:3px}
 
 .cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/images/qinghaihu/青海湖风景区_01.jpg') center/cover;filter:brightness(0.35) saturate(0.9)}
+.cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/images/qinghaihu/青海湖风景区_01.jpg) center/cover;filter:brightness(0.35) saturate(0.9)}
 .cta-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(30,144,255,0.2),rgba(12,74,110,0.4))}
 .cta-content{position:relative;z-index:2;text-align:center;color:#fff}
 .cta-num{font-family:'Noto Serif SC',serif;font-size:clamp(64px,10vw,120px);font-weight:900;letter-spacing:8px;opacity:0.12;margin-bottom:-24px}
@@ -213,7 +213,7 @@ body{font-family:'Noto Sans SC','Noto Serif SC',sans-serif;background:var(--bg);
 </footer>
 
 <script>
-(function(){var i=new Image();i.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/images/qinghaihu/青海湖风景区_01.jpg')"};i.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/images/qinghaihu/青海湖风景区_01.jpg'})();
+(function(){var i=new Image();i.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/images/qinghaihu/青海湖风景区_01.jpg)"};i.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/qinghai/images/qinghaihu/青海湖风景区_01.jpg'})();
 window.addEventListener('scroll',function(){var s=document.getElementById('scrollHud');if(s)s.style.opacity=window.scrollY>100?'0':'1'});
 document.querySelector('.hero').addEventListener('mousemove',function(e){var x=(e.clientX/window.innerWidth-0.5)*10,y=(e.clientY/window.innerHeight-0.5)*10;document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)'});
 var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});

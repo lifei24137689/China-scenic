@@ -39,7 +39,7 @@ body{font-family:var(--font-cn);background:var(--bg);color:var(--text);overflow-
 .loading-overlay p{margin-top:20px;font-size:13px;color:var(--text-dim);letter-spacing:3px;font-family:'Courier New',monospace}
 /* Hero */
 .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_budala/img-1.jpg') center/cover;filter:brightness(0.55) saturate(1.15);transition:transform 0.1s ease-out}
+.hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_budala/img-1.jpg) center/cover;filter:brightness(0.55) saturate(1.15);transition:transform 0.1s ease-out}
 .hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 30%,var(--bg) 80%)}
 .hero .scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(212,168,67,.008) 2px,rgba(212,168,67,.008) 4px);pointer-events:none}
 .hero .top-fade{position:absolute;top:0;left:0;right:0;height:30vh;background:linear-gradient(180deg,var(--bg) 0%,transparent 100%)}
@@ -106,7 +106,7 @@ body{font-family:var(--font-cn);background:var(--bg);color:var(--text);overflow-
   background:repeating-linear-gradient(90deg,var(--secondary),var(--secondary) 4px,var(--primary) 4px,var(--primary) 8px,transparent 8px,transparent 12px);
 }
 .image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_budala/img-5.png') center/cover fixed;filter:brightness(0.4) saturate(1.1)}
+.image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_budala/img-5.png) center/cover fixed;filter:brightness(0.4) saturate(1.1)}
 .image-break .overlay{position:absolute;inset:0;background:rgba(26,10,10,.5)}
 .image-break .quote{position:relative;z-index:2;text-align:center}
 .image-break .quote-cn{font-family:var(--font-title);font-size:clamp(28px,4vw,48px);letter-spacing:8px;margin-bottom:12px}
@@ -128,7 +128,7 @@ body{font-family:var(--font-cn);background:var(--bg);color:var(--text);overflow-
 .dash-value{font-size:clamp(24px,2.5vw,36px);font-weight:700;color:var(--secondary);margin-bottom:4px}
 .dash-label{font-size:13px;color:var(--text-dim);letter-spacing:2px}
 .cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_budala/img-1.jpg') center/cover;filter:brightness(0.3) saturate(0.8)}
+.cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_budala/img-1.jpg) center/cover;filter:brightness(0.3) saturate(0.8)}
 .cta-overlay{position:absolute;inset:0;background:rgba(26,10,10,.6)}
 .cta-content{position:relative;z-index:2;text-align:center}
 .cta-num{font-size:clamp(60px,10vw,120px);font-weight:900;letter-spacing:8px;color:var(--text-faint);margin-bottom:-16px}
@@ -286,7 +286,7 @@ body{font-family:var(--font-cn);background:var(--bg);color:var(--text);overflow-
 <script>
 (function(){
   var img=new Image();
-  img.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_budala/img-1.jpg')";setTimeout(function(){document.getElementById('loading').classList.add('hidden')},400)};
+  img.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_budala/img-1.jpg)";setTimeout(function(){document.getElementById('loading').classList.add('hidden')},400)};
   img.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_budala/img-1.jpg';
 })();
 window.addEventListener('scroll',function(){

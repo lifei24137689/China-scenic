@@ -810,7 +810,7 @@ footer p {
   function preloadAndSet(el, src) {
     if (!el || !src) return;
     const img = new Image();
-    img.onload = () => { el.style.backgroundImage = `url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/neimenggu/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/neimenggu/${src}')`; };
+    img.onload = () => { el.style.backgroundImage = `url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/neimenggu/${src})`; };
     img.src = src;
   }
 

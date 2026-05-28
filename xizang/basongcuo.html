@@ -31,7 +31,7 @@ body{font-family:var(--font-cn);background:var(--bg);color:var(--text);overflow-
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-overlay p{margin-top:20px;font-size:13px;color:var(--text-dim);letter-spacing:3px;font-family:'Courier New',monospace}
 .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_basongcuo/img-1.png') center/cover;filter:brightness(0.85) saturate(1.05);transition:transform 0.1s ease-out}
+.hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_basongcuo/img-1.png) center/cover;filter:brightness(0.85) saturate(1.05);transition:transform 0.1s ease-out}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,250,248,.4) 0%,rgba(245,250,248,.1) 40%,rgba(42,74,62,.15) 100%)}
 .hero .top-fade{position:absolute;top:0;left:0;right:0;height:20vh;background:linear-gradient(180deg,var(--bg) 0%,transparent 100%)}
 .hero .bottom-fade{position:absolute;bottom:0;left:0;right:0;height:30vh;background:linear-gradient(0deg,var(--bg) 0%,transparent 100%)}
@@ -66,7 +66,7 @@ body{font-family:var(--font-cn);background:var(--bg);color:var(--text);overflow-
 .content-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
 .content-tag{padding:4px 16px;border:1px solid rgba(90,158,143,.2);border-radius:20px;font-size:12px;letter-spacing:2px;color:var(--primary);background:rgba(90,158,143,.04);font-weight:300}
 .image-break{height:50vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_basongcuo/img-5.jpg') center/cover fixed;filter:brightness(0.65) saturate(1.05)}
+.image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_basongcuo/img-5.jpg) center/cover fixed;filter:brightness(0.65) saturate(1.05)}
 .image-break .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,250,248,.3),rgba(42,74,62,.2))}
 .image-break .quote{position:relative;z-index:2;text-align:center}
 .image-break .quote-cn{font-family:var(--font-title);font-size:clamp(26px,3.5vw,42px);letter-spacing:8px;margin-bottom:10px;font-weight:300;color:var(--text)}
@@ -86,7 +86,7 @@ body{font-family:var(--font-cn);background:var(--bg);color:var(--text);overflow-
 .dash-value{font-size:clamp(22px,2.5vw,32px);font-weight:300;color:var(--primary);margin-bottom:4px}
 .dash-label{font-size:13px;color:var(--text-dim);letter-spacing:2px;font-weight:300}
 .cta{height:50vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_basongcuo/img-1.png') center/cover;filter:brightness(0.5) saturate(0.9)}
+.cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_basongcuo/img-1.png) center/cover;filter:brightness(0.5) saturate(0.9)}
 .cta-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,250,248,.2),rgba(42,74,62,.3))}
 .cta-content{position:relative;z-index:2;text-align:center}
 .cta-num{font-size:clamp(50px,8vw,100px);font-weight:200;letter-spacing:8px;color:var(--text-faint);margin-bottom:-12px}
@@ -236,7 +236,7 @@ body{font-family:var(--font-cn);background:var(--bg);color:var(--text);overflow-
 <script>
 (function(){
   var img=new Image();
-  img.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_basongcuo/img-1.png')";setTimeout(function(){document.getElementById('loading').classList.add('hidden')},400)};
+  img.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_basongcuo/img-1.png)";setTimeout(function(){document.getElementById('loading').classList.add('hidden')},400)};
   img.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/xizang/img_basongcuo/img-1.png';
 })();
 window.addEventListener('scroll',function(){
