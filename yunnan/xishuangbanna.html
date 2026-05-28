@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Xishuangbanna Tropical Botanical Garden · China's Premier Plant Kingdom | 5A Scenic Immersive Tour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Serif SC','PingFang SC','Microsoft YaHei',serif;
+      background: #0a1a0a;
+      color: #e0efe0;
+      overflow-x: hidden;
+    }
+
+    :root {
+      --primary: #2d8a4e;
+      --secondary: #50c878;
+      --bg: #0a1a0a;
+      --surface: rgba(45,138,78,0.05);
+      --text: #e0efe0;
+      --text-dim: rgba(224,239,224,0.5);
+      --text-faint: rgba(224,239,224,0.18);
+      --glow: rgba(45,138,78,0.2);
+      --accent: #8fbc8f;
+    }
+
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: #0a1a0a;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 2px solid rgba(45,138,78,.1);
+      border-top: 2px solid rgba(45,138,78,.45);
+      border-radius: 50%; animation: spin 1.5s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p {
+      margin-top: 20px; font-size: 13px;
+      color: rgba(224,239,224,.2);
+      letter-spacing: 3px; font-family: 'Courier New',monospace;
+    }
+
+    .hero {
+      position: relative; width: 100%; height: 100vh;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      filter: brightness(0.6) saturate(1.1);
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 20%, #0a1a0a 75%);
+    }
+    .hero .top-fade {
+      position: absolute; top: 0; left: 0; right: 0; height: 30vh;
+      background: linear-gradient(180deg,#0a1a0a 0%,transparent 100%);
+    }
+    .hero .bottom-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40vh;
+      background: linear-gradient(0deg,#0a1a0a 0%,#0a1a0aa0 20%,transparent 100%);
+    }
+
+    .canopy-glow {
+      position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse, rgba(45,138,78,0.07) 0%, transparent 70%);
+      animation: canopyPulse 5s ease-in-out infinite;
+      pointer-events: none; z-index: 4;
+    }
+    @keyframes canopyPulse {
+      0%,100% { opacity: 0.3; transform: translate(-50%,-50%) scale(1); }
+      50% { opacity: 0.7; transform: translate(-50%,-50%) scale(1.15); }
+    }
+
+    .hud {
+      position: absolute; inset: 0; z-index: 10;
+      padding: 28px 40px; display: flex; flex-direction: column;
+    }
+    .hud-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 18px; border-radius: 20px;
+      background: rgba(10,26,10,.45);
+      border: 1px solid rgba(45,138,78,.12);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      color: rgba(224,239,224,.4); font-size: 13px; cursor: pointer;
+      transition: all .3s; width: fit-content; text-decoration: none;
+    }
+    .back-btn:hover { border-color: rgba(45,138,78,.3); color: #e0efe0; }
+    .back-btn .arrow { display: inline-block; transition: transform .3s; }
+    .back-btn:hover .arrow { transform: translateX(-3px); }
+
+    .title-group { margin-top: 20px; }
+    .title-group h1 {
+      font-size: 52px; font-weight: 300; letter-spacing: 6px;
+      text-shadow: 0 0 60px rgba(0,0,0,.5);
+      display: flex; align-items: baseline; gap: 14px;
+    }
+    .title-group h1 .badge {
+      font-size: 12px; padding: 4px 16px; border-radius: 14px;
+      background: rgba(45,138,78,.1);
+      border: 1px solid rgba(45,138,78,.2);
+      color: rgba(80,200,120,.75); letter-spacing: 1px;
+      font-weight: 400; font-size: 11px;
+    }
+    .title-group h1 .stars {
+      font-size: 16px; color: rgba(45,138,78,.35);
+      letter-spacing: 2px; font-weight: 400;
+    }
+    .title-group .subtitle {
+      font-size: 14px; color: rgba(224,239,224,.3);
+      letter-spacing: 6px; margin-top: 4px;
+    }
+
+    .data-panel { display: flex; gap: 8px; }
+    .data-item {
+      text-align: center; padding: 10px 18px; border-radius: 10px;
+      background: rgba(10,26,10,.4);
+      border: 1px solid rgba(45,138,78,.06);
+      backdrop-filter: blur(12px); min-width: 72px;
+    }
+    .data-item .num { font-size: 20px; font-weight: 700; font-family: 'Orbitron',monospace; }
+    .data-item .num.cyan { color: #2d8a4e; }
+    .data-item .num.green { color: #50c878; }
+    .data-item .num.pink { color: #e0efe0; }
+    .data-item .label { font-size: 9px; color: rgba(224,239,224,.2); margin-top: 2px; letter-spacing: 1px; }
+
+    .hero-info {
+      position: absolute; left: 40px; bottom: 130px; z-index: 11;
+      max-width: 440px;
+    }
+    .hero-info .card {
+      background: rgba(10,26,10,.5);
+      backdrop-filter: blur(16px);
+      border-radius: 14px; border: 1px solid rgba(45,138,78,.08);
+      padding: 22px 28px;
+    }
+    .hero-info .card p {
+      font-size: 14px; line-height: 1.8; color: rgba(224,239,224,.55);
+    }
+    .hero-info .tags { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-info .tags span {
+      padding: 4px 14px; border-radius: 14px; font-size: 11px;
+      letter-spacing: 1px; border: 1px solid;
+    }
+    .tag-green { background: rgba(45,138,78,.06); border-color: rgba(45,138,78,.15); color: #2d8a4e; }
+    .tag-gold { background: rgba(80,200,120,.06); border-color: rgba(80,200,120,.15); color: #50c878; }
+    .tag-cream { background: rgba(224,239,224,.04); border-color: rgba(224,239,224,.1); color: rgba(224,239,224,.6); }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%; z-index: 11;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(224,239,224,.15);
+      font-size: 10px; letter-spacing: 2px;
+      font-family: 'Courier New',monospace;
+    }
+    .scroll-hint .line {
+      width: 1px; height: 30px;
+      background: linear-gradient(180deg,rgba(45,138,78,.25),transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.3; transform: scaleY(0.5); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    .section {
+      position: relative; min-height: 80vh;
+      display: flex; align-items: center;
+      padding: 80px 40px;
+    }
+    .section-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    .section-inner.reverse { direction: rtl; }
+    .section-inner.reverse > * { direction: ltr; }
+
+    .section-image {
+      border-radius: 14px; overflow: hidden; position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      opacity: 0; transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .section-image.visible { opacity: 1; transform: translateY(0); }
+    .section-image img {
+      width: 100%; height: 400px; object-fit: cover; display: block;
+      transition: transform 0.6s ease;
+    }
+    .section-image:hover img { transform: scale(1.03); }
+    .section-image .img-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 60%;
+      background: linear-gradient(0deg,#0a1a0a 0%,transparent 100%);
+      pointer-events: none;
+    }
+    .section-image .img-label {
+      position: absolute; bottom: 16px; left: 20px;
+      font-size: 11px; color: rgba(224,239,224,.2);
+      letter-spacing: 2px; font-family: 'Courier New',monospace;
+    }
+
+    .section-content {
+      opacity: 0; transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1) 0.15s;
+    }
+    .section-content.visible { opacity: 1; transform: translateY(0); }
+    .section-content .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(45,138,78,.35);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .section-content h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+      margin-bottom: 20px; line-height: 1.3;
+    }
+    .section-content h2 .highlight {
+      background: linear-gradient(135deg,#2d8a4e,#50c878);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-content p {
+      font-size: 15px; line-height: 1.9;
+      color: rgba(224,239,224,.5);
+      margin-bottom: 20px;
+    }
+    .section-content .stat-row { display: flex; gap: 24px; margin-top: 24px; }
+    .section-content .stat-item {
+      text-align: center; padding: 16px 24px; border-radius: 10px;
+      background: rgba(45,138,78,.04);
+      border: 1px solid rgba(45,138,78,.06);
+      min-width: 100px;
+    }
+    .section-content .stat-item .num {
+      font-size: 28px; font-weight: 700; color: #2d8a4e;
+    }
+    .section-content .stat-item .lbl {
+      font-size: 10px; color: rgba(224,239,224,.2);
+      margin-top: 4px; letter-spacing: 1px;
+    }
+
+    .image-break {
+      position: relative; width: 100%; height: 60vh; overflow: hidden;
+    }
+    .image-break .bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      background-attachment: fixed;
+      filter: brightness(0.45);
+    }
+    .image-break .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,#0a1a0a 0%,transparent 20%,transparent 80%,#0a1a0a 100%);
+    }
+    .image-break .quote {
+      position: absolute; bottom: 60px; left: 40px; right: 40px; z-index: 2;
+      max-width: 600px;
+    }
+    .image-break .quote p {
+      font-size: 22px; font-weight: 300; line-height: 1.6;
+      color: rgba(224,239,224,.5);
+      letter-spacing: 2px;
+    }
+    .image-break .quote .author {
+      font-size: 12px; color: rgba(224,239,224,.18);
+      letter-spacing: 3px; margin-top: 12px;
+      font-family: 'Courier New',monospace;
+    }
+
+    .gallery-section { padding: 100px 40px; }
+    .gallery-section .section-header { max-width: 1200px; margin: 0 auto 40px; }
+    .gallery-section .section-header .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(45,138,78,.35);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .gallery-section .section-header h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+    }
+    .gallery-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr; gap: 12px;
+    }
+    .gallery-grid .col { display: flex; flex-direction: column; gap: 12px; }
+    .gallery-grid .col:first-child { grid-row: span 2; }
+    .gallery-item {
+      border-radius: 12px; overflow: hidden; position: relative;
+      opacity: 0; transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .gallery-item.visible { opacity: 1; transform: translateY(0); }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.6s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item .item-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 20px;
+      background: linear-gradient(0deg,#0a1a0a 0%,transparent 100%);
+    }
+    .gallery-item .item-overlay span {
+      font-size: 12px; color: rgba(224,239,224,.3); letter-spacing: 1px;
+    }
+
+    .dashboard-section {
+      padding: 100px 40px;
+      background: linear-gradient(180deg,#0a1a0a,#0c1e12,#0a1a0a);
+    }
+    .dashboard-section .section-header { max-width: 1200px; margin: 0 auto 50px; }
+    .dashboard-section .section-header .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(45,138,78,.35);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .dashboard-section .section-header h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+    }
+    .dashboard-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+    }
+    .dashboard-card {
+      padding: 28px 24px; border-radius: 14px;
+      background: rgba(45,138,78,.03);
+      border: 1px solid rgba(45,138,78,.05);
+      text-align: center;
+      opacity: 0; transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(.16,1,.3,1);
+    }
+    .dashboard-card.visible { opacity: 1; transform: translateY(0); }
+    .dashboard-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .dashboard-card .d-num { font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+    .dashboard-card .d-label {
+      font-size: 10px; color: rgba(224,239,224,.2);
+      letter-spacing: 2px; margin-top: 6px;
+      font-family: 'Courier New',monospace;
+    }
+    .dashboard-card.cyan .d-num { color: #2d8a4e; }
+    .dashboard-card.green .d-num { color: #50c878; }
+    .dashboard-card.purple .d-num { color: #e0efe0; }
+    .dashboard-card.pink .d-num { color: #8fbc8f; }
+
+    .cta-section { padding: 120px 40px; text-align: center; position: relative; }
+    .cta-section .bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      filter: brightness(0.25);
+    }
+    .cta-section .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,#0a1a0a 0%,transparent 30%,transparent 70%,#0a1a0a 100%);
+    }
+    .cta-section .content { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
+    .cta-section .content .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(45,138,78,.35);
+      letter-spacing: 3px; margin-bottom: 16px;
+    }
+    .cta-section .content h2 {
+      font-size: 36px; font-weight: 700; letter-spacing: 2px; margin-bottom: 16px;
+    }
+    .cta-section .content p {
+      font-size: 15px; color: rgba(224,239,224,.3);
+      line-height: 1.8; margin-bottom: 30px;
+    }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px;
+      border: 1px solid rgba(45,138,78,.25);
+      background: rgba(45,138,78,.08);
+      backdrop-filter: blur(12px); border-radius: 12px;
+      color: #50c878; font-size: 14px;
+      cursor: pointer; transition: all .3s;
+      letter-spacing: 1px; text-decoration: none;
+    }
+    .cta-btn:hover {
+      background: rgba(45,138,78,.18);
+      box-shadow: 0 0 40px rgba(45,138,78,.08);
+      transform: translateY(-2px);
+    }
+
+    footer { padding: 40px; text-align: center; border-top: 1px solid rgba(45,138,78,.04); }
+    footer p { font-size: 11px; color: rgba(224,239,224,.1); letter-spacing: 2px; font-family: 'Courier New',monospace; }
+
+    .corner { position: fixed; z-index: 100; pointer-events: none; }
+    .corner-h { position: absolute; width: 20px; height: 1px; background: rgba(45,138,78,.04); }
+    .corner-v { position: absolute; width: 1px; height: 20px; background: rgba(45,138,78,.04); }
+    .corner-tl { top: 10px; left: 10px; } .corner-tr { top: 10px; right: 10px; }
+    .corner-bl { bottom: 10px; left: 10px; } .corner-br { bottom: 10px; right: 10px; }
+    .corner-tl .corner-h { top: 0; left: 0; } .corner-tl .corner-v { top: 0; left: 0; }
+    .corner-tr .corner-h { top: 0; right: 0; } .corner-tr .corner-v { top: 0; right: 0; }
+    .corner-bl .corner-h { bottom: 0; left: 0; } .corner-bl .corner-v { bottom: 0; left: 0; }
+    .corner-br .corner-h { bottom: 0; right: 0; } .corner-br .corner-v { bottom: 0; right: 0; }
+
+    .scroll-hud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 12px 40px; display: flex; justify-content: space-between; align-items: center;
+      background: rgba(10,26,10,.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(45,138,78,.04);
+      transform: translateY(-100%);
+      transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+    }
+    .scroll-hud.active { transform: translateY(0); }
+    .scroll-hud .left { display: flex; align-items: center; gap: 16px; }
+    .scroll-hud .site-name {
+      font-size: 13px; color: rgba(224,239,224,.3);
+      letter-spacing: 2px;
+      font-family: 'Orbitron','PingFang SC',sans-serif;
+    }
+    .scroll-hud .site-name strong { color: rgba(224,239,224,.5); }
+    .scroll-hud .right span { font-size: 10px; color: rgba(224,239,224,.15); letter-spacing: 2px; font-family: 'Orbitron','Courier New',monospace; }
+
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 2px; background: rgba(45,138,78,.04);
+    }
+    .scroll-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #2d8a4e, #50c878);
+      transition: width 0.1s linear;
+    }
+    .scroll-progress-pct {
+      position: fixed; top: 8px; right: 42px; z-index: 60;
+      font-size: 9px; color: rgba(45,138,78,.12);
+      font-family: 'Courier New',monospace; letter-spacing: 1px;
+    }
+
+    .chapter-nav {
+      position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 55;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .chapter-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(45,138,78,.1); cursor: pointer; transition: all .3s; position: relative;
+    }
+    .chapter-dot:hover { background: rgba(45,138,78,.3); transform: scale(1.4); }
+    .chapter-dot.active { background: rgba(45,138,78,.6); transform: scale(1.5); box-shadow: 0 0 10px rgba(45,138,78,.25); }
+    .chapter-dot .chapter-label {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      white-space: nowrap; font-size: 9px; color: rgba(224,239,224,.12);
+      letter-spacing: 2px; font-family: 'Courier New',monospace;
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+    }
+    .chapter-dot:hover .chapter-label { opacity: 1; }
+    .chapter-counter {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      z-index: 45; font-size: 10px; color: rgba(45,138,78,.08);
+      font-family: 'Courier New',monospace; letter-spacing: 3px;
+      transition: opacity 0.4s; opacity: 0; pointer-events: none;
+    }
+    .chapter-counter.visible { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .hud { padding: 16px 20px; }
+      .hud-top { flex-direction: column; }
+      .data-panel { margin-top: 12px; gap: 4px; }
+      .data-item { padding: 6px 12px; min-width: 56px; }
+      .data-item .num { font-size: 16px; }
+      .title-group h1 { font-size: 28px; flex-wrap: wrap; }
+      .hero-info { left: 20px; right: 20px; bottom: 100px; }
+      .hero-info .card { padding: 16px 20px; }
+      .hero-info .card p { font-size: 12px; }
+      .section { padding: 60px 20px; min-height: auto; }
+      .section-inner { grid-template-columns: 1fr; gap: 30px; }
+      .section-inner.reverse { direction: ltr; }
+      .section-image img { height: 250px; }
+      .section-content h2 { font-size: 24px; }
+      .section-content .stat-row { flex-wrap: wrap; }
+      .gallery-section { padding: 60px 20px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid .col:first-child { grid-row: auto; }
+      .dashboard-grid { grid-template-columns: repeat(2,1fr); }
+      .dashboard-section { padding: 60px 20px; }
+      .cta-section { padding: 80px 20px; }
+      .cta-section .content h2 { font-size: 26px; }
+      .image-break .quote p { font-size: 16px; }
+      .scroll-hud { padding: 10px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+  <p>Crossing the tropical rainforest ...</p>
+</div>
+
+<div class="corner corner-tl"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-tr"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-bl"><div class="corner-h"></div><div class="corner-v"></div></div>
+<div class="corner corner-br"><div class="corner-h"></div><div class="corner-v"></div></div>
+
+<div class="scroll-progress" id="scrollProgress">
+  <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+  <span class="scroll-progress-pct" id="scrollPct">0%</span>
+</div>
+
+<div class="scroll-hud" id="scrollHud">
+  <div class="left"><span class="site-name"><strong>5A</strong> · Immersive Exploration</span></div>
+  <div class="right"><span>Yunnan · Xishuangbanna</span></div>
+</div>
+
+<div class="chapter-nav" id="chapterNav"></div>
+
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="canopy-glow"></div>
+  <div class="top-fade"></div>
+  <div class="bottom-fade"></div>
+
+  <div class="hud">
+    <div class="hud-top">
+      <div>
+        
+        <div class="title-group">
+          <h1>
+            <span>Tropical Botanical Garden</span>
+            <span class="badge">5A</span>
+            <span class="stars">★★★★★</span>
+          </h1>
+          <div class="subtitle">Yunnan · Xishuangbanna Dai Autonomous Prefecture</div>
+        </div>
+      </div>
+      <div class="data-panel">
+        <div class="data-item"><div class="num cyan">1125</div><div class="label">Area (ha)</div></div>
+        <div class="data-item"><div class="num green">1.3万</div><div class="label">Plant Species</div></div>
+        <div class="data-item"><div class="num pink">1959</div><div class="label">Established</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-info">
+    <div class="card">
+      <p>
+        <span style="color:rgba(45,138,78,.45);font-size:11px;letter-spacing:2px;display:block;margin-bottom:8px;">◈ Plant Briefing</span>
+        <span style="color:rgba(224,239,224,.7);">China's largest and most biodiverse tropical botanical garden. 13,000 species of tropical plants thrive across 1,125 hectares of green sea — a miracle oasis on the Tropic of Cancer.</span>
+      </p>
+      <div class="tags">
+        <span class="tag-green">🌴 Tropical Rainforest</span>
+        <span class="tag-gold">🌿 Plant Kingdom</span>
+        <span class="tag-cream">🔬 Research Base</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint"><span>Scroll to explore</span><div class="line"></div></div>
+</section>
+
+<section class="section" data-chapter="Oasis">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_02.jpg" alt="Panoramic view of the botanical garden" loading="lazy"/>
+      <div class="img-overlay"></div>
+      
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">/// 01</div>
+      <h2>An <span class="highlight">Emerald</span> on the Tropic of Cancer</h2>
+      <p>Founded in 1959 by renowned botanist Professor Cai Xitao, the Xishuangbanna Tropical Botanical Garden of the Chinese Academy of Sciences is located in Menglun Town, Mengla County, Xishuangbanna Dai Autonomous Prefecture, Yunnan Province. It is China's largest tropical botanical garden and a world-class center for tropical plant research.</p>
+      <p>Spanning approximately 1,125 hectares, the garden sits on Hulu Island, encircled by the Luosuo River, a tributary of the Lancang River (Mekong River). It collects and preserves over 13,000 species of tropical plants, including rare species such as Antiaris toxicaria, Antiaris, and Parashorea chinensis, earning it the reputation of "Noah's Ark of Tropical Plants."</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="num">5A</div><div class="lbl">Rating</div></div>
+        <div class="stat-item"><div class="num">1125</div><div class="lbl">Area (ha)</div></div>
+        <div class="stat-item"><div class="num">13K</div><div class="lbl">Plant Species</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="image-break">
+  <div class="bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_03.jpg');"></div>
+  <div class="overlay"></div>
+  <div class="quote">
+    <p>"In this animistic plant kingdom, every flower and leaf is a love poem nature writes to the world."</p>
+    <div class="author">— Xishuangbanna Tropical Botanical Garden · Saraca dives</div>
+  </div>
+</div>
+
+<section class="section" data-chapter="Exotic Flora">
+  <div class="section-inner reverse">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_05.jpg" alt="Tropical flowers" loading="lazy"/>
+      <div class="img-overlay"></div>
+      
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">/// 02</div>
+      <h2>A <span class="highlight">Vibrant World</span> of Exotic Flora</h2>
+      <p>The garden features 38 specialized collection areas, including Palm Garden, Banyan Garden, Bamboo Garden, Hundred-Flower Garden, and Exotic Plants Garden. From Africa's baobab trees to South America's giant water lilies, from the flavor-changing miracle fruit to the dancing Telegraph Plant — every step is a feast for the eyes and nose.</p>
+      <p>The Hundred-Flower Garden blooms year-round, while the Exotic Plants Garden never fails to amaze: mimosa leaves fold at a touch, cannonball flowers bloom large and vibrant, and epiphytic orchids burst into magnificent blossoms on tree trunks. This is not only a plant kingdom but also a living classroom of nature education.</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="num">38</div><div class="lbl">Themed Gardens</div></div>
+        <div class="stat-item"><div class="num">13K</div><div class="lbl">Species Count</div></div>
+        <div class="stat-item"><div class="num">4.5</div><div class="lbl">Visitor Rating</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" data-chapter="Rainforest">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_07.jpg" alt="Tropical flowers" loading="lazy"/>
+      <div class="img-overlay"></div>
+      
+    </div>
+    <div class="section-content" data-animate>
+      <div class="numeral">/// 03</div>
+      <h2>The <span class="highlight">Life Code</span> of the Tropical Rainforest</h2>
+      <p>The Valley Rainforest area is the most pristine part of the garden, preserving a complete tropical rainforest ecosystem. Buttress roots, cauliflory, strangulation, and canopy gardens — all the classic features of tropical rainforests are perfectly displayed here.</p>
+      <p>This area is also home to Asian elephants, green peacocks, hornbills, and other rare animals. Walking along the canopy walkway, you can overlook the entire rainforest from the treetop level and feel the heartbeat of Earth's oldest ecosystem. The garden also serves as China's center for tropical plant research, making significant contributions to global plant diversity conservation.</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="num">Tropical</div><div class="lbl">Ecosystem</div></div>
+        <div class="stat-item"><div class="num">Nov-Apr</div><div class="lbl">Best Months</div></div>
+        <div class="stat-item"><div class="num">2011</div><div class="lbl">Rated Year</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section" data-chapter="Gallery">
+  <div class="section-header">
+    <div class="numeral">/// Gallery</div>
+    <h2>Botanical <span style="background:linear-gradient(135deg,#2d8a4e,#50c878);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Green Atlas</span></h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="col">
+      <div class="gallery-item tall" data-animate style="grid-row:span 2;height:100%;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_09.jpg" alt="Tropical rainforest" style="height:100%;min-height:500px;" loading="lazy"/>
+        
+      </div>
+      <div class="gallery-item" data-animate style="height:200px;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_10.jpg" alt="Banyan tree forming a single-tree forest" style="height:100%;" loading="lazy"/>
+        
+      </div>
+    </div>
+    <div class="col">
+      <div class="gallery-item" data-animate style="height:240px;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_11.jpg" alt="Victoria water lily pond" style="height:100%;" loading="lazy"/>
+        
+      </div>
+      <div class="gallery-item" data-animate style="height:260px;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_12.jpg" alt="Exotic flowers and plants" style="height:100%;" loading="lazy"/>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dashboard-section" data-chapter="Dashboard">
+  <div class="section-header">
+    <div class="numeral">/// Dashboard</div>
+    <h2>Botanical <span style="background:linear-gradient(135deg,#2d8a4e,#50c878);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Key Metrics</span></h2>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dashboard-card cyan" data-animate><div class="icon">🌿</div><div class="d-num">5A</div><div class="d-label">Rating</div></div>
+    <div class="dashboard-card green" data-animate><div class="icon">🌍</div><div class="d-num">1125</div><div class="d-label">Area (ha)</div></div>
+    <div class="dashboard-card purple" data-animate><div class="icon">🌱</div><div class="d-num">13K</div><div class="d-label">Plant Species</div></div>
+    <div class="dashboard-card pink" data-animate><div class="icon">🏡</div><div class="d-num">38</div><div class="d-label">Themed Gardens</div></div>
+    <div class="dashboard-card cyan" data-animate><div class="icon">🔬</div><div class="d-num">CAS</div><div class="d-label">Affiliation</div></div>
+    <div class="dashboard-card green" data-animate><div class="icon">⭐</div><div class="d-num">4.5</div><div class="d-label">Visitor Rating</div></div>
+    <div class="dashboard-card purple" data-animate><div class="icon">📅</div><div class="d-num">1959</div><div class="d-label">Established</div></div>
+    <div class="dashboard-card pink" data-animate><div class="icon">📏</div><div class="d-num">2011</div><div class="d-label">Year Rated</div></div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_13.jpg');"></div>
+  <div class="overlay"></div>
+  <div class="content">
+    <div class="numeral">/// Next Stop</div>
+    <h2>Touch Life in the <span style="background:linear-gradient(135deg,#2d8a4e,#50c878);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Tropical Rainforest</span></h2>
+    <p>Set out from Xishuangbanna to explore more natural wonders of Yunnan's 5A scenic spots.<br/>Every leaf is a love poem nature writes to the world.</p>
+    
+  </div>
+</section>
+
+<footer><p>5A Immersive Exploration · SATELLITE TOUR · Images: Wikimedia Commons (CC BY/CC BY-SA)</p></footer>
+
+<div class="page-transition" id="pageTransition"></div>
+
+<script>
+(function(){
+  var bg=document.getElementById('heroBg');
+  var i=new Image();
+  i.onload=i.onerror=function(){
+    bg.style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_01.jpg')";
+    document.getElementById('loading').classList.add('hidden');
+  };
+  i.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/yunnan/yunnan/中科院西双版纳热带植物园/中科院西双版纳热带植物园_01.jpg';
+})();
+
+window.addEventListener('scroll',function(){
+  document.getElementById('scrollHud').classList.toggle('active',scrollY>innerHeight*.5);
+  var pf=document.getElementById('scrollProgressFill'),ps=document.getElementById('scrollPct');
+  var h=document.documentElement.scrollHeight-innerHeight;
+  var p=h>0?(scrollY/h)*100:0;
+  pf.style.width=p+'%';ps.textContent=Math.round(p)+'%';
+});
+
+document.getElementById('hero').addEventListener('mousemove',function(e){
+  var x=(e.clientX/innerWidth-.5)*10,y=(e.clientY/innerHeight-.5)*10;
+  document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)';
+});
+
+(function(){
+  var cs=document.querySelectorAll('[data-chapter]'),nav=document.getElementById('chapterNav'),dots=[];
+  cs.forEach(function(c,i){
+    var d=document.createElement('div');d.className='chapter-dot';
+    var l=document.createElement('span');l.className='chapter-label';l.textContent=c.getAttribute('data-chapter');
+    d.appendChild(l);
+    d.addEventListener('click',function(){c.scrollIntoView({behavior:'smooth',block:'center'});});
+    nav.appendChild(d);dots.push({dot:d,el:c});
+  });
+  var cnt=document.createElement('div');cnt.className='chapter-counter';document.body.appendChild(cnt);
+  window.addEventListener('scroll',function(){
+    var sy=scrollY+innerHeight/2,ai=dots.length-1;
+    for(var i=0;i<dots.length;i++){if(sy<dots[i].el.offsetTop+dots[i].el.offsetHeight/2){ai=i;break;}}
+    dots.forEach(function(d,i){d.dot.classList.toggle('active',i===ai);});
+    cnt.textContent=(ai+1)+' / '+dots.length;
+    cnt.classList.toggle('visible',scrollY>300);
+  });
+})();
+
+(function(){
+  var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:.15});
+  document.querySelectorAll('[data-animate]').forEach(function(e){o.observe(e);});
+})();
+</script>
+
+<a href="../index.html?prov=云南省" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Scenic Map</a>
+</body>
+</html>

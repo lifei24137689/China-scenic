@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Badaling–Mutianyu Great Wall | Beijing 5A Scenic Area</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #8b4513;
+  --secondary: #daa520;
+  --bg: #0f0a05;
+  --surface: rgba(139,69,19,0.06);
+  --text: #f3e5d8;
+  --text-dim: rgba(243,229,216,0.50);
+  --text-faint: rgba(243,229,216,0.18);
+  --glow: rgba(218,165,32,0.18);
+  --gold: #daa520;
+  --accent: #cd853f;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Serif SC','Noto Sans SC','PingFang SC','Microsoft YaHei',serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.85;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--primary);border-radius:3px}
+
+#loading{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .6s ease,visibility .6s ease;
+}
+#loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-stone{
+  width:48px;height:48px;
+  border:2px solid var(--text-faint);
+  border-top-color:var(--accent);border-radius:4px;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{
+  margin-top:20px;font-family:'Noto Serif SC',serif;font-size:13px;
+  letter-spacing:.3em;color:var(--text-dim);
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .4s ease,backdrop-filter .4s ease,padding .4s ease;
+}
+nav.scrolled{
+  background:rgba(15,10,5,.90);backdrop-filter:blur(20px);
+  padding:10px 40px;
+}
+.nav-logo a{
+  font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;
+  color:var(--text);text-decoration:none;letter-spacing:.05em;
+}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{
+  color:var(--text-dim);text-decoration:none;font-size:13px;
+  letter-spacing:.12em;transition:color .3s ease;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.nav-links a:hover{color:var(--gold)}
+
+.hero{
+  position:relative;height:100vh;min-height:700px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  background-repeat:no-repeat;
+  transition:opacity 1.5s ease;
+}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(15,10,5,.30) 0%,rgba(15,10,5,.15) 40%,rgba(15,10,5,.75) 85%,var(--bg) 100%);
+}
+.ridge-glow{
+  position:absolute;bottom:20%;left:50%;
+  transform:translateX(-50%);
+  width:1000px;height:350px;
+  background:radial-gradient(ellipse at 50% 60%,var(--glow) 0%,transparent 60%);
+  animation:ridgePulse 7s ease-in-out infinite;
+}
+@keyframes ridgePulse{
+  0%,100%{transform:translateX(-50%) scale(1);opacity:.30}
+  50%{transform:translateX(-50%) scale(1.08);opacity:.55}
+}
+.hero-content{
+  position:relative;z-index:2;text-align:center;padding:0 24px;
+}
+.hero-badge{
+  display:inline-block;border:1px solid var(--gold);
+  color:var(--gold);padding:6px 24px;
+  font-size:11px;letter-spacing:.25em;
+  margin-bottom:28px;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.hero-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(2.6rem,6vw,5rem);
+  font-weight:900;line-height:1.1;
+  letter-spacing:.06em;color:var(--text);
+}
+.hero-title span{display:block;font-size:clamp(1rem,1.8vw,1.4rem);font-weight:400;color:var(--gold);letter-spacing:.25em;margin-bottom:8px}
+.hero-subtitle{
+  font-size:clamp(.85rem,1.4vw,1rem);
+  font-weight:300;color:var(--text-dim);
+  margin-top:16px;letter-spacing:.35em;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.hero-scroll{
+  position:absolute;bottom:40px;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--text-faint);font-size:10px;letter-spacing:.3em;
+  animation:bounceDown 2s ease-in-out infinite;
+  font-family:'Noto Sans SC',sans-serif;
+}
+@keyframes bounceDown{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(10px)}
+}
+.scroll-line{width:1px;height:40px;background:var(--text-faint)}
+
+.content-section{padding:100px 0;position:relative}
+.section-inner{
+  max-width:1200px;margin:0 auto;padding:0 40px;
+  display:flex;align-items:center;gap:80px;
+}
+.section-inner.reverse{flex-direction:row-reverse}
+.section-text{flex:1;min-width:0}
+.section-image{flex:1;position:relative;overflow:hidden;border-radius:2px}
+.section-image img{width:100%;display:block;object-fit:cover;aspect-ratio:4/3}
+.section-image .img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,var(--bg) 0%,transparent 25%);
+}
+.section-image .img-label{
+  position:absolute;bottom:16px;left:16px;
+  font-size:11px;letter-spacing:.2em;color:var(--text-dim);
+  font-family:'Noto Sans SC',sans-serif;
+}
+.section-label{
+  font-size:11px;letter-spacing:.3em;color:var(--accent);
+  margin-bottom:16px;font-weight:500;font-family:'Noto Sans SC',sans-serif;
+}
+.section-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:700;line-height:1.3;
+  margin-bottom:24px;color:var(--text);
+}
+.section-body{
+  color:var(--text-dim);font-size:15px;line-height:2;
+}
+.section-body p{margin-bottom:16px}
+.highlight-stat{
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:800;color:var(--gold);
+  line-height:1;margin:8px 0;
+  font-family:'Noto Serif SC',serif;
+}
+.highlight-stat span{font-size:14px;font-weight:400;color:var(--text-dim)}
+
+.image-break{
+  position:relative;height:55vh;min-height:380px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.image-break .break-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  background-attachment:fixed;
+}
+.image-break .break-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(15,10,5,.30),rgba(15,10,5,.50));
+}
+.break-quote{
+  position:relative;z-index:1;text-align:center;padding:0 24px;
+}
+.break-quote blockquote{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(1.2rem,2.5vw,1.8rem);
+  font-weight:600;color:var(--text);
+  letter-spacing:.08em;line-height:1.8;
+}
+.break-quote cite{
+  display:block;margin-top:16px;
+  font-size:13px;letter-spacing:.25em;color:var(--text-dim);
+  font-style:normal;font-family:'Noto Sans SC',sans-serif;
+}
+
+.gallery-section{padding:80px 0;overflow:hidden}
+.gallery-inner{max-width:1280px;margin:0 auto;padding:0 40px}
+.gallery-header{text-align:center;margin-bottom:56px}
+.gallery-header .section-label{text-align:center}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.gallery-item{position:relative;overflow:hidden;border-radius:2px}
+.gallery-item img{width:100%;display:block;object-fit:cover;aspect-ratio:4/3;height:100%;}
+.gallery-item .item-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(15,10,5,.70) 0%,transparent 35%);
+  opacity:0;transition:opacity .4s ease;
+}
+.gallery-item:hover .item-overlay{opacity:1}
+.gallery-item .item-overlay span{
+  position:absolute;bottom:14px;left:14px;
+  font-size:13px;letter-spacing:.12em;color:var(--text);
+  font-family:'Noto Sans SC',sans-serif;
+}
+
+.dashboard{padding:100px 0}
+.dashboard-inner{max-width:1100px;margin:0 auto;padding:0 40px}
+.dashboard-header{text-align:center;margin-bottom:56px}
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+.stat-card{
+  background:var(--surface);
+  border:1px solid rgba(243,229,216,.04);
+  padding:32px 24px;text-align:center;border-radius:2px;
+}
+.stat-value{
+  font-size:clamp(1.5rem,2.5vw,2.2rem);
+  font-weight:700;color:var(--gold);
+  line-height:1.2;font-family:'Noto Serif SC',serif;
+}
+.stat-label{
+  font-size:11px;letter-spacing:.15em;color:var(--text-faint);
+  margin-top:10px;font-family:'Noto Sans SC',sans-serif;
+}
+
+.cta-section{
+  padding:120px 0;position:relative;overflow:hidden;
+}
+.cta-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:.18;
+}
+.cta-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,var(--bg) 0%,rgba(15,10,5,.30) 40%,var(--bg) 100%);
+}
+.cta-inner{
+  position:relative;z-index:1;text-align:center;padding:0 24px;
+}
+.cta-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(1.8rem,3.5vw,2.6rem);
+  font-weight:700;color:var(--text);margin-bottom:32px;
+  letter-spacing:.04em;
+}
+.cta-btn{
+  display:inline-block;padding:14px 48px;
+  border:1px solid var(--gold);
+  color:var(--gold);text-decoration:none;
+  font-size:13px;letter-spacing:.2em;
+  transition:background .35s ease,color .35s ease;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.cta-btn:hover{background:var(--gold);color:var(--bg)}
+.cta-back{margin-top:16px}
+.cta-back a{
+  font-size:12px;color:var(--text-faint);text-decoration:none;
+  letter-spacing:.15em;transition:color .3s;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.cta-back a:hover{color:var(--text-dim)}
+
+footer{
+  padding:48px 40px;text-align:center;
+  border-top:1px solid rgba(243,229,216,.04);
+}
+footer p{
+  font-size:12px;color:var(--text-faint);letter-spacing:.1em;
+  font-family:'Noto Sans SC',sans-serif;
+}
+
+[data-animate]{
+  opacity:0;transform:translateY(40px);
+  transition:opacity .8s ease,transform .8s ease;
+}
+[data-animate].visible{opacity:1;transform:translateY(0)}
+[data-animate-delay]{transition-delay:.15s}
+
+@media(max-width:900px){
+  .section-inner,.section-inner.reverse{
+    flex-direction:column;gap:40px;
+  }
+  .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+  .gallery-grid{grid-template-columns:1fr}
+  nav{padding:12px 20px}
+  nav.scrolled{padding:8px 20px}
+  .nav-links{gap:16px}
+  .content-section{padding:60px 0}
+  .image-break{height:45vh}
+  .hero-title{font-size:2rem}
+}
+@media(max-width:600px){
+  .section-inner{padding:0 20px}
+  .section-body{font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="loader-stone"></div>
+  <p class="loading-text">THE GREAT WALL OF CHINA</p>
+</div>
+
+<nav id="nav">
+  <div class="nav-logo"><a href="../index.html?prov=%E5%8C%97%E4%BA%AC%E5%B8%82">Beijing 5A</a></div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="ridge-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">UNESCO WORLD HERITAGE</div>
+    <h1 class="hero-title"><span>Badaling · Mutianyu</span>The Great Wall</h1>
+    <p class="hero-subtitle">He who has never been to the Great Wall is not a true man</p>
+  </div>
+  <div class="hero-scroll">
+    <span>E X P L O R E</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<section class="content-section" id="overview">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_01.jpg" alt="Badaling Great Wall" loading="lazy" />
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">OVERVIEW</div>
+      <h2 class="section-title">A World Wonder<br>The Spine of China</h2>
+      <div class="section-body">
+        <p>The Great Wall is ancient China's <span style="color:var(--gold);">greatest defensive project</span>, first built during the Spring and Autumn period and continuously expanded over two millennia. The Badaling section is the best-preserved and most representative stretch of the Ming Great Wall, strategically situated with formidable passes, earning its reputation as "<span style="color:var(--gold);">the essence of the Great Wall</span>".</p>
+        <p>The Mutianyu section is renowned for its <span style="color:var(--gold);">lush vegetation</span> and dense watchtowers. Visitors from around the world can marvel at the Wall's majestic grandeur while immersing themselves in nature's tranquility. In 1987, the Great Wall was inscribed as a <span style="color:var(--gold);">UNESCO World Heritage Site</span>.</p>
+        <div class="highlight-stat">21196km<span> · Total Length</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="image-break">
+  <div class="break-bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_02.jpg')"></div>
+  <div class="break-overlay"></div>
+  <div class="break-quote">
+    <blockquote>"The moon of Qin still shines on the Han frontier,<br>Ten thousand miles away, no soldier has returned."</blockquote>
+    <cite>—— Wang Changling, Tang Dynasty, "On the Frontier"</cite>
+  </div>
+</div>
+
+<section class="content-section" id="badaling">
+  <div class="section-inner reverse">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_03.jpg" alt="Badaling Great Wall Panorama" loading="lazy" />
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">BADALING</div>
+      <h2 class="section-title">Key to the Northern Gate<br>The Peril of Juyong</h2>
+      <div class="section-body">
+        <p>Badaling Great Wall sits at an elevation of <span style="color:var(--gold);">1,015 meters</span>. Since ancient times, it has been said that "the danger of Juyong Pass lies not in the pass itself, but in Badaling." The fortress wall, trapezoidal in shape, follows the contours of the mountain, standing tall and robust with an average height of <span style="color:var(--gold);">7.8 meters</span>.</p>
+        <p>The Badaling section is densely dotted with watchtowers. North Tower No. 8 is the highest point — from its summit, the Great Wall winds like a mighty dragon across the rugged mountain ranges. This section has hosted more foreign heads of state than any other, serving as China's <span style="color:var(--gold);">national guest scenic area</span>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" id="mutianyu">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_05.jpg" alt="Mutianyu Great Wall" loading="lazy" />
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">MUTIANYU</div>
+      <h2 class="section-title">Double-Sided Battlements<br>A Fortress in the Forest</h2>
+      <div class="section-body">
+        <p>Located in Huairou District, the Mutianyu Great Wall boasts a forest coverage rate of over <span style="color:var(--gold);">96%</span>, offering strikingly different scenery across seasons — mountain flowers bloom in spring, while red leaves blanket the hills in autumn. Its most distinctive feature is the <span style="color:var(--gold);">double-sided battlements</span>, an extremely rare design along the Great Wall.</p>
+        <p>The Mutianyu section features <span style="color:var(--gold);">densely packed watchtowers</span> and uniquely designed gate platforms. The main gate platform, where three watchtowers stand side by side, is considered a masterpiece of Great Wall architecture. It is also the most popular section among international visitors, where Eastern and Western civilizations converge.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="image-break">
+  <div class="break-bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_06.jpg')"></div>
+  <div class="break-overlay"></div>
+  <div class="break-quote">
+    <blockquote>"Behold the Great Wall, within and without,<br>Only a vast expanse of white."</blockquote>
+    <cite>—— Mao Zedong, "Snow · Spring in a Pleasure Garden"</cite>
+  </div>
+</div>
+
+<section class="gallery-section" id="gallery">
+  <div class="gallery-inner">
+    <div class="gallery-header" data-animate>
+      <div class="section-label">GALLERY</div>
+      <h2 class="section-title" style="font-size:clamp(1.4rem,2.5vw,1.8rem);margin-top:8px;">The Winding Dragon · Beauty of the Great Wall</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item" data-animate style="height:340px;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_07.jpg" alt="Mutianyu Great Wall" style="height:100%;" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-animate style="height:340px;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_08.jpg" alt="Mutianyu Great Wall View" style="height:100%;" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-animate style="height:340px;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_10.jpg" alt="Mutianyu Watchtower" style="height:100%;" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-animate style="height:340px;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_11.jpg" alt="Mutianyu Great Wall Close-up" style="height:100%;" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dashboard">
+  <div class="dashboard-inner">
+    <div class="dashboard-header" data-animate>
+      <div class="section-label">DASHBOARD</div>
+    </div>
+    <div class="dashboard-grid">
+      <div class="stat-card" data-animate>
+        <div class="stat-value">21196km</div>
+        <div class="stat-label">Total Length</div>
+      </div>
+      <div class="stat-card" data-animate>
+        <div class="stat-value">1015m</div>
+        <div class="stat-label">Badaling Elevation</div>
+      </div>
+      <div class="stat-card" data-animate>
+        <div class="stat-value">96%</div>
+        <div class="stat-label">Mutianyu Forest Coverage</div>
+      </div>
+      <div class="stat-card" data-animate>
+        <div class="stat-value">2000+ Years</div>
+        <div class="stat-label">Construction History</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_06.jpg')"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-inner" data-animate>
+    <h2 class="cta-title">Scale the Great Wall<br>Be a True Hero</h2>
+    <p style="color:var(--text-dim);font-size:14px;letter-spacing:.15em;margin-bottom:24px;font-family:'Noto Sans SC',sans-serif;">Best Seasons: Spring &amp; Autumn (Apr–May, Sep–Oct) · S2 Line / Bus 877 to Badaling</p>
+    <a href="#" class="cta-btn">C O N Q U E R</a>
+    <div class="cta-back" style="margin-top:24px;">
+      <a href="../index.html?prov=%E5%8C%97%E4%BA%AC%E5%B8%82">← Back to Map</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Badaling–Mutianyu Great Wall · One of the Seven Wonders of the World · Symbol of the Chinese Nation</p>
+  <p style="margin-top:8px;color:rgba(243,229,216,.12);">Badaling Town, Yanqing District / Mutianyu, Bohai Town, Huairou District, Beijing · Images from Wikimedia Commons</p>
+</footer>
+
+<script>
+(function(){
+  var heroBg = document.getElementById('heroBg');
+  heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/changcheng/八达岭—慕田峪长城旅游区_01.jpg')";
+  document.getElementById('loading').classList.add('hidden');
+})();
+
+var nav = document.getElementById('nav');
+window.addEventListener('scroll',function(){
+  nav.classList.toggle('scrolled',window.scrollY > 80);
+});
+
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting) entry.target.classList.add('visible');
+  });
+},{threshold:.15,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('[data-animate]').forEach(function(el){observer.observe(el)});
+
+document.addEventListener('mousemove',function(e){
+  var x = (e.clientX / window.innerWidth - .5) * 8;
+  var y = (e.clientY / window.innerHeight - .5) * 6;
+  var heroEl = document.querySelector('.hero-bg');
+  if(heroEl.style.backgroundImage){
+    heroEl.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(1.05)';
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,339 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Siguniangshan  Queen of Sichuan Mountains | 5A Scenic Area Immersive Exploration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #4a90d9;
+      --secondary: #a18cd1;
+      --bg: #0a1a0f;
+      --surface: rgba(74,144,217,0.08);
+      --text: #e8f0f8;
+      --text-dim: rgba(232,240,248,0.5);
+      --glow-blue: rgba(74,144,217,0.25);
+      --glow-purple: rgba(161,140,209,0.2);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;perspective:1200px}
+    .hero-bg{position:absolute;inset:-30px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_01.jpg') center/cover;filter:brightness(0.5) saturate(1.2);transition:transform 0.15s ease-out}
+    .hero-layer-mid{position:absolute;inset:0;
+      background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_03.jpg') center/cover;
+      filter:brightness(0.25) saturate(0.8) blur(2px);
+      opacity:0.4;
+      transition:transform 0.2s ease-out;
+      transform:translateZ(-80px) scale(1.1);
+    }
+    .hero-layer-front{position:absolute;inset:0;
+      background:linear-gradient(180deg, transparent 30%, rgba(10,26,15,0.6) 80%),
+        radial-gradient(ellipse at 30% 70%, rgba(74,144,217,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 40%, rgba(161,140,209,0.1) 0%, transparent 50%);
+      transition:transform 0.25s ease-out;
+      transform:translateZ(40px);
+    }
+    .hero-overlay{position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(74,144,217,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, rgba(161,140,209,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(10,26,15,0.5) 0%, transparent 70%);
+    }
+    .hero-content{position:relative;z-index:3;text-align:center;transform-style:preserve-3d}
+    .hero-title{font-size:clamp(48px,8vw,88px);letter-spacing:16px;color:#fff;
+      text-shadow:
+        0 1px 0 rgba(255,255,255,0.08),
+        0 2px 0 rgba(0,0,0,0.3),
+        0 3px 0 rgba(0,0,0,0.2),
+        0 4px 12px rgba(0,0,0,0.5),
+        0 0 60px rgba(74,144,217,0.3),
+        0 0 100px rgba(161,140,209,0.15);
+      transform:perspective(800px) rotateX(1.5deg);
+      font-weight:700;
+    }
+    .hero-sub{font-family:'Noto Sans SC',sans-serif;font-size:clamp(16px,2vw,24px);opacity:0.8;margin-top:20px;letter-spacing:10px;font-weight:300;
+      text-shadow:0 2px 20px rgba(0,0,0,0.5),0 0 40px rgba(74,144,217,0.2);
+      transform:perspective(800px) rotateX(0.5deg);
+    }
+
+    .mountain-mist{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+    .mist-layer{position:absolute;width:200%;height:100%;left:-50%;
+      background:radial-gradient(ellipse at 50% 80%, rgba(161,140,209,0.06) 0%, transparent 50%);
+      animation:mistDrift 20s ease-in-out infinite;
+    }
+    .mist-layer-2{position:absolute;width:200%;height:100%;left:-30%;
+      background:radial-gradient(ellipse at 30% 60%, rgba(74,144,217,0.05) 0%, transparent 50%);
+      animation:mistDrift2 25s ease-in-out infinite;
+      top:-10%;
+    }
+    @keyframes mistDrift{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(40px) translateY(-10px)}}
+    @keyframes mistDrift2{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(-30px) translateY(15px)}}
+
+    .mountain-particle{position:absolute;width:4px;height:4px;background:rgba(255,255,255,0.15);border-radius:50%;animation:particleFloat 8s ease-in-out infinite;box-shadow:0 0 6px rgba(161,140,209,0.1)}
+    .mountain-particle:nth-child(1){top:20%;left:15%;animation-delay:0s;width:3px;height:3px}
+    .mountain-particle:nth-child(2){top:35%;left:75%;animation-delay:2s;width:5px;height:5px}
+    .mountain-particle:nth-child(3){top:55%;left:40%;animation-delay:4s;width:2px;height:2px}
+    .mountain-particle:nth-child(4){top:15%;left:60%;animation-delay:1s}
+    .mountain-particle:nth-child(5){top:45%;left:85%;animation-delay:3s;width:3px;height:3px}
+    .mountain-particle:nth-child(6){top:65%;left:20%;animation-delay:5s;width:2px;height:2px}
+    .mountain-particle:nth-child(7){top:25%;left:50%;animation-delay:6s}
+    .mountain-particle:nth-child(8){top:50%;left:10%;animation-delay:2.5s;width:3px;height:3px}
+    .mountain-particle:nth-child(9){top:30%;left:90%;animation-delay:4.5s;width:2px;height:2px}
+    .mountain-particle:nth-child(10){top:60%;left:55%;animation-delay:7s;width:5px;height:5px}
+    @keyframes particleFloat{0%,100%{transform:translateY(0) scale(1);opacity:0.3}50%{transform:translateY(-30px) scale(1.5);opacity:0.8}}
+
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:12px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(16px);background:rgba(74,144,217,0.08);border:1px solid rgba(74,144,217,0.2);border-radius:12px;padding:12px 20px;text-align:center}
+    .hud-value{font-size:24px;font-weight:700;color:var(--secondary);text-shadow:0 0 20px rgba(161,140,209,0.3)}
+    .hud-label{font-size:11px;opacity:0.55;margin-top:4px;letter-spacing:2px}
+
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:1px solid rgba(74,144,217,0.15);transform:perspective(600px);transition:transform 0.6s}
+    .content-image:hover{transform:perspective(600px) rotateY(2deg)}
+    .content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s}
+    .content-image:hover img{transform:scale(1.05)}
+    .content-text h2{font-size:clamp(28px,4vw,42px);margin-bottom:20px;letter-spacing:6px;text-shadow:0 0 30px rgba(74,144,217,0.15)}
+    .content-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--secondary),transparent);margin-bottom:24px}
+    .content-text p{font-size:16px;line-height:2;opacity:0.8;margin-bottom:16px}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .content-tag{padding:6px 18px;border:1px solid rgba(161,140,209,0.3);border-radius:20px;font-size:13px;letter-spacing:2px;color:var(--secondary)}
+
+    .image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_07.jpg') center/cover fixed;filter:brightness(0.4) saturate(1.1)}
+    .image-break .bg-overlay{position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(74,144,217,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 50%, rgba(161,140,209,0.1) 0%, transparent 50%),
+        linear-gradient(to top, rgba(10,26,15,0.4), transparent 40%, rgba(10,26,15,0.2));
+    }
+    .image-break .quote{position:relative;z-index:2;text-align:center}
+    .image-break .quote-cn{font-size:clamp(32px,5vw,56px);letter-spacing:12px;margin-bottom:12px;
+      text-shadow:0 0 40px rgba(74,144,217,0.3),0 0 80px rgba(161,140,209,0.2);
+      font-weight:700;
+    }
+    .image-break .quote-en{font-size:14px;opacity:0.5;letter-spacing:6px;text-transform:uppercase;font-family:'Noto Sans SC',sans-serif;font-weight:300}
+
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{text-align:center;font-size:clamp(28px,3.5vw,40px);margin-bottom:48px;letter-spacing:8px;text-shadow:0 0 30px rgba(74,144,217,0.15)}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .gallery-item{position:relative;overflow:hidden;border-radius:12px;cursor:pointer;border:1px solid rgba(74,144,217,0.1);transition:border-color 0.4s,transform 0.6s;transform:perspective(600px)}
+    .gallery-item:hover{border-color:rgba(161,140,209,0.3);transform:perspective(600px) rotateY(1.5deg);z-index:10}
+    .gallery-item img{width:100%;object-fit:cover;transition:transform 0.6s}
+    .gallery-item:hover img{transform:scale(1.08)}
+    .gallery-item .glow-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(74,144,217,0.08),transparent);opacity:0;transition:opacity 0.4s}
+    .gallery-item:hover .glow-overlay{opacity:1}
+
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .dash-card{backdrop-filter:blur(16px);background:rgba(74,144,217,0.06);border:1px solid rgba(74,144,217,0.12);border-radius:16px;padding:32px 24px;text-align:center;transition:transform 0.4s,border-color 0.4s;transform:perspective(600px)}
+    .dash-card:hover{transform:perspective(600px) translateY(-6px) rotateX(2deg);border-color:rgba(161,140,209,0.3)}
+    .dash-icon{font-size:28px;margin-bottom:12px;filter:drop-shadow(0 0 8px rgba(74,144,217,0.3))}
+    .dash-value{font-size:32px;font-weight:700;color:var(--secondary);margin-bottom:6px;text-shadow:0 0 20px rgba(161,140,209,0.2)}
+    .dash-label{font-size:13px;opacity:0.55;letter-spacing:2px}
+
+    .cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_10.png') center/cover;filter:brightness(0.35) saturate(0.9)}
+    .cta-overlay{position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(74,144,217,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 50%, rgba(161,140,209,0.1) 0%, transparent 60%),
+        linear-gradient(to top, rgba(10,26,15,0.3), transparent);
+    }
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{font-size:clamp(64px,10vw,120px);font-weight:900;letter-spacing:8px;opacity:0.1;margin-bottom:-20px;color:var(--secondary)}
+    .cta-title{font-size:clamp(24px,3vw,36px);letter-spacing:6px;margin-bottom:32px}
+    .cta-btn{display:inline-block;padding:14px 48px;border:1px solid rgba(161,140,209,0.3);border-radius:30px;font-size:15px;letter-spacing:4px;text-decoration:none;color:var(--text);transition:all 0.3s;font-family:'Noto Sans SC',sans-serif}
+    .cta-btn:hover{background:rgba(161,140,209,0.15);border-color:var(--secondary);box-shadow:0 0 30px rgba(161,140,209,0.15)}
+
+    .footer{padding:40px;text-align:center;opacity:0.35;font-size:13px;letter-spacing:2px;border-top:1px solid rgba(74,144,217,0.1)}
+
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:768px){
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .gallery-grid{grid-template-columns:1fr}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:6px}
+      .hud-item{padding:8px 14px}
+      .hud-value{font-size:18px}
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-layer-mid" id="heroLayerMid"></div>
+    <div class="hero-layer-front"></div>
+    <div class="hero-overlay"></div>
+    <div class="mountain-mist">
+      <div class="mist-layer"></div>
+      <div class="mist-layer-2"></div>
+      <div class="mountain-particle"></div>
+      <div class="mountain-particle"></div>
+      <div class="mountain-particle"></div>
+      <div class="mountain-particle"></div>
+      <div class="mountain-particle"></div>
+      <div class="mountain-particle"></div>
+      <div class="mountain-particle"></div>
+      <div class="mountain-particle"></div>
+      <div class="mountain-particle"></div>
+      <div class="mountain-particle"></div>
+    </div>
+    <div class="hero-content">
+      <h1 class="hero-title">Siguniangshan</h1>
+      <p class="hero-sub">Queen of Sichuan Mountains  Oriental Alps</p>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span style="font-size:11px;letter-spacing:4px;opacity:0.5;font-family:'Noto Sans SC',sans-serif;font-weight:300">Scroll Down</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- HUD Data Panel -->
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">6250</div><div class="hud-label">Max Elevation (m)</div></div>
+    <div class="hud-item"><div class="hud-value">560</div><div class="hud-label">Area (km&sup2;)</div></div>
+    <div class="hud-item"><div class="hud-value">Sep-Oct</div><div class="hud-label">Best Season</div></div>
+  </div>
+
+  <!-- Content Section 1: Queen of Sichuan Mountains -->
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_02.jpg" alt="Siguniangshan Panorama" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Queen of Sichuan Mountains</h2>
+      <div class="content-divider"></div>
+      <p>Siguniangshan (Four Sisters Mountain) is located in Xiaojin County, Aba Tibetan and Qiang Autonomous Prefecture, Sichuan Province. It consists of four connected peaks. The main peak, Yaomei Peak, stands at 6,250 meters above sea level, making it the highest peak of the Qionglai Mountains and the second highest peak in Sichuan Province after Mount Gongga. It is honored as the "Queen of Sichuan Mountains."</p>
+      <p>The four peaks line up from north to south: Big Sister Peak, Second Sister Peak, Third Sister Peak, and Yaomei Peak. They are covered in snow year-round, presenting a majestic spectacle. Known for its magnificent snow-capped mountain scenery and abundant outdoor resources, it is also called the "Oriental Alps."</p>
+      <div class="content-tags">
+        <span class="content-tag">Queen of Sichuan</span>
+        <span class="content-tag">Oriental Alps</span>
+        <span class="content-tag">Yaomei Peak 6250m</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Image Break -->
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="bg-overlay"></div>
+    <div class="quote">
+      <div class="quote-cn">Four Peaks in a Row  Sacred Snow Mountains</div>
+      <div class="quote-en">Four Maidens  Queen of Sichuan Mountains</div>
+    </div>
+  </section>
+
+  <!-- Content Section 2 (Reverse): Three Valleys -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_04.jpg" alt="Shuangqiao Valley" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Three Valleys</h2>
+      <div class="content-divider"></div>
+      <p>The Siguniangshan Scenic Area consists of three distinctive valleys. Shuangqiao Valley (Double Bridge Valley) stretches 34.8 kilometers, offering the richest scenery among the three. Visitors can take sightseeing buses throughout the entire valley, where snow-capped mountains, forests, meadows, and alpine lakes complement each other &mdash; a top choice for first-time visitors.</p>
+      <p>Changping Valley (Long Flat Valley) is renowned for hiking and horseback riding experiences, with attractions such as the ancient cypress path, Lama Temple, and Dead Tree Beach scattered along the way. Haizi Valley (Lake Valley) preserves the most pristine alpine lake clusters, making it a hidden paradise for mountaineers and photographers.</p>
+      <div class="content-tags">
+        <span class="content-tag">Shuangqiao Valley</span>
+        <span class="content-tag">Changping Valley</span>
+        <span class="content-tag">Haizi Valley</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Section 3: Four Seasons Scenery -->
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_05.jpg" alt="Siguniangshan Autumn Colors" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Four Seasons Scenery</h2>
+      <div class="content-divider"></div>
+      <p>Siguniangshan offers stunning views in every season, with autumn being the most enchanting. From September to October, the colorful forests at the foot of the snow mountains are dyed in layers of gold, orange-red, and deep purple, weaving a brilliant tapestry that contrasts dramatically with the white snow peaks and azure sky.</p>
+      <p>In late spring and early summer, hundreds of flowers bloom across the alpine meadows, covering them in lush green carpets. In winter, the mountains are cloaked in silver, resembling a fairy-tale world of ice and snow. Maobiliang Viewing Platform is the best spot to capture the panoramic view of Siguniangshan, where all four peaks can be seen in a single frame.</p>
+      <div class="content-tags">
+        <span class="content-tag">Golden Autumn Forest</span>
+        <span class="content-tag">Snow Mountains &amp; Glaciers</span>
+        <span class="content-tag">Maobiliang Viewpoint</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" data-animate>
+    <h2>✦ Visual Exploration ✦</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="grid-row:span 2;height:100%">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_06.jpg" alt="Siguniangshan Snow Peak" style="height:100%;min-height:500px" loading="lazy"/>
+        <div class="glow-overlay"></div>
+      </div>
+      <div class="gallery-item" style="height:240px">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_08.jpg" alt="Siguniangshan Meadow" style="height:100%" loading="lazy"/>
+        <div class="glow-overlay"></div>
+      </div>
+      <div class="gallery-item" style="height:240px">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_09.jpeg" alt="Siguniangshan Alpine Lake" style="height:100%" loading="lazy"/>
+        <div class="glow-overlay"></div>
+      </div>
+      <div class="gallery-item" style="height:240px">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_11.jpg" alt="Siguniangshan Changping Valley" style="height:100%" loading="lazy"/>
+        <div class="glow-overlay"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="dashboard" data-animate>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🏔️</div><div class="dash-value">6250m</div><div class="dash-label">Max Elevation</div></div>
+      <div class="dash-card"><div class="dash-icon">📏</div><div class="dash-value">560km&sup2;</div><div class="dash-label">Scenic Area</div></div>
+      <div class="dash-card"><div class="dash-icon">⛰️</div><div class="dash-value">4 Peaks</div><div class="dash-label">Connected Peaks</div></div>
+      <div class="dash-card"><div class="dash-icon">🍂</div><div class="dash-value">Sep-Oct</div><div class="dash-label">Best Season</div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-overlay"></div>
+    <div class="cta-content">
+      <div class="cta-num">6250</div>
+      <div class="cta-title">Queen of Sichuan &middot; We Invite You</div>
+      <a href="../index.html?prov=%E5%9B%9B%E5%B7%9D%E7%9C%81" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Siguniangshan &middot; National 5A Tourist Attraction &middot; Aba Tibetan and Qiang Autonomous Prefecture, Sichuan</p>
+  </footer>
+
+  <script>
+    (function(){var i=new Image();i.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_01.jpg')";document.getElementById('heroBg').style.opacity='1'};i.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_01.jpg';document.getElementById('heroBg').style.opacity='0'})();
+    (function(){var i=new Image();i.onload=function(){document.getElementById('heroLayerMid').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_03.jpg')"};i.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/siguniangshan/阿坝州四姑娘山景区_03.jpg'})();
+    window.addEventListener('scroll',function(){var s=document.getElementById('scrollHud');if(s)s.style.opacity=window.scrollY>100?'0':'1'});
+    document.querySelector('.hero').addEventListener('mousemove',function(e){
+      var x=(e.clientX/window.innerWidth-0.5)*15,y=(e.clientY/window.innerHeight-0.5)*15;
+      document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)';
+      document.getElementById('heroLayerMid').style.transform='translate('+(x*0.5)+'px,'+(y*0.5)+'px) translateZ(-80px) scale(1.1)';
+    });
+    window.addEventListener('scroll',function(){
+      var s=window.scrollY;
+      var h=document.getElementById('hero');
+      if(h){
+        var layerMid=document.getElementById('heroLayerMid');
+        if(layerMid)layerMid.style.transform='translateY('+(s*0.08)+'px) translateZ(-80px) scale(1.1)';
+      }
+    });
+    var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});
+    document.querySelectorAll('[data-animate]').forEach(function(e){o.observe(e)});
+  </script>
+</body>
+</html>

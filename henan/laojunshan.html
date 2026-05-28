@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laojun Mountain & Jiguan Cave · The Peerless Sacred Land</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Serif SC', 'PingFang SC', serif;
+      background: #0a0015;
+      color: #f0e8ff;
+      overflow-x: hidden;
+    }
+
+    :root {
+      --primary: #6a0dad;
+      --secondary: #c084fc;
+      --bg: #0a0015;
+      --surface: rgba(106,13,173,0.08);
+      --text: #f0e8ff;
+      --text-dim: rgba(240,232,255,0.5);
+      --gold: #d4a843;
+      --gold-dim: rgba(212,168,67,0.15);
+      --cloud: rgba(192,132,252,0.06);
+    }
+
+    @keyframes fairyMist {
+      0%,100% { transform: translate(0,0) scale(1); opacity: 0.3; }
+      25% { transform: translate(30px,-20px) scale(1.1); opacity: 0.5; }
+      50% { transform: translate(-20px,10px) scale(0.95); opacity: 0.35; }
+      75% { transform: translate(15px,20px) scale(1.05); opacity: 0.45; }
+    }
+
+    @keyframes goldenGlow {
+      0%,100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.15); }
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(106,13,173,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(192,132,252,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 20%, rgba(212,168,67,0.04) 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 80%, rgba(106,13,173,0.06) 0%, transparent 50%),
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(106,13,173,0.03) 3px, rgba(106,13,173,0.03) 5px),
+        repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(192,132,252,0.01) 4px, rgba(192,132,252,0.01) 6px);
+      animation: fairyMist 25s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .fairy-particle {
+      position: fixed;
+      width: 4px; height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--gold), 0 0 12px rgba(212,168,67,0.3);
+      pointer-events: none;
+      z-index: 2;
+      animation: floatUp linear infinite;
+    }
+
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner {
+      width: 50px; height: 50px;
+      border: 2px solid rgba(192,132,252,.1);
+      border-top: 2px solid var(--secondary);
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p {
+      margin-top: 24px; font-size: 14px;
+      color: var(--text-dim);
+      letter-spacing: 4px;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 2px; background: rgba(192,132,252,.08);
+    }
+    .scroll-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--gold));
+      transition: width 0.1s linear;
+    }
+    .scroll-progress-pct {
+      position: fixed; top: 8px; right: 42px; z-index: 60;
+      font-size: 9px; color: rgba(192,132,252,.2);
+      font-family: 'Noto Serif SC', serif;
+      letter-spacing: 1px;
+    }
+
+    .scroll-hud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 14px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10,0,21,.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(192,132,252,.08);
+      transform: translateY(-100%);
+      transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+    }
+    .scroll-hud.active { transform: translateY(0); }
+    .scroll-hud .left { display: flex; align-items: center; gap: 16px; }
+    .scroll-hud .site-name {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 14px; color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+    .scroll-hud .site-name strong { color: var(--secondary); }
+    .scroll-hud .right span {
+      font-size: 11px; color: rgba(240,232,255,.15);
+      letter-spacing: 2px;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .chapter-nav {
+      position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 55;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .chapter-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(192,132,252,.15);
+      cursor: pointer;
+      transition: all .3s;
+      position: relative;
+    }
+    .chapter-dot:hover { background: var(--secondary); transform: scale(1.4); }
+    .chapter-dot.active { background: var(--secondary); transform: scale(1.5); box-shadow: 0 0 12px rgba(192,132,252,.4); }
+    .chapter-dot .chapter-label {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      white-space: nowrap; font-size: 9px; color: rgba(240,232,255,.15);
+      letter-spacing: 2px; font-family: 'Noto Serif SC', serif;
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+    }
+    .chapter-dot:hover .chapter-label { opacity: 1; }
+
+    .chapter-counter {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      z-index: 45; font-size: 10px; color: rgba(192,132,252,.1);
+      font-family: 'Noto Serif SC', serif; letter-spacing: 3px;
+      transition: opacity 0.4s; opacity: 0; pointer-events: none;
+    }
+    .chapter-counter.visible { opacity: 1; }
+
+    .gold-cloud {
+      position: absolute;
+      pointer-events: none;
+      z-index: 3;
+    }
+    .gold-cloud::before,
+    .gold-cloud::after {
+      content: '';
+      position: absolute;
+      background: rgba(212,168,67,0.04);
+      border-radius: 50%;
+    }
+    .gold-cloud.tl {
+      top: 40px; left: 30px;
+      width: 120px; height: 50px;
+    }
+    .gold-cloud.tl::before {
+      width: 60px; height: 60px;
+      top: -25px; left: 15px;
+    }
+    .gold-cloud.tl::after {
+      width: 40px; height: 40px;
+      top: -10px; left: 60px;
+    }
+    .gold-cloud.tr {
+      top: 40px; right: 30px;
+      width: 120px; height: 50px;
+    }
+    .gold-cloud.tr::before {
+      width: 60px; height: 60px;
+      top: -25px; left: 15px;
+    }
+    .gold-cloud.tr::after {
+      width: 40px; height: 40px;
+      top: -10px; left: 60px;
+    }
+    .gold-cloud.bl {
+      bottom: 80px; left: 30px;
+      width: 100px; height: 40px;
+    }
+    .gold-cloud.bl::before {
+      width: 50px; height: 50px;
+      top: -20px; left: 10px;
+    }
+    .gold-cloud.bl::after {
+      width: 35px; height: 35px;
+      top: -8px; left: 50px;
+    }
+    .gold-cloud.br {
+      bottom: 80px; right: 30px;
+      width: 100px; height: 40px;
+    }
+    .gold-cloud.br::before {
+      width: 50px; height: 50px;
+      top: -20px; left: 10px;
+    }
+    .gold-cloud.br::after {
+      width: 35px; height: 35px;
+      top: -8px; left: 50px;
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: -10px;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.45) saturate(1.2) hue-rotate(-10deg);
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, rgba(10,0,21,0.7) 0%, transparent 40%, transparent 60%, rgba(10,0,21,0.7) 100%),
+        radial-gradient(ellipse at center, rgba(10,0,21,0.3) 30%, var(--bg) 85%);
+    }
+    .hero .top-fade {
+      position: absolute; top: 0; left: 0; right: 0; height: 30vh;
+      background: linear-gradient(180deg, var(--bg) 0%, transparent 100%);
+    }
+    .hero .bottom-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40vh;
+      background: linear-gradient(0deg, var(--bg) 0%, rgba(10,0,21,.7) 20%, transparent 100%);
+    }
+
+    .hero-glow {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(192,132,252,0.12) 0%, rgba(106,13,173,0.06) 30%, transparent 70%);
+      animation: goldenGlow 5s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .hud {
+      position: absolute; inset: 0; z-index: 10;
+      padding: 28px 50px;
+      display: flex; flex-direction: column;
+    }
+    .hud-top {
+      display: flex; justify-content: flex-end; align-items: flex-start;
+    }
+
+    .hero-main {
+      position: absolute;
+      left: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 11;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .vertical-title {
+      writing-mode: vertical-rl;
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 90px;
+      color: var(--text);
+      letter-spacing: 12px;
+      text-shadow: 0 0 80px rgba(192,132,252,.2), 0 0 40px rgba(0,0,0,.5);
+      opacity: 0;
+      transform: translateX(-30px);
+      animation: fadeInRight 1.2s cubic-bezier(.16,1,.3,1) 0.3s forwards;
+    }
+    @keyframes fadeInRight { to { opacity: 1; transform: translateX(0); } }
+
+    .hero-content {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1.2s cubic-bezier(.16,1,.3,1) 0.6s forwards;
+    }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+    .hero-content .subtitle {
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: 6px;
+      margin-bottom: 20px;
+      font-family: 'ZCOOL XiaoWei', serif;
+    }
+    .hero-content .subtitle span {
+      display: inline-block;
+      padding: 4px 16px;
+      border: 1px solid rgba(212,168,67,.25);
+      border-radius: 20px;
+      backdrop-filter: blur(8px);
+      background: rgba(212,168,67,.05);
+    }
+    .hero-content .main-title {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 64px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #f0e8ff 0%, var(--secondary) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-content .main-title em {
+      font-style: normal;
+      color: var(--gold);
+      font-family: 'ZCOOL XiaoWei', serif;
+    }
+    .hero-content .hero-desc {
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 1.8;
+      max-width: 460px;
+      margin-bottom: 32px;
+    }
+
+    .hero-meta {
+      display: flex; gap: 32px;
+    }
+    .hero-meta-item {
+      text-align: center;
+    }
+    .hero-meta-item .num {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 28px;
+      color: var(--secondary);
+      display: block;
+    }
+    .hero-meta-item .label {
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    .hero-badge {
+      position: absolute;
+      bottom: 100px;
+      right: 50px;
+      z-index: 12;
+      opacity: 0;
+      animation: fadeInUp 1s ease 1.2s forwards;
+    }
+    .hero-badge .badge-inner {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      border: 1px solid rgba(192,132,252,.2);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(10px);
+      background: rgba(106,13,173,.1);
+    }
+    .hero-badge .badge-inner .big {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 28px;
+      color: var(--gold);
+    }
+    .hero-badge .badge-inner .small {
+      font-size: 9px;
+      color: rgba(240,232,255,.4);
+      letter-spacing: 2px;
+      margin-top: 2px;
+    }
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 12;
+      opacity: 0;
+      animation: fadeInUp 1s ease 1.6s forwards;
+      cursor: pointer;
+    }
+    .hero-scroll-hint .arrow {
+      width: 20px; height: 30px;
+      border: 1px solid rgba(192,132,252,.2);
+      border-radius: 10px;
+      margin: 0 auto 8px;
+      position: relative;
+    }
+    .hero-scroll-hint .arrow::after {
+      content: '';
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 2px; height: 6px;
+      background: var(--secondary);
+      border-radius: 1px;
+      animation: scrollBounce 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+      0%,100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+      50% { transform: translateX(-50%) translateY(6px); opacity: 0.3; }
+    }
+    .hero-scroll-hint span {
+      font-size: 8px;
+      color: rgba(192,132,252,.2);
+      letter-spacing: 3px;
+      font-family: 'ZCOOL XiaoWei', serif;
+    }
+
+    section {
+      position: relative;
+      padding: 100px 50px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .section-header.visible { opacity: 1; transform: translateY(0); }
+    .section-header .label {
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 6px;
+      font-family: 'ZCOOL XiaoWei', serif;
+      margin-bottom: 12px;
+    }
+    .section-header .label::before,
+    .section-header .label::after {
+      content: '✦';
+      margin: 0 8px;
+      font-size: 8px;
+      color: rgba(212,168,67,.3);
+    }
+    .section-header h2 {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 48px;
+      color: var(--text);
+      background: linear-gradient(135deg, #f0e8ff, var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-header p {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-top: 12px;
+      line-height: 1.8;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .content-grid.visible { opacity: 1; transform: translateY(0); }
+    .content-grid.reverse { direction: rtl; }
+    .content-grid.reverse > * { direction: ltr; }
+
+    .content-text h3 {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 32px;
+      color: var(--text);
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--secondary), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .content-text p {
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 2;
+      margin-bottom: 16px;
+    }
+    .content-text .tag-list {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px;
+    }
+    .content-text .tag-list span {
+      font-size: 11px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(192,132,252,.15);
+      color: var(--secondary);
+      letter-spacing: 1px;
+      font-family: 'ZCOOL XiaoWei', serif;
+    }
+
+    .content-image {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(106,13,173,.2);
+    }
+    .content-image img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .content-image:hover img { transform: scale(1.05); }
+    .content-image::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 12px;
+      border: 1px solid rgba(192,132,252,.1);
+      pointer-events: none;
+    }
+
+    .image-break {
+      position: relative;
+      width: 100%;
+      height: 60vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .image-break-bg {
+      position: absolute; inset: -10px;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      filter: brightness(0.4) saturate(1.15) hue-rotate(-10deg);
+    }
+    .image-break-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, var(--bg) 0%, transparent 20%, transparent 80%, var(--bg) 100%);
+    }
+    .image-break-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      max-width: 600px;
+      padding: 40px;
+    }
+    .image-break-content h2 {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 56px;
+      color: var(--text);
+      text-shadow: 0 0 60px rgba(192,132,252,.2);
+      margin-bottom: 16px;
+    }
+    .image-break-content p {
+      font-size: 16px;
+      color: rgba(240,232,255,.6);
+      line-height: 2;
+      letter-spacing: 2px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .gallery-grid.visible { opacity: 1; transform: translateY(0); }
+    .gallery-item {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease, filter 0.6s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.08); filter: brightness(0.7); }
+    .gallery-item::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 10px;
+      border: 1px solid rgba(192,132,252,.08);
+      pointer-events: none;
+    }
+    .gallery-item:first-child {
+      grid-column: 1 / -1;
+    }
+    .gallery-item:first-child img {
+      height: 380px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .dashboard-grid.visible { opacity: 1; transform: translateY(0); }
+    .dashboard-card {
+      background: rgba(106,13,173,.06);
+      border: 1px solid rgba(192,132,252,.08);
+      border-radius: 12px;
+      padding: 28px 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.4s ease;
+    }
+    .dashboard-card:hover {
+      background: rgba(106,13,173,.12);
+      border-color: rgba(192,132,252,.2);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(106,13,173,.15);
+    }
+    .dashboard-card .icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .dashboard-card .value {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 32px;
+      color: var(--secondary);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .dashboard-card .label {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      font-family: 'ZCOOL XiaoWei', serif;
+    }
+
+    .cta-section {
+      position: relative;
+      padding: 100px 50px 120px;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .cta-section.visible { opacity: 1; transform: translateY(0); }
+    .cta-section h2 {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 52px;
+      color: var(--text);
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--secondary), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-section p {
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 2;
+      margin-bottom: 32px;
+    }
+    .cta-btn {
+      display: inline-block;
+      padding: 14px 48px;
+      border: 1px solid rgba(192,132,252,.2);
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(106,13,173,.15), rgba(192,132,252,.1));
+      color: var(--secondary);
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 14px;
+      letter-spacing: 4px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      text-decoration: none;
+      backdrop-filter: blur(10px);
+    }
+    .cta-btn:hover {
+      background: linear-gradient(135deg, var(--primary), rgba(192,132,252,.3));
+      border-color: var(--secondary);
+      box-shadow: 0 4px 30px rgba(106,13,173,.3);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+
+    footer {
+      position: relative;
+      padding: 40px 50px;
+      text-align: center;
+      border-top: 1px solid rgba(192,132,252,.06);
+    }
+    footer p {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+    footer p strong { color: rgba(192,132,252,.3); }
+
+    @media (max-width: 768px) {
+      section { padding: 60px 20px; }
+      .hero-main {
+        left: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+      .vertical-title { font-size: 50px; }
+      .hero-content .main-title { font-size: 36px; }
+      .hero-meta { gap: 20px; }
+      .hero-meta-item .num { font-size: 22px; }
+      .hero-badge { right: 20px; bottom: 80px; }
+      .hero-badge .badge-inner { width: 70px; height: 70px; }
+      .hero-badge .badge-inner .big { font-size: 20px; }
+      .scroll-hud { padding: 12px 20px; }
+      .scroll-hud .right span { font-size: 9px; }
+      .content-grid { grid-template-columns: 1fr; gap: 30px; }
+      .content-grid.reverse { direction: ltr; }
+      .content-image img { height: 280px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item:first-child img { height: 280px; }
+      .gallery-item img { height: 220px; }
+      .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+      .image-break { height: 50vh; }
+      .image-break-content h2 { font-size: 36px; }
+      .section-header h2 { font-size: 32px; }
+      .cta-section h2 { font-size: 36px; }
+      .cta-section { padding: 60px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">
+  <div class="loading-spinner"></div>
+  <p>Celestial Realm · Descending</p>
+</div>
+
+<div class="scroll-progress">
+  <div class="scroll-progress-fill" id="scrollFill"></div>
+</div>
+<div class="scroll-progress-pct" id="scrollPct">0%</div>
+
+<div class="scroll-hud" id="hud">
+  <div class="left">
+    <span class="site-name">✦ <strong>Laojun Mountain</strong> · Jiguan Cave</span>
+  </div>
+  <div class="right"><span>Peerless Sacred Land · Foremost Immortal Mountain</span></div>
+</div>
+
+<nav class="chapter-nav" id="chapterNav"></nav>
+<div class="chapter-counter" id="chapterCounter">00 / 00</div>
+
+<div class="hero" id="hero">
+  <div class="hero-bg" id="heroBg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/images/laojunshan/洛阳市老君山－鸡冠洞旅游区_01.jpg')"></div>
+  <div class="hero-overlay"></div>
+  <div class="top-fade"></div>
+  <div class="bottom-fade"></div>
+  <div class="hero-glow"></div>
+
+  <div class="gold-cloud tl"></div>
+  <div class="gold-cloud tr"></div>
+  <div class="gold-cloud bl"></div>
+  <div class="gold-cloud br"></div>
+
+  <div class="hud">
+    <div class="hud-top"></div>
+  </div>
+
+  <div class="hero-main">
+    <div class="vertical-title">Laojun Mountain</div>
+    <div class="hero-content">
+      <div class="subtitle"><span>✦ National 5A Tourist Attraction ✦</span></div>
+      <div class="main-title">Peerless Sacred Land<br><em>The Foremost Immortal Mountain</em></div>
+      <p class="hero-desc">Laozi's retreat, golden-summit temples like celestial palaces<br>Where sea clouds surge, Jiguan Cave hides eons of wonder</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="num">2217m</span>
+          <span class="label">Elevation</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="num">266km²</span>
+          <span class="label">Area</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="num">★4.7</span>
+          <span class="label">Rating</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-badge">
+    <div class="badge-inner">
+      <span class="big">2012</span>
+      <span class="small">Listed</span>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint" onclick="document.getElementById('content1').scrollIntoView()">
+    <div class="arrow"></div>
+    <span>SCROLL</span>
+  </div>
+</div>
+
+<section id="content1">
+  <div class="section-header">
+    <div class="label">Taoist Sacred Land · Laozi's Retreat</div>
+    <h2>Supreme Lord Laozi · Purple Mist from the East</h2>
+    <p>Laojun Mountain is the sacred ground where Laozi, the founder of Taoism, retreated for cultivation. For two millennia, incense has never ceased, earning it the title "Peerless Sacred Land, the Foremost Immortal Mountain."</p>
+  </div>
+  <div class="content-grid">
+    <div class="content-text">
+      <h3>Taoist Ancestral Court · Millennia of Heritage</h3>
+      <p>Originally named Jingshi Mountain, Laojun Mountain was renamed after Laozi (Li Er), the founder of Taoism, who retreated here for cultivation. During the Spring and Autumn period, Laozi resigned from his official post and journeyed westward. Passing through this area, he was captivated by the majestic peaks shrouded in purple mist, and chose to dwell in seclusion, composing the five-thousand-word "Tao Te Ching."</p>
+      <p>Since the Northern Wei dynasty, Taoist followers have built temples and shrines here, with incense burning continuously through the ages. Emperor Taizong of Tang bestowed the name "Laojun Mountain," and it became a Taoist sacred land, renowned alongside Wudang Mountain as one of the two great Taoist mountains of the north and south.</p>
+      <div class="tag-list">
+        <span>Taoist Sacred Land</span>
+        <span>Laozi</span>
+        <span>Golden Summit Temples</span>
+        <span>Sea of Clouds</span>
+        <span>Karst Cave</span>
+      </div>
+    </div>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/images/laojunshan/洛阳市老君山－鸡冠洞旅游区_02.jpg" alt="Laojun Mountain Taoist Temple" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<div class="image-break" id="imageBreak1">
+  <div class="image-break-bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/images/laojunshan/洛阳市老君山－鸡冠洞旅游区_10.jpg')"></div>
+  <div class="image-break-overlay"></div>
+  <div class="image-break-content">
+    <h2>Above the Golden Summit · The Celestial Palace</h2>
+    <p>When clouds surge, the temple complex appears like jade pavilions in the sky</p>
+  </div>
+</div>
+
+<section id="content2">
+  <div class="section-header">
+    <div class="label">Golden Summit Wonderland · Cloud Sea Celestial Palace</div>
+    <h2>Ten-Mile Painting Screen · Purple Twilight</h2>
+    <p>The Golden Summit temple complex, perched atop the 2200m peak, looks like a celestial palace when clouds roll in, earning it the name "Cloud Summit Celestial Palace."</p>
+  </div>
+  <div class="content-grid reverse">
+    <div class="content-text">
+      <h3>Golden Summit Temples · Sanctuaries Above the Clouds</h3>
+      <p>The Laojun Mountain Golden Summit temple complex comprises the Five-Mother Golden Hall, Morality Temple, Laojun Shrine, Jade Emperor Peak, and other structures, all built atop the 2200-meter summit. The architecture follows the Ming-Qing official style, with golden roofs and richly ornamented beams, appearing as a heavenly palace amid the sea of clouds.</p>
+      <p>Mazong Ridge is the highest peak of Laojun Mountain at 2217 meters. From its summit, the vast Funiu Mountain range unfolds before your eyes. The Ten-Mile Painting Screen is the most spectacular scenic zone along the ascent, featuring peculiar peaks, ancient pines, and verdant cypresses — a landscape scroll gradually revealed with every step.</p>
+      <div class="tag-list">
+        <span>Golden Summit Temples</span>
+        <span>Mazong Ridge</span>
+        <span>Ten-Mile Painting Screen</span>
+        <span>Dream-Chasing Valley</span>
+      </div>
+    </div>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/images/laojunshan/洛阳市老君山－鸡冠洞旅游区_06.jpg" alt="Golden Summit Sea of Clouds" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<section id="content3">
+  <div class="section-header">
+    <div class="label">Eons of Creation · Underground Wonder</div>
+    <h2>Jiguan Cave · Nature's Masterpiece</h2>
+    <p>Jiguan Cave is the largest karst cave in northern China, filled with stalactites of countless forms, shaped by geological movements over hundreds of millions of years.</p>
+  </div>
+  <div class="content-grid">
+    <div class="content-text">
+      <h3>North's Finest Cave · Carved by Eons</h3>
+      <p>Located at the northern foot of Laojun Mountain, Jiguan Cave is the largest and best-preserved karst cave in northern China. Stretching approximately 1800 meters in length, it spans five levels from top to bottom, composed of stalagmites, stalactite curtains, cave flowers, stone waterfalls, and various other formations.</p>
+      <p>The cave maintains a constant temperature of 18°C year-round, cool in summer and warm in winter. Illuminated by colorful lights, the stalactites glisten with iridescent splendor, creating a dreamlike atmosphere. Major attractions include "Jade Pillars Holding the Sky," "Jade Pool Fairyland," "Dragon Palace Treasure Hall," and "Sky-Scraping Flying Waterfall" — each a masterpiece sculpted by nature over eons.</p>
+      <div class="tag-list">
+        <span>Jiguan Cave</span>
+        <span>Karst Cave</span>
+        <span>Stalactites</span>
+        <span>Underground Wonder</span>
+      </div>
+    </div>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/images/laojunshan/洛阳市老君山－鸡冠洞旅游区_04.jpg" alt="Jiguan Cave Interior" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="section-header">
+    <div class="label">Light & Shadow · Fairyland Glimpses</div>
+    <h2>Purple Haze Golden Summit · Dreamlike Radiance</h2>
+    <p>Every frame is nature's artistry, every scene captivates the soul.</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/images/laojunshan/洛阳市老君山－鸡冠洞旅游区_05.jpg" alt="Laojun Mountain Panorama" loading="lazy" />
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/images/laojunshan/洛阳市老君山－鸡冠洞旅游区_07.jpg" alt="Laojun Mountain Snowscape" loading="lazy" />
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/images/laojunshan/洛阳市老君山－鸡冠洞旅游区_08.jpg" alt="Golden Summit Temple" loading="lazy" />
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/images/laojunshan/洛阳市老君山－鸡冠洞旅游区_11.jpg" alt="Jiguan Cave Interior View" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<section id="dashboard">
+  <div class="section-header">
+    <div class="label">Comprehensive Data · At a Glance</div>
+    <h2>Mountain Archive · Sacred Records</h2>
+    <p>Key data overview of the Laojun Mountain · Jiguan Cave Scenic Area.</p>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <span class="icon">🏔️</span>
+      <span class="value">2217m</span>
+      <span class="label">Max Elevation</span>
+    </div>
+    <div class="dashboard-card">
+      <span class="icon">🗺️</span>
+      <span class="value">266km²</span>
+      <span class="label">Scenic Area</span>
+    </div>
+    <div class="dashboard-card">
+      <span class="icon">⭐</span>
+      <span class="value">4.7</span>
+      <span class="label">Visitor Rating</span>
+    </div>
+    <div class="dashboard-card">
+      <span class="icon">🏛️</span>
+      <span class="value">2012</span>
+      <span class="label">5A Listing Year</span>
+    </div>
+    <div class="dashboard-card">
+      <span class="icon">⛰️</span>
+      <span class="value">2200m</span>
+      <span class="label">Summit Elevation</span>
+    </div>
+    <div class="dashboard-card">
+      <span class="icon">🕉️</span>
+      <span class="value">2500 yrs</span>
+      <span class="label">Taoist Heritage</span>
+    </div>
+    <div class="dashboard-card">
+      <span class="icon">💎</span>
+      <span class="value">1800m</span>
+      <span class="label">Cave Length</span>
+    </div>
+    <div class="dashboard-card">
+      <span class="icon">🌨️</span>
+      <span class="value">Winter</span>
+      <span class="label">Best Season</span>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="cta">
+  <h2>A Must-Visit · Rendezvous with the Immortals</h2>
+  <p>Winter snowscapes transform the mountain into a fairyland, golden-summit temples shimmer through the clouds<br>Come to Laojun Mountain and answer the call of heaven and earth</p>
+</section>
+
+<footer>
+  <p>✦ <strong>Laojun Mountain · Jiguan Cave</strong> · Luoyang, Henan · National 5A Tourist Attraction ✦</p>
+</footer>
+
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loading').classList.add('hidden');
+    }, 600);
+  });
+
+  const sections = [
+    { id: 'hero', label: 'Sanctuary' },
+    { id: 'content1', label: 'Taoist Land' },
+    { id: 'imageBreak1', label: 'Summit' },
+    { id: 'content2', label: 'Cloud Sea' },
+    { id: 'content3', label: 'Cave' },
+    { id: 'gallery', label: 'Gallery' },
+    { id: 'dashboard', label: 'Data' },
+    { id: 'cta', label: 'Invitation' }
+  ];
+
+  const nav = document.getElementById('chapterNav');
+  sections.forEach((s, i) => {
+    if (s.id === 'hero') return;
+    const dot = document.createElement('div');
+    dot.className = 'chapter-dot';
+    dot.dataset.index = i;
+    const label = document.createElement('span');
+    label.className = 'chapter-label';
+    label.textContent = s.label;
+    dot.appendChild(label);
+    dot.addEventListener('click', () => {
+      document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth' });
+    });
+    nav.appendChild(dot);
+  });
+
+  const counter = document.getElementById('chapterCounter');
+  const dots = nav.querySelectorAll('.chapter-dot');
+
+  function updateChapter(activeIndex) {
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === activeIndex - 1);
+    });
+    const display = activeIndex > 0 ? String(activeIndex).padStart(2,'0') : '00';
+    counter.textContent = `${display} / ${String(sections.length-1).padStart(2,'0')}`;
+  }
+
+  const scrollFill = document.getElementById('scrollFill');
+  const scrollPct = document.getElementById('scrollPct');
+  const hud = document.getElementById('hud');
+  const heroBg = document.getElementById('heroBg');
+
+  function onScroll() {
+    const winH = window.innerHeight;
+    const docH = document.documentElement.scrollHeight;
+    const scrollT = window.scrollY;
+    const maxScroll = docH - winH;
+    const pct = maxScroll > 0 ? (scrollT / maxScroll) * 100 : 0;
+    scrollFill.style.width = pct + '%';
+    scrollPct.textContent = Math.round(pct) + '%';
+
+    hud.classList.toggle('active', scrollT > winH * 0.6);
+
+    if (heroBg) {
+      heroBg.style.transform = `translateY(${scrollT * 0.15}px)`;
+    }
+
+    let activeIdx = 0;
+    sections.forEach((s, i) => {
+      const el = document.getElementById(s.id);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < winH * 0.5) activeIdx = i;
+      }
+    });
+    updateChapter(activeIdx);
+
+    counter.classList.toggle('visible', scrollT > winH * 0.3);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const obsOptions = { threshold: 0.12, rootMargin: '0px 0px -40px 0px' };
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, obsOptions);
+
+  document.querySelectorAll('.section-header, .content-grid, .gallery-grid, .dashboard-grid, .cta-section').forEach(el => {
+    obs.observe(el);
+  });
+
+  for (let i = 0; i < 20; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'fairy-particle';
+    const size = 2 + Math.random() * 4;
+    particle.style.width = size + 'px';
+    particle.style.height = size + 'px';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 15 + 's';
+    particle.style.animationDuration = (12 + Math.random() * 20) + 's';
+    particle.style.opacity = 0.2 + Math.random() * 0.4;
+    document.body.appendChild(particle);
+  }
+</script>
+
+<a href="../index.html?prov=Henan" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Scenic Map</a>
+</body>
+</html>

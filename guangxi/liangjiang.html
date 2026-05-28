@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Two Rivers & Four Lakes · Elephant Trunk Hill · City in the Scenery | 5A Scenic Area Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #8b6914;
+      --secondary: #d4a843;
+      --bg: #faf8f3;
+      --surface: #ffffff;
+      --text: #3c2415;
+      --text-dim: rgba(60,36,21,0.5);
+      --accent: #c47a3a;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/img/liangjiang/桂林市桂林·两江四湖·象山景区_01.jpg') center/cover;filter:brightness(0.5) saturate(1.1);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(250,248,243,0.15) 0%,rgba(250,248,243,0.4) 100%)}
+    .hero-content{position:relative;z-index:2;text-align:center}
+    .hero-date{font-family:'Noto Sans SC',sans-serif;font-size:14px;letter-spacing:6px;color:var(--secondary);margin-bottom:16px;opacity:0.7}
+    .hero-date-line{width:60px;height:1px;background:var(--secondary);margin:0 auto 20px;opacity:0.4}
+    .hero-title{font-family:'Noto Serif SC',serif;font-size:clamp(48px,8vw,96px);font-weight:900;letter-spacing:12px;color:var(--text);text-shadow:0 2px 20px rgba(0,0,0,0.15)}
+    .hero-title-line{width:120px;height:2px;background:var(--secondary);margin:24px auto;opacity:0.5}
+    .hero-sub{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:clamp(16px,2vw,22px);letter-spacing:8px;color:var(--text);opacity:0.6}
+    .hero-location{font-family:'Noto Sans SC',sans-serif;font-size:12px;letter-spacing:4px;color:var(--text-dim);margin-top:16px}
+
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:8px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(255,255,255,0.85);border:1px solid rgba(139,105,20,0.1);border-radius:2px;padding:10px 16px;text-align:center;min-width:64px;box-shadow:0 2px 12px rgba(139,105,20,0.06)}
+    .hud-value{font-family:'Noto Serif SC',serif;font-size:20px;font-weight:700;color:var(--primary)}
+    .hud-label{font-family:'Noto Sans SC',sans-serif;font-size:10px;opacity:0.5;margin-top:3px;letter-spacing:2px;color:var(--text)}
+
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-family:'Noto Sans SC',sans-serif;font-size:11px;letter-spacing:4px;opacity:0.35;color:var(--text)}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.15}50%{opacity:0.5}}
+
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:2px;overflow:hidden;box-shadow:0 8px 30px rgba(139,105,20,0.1)}
+    .content-image img{width:100%;height:420px;object-fit:cover;display:block;transition:transform 0.6s}
+    .content-image:hover img{transform:scale(1.04)}
+    .content-text h2{font-family:'Noto Serif SC',serif;font-size:clamp(28px,4vw,42px);font-weight:700;margin-bottom:12px;letter-spacing:6px;color:var(--text)}
+    .content-text h2 .gold{color:var(--primary)}
+    .content-divider{width:50px;height:2px;background:var(--secondary);margin-bottom:20px;opacity:0.5}
+    .content-text p{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:15px;line-height:2.1;opacity:0.7;margin-bottom:14px;color:var(--text)}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .content-tag{padding:4px 16px;border:1px solid rgba(139,105,20,0.15);border-radius:2px;font-family:'Noto Sans SC',sans-serif;font-size:12px;letter-spacing:2px;color:var(--primary);background:rgba(139,105,20,0.04)}
+
+    .image-break{height:50vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/img/liangjiang/桂林市桂林·两江四湖·象山景区_11.jpg') center/cover fixed;filter:brightness(0.4) saturate(1.05)}
+    .image-break .ol{position:absolute;inset:0;background:linear-gradient(180deg,rgba(250,248,243,0.1),transparent 30%,transparent 70%,rgba(250,248,243,0.15) 100%)}
+    .image-break .quote{position:relative;z-index:2;text-align:center}
+    .image-break .quote-cn{font-family:'Noto Serif SC',serif;font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:12px;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,0.4)}
+    .image-break .quote-en{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:13px;opacity:0.4;letter-spacing:6px;margin-top:12px;color:#fff}
+
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{text-align:center;font-family:'Noto Serif SC',serif;font-size:clamp(24px,3vw,36px);font-weight:700;margin-bottom:48px;letter-spacing:8px;color:var(--text)}
+    .gallery h2 .gold{color:var(--primary)}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:1200px;margin:0 auto}
+    .gallery-item{position:relative;overflow:hidden;cursor:pointer;border-radius:2px}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .gallery-item:hover img{transform:scale(1.06)}
+    .gallery-item:first-child{grid-column:span 2;height:440px}
+    .gallery-item:nth-child(2){height:260px}
+    .gallery-item:nth-child(3){height:260px}
+    .gallery-item:nth-child(4){height:280px}
+
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dash-header{text-align:center;margin-bottom:48px}
+    .dash-header .dash-label-top{font-family:'Noto Sans SC',sans-serif;font-size:13px;color:var(--primary);opacity:0.4;letter-spacing:6px;margin-bottom:8px}
+    .dash-header h2{font-family:'Noto Serif SC',serif;font-size:clamp(24px,3vw,34px);font-weight:700;letter-spacing:6px;color:var(--text)}
+    .dash-header h2 .gold{color:var(--primary)}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .dash-card{background:var(--surface);border:1px solid rgba(139,105,20,0.08);border-radius:2px;padding:28px 20px;text-align:center;transition:all 0.3s;box-shadow:0 2px 16px rgba(139,105,20,0.04)}
+    .dash-card:hover{transform:translateY(-3px);border-color:rgba(139,105,20,0.2);box-shadow:0 6px 24px rgba(139,105,20,0.08)}
+    .dash-icon{font-size:24px;margin-bottom:10px;opacity:0.6}
+    .dash-value{font-family:'Noto Serif SC',serif;font-size:28px;font-weight:700;color:var(--primary);margin-bottom:4px}
+    .dash-label{font-family:'Noto Sans SC',sans-serif;font-size:11px;opacity:0.4;letter-spacing:3px;color:var(--text)}
+
+    .cta{height:50vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/img/liangjiang/桂林市桂林·两江四湖·象山景区_13.jpg') center/cover;filter:brightness(0.35) saturate(0.9)}
+    .cta-ol{position:absolute;inset:0;background:linear-gradient(180deg,rgba(250,248,243,0.08),transparent 30%,transparent 70%,rgba(250,248,243,0.12) 100%)}
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{font-family:'Noto Serif SC',serif;font-size:clamp(64px,10vw,120px);font-weight:900;letter-spacing:12px;opacity:0.1;margin-bottom:-20px;color:var(--secondary);text-shadow:0 0 40px rgba(212,168,67,0.2)}
+    .cta-title{font-family:'Noto Serif SC',serif;font-size:clamp(24px,3vw,36px);font-weight:700;letter-spacing:8px;margin-bottom:32px;color:#fff}
+    .cta-btn{display:inline-block;padding:12px 44px;border:1px solid rgba(255,255,255,0.25);border-radius:2px;font-family:'Noto Sans SC',sans-serif;font-size:13px;letter-spacing:5px;text-decoration:none;color:#fff;background:rgba(139,105,20,0.1);backdrop-filter:blur(12px);transition:all 0.3s}
+    .cta-btn:hover{background:rgba(212,168,67,0.15);border-color:var(--secondary)}
+
+    .footer{padding:32px;text-align:center;border-top:1px solid rgba(139,105,20,0.06);font-family:'Noto Sans SC',sans-serif;font-size:12px;opacity:0.3;letter-spacing:4px;color:var(--text)}
+
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.9s ease,transform 0.9s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:768px){
+      .hero-title{font-size:clamp(36px,10vw,56px);letter-spacing:8px}
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .content-image img{height:260px}
+      .gallery-grid{grid-template-columns:1fr 1fr}
+      .gallery-item:first-child{grid-column:span 2;height:220px}
+      .gallery-item{height:160px!important}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+      .hud{top:12px;right:12px;gap:4px}
+      .hud-item{padding:6px 10px;min-width:50px}
+      .hud-value{font-size:16px}
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-date">Guilin · 2026</div>
+      <div class="hero-date-line"></div>
+      <h1 class="hero-title">Two Rivers & Four Lakes · Elephant Trunk Hill</h1>
+      <div class="hero-title-line"></div>
+      <p class="hero-sub">City in the scenery, scenery in the city — Guilin's iconic urban landscape</p>
+      <p class="hero-location">Guangxi · Guilin</p>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">3.1km²</div><div class="hud-label">Area</div></div>
+    <div class="hud-item"><div class="hud-value">4.5</div><div class="hud-label">Rating</div></div>
+    <div class="hud-item"><div class="hud-value">2017年</div><div class="hud-label">Year Rated</div></div>
+  </div>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/img/liangjiang/桂林市桂林·两江四湖·象山景区_02.jpg" alt="Panoramic view of Two Rivers and Four Lakes" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Two Rivers & Four Lakes · <span class="gold">Guilin's Iconic Card</span></h2>
+      <div class="content-divider"></div>
+      <p>Located in the heart of Guilin's urban center, the Two Rivers & Four Lakes · Elephant Trunk Hill Scenic Area is the soul of Guilin's cityscape. The scenic area is composed of the Li River, Peach Blossom River, Shan Lake, Rong Lake, Gui Lake, Mulong Lake, and Elephant Trunk Hill, with vast water surfaces forming a unique urban landscape where "the city lies within the scenery, and the scenery lies within the city."</p>
+      <p>Elephant Trunk Hill is the icon and symbol of Guilin, named for its striking resemblance to an elephant drinking from the river. Though only slightly over 200 meters in elevation, this stone hill has been the quintessential representation of Guilin's landscape for thousands of years. Since the Song Dynasty, the poetic line "Below the water there is a bright moon, above the water the bright moon floats" has been celebrated to this day.</p>
+      <div class="content-tags">
+        <span class="content-tag">Elephant Trunk Hill</span>
+        <span class="content-tag">Sun & Moon Pagodas</span>
+        <span class="content-tag">Shan Lake</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="ol"></div>
+    <div class="quote">
+      <div class="quote-cn">Thousand peaks stand around the wild, one river embraces the city</div>
+      <div class="quote-en">—— Two Rivers & Four Lakes · Guilin Scroll</div>
+    </div>
+  </section>
+
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/img/liangjiang/桂林市桂林·两江四湖·象山景区_05.png" alt="Sun and Moon Pagodas" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Sun & Moon Pagodas · <span class="gold">Pagodas Reflected on the Lake</span></h2>
+      <div class="content-divider"></div>
+      <p>The Sun and Moon Pagodas stand on Shan Lake, shining pearls of Guilin's night scenery. The Sun Pagoda, made of copper, stands 41 meters tall with nine stories; the Moon Pagoda, made of glazed tiles, stands 35 meters tall with seven stories. One gold and one silver, one tall and one short, they complement each other as if made by heaven.</p>
+      <p>When the evening lights come on, the Sun and Moon Pagodas shimmer with colorful reflections on the lake, creating one of the most enchanting scenes in Guilin's nightscape. Visitors can climb the pagodas for a panoramic view of Guilin or take a night cruise along the Two Rivers and Four Lakes to experience the charming allure of this "city on the water."</p>
+      <div class="content-tags">
+        <span class="content-tag">Sun & Moon Pagodas</span>
+        <span class="content-tag">Shan Lake Night View</span>
+        <span class="content-tag">City Landmark</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/img/liangjiang/桂林市桂林·两江四湖·象山景区_07.png" alt="Rong Lake and Mulong Lake" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Rong & Mulong Lakes · <span class="gold">Waterfront Charm</span></h2>
+      <div class="content-divider"></div>
+      <p>Rong Lake and Mulong Lake are two of the most charming water bodies in the Two Rivers and Four Lakes system. Along the shores of Rong Lake, ancient banyan trees reach for the sky, willows sway gently, and pavilions and terraces are scattered across the islets — the perfect place for locals to take a leisurely stroll. The Ancient South Gate stands quietly by the lake, telling the thousand-year history of Guilin.</p>
+      <p>Mulong Lake is characterized by its Song Dynasty-style architecture. Cluster of ancient-style buildings line the lake, harmonizing beautifully with the emerald waters and green trees. The exquisite Mulong Pagoda by the lakeside reflects gracefully upon the rippling blue waves, like a flowing Song Dynasty painting that captivates every visitor.</p>
+      <div class="content-tags">
+        <span class="content-tag">Rong Lake</span>
+        <span class="content-tag">Mulong Lake</span>
+        <span class="content-tag">Ancient South Gate</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" data-animate>
+    <h2><span class="gold">Two Rivers & Four Lakes</span> Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/img/liangjiang/桂林市桂林·两江四湖·象山景区_03.png" alt="Panoramic view of Two Rivers and Four Lakes" loading="lazy"/></div>
+      <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/img/liangjiang/桂林市桂林·两江四湖·象山景区_06.jpeg" alt="Elephant Trunk Hill at sunset" loading="lazy"/></div>
+      <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/img/liangjiang/桂林市桂林·两江四湖·象山景区_10.jpg" alt="Night view of Two Rivers and Four Lakes" loading="lazy"/></div>
+      <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/img/liangjiang/桂林市桂林·两江四湖·象山景区_12.jpeg" alt="Scenery of the Four Lakes" loading="lazy"/></div>
+    </div>
+  </section>
+
+  <section class="dashboard" data-animate>
+    <div class="dash-header">
+      <div class="dash-label-top">✦ Data ✦</div>
+      <h2><span class="gold">Two Rivers & Four Lakes</span> Profile</h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🏞️</div><div class="dash-value">3.1km²</div><div class="dash-label">Scenic Area</div></div>
+      <div class="dash-card"><div class="dash-icon">💧</div><div class="dash-value">8万m²</div><div class="dash-label">Water Area</div></div>
+      <div class="dash-card"><div class="dash-icon">⭐</div><div class="dash-value">4.5</div><div class="dash-label">Rating</div></div>
+      <div class="dash-card"><div class="dash-icon">📅</div><div class="dash-value">2017年</div><div class="dash-label">5A Rated</div></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-ol"></div>
+    <div class="cta-content">
+      <div class="cta-num">Guilin</div>
+      <div class="cta-title">Night Cruise on Two Rivers & Four Lakes</div>
+      <a href="../index.html?prov=%E5%B9%BF%E8%A5%BF%E5%A3%AE%E6%97%8F%E8%87%AA%E6%B2%BB%E5%8C%BA" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Two Rivers & Four Lakes · Elephant Trunk Hill · National 5A Scenic Area · Guilin, Guangxi</p>
+  </footer>
+
+  <script>
+    (function(){
+      var heroBg = document.getElementById('heroBg');
+      var bgUrl = 'img/liangjiang/桂林市桂林·两江四湖·象山景区_01.jpg';
+      var img = new Image();
+      img.onload = function(){ heroBg.style.backgroundImage = 'url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/guangxi/+ bgUrl +')' };
+      img.src = bgUrl;
+
+      window.addEventListener('scroll', function(){
+        var s = document.getElementById('scrollHud');
+        if(s) s.style.opacity = window.scrollY > 100 ? '0' : '1';
+      });
+
+      document.querySelector('.hero').addEventListener('mousemove', function(e){
+        var x = (e.clientX / window.innerWidth - 0.5) * 10;
+        var y = (e.clientY / window.innerHeight - 0.5) * 10;
+        document.getElementById('heroBg').style.transform = 'translate(' + x + 'px,' + y + 'px)';
+      });
+
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting) e.target.classList.add('visible');
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('[data-animate]').forEach(function(e){ observer.observe(e); });
+    })();
+  </script>
+</body>
+</html>

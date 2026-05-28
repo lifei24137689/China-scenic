@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Beijing Olympic Park · Modern Architectural Marvel | Beijing 5A Scenic Area</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #e53935;
+  --secondary: #42a5f5;
+  --bg: #0a0a0a;
+  --surface: rgba(229,57,53,0.08);
+  --text: #fafafa;
+  --text-dim: rgba(250,250,250,0.50);
+  --text-faint: rgba(250,250,250,0.20);
+  --glow: rgba(229,57,53,0.25);
+  --blue-glow: rgba(66,165,245,0.18);
+  --accent: #ff6f00;
+  --gold: #ffb300;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter','Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.75;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--primary);border-radius:3px}
+
+#loading{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .6s ease,visibility .6s ease;
+}
+#loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-ring{
+  width:48px;height:48px;border:2px solid var(--text-faint);
+  border-top-color:var(--accent);border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{
+  margin-top:20px;font-size:13px;letter-spacing:.3em;color:var(--text-dim);
+  text-transform:uppercase;
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .4s ease,backdrop-filter .4s ease,padding .4s ease;
+  font-family:'Noto Sans SC',sans-serif;
+}
+nav.scrolled{
+  background:rgba(10,10,10,.88);backdrop-filter:blur(20px);
+  padding:10px 40px;
+}
+.nav-logo a{
+  font-family:'Noto Sans SC',sans-serif;font-size:18px;font-weight:700;
+  color:var(--text);text-decoration:none;letter-spacing:.05em;
+}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{
+  color:var(--text-dim);text-decoration:none;font-size:13px;
+  letter-spacing:.12em;transition:color .3s ease;
+}
+.nav-links a:hover{color:var(--accent)}
+
+.hero{
+  position:relative;height:100vh;min-height:700px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  background-repeat:no-repeat;
+  transition:opacity 1.2s ease;
+}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(10,10,10,.50) 0%,rgba(10,10,10,.25) 40%,rgba(10,10,10,.80) 85%,var(--bg) 100%);
+}
+.dual-glow{
+  position:absolute;top:45%;left:50%;
+  transform:translate(-50%,-50%);
+  width:900px;height:500px;
+  background:
+    radial-gradient(ellipse at 35% 50%,var(--glow) 0%,transparent 50%),
+    radial-gradient(ellipse at 70% 50%,var(--blue-glow) 0%,transparent 50%);
+  animation:dualPulse 5s ease-in-out infinite;
+}
+@keyframes dualPulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.5}
+  50%{transform:translate(-50%,-50%) scale(1.12);opacity:.85}
+}
+.hero-content{
+  position:relative;z-index:2;text-align:center;padding:0 24px;
+}
+.hero-badge{
+  display:inline-block;border:1px solid var(--accent);
+  color:var(--accent);padding:6px 24px;
+  font-size:11px;letter-spacing:.25em;
+  margin-bottom:28px;
+}
+.hero-title{
+  font-family:'Noto Sans SC',sans-serif;
+  font-size:clamp(2.6rem,6vw,5rem);
+  font-weight:900;line-height:1.1;
+  letter-spacing:.04em;color:var(--text);
+}
+.hero-subtitle{
+  font-size:clamp(.9rem,1.6vw,1.15rem);
+  font-weight:300;color:var(--text-dim);
+  margin-top:16px;letter-spacing:.25em;
+  text-transform:uppercase;
+}
+.hero-scroll{
+  position:absolute;bottom:40px;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--text-faint);font-size:10px;letter-spacing:.3em;
+  animation:bounceDown 2s ease-in-out infinite;
+}
+@keyframes bounceDown{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(10px)}
+}
+.scroll-line{width:1px;height:40px;background:var(--text-faint)}
+
+.content-section{padding:100px 0;position:relative}
+.section-inner{
+  max-width:1200px;margin:0 auto;padding:0 40px;
+  display:flex;align-items:center;gap:80px;
+}
+.section-inner.reverse{flex-direction:row-reverse}
+.section-text{flex:1;min-width:0}
+.section-image{flex:1;position:relative;overflow:hidden;border-radius:2px}
+.section-image img{width:100%;display:block;object-fit:cover;aspect-ratio:4/3}
+.section-image .img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,var(--bg) 0%,transparent 25%);
+}
+.section-image .img-label{
+  position:absolute;bottom:16px;left:16px;
+  font-size:11px;letter-spacing:.2em;color:var(--text-dim);
+  text-transform:uppercase;
+}
+.section-label{
+  font-size:11px;letter-spacing:.3em;color:var(--accent);
+  margin-bottom:16px;font-weight:600;text-transform:uppercase;
+}
+.section-title{
+  font-family:'Noto Sans SC',sans-serif;
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:700;line-height:1.3;
+  margin-bottom:24px;color:var(--text);
+}
+.section-body{
+  color:var(--text-dim);font-size:15px;line-height:2;
+}
+.section-body p{margin-bottom:16px}
+.highlight-stat{
+  display:inline-flex;align-items:baseline;gap:6px;
+  font-size:clamp(2rem,4vw,3.2rem);
+  font-weight:900;color:var(--gold);
+  line-height:1;margin:8px 0;
+}
+.highlight-stat span{font-size:14px;font-weight:400;color:var(--text-dim)}
+
+.image-break{
+  position:relative;height:60vh;min-height:420px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.image-break .break-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  background-attachment:fixed;
+}
+.image-break .break-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(10,10,10,.45),rgba(10,10,10,.55));
+}
+.break-quote{
+  position:relative;z-index:1;text-align:center;padding:0 24px;
+}
+.break-quote blockquote{
+  font-family:'Noto Sans SC',sans-serif;
+  font-size:clamp(1.3rem,2.6vw,1.8rem);
+  font-weight:600;color:var(--text);
+  letter-spacing:.06em;line-height:1.6;
+}
+.break-quote cite{
+  display:block;margin-top:16px;
+  font-size:13px;letter-spacing:.25em;color:var(--text-dim);
+  font-style:normal;text-transform:uppercase;
+}
+
+.gallery-section{padding:80px 0;overflow:hidden}
+.gallery-inner{max-width:1280px;margin:0 auto;padding:0 40px}
+.gallery-header{
+  text-align:center;margin-bottom:56px;
+}
+.gallery-header .section-label{text-align:center}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.gallery-item{position:relative;overflow:hidden;border-radius:2px}
+.gallery-item img{width:100%;display:block;object-fit:cover;aspect-ratio:4/3}
+.gallery-item .item-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,10,10,.75) 0%,transparent 40%);
+  opacity:0;transition:opacity .4s ease;
+}
+.gallery-item:hover .item-overlay{opacity:1}
+.gallery-item .item-overlay span{
+  position:absolute;bottom:14px;left:14px;
+  font-size:13px;letter-spacing:.12em;color:var(--text);
+}
+
+.dashboard{padding:100px 0}
+.dashboard-inner{max-width:1100px;margin:0 auto;padding:0 40px}
+.dashboard-header{text-align:center;margin-bottom:56px}
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+.stat-card{
+  background:var(--surface);
+  border:1px solid rgba(250,250,250,.06);
+  padding:32px 24px;text-align:center;border-radius:2px;
+}
+.stat-value{
+  font-size:clamp(1.6rem,2.8vw,2.4rem);
+  font-weight:700;color:var(--accent);
+  line-height:1.2;
+}
+.stat-label{
+  font-size:11px;letter-spacing:.15em;color:var(--text-faint);
+  margin-top:10px;text-transform:uppercase;
+}
+
+.cta-section{
+  padding:120px 0;position:relative;overflow:hidden;
+}
+.cta-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:.25;
+}
+.cta-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,var(--bg) 0%,rgba(10,10,10,.4) 40%,var(--bg) 100%);
+}
+.cta-inner{
+  position:relative;z-index:1;text-align:center;padding:0 24px;
+}
+.cta-title{
+  font-family:'Noto Sans SC',sans-serif;
+  font-size:clamp(1.8rem,3.5vw,2.6rem);
+  font-weight:700;color:var(--text);margin-bottom:32px;
+}
+.cta-btn{
+  display:inline-block;padding:14px 48px;
+  border:1px solid var(--accent);
+  color:var(--accent);text-decoration:none;
+  font-size:13px;letter-spacing:.2em;
+  transition:background .35s ease,color .35s ease;
+  text-transform:uppercase;
+}
+.cta-btn:hover{background:var(--accent);color:var(--bg)}
+.cta-back{margin-top:16px}
+.cta-back a{
+  font-size:12px;color:var(--text-faint);text-decoration:none;
+  letter-spacing:.15em;transition:color .3s;
+}
+.cta-back a:hover{color:var(--text-dim)}
+
+footer{
+  padding:48px 40px;text-align:center;
+  border-top:1px solid rgba(250,250,250,.04);
+}
+footer p{
+  font-size:12px;color:var(--text-faint);letter-spacing:.1em;
+}
+
+[data-animate]{
+  opacity:0;transform:translateY(40px);
+  transition:opacity .8s ease,transform .8s ease;
+}
+[data-animate].visible{opacity:1;transform:translateY(0)}
+[data-animate-delay]{transition-delay:.15s}
+
+@media(max-width:900px){
+  .section-inner,.section-inner.reverse{
+    flex-direction:column;gap:40px;
+  }
+  .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+  .gallery-grid{grid-template-columns:1fr}
+  nav{padding:12px 20px}
+  nav.scrolled{padding:8px 20px}
+  .nav-links{gap:16px}
+  .content-section{padding:60px 0}
+  .image-break{height:50vh}
+}
+@media(max-width:600px){
+  .section-inner{padding:0 20px}
+  .section-body{font-size:14px}
+  .hero-title{font-size:2rem}
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="loader-ring"></div>
+  <p class="loading-text">Olympic Park · Loading</p>
+</div>
+
+<nav id="nav">
+  <div class="nav-logo"><a href="../index.html?prov=%E5%8C%97%E4%BA%AC%E5%B8%82">Beijing 5A</a></div>
+  
+</nav>
+
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="dual-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">2008 · BEIJING OLYMPICS</div>
+    <h1 class="hero-title">Beijing<br>Olympic Park</h1>
+    <p class="hero-subtitle">Where Dreams Came True</p>
+  </div>
+  <div class="hero-scroll">
+    <span>EXPLORE</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<section class="content-section" id="overview">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_01.jpg" alt="Olympic Park Entrance" loading="lazy" />
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">OVERVIEW</div>
+      <h2 class="section-title">Olympic Legacy<br>New City Landmark</h2>
+      <div class="section-body">
+        <p>Beijing Olympic Park is located at the northern end of the city's central axis, covering approximately <span style="color:var(--gold);">11.6 square kilometers</span>. It served as the main venue area for the 2008 Beijing Olympic Games. In 2022, the Beijing Winter Olympics once again focused the world's attention here, making it the world's only "Dual Olympics" core area.</p>
+        <p>The park integrates sports competitions, conferences and exhibitions, cultural entertainment, and leisure shopping. It is not only a showcase of modern architectural marvels but also an <span style="color:var(--gold);">eternal symbol</span> of the Olympic spirit in China.</p>
+        <div class="highlight-stat">2008<span> & 2022 · Dual-Olympic City</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="image-break">
+  <div class="break-bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_03.jpg')"></div>
+  <div class="break-overlay"></div>
+  <div class="break-quote">
+    <blockquote>"One World<br>One Dream"</blockquote>
+    <cite>—— 2008 Beijing Olympic Motto</cite>
+  </div>
+</div>
+
+<section class="content-section" id="birds-nest">
+  <div class="section-inner reverse">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_04.jpg" alt="National Stadium Bird's Nest" loading="lazy" />
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">NATIONAL STADIUM · BIRD'S NEST</div>
+      <h2 class="section-title">Steel Woven<br>Eastern Nest</h2>
+      <div class="section-body">
+        <p>The National Stadium — "Bird's Nest," was designed by the Swiss firm Herzog & de Meuron in collaboration with Chinese architects. The exterior is woven from <span style="color:var(--gold);">24 portal trusses</span>, resembling a cradle of life and a giant bird's nest, interpreting the round beauty of traditional Chinese artifacts through the most modern steel structure language.</p>
+        <p>The Bird's Nest measures 333 meters long, 298 meters wide, and 69 meters high, with a capacity of <span style="color:var(--gold);">91,000</span> spectators. The opening and closing ceremonies of the 2008 Olympics were held here — a spectacular audio-visual feast that shook the world and remains China's most thrilling collective memory.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" id="water-cube">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_05.jpg" alt="National Aquatics Center Water Cube" loading="lazy" />
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">NATIONAL AQUATICS CENTER · WATER CUBE</div>
+      <h2 class="section-title">Water Magic<br>Bubble Fantasy</h2>
+      <div class="section-body">
+        <p>The National Aquatics Center — "Water Cube," features an ETFE membrane structure with <span style="color:var(--gold);">over 3,000</span> irregular bubble-like forms, inspired by the natural beauty of water molecule arrangements and soap bubbles. Crystalline and translucent by day, the building transforms with dazzling lighting effects at night.</p>
+        <p>The Water Cube covers nearly <span style="color:var(--gold);">80,000 square meters</span>, housing competition pools, diving pools, and warm-up pools. During the 2008 Olympics, 25 world records were set here. For the 2022 Winter Olympics, the Water Cube transformed into the "Ice Cube," successfully hosting the curling competitions and continuing its legendary legacy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" id="tower">
+  <div class="section-inner reverse">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_06.jpg" alt="Olympic Tower" loading="lazy" />
+      <div class="img-overlay"></div>
+    </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">OLYMPIC TOWER</div>
+      <h2 class="section-title">Top of the City<br>Overlooking the Axis</h2>
+      <div class="section-body">
+        <p>Beijing Olympic Tower stands <span style="color:var(--gold);">246.8 meters</span> tall, consisting of five independent towers of varying heights, topped with a permanent Olympic Rings emblem. The observation deck at the top is the highest point in northern Beijing, offering a 360-degree panoramic view of the Olympic Park and the Beijing central axis.</p>
+        <p>At the foot of the tower lies the <span style="color:var(--gold);">Sunken Garden</span> and the Dragon-shaped Waterway, where traditional garden aesthetics and modern landscape design blend seamlessly. During major events and festivals, this area becomes a vibrant urban living room for the public.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section" id="gallery">
+  <div class="gallery-inner">
+    <div class="gallery-header" data-animate>
+      <div class="section-label">GALLERY</div>
+      <h2 class="section-title" style="font-size:clamp(1.4rem,2.5vw,1.8rem);margin-top:8px;">Olympic · Architectural Symphony</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="col">
+        <div class="gallery-item tall" data-animate style="grid-row:span 2;height:100%;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_08.jpg" alt="Panoramic view of Olympic Park" style="height:100%;min-height:500px;" loading="lazy" />
+        </div>
+        <div class="gallery-item" data-animate style="height:240px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_09.jpg" alt="Bird's Nest and Water Cube" style="height:100%;" loading="lazy" />
+        </div>
+      </div>
+      <div class="col">
+        <div class="gallery-item" data-animate style="height:280px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_10.jpg" alt="Olympic Park Scenery" style="height:100%;" loading="lazy" />
+        </div>
+        <div class="gallery-item" data-animate style="height:300px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_11.jpg" alt="2008 Olympic Park" style="height:100%;" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dashboard">
+  <div class="dashboard-inner">
+    <div class="dashboard-header" data-animate>
+      <div class="section-label">DATA DASHBOARD</div>
+    </div>
+    <div class="dashboard-grid">
+      <div class="stat-card" data-animate>
+        <div class="stat-value">11.6km²</div>
+        <div class="stat-label">Total Park Area</div>
+      </div>
+      <div class="stat-card" data-animate>
+        <div class="stat-value">91,000</div>
+        <div class="stat-label">Bird's Nest Capacity</div>
+      </div>
+      <div class="stat-card" data-animate>
+        <div class="stat-value">246.8m</div>
+        <div class="stat-label">Olympic Tower Height</div>
+      </div>
+      <div class="stat-card" data-animate>
+        <div class="stat-value">25</div>
+        <div class="stat-label">Records Set at Water Cube</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_03.jpg')"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-inner" data-animate>
+    <h2 class="cta-title">Step into Olympic Park<br>Feel the Pulse of the Dual-Olympic City</h2>
+    <p style="color:var(--text-dim);font-size:14px;letter-spacing:.15em;margin-bottom:24px;">Open Year-Round · Direct Access via Metro Line 8, Olympic Sports Center Station</p>
+    <a href="#" class="cta-btn">EXPLORE OLYMPIC PARK</a>
+    <div class="cta-back" style="margin-top:20px;">
+      <a href="../index.html?prov=%E5%8C%97%E4%BA%AC%E5%B8%82">← Back to Scenic Map</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Beijing Olympic Park · 2008/2022 Dual-Olympic Heritage · National 5A Tourist Attraction</p>
+  <p style="margin-top:8px;color:rgba(250,250,250,.15);">Beichen Road, Chaoyang District, Beijing · Images via Wikimedia Commons</p>
+</footer>
+
+<script>
+(function(){
+  var heroBg = document.getElementById('heroBg');
+  var loading = document.getElementById('loading');
+
+  var heroImg = new Image();
+  heroImg.onload = function() {
+    heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_01.jpg')";
+    loading.classList.add('hidden');
+  };
+  heroImg.onerror = function() {
+    heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_01.jpg')";
+    loading.classList.add('hidden');
+  };
+  setTimeout(function(){
+    if(!heroBg.style.backgroundImage){
+      heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_01.jpg')";
+      loading.classList.add('hidden');
+    }
+  }, 5000);
+  heroImg.src = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/aolinpike/北京奥林匹克公园_01.jpg';
+})();
+
+var nav = document.getElementById('nav');
+window.addEventListener('scroll',function(){
+  nav.classList.toggle('scrolled',window.scrollY > 80);
+});
+
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting) entry.target.classList.add('visible');
+  });
+},{threshold:.15,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('[data-animate]').forEach(function(el){observer.observe(el)});
+
+document.addEventListener('mousemove',function(e){
+  var x = (e.clientX / window.innerWidth - .5) * 14;
+  var y = (e.clientY / window.innerHeight - .5) * 10;
+  var heroEl = document.querySelector('.hero-bg');
+  if(heroEl.style.backgroundImage){
+    heroEl.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(1.05)';
+  }
+});
+</script>
+
+</body>
+</html>

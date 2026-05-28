@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Jinji Lake · Modern Suzhou | 5A Scenic Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@300;400;600;700&family=Orbitron:wght@400;600;700&family=Rajdhani:wght@300;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Serif SC','PingFang SC','Microsoft YaHei',serif;
+      background: #050a10;
+      color: #e3f0fa;
+      overflow-x: hidden;
+    }
+
+    :root {
+      --primary: #1565c0;
+      --secondary: #4fc3f7;
+      --bg: #050a10;
+      --surface: rgba(21,101,192,0.06);
+      --text: #e3f0fa;
+      --text-dim: rgba(227,240,250,0.55);
+      --text-faint: rgba(227,240,250,0.25);
+      --glow: rgba(21,101,192,0.25);
+    }
+
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: #050a10;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 2px solid rgba(21,101,192,.1);
+      border-top: 2px solid rgba(21,101,192,.5);
+      border-radius: 50%; animation: spin 1.5s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p {
+      margin-top: 20px; font-size: 13px;
+      color: rgba(227,240,250,.3);
+      letter-spacing: 3px; font-family: 'Courier New',monospace;
+    }
+
+    .hero {
+      position: relative; width: 100%; height: 100vh;
+      overflow: hidden; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      filter: brightness(0.5) saturate(1.15);
+      transition: transform 0.1s ease-out; will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 25%, #050a10 80%);
+    }
+    .hero .geo-layer {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(21,101,192,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 25% 65%, rgba(79,195,247,0.04) 0%, transparent 40%),
+        radial-gradient(circle at 75% 35%, rgba(21,101,192,0.05) 0%, transparent 45%);
+      animation: geoPulse 8s ease-in-out infinite;
+    }
+    @keyframes geoPulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+    .hero .top-fade {
+      position: absolute; top: 0; left: 0; right: 0; height: 30vh;
+      background: linear-gradient(180deg,#050a10 0%,transparent 100%);
+    }
+    .hero .bottom-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40vh;
+      background: linear-gradient(0deg,#050a10 0%,#050a10aa 20%,transparent 100%);
+    }
+
+    .hud {
+      position: absolute; inset: 0; z-index: 10;
+      padding: 28px 40px;
+      display: flex; flex-direction: column;
+    }
+    .hud-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 18px; border-radius: 20px;
+      background: rgba(5,10,16,.5);
+      border: 1px solid rgba(21,101,192,.15);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      color: rgba(227,240,250,.5); font-size: 13px; cursor: pointer;
+      transition: all .3s; width: fit-content; text-decoration: none;
+    }
+    .back-btn:hover { border-color: rgba(21,101,192,.3); color: #e3f0fa; }
+    .back-btn .arrow { display: inline-block; transition: transform .3s; }
+    .back-btn:hover .arrow { transform: translateX(-3px); }
+
+    .title-group { margin-top: 20px; }
+    .title-group h1 {
+      font-size: 52px; font-weight: 700; letter-spacing: 8px;
+      text-shadow: 0 0 60px rgba(0,0,0,.5);
+      display: flex; align-items: baseline; gap: 14px;
+      font-family: 'ZCOOL XiaoWei','Noto Serif SC',serif;
+    }
+    .title-group h1 .badge {
+      font-size: 12px; padding: 4px 16px; border-radius: 14px;
+      background: rgba(21,101,192,.15);
+      border: 1px solid rgba(21,101,192,.25);
+      color: rgba(79,195,247,.8); letter-spacing: 1px;
+      font-weight: 400; font-size: 11px;
+    }
+    .title-group h1 .stars {
+      font-size: 16px; color: rgba(79,195,247,.4);
+      letter-spacing: 2px; font-weight: 400;
+    }
+    .title-group .subtitle {
+      font-size: 14px; color: rgba(227,240,250,.35);
+      letter-spacing: 6px; margin-top: 4px;
+    }
+
+    .data-panel { display: flex; gap: 8px; }
+    .data-item {
+      text-align: center; padding: 10px 18px; border-radius: 10px;
+      background: rgba(5,10,16,.5);
+      border: 1px solid rgba(21,101,192,.08);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      min-width: 72px;
+    }
+    .data-item .num { font-size: 20px; font-weight: 700; }
+    .data-item .num.cyan { color: #4fc3f7; }
+    .data-item .num.green { color: #81d4fa; }
+    .data-item .num.pink { color: #42a5f5; }
+    .data-item .label { font-size: 9px; color: rgba(227,240,250,.3); margin-top: 2px; letter-spacing: 1px; }
+
+    .hero-info {
+      position: absolute; left: 40px; bottom: 130px; z-index: 11;
+      max-width: 440px;
+    }
+    .hero-info .card {
+      background: rgba(5,10,16,.55);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 14px; border: 1px solid rgba(21,101,192,.1);
+      padding: 22px 28px;
+    }
+    .hero-info .card p {
+      font-size: 14px; line-height: 1.8; color: rgba(227,240,250,.6);
+    }
+    .hero-info .tags { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-info .tags span {
+      padding: 4px 14px; border-radius: 14px; font-size: 11px;
+      letter-spacing: 1px; border: 1px solid;
+    }
+    .tag-blue { background: rgba(79,195,247,.08); border-color: rgba(79,195,247,.2); color: #81d4fa; }
+    .tag-amber { background: rgba(66,165,245,.08); border-color: rgba(66,165,245,.2); color: #90caf9; }
+    .tag-teal { background: rgba(0,188,212,.08); border-color: rgba(0,188,212,.2); color: #4dd0e1; }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%; z-index: 11;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(227,240,250,.2);
+      font-size: 10px; letter-spacing: 2px;
+      font-family: 'Courier New',monospace;
+    }
+    .scroll-hint .line {
+      width: 1px; height: 30px;
+      background: linear-gradient(180deg,rgba(21,101,192,.3),transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.3; transform: scaleY(0.5); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    .section {
+      position: relative; min-height: 80vh;
+      display: flex; align-items: center;
+      padding: 80px 40px;
+    }
+    .section-inner {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    .section-inner.reverse { direction: rtl; }
+    .section-inner.reverse > * { direction: ltr; }
+
+    .section-image {
+      border-radius: 14px; overflow: hidden; position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      opacity: 0; transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .section-image.visible { opacity: 1; transform: translateY(0); }
+    .section-image img {
+      width: 100%; height: 400px; object-fit: cover;
+      display: block; transition: transform 0.6s ease;
+    }
+    .section-image:hover img { transform: scale(1.03); }
+    .section-image .img-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 60%;
+      background: linear-gradient(0deg,#050a10 0%,transparent 100%);
+      pointer-events: none;
+    }
+    .section-image .img-label {
+      position: absolute; bottom: 16px; left: 20px;
+      font-size: 11px; color: rgba(227,240,250,.3);
+      letter-spacing: 2px; font-family: 'Courier New',monospace;
+    }
+
+    .section-content {
+      opacity: 0; transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1) 0.15s;
+    }
+    .section-content.visible { opacity: 1; transform: translateY(0); }
+    .section-content .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(21,101,192,.4);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .section-content h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+      margin-bottom: 20px; line-height: 1.3;
+    }
+    .section-content h2 .highlight {
+      background: linear-gradient(135deg,#4fc3f7,#42a5f5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-content p {
+      font-size: 15px; line-height: 1.9;
+      color: rgba(227,240,250,.55);
+      margin-bottom: 20px;
+    }
+    .section-content .stat-row {
+      display: flex; gap: 24px; margin-top: 24px;
+    }
+    .section-content .stat-item {
+      text-align: center; padding: 16px 24px; border-radius: 10px;
+      background: rgba(21,101,192,.05);
+      border: 1px solid rgba(21,101,192,.08);
+      min-width: 100px;
+    }
+    .section-content .stat-item .num {
+      font-size: 28px; font-weight: 700; color: #4fc3f7;
+    }
+    .section-content .stat-item .lbl {
+      font-size: 10px; color: rgba(227,240,250,.3);
+      margin-top: 4px; letter-spacing: 1px;
+    }
+
+    .image-break {
+      position: relative; width: 100%; height: 60vh; overflow: hidden;
+    }
+    .image-break .bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      background-attachment: fixed;
+      filter: brightness(0.35);
+    }
+    .image-break .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,#050a10 0%,transparent 20%,transparent 80%,#050a10 100%);
+    }
+    .image-break .quote {
+      position: absolute; bottom: 60px; left: 40px; right: 40px; z-index: 2;
+      max-width: 600px;
+    }
+    .image-break .quote p {
+      font-size: 22px; font-weight: 300; line-height: 1.6;
+      color: rgba(227,240,250,.6); letter-spacing: 2px;
+    }
+    .image-break .quote .author {
+      font-size: 12px; color: rgba(227,240,250,.25);
+      letter-spacing: 3px; margin-top: 12px;
+      font-family: 'Courier New',monospace;
+    }
+
+    .gallery-section { padding: 100px 40px; }
+    .gallery-section .section-header {
+      max-width: 1200px; margin: 0 auto 40px;
+    }
+    .gallery-section .section-header .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(21,101,192,.4);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .gallery-section .section-header h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+    }
+    .gallery-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr; gap: 12px;
+    }
+    .gallery-grid .col { display: flex; flex-direction: column; gap: 12px; }
+    .gallery-grid .col:first-child { grid-row: span 2; }
+    .gallery-item {
+      border-radius: 12px; overflow: hidden; position: relative;
+      opacity: 0; transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .gallery-item.visible { opacity: 1; transform: translateY(0); }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block; transition: transform 0.6s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item .item-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px;
+      background: linear-gradient(0deg,#050a10 0%,transparent 100%);
+    }
+    .gallery-item .item-overlay span {
+      font-size: 12px; color: rgba(227,240,250,.4);
+      letter-spacing: 1px;
+    }
+
+    .dashboard-section {
+      padding: 100px 40px;
+      background: linear-gradient(180deg,#050a10,#050a18,#050a10);
+    }
+    .dashboard-section .section-header {
+      max-width: 1200px; margin: 0 auto 50px;
+    }
+    .dashboard-section .section-header .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(21,101,192,.4);
+      letter-spacing: 3px; margin-bottom: 12px;
+    }
+    .dashboard-section .section-header h2 {
+      font-size: 32px; font-weight: 700; letter-spacing: 2px;
+    }
+    .dashboard-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 12px;
+    }
+    .dashboard-card {
+      padding: 28px 24px; border-radius: 14px;
+      background: rgba(21,101,192,.03);
+      border: 1px solid rgba(21,101,192,.06);
+      text-align: center;
+      opacity: 0; transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(.16,1,.3,1);
+    }
+    .dashboard-card.visible { opacity: 1; transform: translateY(0); }
+    .dashboard-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .dashboard-card .d-num { font-size: 32px; font-weight: 700; letter-spacing: 1px; }
+    .dashboard-card .d-label {
+      font-size: 10px; color: rgba(227,240,250,.3);
+      letter-spacing: 2px; margin-top: 6px;
+      font-family: 'Courier New',monospace;
+    }
+    .dashboard-card.cyan .d-num { color: #4fc3f7; }
+    .dashboard-card.green .d-num { color: #81d4fa; }
+    .dashboard-card.purple .d-num { color: #42a5f5; }
+    .dashboard-card.pink .d-num { color: #90caf9; }
+    .dashboard-card.gold .d-num { color: #4fc3f7; }
+
+    .cta-section {
+      padding: 120px 40px; text-align: center; position: relative;
+    }
+    .cta-section .bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      filter: brightness(0.2);
+    }
+    .cta-section .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,#050a10 0%,transparent 30%,transparent 70%,#050a10 100%);
+    }
+    .cta-section .content {
+      position: relative; z-index: 2;
+      max-width: 600px; margin: 0 auto;
+    }
+    .cta-section .content .numeral {
+      font-family: 'Courier New',monospace;
+      font-size: 13px; color: rgba(21,101,192,.4);
+      letter-spacing: 3px; margin-bottom: 16px;
+    }
+    .cta-section .content h2 {
+      font-size: 36px; font-weight: 700; letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .cta-section .content p {
+      font-size: 15px; color: rgba(227,240,250,.4);
+      line-height: 1.8; margin-bottom: 30px;
+    }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 32px;
+      border: 1px solid rgba(21,101,192,.3);
+      background: rgba(21,101,192,.1);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      color: #4fc3f7; font-size: 14px;
+      cursor: pointer; transition: all .3s;
+      letter-spacing: 1px; text-decoration: none;
+    }
+    .cta-btn:hover {
+      background: rgba(21,101,192,.2);
+      box-shadow: 0 0 40px rgba(21,101,192,.1);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      padding: 40px; text-align: center;
+      border-top: 1px solid rgba(21,101,192,.05);
+    }
+    footer p {
+      font-size: 11px; color: rgba(227,240,250,.15);
+      letter-spacing: 2px;
+      font-family: 'Courier New',monospace;
+    }
+
+    .corner { position: fixed; z-index: 100; pointer-events: none; }
+    .corner-h { position: absolute; width: 20px; height: 1px; background: rgba(21,101,192,.06); }
+    .corner-v { position: absolute; width: 1px; height: 20px; background: rgba(21,101,192,.06); }
+    .corner-tl { top: 10px; left: 10px; }
+    .corner-tr { top: 10px; right: 10px; }
+    .corner-bl { bottom: 10px; left: 10px; }
+    .corner-br { bottom: 10px; right: 10px; }
+    .corner-tl .corner-h { top: 0; left: 0; }
+    .corner-tl .corner-v { top: 0; left: 0; }
+    .corner-tr .corner-h { top: 0; right: 0; }
+    .corner-tr .corner-v { top: 0; right: 0; }
+    .corner-bl .corner-h { bottom: 0; left: 0; }
+    .corner-bl .corner-v { bottom: 0; left: 0; }
+    .corner-br .corner-h { bottom: 0; right: 0; }
+    .corner-br .corner-v { bottom: 0; right: 0; }
+
+    .scroll-hud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 12px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(5,10,16,.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(21,101,192,.06);
+      transform: translateY(-100%);
+      transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+    }
+    .scroll-hud.active { transform: translateY(0); }
+    .scroll-hud .left { display: flex; align-items: center; gap: 16px; }
+    .scroll-hud .site-name {
+      font-size: 13px; color: rgba(227,240,250,.4);
+      letter-spacing: 2px;
+      font-family: 'Orbitron','PingFang SC',sans-serif;
+    }
+    .scroll-hud .site-name strong { color: rgba(227,240,250,.6); }
+    .scroll-hud .right span {
+      font-size: 10px; color: rgba(227,240,250,.2);
+      letter-spacing: 2px;
+      font-family: 'Orbitron','Courier New',monospace;
+    }
+
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 2px; background: rgba(21,101,192,.05);
+    }
+    .scroll-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #4fc3f7, #42a5f5);
+      transition: width 0.1s linear;
+    }
+    .scroll-progress-pct {
+      position: fixed; top: 8px; right: 42px; z-index: 60;
+      font-size: 9px; color: rgba(21,101,192,.15);
+      font-family: 'Courier New',monospace; letter-spacing: 1px;
+    }
+
+    .chapter-nav {
+      position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 55;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .chapter-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(21,101,192,.12);
+      cursor: pointer; transition: all .3s; position: relative;
+    }
+    .chapter-dot:hover { background: rgba(21,101,192,.35); transform: scale(1.4); }
+    .chapter-dot.active { background: rgba(21,101,192,.7); transform: scale(1.5); box-shadow: 0 0 10px rgba(21,101,192,.3); }
+    .chapter-dot .chapter-label {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      white-space: nowrap; font-size: 9px; color: rgba(227,240,250,.15);
+      letter-spacing: 2px; font-family: 'Courier New',monospace;
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+    }
+    .chapter-dot:hover .chapter-label { opacity: 1; }
+
+    @keyframes target-lock {
+      0% { box-shadow: 0 0 0 0 rgba(21,101,192,.15); }
+      100% { box-shadow: 0 0 0 8px rgba(21,101,192,0); }
+    }
+    .back-btn:hover, .cta-btn:hover, .chapter-dot:hover, .dashboard-card:hover {
+      animation: target-lock 0.6s ease-out;
+    }
+
+    .page-transition {
+      position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none; background: #050a10;
+      opacity: 0; transition: opacity 0.5s cubic-bezier(.16,1,.3,1);
+    }
+    .page-transition.active { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .hud { padding: 16px 20px; }
+      .hud-top { flex-direction: column; }
+      .data-panel { margin-top: 12px; gap: 4px; }
+      .data-item { padding: 6px 12px; min-width: 56px; }
+      .data-item .num { font-size: 16px; }
+      .title-group h1 { font-size: 32px; flex-wrap: wrap; }
+      .hero-info { left: 20px; right: 20px; bottom: 100px; }
+      .hero-info .card { padding: 16px 20px; }
+      .hero-info .card p { font-size: 12px; }
+      .section { padding: 60px 20px; min-height: auto; }
+      .section-inner { grid-template-columns: 1fr; gap: 30px; }
+      .section-inner.reverse { direction: ltr; }
+      .section-image img { height: 250px; }
+      .section-content h2 { font-size: 24px; }
+      .section-content .stat-row { flex-wrap: wrap; }
+      .gallery-section { padding: 60px 20px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-grid .col:first-child { grid-row: auto; }
+      .dashboard-section { padding: 60px 20px; }
+      .dashboard-grid { grid-template-columns: 1fr 1fr; }
+      .cta-section { padding: 80px 20px; }
+      .cta-section .content h2 { font-size: 24px; }
+      .scroll-hud { padding: 10px 20px; }
+      .chapter-nav { right: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-overlay" id="loading">
+    <div class="loading-spinner"></div>
+    <p>Loading</p>
+  </div>
+
+  <div class="scroll-progress">
+    <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+  </div>
+  <div class="scroll-progress-pct" id="scrollPct">0%</div>
+
+  <div class="chapter-nav" id="chapterNav"></div>
+
+  <div class="scroll-hud" id="scrollHud">
+    <div class="left">
+      <span class="site-name"><strong>Jinji Lake</strong> · Suzhou Industrial Park</span>
+    </div>
+    <div class="right">
+      <span>5A SCENIC</span>
+    </div>
+  </div>
+
+  <div class="corner corner-tl"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-tr"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-bl"><div class="corner-h"></div><div class="corner-v"></div></div>
+  <div class="corner corner-br"><div class="corner-h"></div><div class="corner-v"></div></div>
+
+  <div class="page-transition" id="pageTransition"></div>
+
+  <section class="hero" id="hero" data-chapter="City Landmark">
+    <div class="hero-bg" id="heroBg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_01.jpg')"></div>
+    <div class="hero-overlay"></div>
+    <div class="geo-layer"></div>
+    <div class="top-fade"></div>
+    <div class="bottom-fade"></div>
+
+    <div class="hud" id="scrollHudTop">
+      <div class="hud-top">
+        <a href="../index.html?prov=%E6%B1%9F%E8%8B%8F%E7%9C%81" class="back-btn">
+          <span class="arrow">←</span>Back to Map
+        </a>
+        <div class="data-panel">
+          <div class="data-item">
+            <div class="num cyan">2012</div>
+            <div class="label">Year Selected</div>
+          </div>
+          <div class="data-item">
+            <div class="num green">4.4</div>
+            <div class="label">Overall Rating</div>
+          </div>
+          <div class="data-item">
+            <div class="num pink">7.4</div>
+            <div class="label">Area KM²</div>
+          </div>
+        </div>
+      </div>
+      <div class="title-group">
+        <h1>
+          Jinji Lake
+          <span class="badge">Suzhou, Jiangsu</span>
+          <span class="stars">5A</span>
+        </h1>
+        <div class="subtitle">JINJI LAKE · THE MODERN FACE OF SUZHOU</div>
+      </div>
+    </div>
+
+    <div class="hero-info">
+      <div class="card">
+        <p>Jinji Lake is located in Suzhou Industrial Park, and is one of the largest urban lake parks in China. The "Gate of the Orient" on the eastern shore stands by the lake like a portal through time, becoming a new landmark of modern Suzhou. Moonlight Pier, Li Gongdi Embankment, and the Ferris Wheel Park showcase the modern and fashionable urban charm of Suzhou.</p>
+        <div class="tags">
+          <span class="tag-blue">Urban Lake</span>
+          <span class="tag-amber">Modern Suzhou</span>
+          <span class="tag-teal">Ferris Wheel</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>SCROLL</span>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <section class="section" data-chapter="Gate of the Orient">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_02.jpg" alt="Gate of the Orient" loading="lazy"/>
+        <div class="img-overlay"></div>
+        
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">01 CITY LANDMARK</div>
+        <h2><span class="highlight">Gate of the Orient</span> · Oriental Wall Street</h2>
+        <p>Standing proudly on the shore of Jinji Lake with its distinctive "gate" shape, the Gate of the Orient rises 301.8 meters and is hailed as the "First Gate of the World." This skyscraper is not only a landmark of Suzhou but also symbolizes the thousand-year-old city's ambition and vision of transforming into a modern international metropolis.</p>
+        <p>As night falls, the Gate of the Orient shines with brilliant lights, reflected on the calm lake surface, complementing the lakeside Ferris wheel and Moonlight Pier to create a captivating urban nightscape.</p>
+        <div class="stat-row">
+          <div class="stat-item">
+            <div class="num">301.8</div>
+            <div class="lbl">Building Height / M</div>
+          </div>
+          <div class="stat-item">
+            <div class="num">7.4</div>
+            <div class="lbl">Lake Area / KM²</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="image-break" data-chapter="Lakeside Nightfall">
+    <div class="bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_03.jpg')"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <p>"A city's water, a city's dream — Jinji Lake, with its expanse of azure waters, reflects Suzhou's magnificent transformation from classical elegance to a future-oriented metropolis."</p>
+      <div class="author">— Lakeside Reverie —</div>
+    </div>
+  </div>
+
+  <section class="section" data-chapter="Moonlight Pier">
+    <div class="section-inner reverse">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_04.jpg" alt="Moonlight Pier" loading="lazy"/>
+        <div class="img-overlay"></div>
+        
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">02 LAKESIDE LIVING</div>
+        <h2><span class="highlight">Moonlight Pier</span> · Urban Back Garden</h2>
+        <p>Moonlight Pier is the most charming waterfront commercial area along Jinji Lake, where European architecture blends seamlessly with Suzhou's water-town elements. It features specialty restaurants, boutique cafes, and creative shops, making it a favorite social gathering spot and photo destination for young people.</p>
+        <p>Strolling along Moonlight Pier, you have the shimmering Jinji Lake on one side and a vibrant modern commercial district on the other. Sitting on a lakeside terrace with a cup of coffee as the sun sets, watching the changing colors of the lake and sky, is the ultimate luxury of relaxation for city dwellers.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-chapter="Li Gongdi Embankment">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_05.jpg" alt="Li Gongdi Embankment and Ferris Wheel" loading="lazy"/>
+        <div class="img-overlay"></div>
+        
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">03 LAKE CENTER CAUSEWAY</div>
+        <h2><span class="highlight">Li Gongdi Embankment</span> · Waterfront Ferris Wheel</h2>
+        <p>Li Gongdi Embankment is the only lake-center causeway in Jinji Lake, stretching 1,400 meters. It is lined with upscale restaurants, art galleries, and boutique hotels, making it Suzhou's most quality-driven lakeside leisure strip. Under the night sky, it glows with brilliant lights, like a golden necklace lying across the lake.</p>
+        <p>The waterfront Ferris wheel rises 120 meters high and is one of Jinji Lake's iconic attractions. As the Ferris wheel slowly ascends, the magnificent views of the entire Jinji Lake and Suzhou Industrial Park unfold before you — especially at night, when the myriad lights of the city reflect off the lake, creating an utterly romantic panorama.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="gallery-section" data-chapter="Light & Shadow Gallery">
+    <div class="section-header">
+      <div class="numeral">GALLERY</div>
+      <h2>City Light & Shadow · Jinji Lake Through the Seasons</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="col">
+        <div class="gallery-item" data-animate style="height:500px">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_06.jpg" alt="Jinji Lake Panorama" loading="lazy"/>
+          
+        </div>
+      </div>
+      <div class="col">
+        <div class="gallery-item" data-animate style="height:220px">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_07.jpg" alt="Lakeside Night Scene" loading="lazy"/>
+          
+        </div>
+        <div class="gallery-item" data-animate style="height:260px">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_08.jpg" alt="Yuanrong Sky Canopy" loading="lazy"/>
+          
+        </div>
+        <div class="gallery-item" data-animate style="height:280px">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_09.jpg" alt="Lakeside Ferris Wheel" loading="lazy"/>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-section" data-chapter="Data Overview">
+    <div class="section-header">
+      <div class="numeral">DASHBOARD</div>
+      <h2>Jinji Lake · Data Profile</h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dashboard-card cyan" data-animate>
+        <div class="icon">🏙️</div>
+        <div class="d-num">2012</div>
+        <div class="d-label">5A Year Selected</div>
+      </div>
+      <div class="dashboard-card green" data-animate>
+        <div class="icon">🌊</div>
+        <div class="d-num">7.4</div>
+        <div class="d-label">Lake Area KM²</div>
+      </div>
+      <div class="dashboard-card purple" data-animate>
+        <div class="icon">⭐</div>
+        <div class="d-num">4.4</div>
+        <div class="d-label">Visitor Rating</div>
+      </div>
+      <div class="dashboard-card pink" data-animate>
+        <div class="icon">🏗️</div>
+        <div class="d-num">301.8</div>
+        <div class="d-label">Gate of the Orient Height M</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section" data-chapter="Explore More">
+    <div class="bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_01.jpg')"></div>
+    <div class="overlay"></div>
+    <div class="content">
+      <div class="numeral">ENDLESS DISCOVERY</div>
+      <h2>Explore the Modern Heart of Suzhou</h2>
+      <p>From a thousand-year-old ancient city to a city of the future — Jinji Lake, with its expanse of waters, has witnessed Suzhou's magnificent transformation from classical gardens to a modern metropolis. Moonlight Pier, Li Gongdi Embankment, Ferris Wheel Park... each spot is a shining new business card that this city presents to the world.</p>
+      <a href="../index.html?prov=%E6%B1%9F%E8%8B%8F%E7%9C%81" class="cta-btn">← Back to Explore More 5A Scenic Spots</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>5A SCENIC SPOTS IMMERSIVE EXPLORATION · JINJI LAKE</p>
+  </footer>
+
+  <script>
+    (function() {
+      var heroBg = document.getElementById('heroBg');
+      var img = new Image();
+      img.onload = function() {
+        heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_01.jpg')";
+        document.getElementById('loading').classList.add('hidden');
+      };
+      img.onerror = function() {
+        heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_01.jpg')";
+        document.getElementById('loading').classList.add('hidden');
+      };
+      img.src = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_01.jpg';
+
+      setTimeout(function() {
+        if (!document.getElementById('loading').classList.contains('hidden')) {
+          heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangsu/江苏/苏州市金鸡湖旅游区/苏州市金鸡湖旅游区_01.jpg')";
+          document.getElementById('loading').classList.add('hidden');
+        }
+      }, 3000);
+
+      var scrollHud = document.getElementById('scrollHud');
+      window.addEventListener('scroll', function() {
+        var scrollY = window.scrollY;
+        if (scrollY > 300) {
+          scrollHud.classList.add('active');
+        } else {
+          scrollHud.classList.remove('active');
+        }
+
+        var docH = document.documentElement.scrollHeight - window.innerHeight;
+        var pct = docH > 0 ? Math.round((scrollY / docH) * 100) : 0;
+        document.getElementById('scrollProgressFill').style.width = pct + '%';
+        document.getElementById('scrollPct').textContent = pct + '%';
+      });
+
+      var hero = document.getElementById('hero');
+      hero.addEventListener('mousemove', function(e) {
+        var x = (e.clientX / window.innerWidth - 0.5) * 8;
+        var y = (e.clientY / window.innerHeight - 0.5) * 8;
+        heroBg.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+      });
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('[data-animate]').forEach(function(el) {
+        observer.observe(el);
+      });
+
+      var chapters = document.querySelectorAll('[data-chapter]');
+      var chapterNav = document.getElementById('chapterNav');
+      chapters.forEach(function(ch, i) {
+        var dot = document.createElement('div');
+        dot.className = 'chapter-dot';
+        dot.innerHTML = '<span class="chapter-label">' + ch.getAttribute('data-chapter') + '</span>';
+        dot.addEventListener('click', function() {
+          ch.scrollIntoView({ behavior: 'smooth' });
+        });
+        chapterNav.appendChild(dot);
+      });
+
+      var chapterObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var idx = Array.from(chapters).indexOf(entry.target);
+            var dots = chapterNav.querySelectorAll('.chapter-dot');
+            dots.forEach(function(d, i) {
+              d.classList.toggle('active', i === idx);
+            });
+          }
+        });
+      }, { threshold: 0.5 });
+
+      chapters.forEach(function(ch) {
+        chapterObserver.observe(ch);
+      });
+
+      var backBtn = document.querySelector('.back-btn');
+      if (backBtn) {
+        backBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          var transition = document.getElementById('pageTransition');
+          transition.classList.add('active');
+          setTimeout(function() {
+            window.location.href = '../index.html?prov=江苏省';
+          }, 500);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

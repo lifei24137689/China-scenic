@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mount Wutai Scenic Area · Sacred Buddhist Realm</title>
+<style>
+/* ===== T2 Eastern Aesthetic · Ink-Wash China ===== */
+:root {
+  --primary: #c9a96e;
+  --secondary: #8b0000;
+  --bg: #0d0d0d;
+  --surface: rgba(255,255,255,0.05);
+  --text: #e8e0d5;
+  --text-dim: rgba(232,224,213,0.55);
+  --text-faint: rgba(232,224,213,0.25);
+  --glow: rgba(201,169,110,0.15);
+  --ink: #0d0d0d;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Noto Serif SC","STSong","SimSun","Songti SC","PingFang SC","Microsoft YaHei",serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.8;
+}
+
+/* ===== Mist Animation ===== */
+@keyframes mistDrift {
+  0% { transform: translateX(0) translateY(0); opacity: 0.3; }
+  25% { transform: translateX(2%) translateY(-1%); opacity: 0.5; }
+  50% { transform: translateX(0) translateY(-2%); opacity: 0.4; }
+  75% { transform: translateX(-2%) translateY(-1%); opacity: 0.5; }
+  100% { transform: translateX(0) translateY(0); opacity: 0.3; }
+}
+@keyframes mistDrift2 {
+  0% { transform: translateX(0) translateY(0); opacity: 0.2; }
+  33% { transform: translateX(-3%) translateY(1%); opacity: 0.45; }
+  66% { transform: translateX(2%) translateY(-1%); opacity: 0.35; }
+  100% { transform: translateX(0) translateY(0); opacity: 0.2; }
+}
+@keyframes mistDrift3 {
+  0% { transform: translateX(0) translateY(0); opacity: 0.15; }
+  50% { transform: translateX(1%) translateY(-2%); opacity: 0.4; }
+  100% { transform: translateX(0) translateY(0); opacity: 0.15; }
+}
+@keyframes goldPulse {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.3; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes inkReveal {
+  from { opacity: 0; filter: blur(8px); }
+  to { opacity: 1; filter: blur(0); }
+}
+@keyframes verticalScroll {
+  from { transform: translateY(-10%); }
+  to { transform: translateY(10%); }
+}
+
+/* ===== Hero Section ===== */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-bg {
+  position: absolute; inset: -10px;
+  background: url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/"https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/五台山风景名胜区/五台山风景名胜区_01.jpg") center/cover no-repeat;
+  filter: brightness(0.35) saturate(0.6) contrast(1.1);
+  will-change: transform;
+  z-index: 0;
+}
+.hero-mist-1 {
+  position: absolute; inset: 0; z-index: 1;
+  background: radial-gradient(ellipse 80% 60% at 30% 40%, rgba(201,169,110,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 80% at 70% 50%, rgba(232,224,213,0.04) 0%, transparent 70%);
+  animation: mistDrift 12s ease-in-out infinite;
+}
+.hero-mist-2 {
+  position: absolute; inset: 0; z-index: 1;
+  background: radial-gradient(ellipse 50% 40% at 50% 60%, rgba(201,169,110,0.06) 0%, transparent 70%),
+              radial-gradient(ellipse 70% 50% at 40% 30%, rgba(139,0,0,0.04) 0%, transparent 60%);
+  animation: mistDrift2 16s ease-in-out infinite;
+}
+.hero-mist-3 {
+  position: absolute; inset: 0; z-index: 1;
+  background: radial-gradient(ellipse 30% 50% at 60% 35%, rgba(200,180,150,0.05) 0%, transparent 80%);
+  animation: mistDrift3 20s ease-in-out infinite;
+}
+.hero-vignette {
+  position: absolute; inset: 0; z-index: 2;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(13,13,13,0.6) 75%, var(--bg) 95%);
+}
+.hero-top-fade {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 2;
+  height: 25vh;
+  background: linear-gradient(180deg, var(--bg) 0%, transparent 100%);
+}
+.hero-bottom-fade {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  height: 35vh;
+  background: linear-gradient(0deg, var(--bg) 0%, transparent 100%);
+}
+
+/* Hero Content */
+.hero-content {
+  position: relative; z-index: 5;
+  text-align: center;
+  animation: inkReveal 2s ease-out;
+}
+.hero-badge {
+  display: inline-block;
+  padding: 6px 24px;
+  border: 1px solid rgba(201,169,110,0.3);
+  color: var(--primary);
+  font-size: 12px;
+  letter-spacing: 6px;
+  margin-bottom: 32px;
+  backdrop-filter: blur(4px);
+}
+.hero-vertical-line {
+  width: 1px; height: 60px;
+  background: linear-gradient(180deg, transparent, var(--primary), transparent);
+  margin: 0 auto 24px;
+  animation: goldPulse 4s ease-in-out infinite;
+}
+.hero-title-main {
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 700;
+  letter-spacing: 12px;
+  color: var(--text);
+  text-shadow: 0 0 80px rgba(201,169,110,0.2);
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.hero-title-sub {
+  font-size: clamp(16px, 2.5vw, 24px);
+  color: var(--primary);
+  letter-spacing: 10px;
+  font-weight: 400;
+}
+.hero-seal {
+  width: 64px; height: 64px;
+  margin: 36px auto 0;
+  border: 1.5px solid var(--secondary);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--secondary);
+  font-size: 18px;
+  font-weight: 700;
+  writing-mode: vertical-rl;
+  letter-spacing: 4px;
+  opacity: 0.7;
+  transform: rotate(-2deg);
+}
+.hero-location {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 4px;
+}
+
+/* Scroll Hint */
+.scroll-hint {
+  position: absolute; bottom: 40px; left: 50%; z-index: 5;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.scroll-ink-drop {
+  width: 4px; height: 4px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: goldPulse 3s ease-in-out infinite;
+  opacity: 0.4;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(180deg, rgba(201,169,110,0.5), transparent);
+}
+.scroll-text {
+  font-size: 10px; color: var(--text-faint);
+  letter-spacing: 4px;
+}
+
+/* ===== Section Shared ===== */
+.section {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  padding: 100px 60px;
+}
+.section-mist {
+  position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse 60% 50% at 30% 30%, rgba(201,169,110,0.05) 0%, transparent 70%);
+  animation: mistDrift2 18s ease-in-out infinite;
+  pointer-events: none;
+}
+.section-grid {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+  width: 100%;
+}
+.section-grid.reverse { direction: rtl; }
+.section-grid.reverse > * { direction: ltr; }
+
+.section-img-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.section-img-wrap img {
+  width: 100%; height: auto;
+  display: block;
+  filter: saturate(0.4) brightness(0.7) contrast(1.1);
+  transition: filter 0.8s ease;
+}
+.section-img-wrap:hover img {
+  filter: saturate(0.6) brightness(0.85) contrast(1.05);
+}
+.section-img-frame {
+  position: absolute; inset: -1px;
+  border: 1px solid rgba(201,169,110,0.08);
+  pointer-events: none;
+}
+
+.section-number {
+  font-size: 13px;
+  color: var(--primary);
+  letter-spacing: 6px;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 6px;
+  margin-bottom: 32px;
+  line-height: 1.3;
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 40px; height: 1px;
+  background: var(--primary);
+  margin-top: 16px;
+  opacity: 0.5;
+}
+.section-desc {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 2;
+  letter-spacing: 1px;
+}
+.section-detail {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(201,169,110,0.1);
+}
+.section-detail-item {
+  display: flex; gap: 12px;
+  margin-bottom: 14px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.section-detail-item .key {
+  color: var(--primary);
+  white-space: nowrap;
+  font-size: 13px;
+}
+.section-detail-item .val {
+  color: var(--text-faint);
+}
+
+/* Vertical accent */
+.vertical-accent {
+  position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: 4px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ===== Image Break ===== */
+.image-break {
+  position: relative;
+  width: 100%; height: 70vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image-break-bg {
+  position: absolute; inset: 0;
+  background: url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/"https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/五台山风景名胜区/五台山风景名胜区_04.jpg") center/cover no-repeat;
+  filter: brightness(0.3) saturate(0.5) contrast(1.2);
+}
+.image-break-mist {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 40% at 50% 55%, rgba(201,169,110,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse 70% 60% at 30% 40%, rgba(200,180,150,0.04) 0%, transparent 70%);
+  animation: mistDrift 15s ease-in-out infinite;
+}
+.image-break-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(13,13,13,0.7) 80%);
+}
+.image-break-content {
+  position: relative; z-index: 3;
+  text-align: center;
+  animation: inkReveal 2s ease-out;
+}
+.image-break-quote {
+  font-size: clamp(22px, 4vw, 36px);
+  color: var(--text);
+  letter-spacing: 8px;
+  font-weight: 400;
+  line-height: 1.8;
+  text-shadow: 0 0 40px rgba(201,169,110,0.2);
+}
+.image-break-sub {
+  font-size: 14px;
+  color: var(--primary);
+  letter-spacing: 6px;
+  margin-top: 20px;
+  opacity: 0.6;
+}
+.image-break-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(180deg, transparent, var(--primary), transparent);
+  margin: 30px auto 0;
+  animation: goldPulse 4s ease-in-out infinite;
+}
+
+/* ===== Gallery ===== */
+.gallery-section {
+  position: relative;
+  padding: 120px 60px 80px;
+  background: var(--bg);
+}
+.gallery-section .vertical-accent {
+  left: 20px; top: auto; bottom: auto;
+  transform: none; position: absolute; top: 120px;
+}
+.gallery-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.gallery-header .num {
+  font-size: 13px; color: var(--primary);
+  letter-spacing: 6px; opacity: 0.6;
+}
+.gallery-header h2 {
+  font-size: clamp(24px, 3.5vw, 32px);
+  letter-spacing: 8px;
+  color: var(--text);
+  font-weight: 400;
+  margin-top: 12px;
+}
+.gallery-header .line {
+  width: 1px; height: 40px;
+  background: linear-gradient(180deg, transparent, rgba(201,169,110,0.3), transparent);
+  margin: 24px auto 0;
+}
+
+.gallery-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 8px;
+}
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 1px;
+}
+.gallery-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.4) brightness(0.6) contrast(1.15);
+  transition: all 0.8s ease;
+}
+.gallery-item:hover img {
+  filter: saturate(0.7) brightness(0.8) contrast(1.05);
+  transform: scale(1.03);
+}
+.gallery-item.tall { grid-row: span 2; }
+
+.gallery-mist {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 50% at 40% 40%, rgba(201,169,110,0.04) 0%, transparent 70%);
+  animation: mistDrift3 20s ease-in-out infinite;
+  pointer-events: none; z-index: 1;
+}
+
+/* ===== Dashboard ===== */
+.dashboard-section {
+  position: relative;
+  padding: 100px 60px;
+  background: var(--bg);
+}
+.dashboard-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(201,169,110,0.03) 0%, transparent 70%);
+}
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+}
+.dashboard-header .num {
+  font-size: 13px; color: var(--primary);
+  letter-spacing: 6px; opacity: 0.6;
+}
+.dashboard-header h2 {
+  font-size: clamp(22px, 3vw, 28px);
+  letter-spacing: 8px;
+  color: var(--text);
+  font-weight: 400;
+  margin-top: 12px;
+}
+.dashboard-separator {
+  width: 1px; height: 30px;
+  background: linear-gradient(180deg, transparent, rgba(201,169,110,0.3), transparent);
+  margin: 20px auto 0;
+}
+
+.dashboard-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  border: 1px solid rgba(201,169,110,0.08);
+  background: rgba(201,169,110,0.04);
+}
+.dashboard-card {
+  padding: 36px 20px;
+  text-align: center;
+  background: rgba(13,13,13,0.6);
+  backdrop-filter: blur(6px);
+  transition: all 0.4s ease;
+  cursor: default;
+}
+.dashboard-card:hover {
+  background: rgba(201,169,110,0.06);
+}
+.dashboard-card .card-icon {
+  font-size: 24px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+.dashboard-card .card-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.dashboard-card .card-label {
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: 2px;
+  line-height: 1.6;
+}
+
+/* ===== CTA Section ===== */
+.cta-section {
+  position: relative;
+  width: 100%; height: 60vh;
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.cta-bg {
+  position: absolute; inset: 0;
+  background: url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/"https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/五台山风景名胜区/五台山风景名胜区_12.jpg") center/cover no-repeat;
+  filter: brightness(0.25) saturate(0.4) contrast(1.2);
+}
+.cta-mist {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 55%, rgba(201,169,110,0.07) 0%, transparent 60%);
+  animation: mistDrift 14s ease-in-out infinite;
+}
+.cta-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(13,13,13,0.7) 80%);
+}
+.cta-content {
+  position: relative; z-index: 3;
+  text-align: center;
+}
+.cta-content h2 {
+  font-size: clamp(22px, 3.5vw, 32px);
+  color: var(--text);
+  letter-spacing: 8px;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.cta-content p {
+  font-size: 14px;
+  color: var(--text-dim);
+  letter-spacing: 4px;
+  margin-bottom: 40px;
+}
+.cta-btn {
+  display: inline-block;
+  padding: 14px 48px;
+  border: 1px solid rgba(201,169,110,0.4);
+  color: var(--primary);
+  font-size: 14px;
+  letter-spacing: 6px;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+.cta-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(201,169,110,0.06);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+.cta-btn:hover::before {
+  transform: translateX(0);
+}
+.cta-btn:hover {
+  border-color: rgba(201,169,110,0.7);
+  color: #d4b978;
+  text-shadow: 0 0 20px rgba(201,169,110,0.3);
+}
+.cta-separator {
+  width: 1px; height: 40px;
+  background: linear-gradient(180deg, transparent, rgba(201,169,110,0.3), transparent);
+  margin: 0 auto 30px;
+}
+
+/* ===== Footer ===== */
+.footer {
+  position: relative;
+  padding: 60px 40px;
+  text-align: center;
+  background: var(--bg);
+  border-top: 1px solid rgba(201,169,110,0.06);
+}
+.footer-line {
+  width: 1px; height: 24px;
+  background: linear-gradient(180deg, transparent, rgba(201,169,110,0.2), transparent);
+  margin: 0 auto 20px;
+}
+.footer p {
+  font-size: 11px;
+  color: var(--text-faint);
+  letter-spacing: 4px;
+  line-height: 2;
+}
+.footer .footer-seal {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 10px 16px;
+  border: 1px solid rgba(201,169,110,0.15);
+  font-size: 10px;
+  color: var(--text-faint);
+  letter-spacing: 3px;
+}
+
+/* ===== Back to Map ===== */
+.back-to-map {
+  position: fixed; top: 28px; left: 28px; z-index: 20;
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  border: 1px solid rgba(201,169,110,0.15);
+  color: var(--text-dim);
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-decoration: none;
+  backdrop-filter: blur(12px);
+  background: rgba(13,13,13,0.5);
+  transition: all 0.3s ease;
+}
+.back-to-map:hover {
+  border-color: rgba(201,169,110,0.4);
+  color: var(--primary);
+}
+.back-to-map .arr {
+  display: inline-block;
+  transition: transform 0.3s;
+}
+.back-to-map:hover .arr {
+  transform: translateX(-3px);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .section { padding: 60px 24px; }
+  .section-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .section-grid.reverse { direction: ltr; }
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .gallery-item.tall { grid-row: span 1; }
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .vertical-accent { display: none; }
+  .hero-badge { letter-spacing: 4px; font-size: 10px; }
+  .hero-title-main { letter-spacing: 6px; }
+  .hero-title-sub { letter-spacing: 6px; }
+  .back-to-map { top: 16px; left: 16px; padding: 8px 14px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-mist-1"></div>
+  <div class="hero-mist-2"></div>
+  <div class="hero-mist-3"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-top-fade"></div>
+  <div class="hero-bottom-fade"></div>
+
+  <a href="../index.html?prov=%E5%B1%B1%E8%A5%BF%E7%9C%81" class="back-to-map">
+    <span class="arr">←</span> Back to Map
+  </a>
+
+  <div class="hero-content">
+    <div class="hero-badge">M O U N T  W U T A I  S C E N I C  A R E A</div>
+    <div class="hero-vertical-line"></div>
+    <h1 class="hero-title-main">Sacred Buddhist Realm</h1>
+    <p class="hero-title-sub">Roof of North China</p>
+    <div class="hero-seal">Wutai</div>
+    <p class="hero-location">Shanxi Province · Xinzhou City · Wutai County</p>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-ink-drop"></div>
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll Down</span>
+  </div>
+</section>
+
+<!-- ===== Section 1: Sacred Buddhist Realm ===== -->
+<section class="section">
+  <div class="section-mist"></div>
+  <span class="vertical-accent">Sacred Buddhist Realm</span>
+  <div class="section-grid">
+    <div class="section-img-wrap">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/五台山风景名胜区/五台山风景名胜区_02.jpg" alt="Mount Wutai Sacred Buddhist Realm" loading="lazy" />
+      <div class="section-img-frame"></div>
+    </div>
+    <div>
+      <div class="section-number">/// 01</div>
+      <h2 class="section-title">Sacred Buddhist Realm</h2>
+      <p class="section-desc">
+        Mount Wutai ranks first among the Four Sacred Buddhist Mountains of China and is recognized alongside Lumbini (Nepal), Sarnath, Bodh Gaya, and Kushinagar (India) as one of the Five Sacred Buddhist Sites of the world. It is the only sacred site where Chinese Buddhism (Green Temples) and Tibetan Buddhism (Yellow Temples) coexist in harmony. As the manifested abode of Manjusri Bodhisattva, its incense has flourished for millennia.
+      </p>
+      <div class="section-detail">
+        <div class="section-detail-item">
+          <span class="key">World Heritage</span>
+          <span class="val">Inscribed as a Cultural Landscape on the World Heritage List in 2009</span>
+        </div>
+        <div class="section-detail-item">
+          <span class="key">5A Rating</span>
+          <span class="val">Designated a National 5A Tourist Attraction in 2007</span>
+        </div>
+        <div class="section-detail-item">
+          <span class="key">Buddhist Status</span>
+          <span class="val">Foremost of the Four Sacred Buddhist Mountains · One of the Five Sacred Buddhist Sites</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 2: Roof of North China ===== -->
+<section class="section">
+  <div class="section-mist"></div>
+  <span class="vertical-accent" style="right:20px;left:auto;">Roof of North China</span>
+  <div class="section-grid reverse">
+    <div class="section-img-wrap">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/五台山风景名胜区/五台山风景名胜区_05.jpg" alt="Mount Wutai Roof of North China" loading="lazy" />
+      <div class="section-img-frame"></div>
+    </div>
+    <div>
+      <div class="section-number">/// 02</div>
+      <h2 class="section-title">Roof of North China</h2>
+      <p class="section-desc">
+        Mount Wutai comprises five terraced peaks: East Peak Wanghai, West Peak Guayue, South Peak Jinxiu, North Peak Yedou, and Central Peak Cuiyan. The five peaks rise steeply with treeless summits resembling terraced platforms, hence the name "Wutai" (Five Terraces). North Peak Yedou, at 3,061 meters above sea level, stands as the highest point in northern China, earning the illustrious title "Roof of North China."
+      </p>
+      <div class="section-detail">
+        <div class="section-detail-item">
+          <span class="key">Total Area</span>
+          <span class="val">2,837 square kilometers</span>
+        </div>
+        <div class="section-detail-item">
+          <span class="key">Scenic Area</span>
+          <span class="val">607 square kilometers</span>
+        </div>
+        <div class="section-detail-item">
+          <span class="key">Highest Peak</span>
+          <span class="val">North Peak Yedou at 3,061 m</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Section 3: Architectural Treasures ===== -->
+<section class="section">
+  <div class="section-mist"></div>
+  <span class="vertical-accent">Architectural Treasures</span>
+  <div class="section-grid">
+    <div class="section-img-wrap">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/五台山风景名胜区/五台山风景名胜区_06.jpg" alt="Mount Wutai Architectural Treasures" loading="lazy" />
+      <div class="section-img-frame"></div>
+    </div>
+    <div>
+      <div class="section-number">/// 03</div>
+      <h2 class="section-title">Architectural Treasures</h2>
+      <p class="section-desc">
+        Mount Wutai preserves 86 existing temples (within and beyond the five terraces), including 13 Major Historical and Cultural Sites Protected at the National Level. Xiantong Temple is the founding monastery, the White Pagoda of Tayuan Temple serves as the iconic landmark of Mount Wutai, and Pusading Temple is a Qing dynasty imperial monastery. Since the first temple was built during the Yongping era of the Eastern Han dynasty, spanning nearly two millennia, the site presents a complete architectural sequence from the Northern Wei to the Qing dynasties.
+      </p>
+      <div class="section-detail">
+        <div class="section-detail-item">
+          <span class="key">Existing Temples</span>
+          <span class="val">86 (within and beyond the five terraces)</span>
+        </div>
+        <div class="section-detail-item">
+          <span class="key">National Sites</span>
+          <span class="val">13 Major Historical and Cultural Sites Protected at the National Level</span>
+        </div>
+        <div class="section-detail-item">
+          <span class="key">Famous Temples</span>
+          <span class="val">Xiantong Temple · Tayuan Temple · Pusading Temple · Nanshan Temple · Dailuo Summit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Image Break ===== -->
+<section class="image-break">
+  <div class="image-break-bg"></div>
+  <div class="image-break-mist"></div>
+  <div class="image-break-vignette"></div>
+  <div class="image-break-content">
+    <p class="image-break-quote">
+      Golden Wutai, Silver Putuo<br/>Copper Emei, Iron Jiuhua
+    </p>
+    <p class="image-break-sub">Roof of North China · Sacred Buddhist Realm</p>
+    <div class="image-break-line"></div>
+  </div>
+</section>
+
+<!-- ===== Gallery ===== -->
+<section class="gallery-section">
+  <span class="vertical-accent">Temple Pilgrimage</span>
+  <div class="gallery-header">
+    <span class="num">/// Temples</span>
+    <h2>Sacred Monastery Tour</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-item tall">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/五台山风景名胜区/五台山风景名胜区_08.jpg" alt="Tayuan Temple" loading="lazy" />
+      <div class="gallery-mist"></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/五台山风景名胜区/五台山风景名胜区_09.jpg" alt="Xiantong Temple" loading="lazy" />
+      <div class="gallery-mist"></div>
+      
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/五台山风景名胜区/五台山风景名胜区_10.jpg" alt="Pusading Temple" loading="lazy" />
+      <div class="gallery-mist"></div>
+      
+    </div>
+    <div class="gallery-item" style="grid-column: span 2;">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/五台山风景名胜区/五台山风景名胜区_11.jpg" alt="Dailuo Summit" loading="lazy" style="height:280px;" />
+      <div class="gallery-mist"></div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- ===== Dashboard ===== -->
+<section class="dashboard-section">
+  <div class="dashboard-bg"></div>
+  <div class="dashboard-header">
+    <span class="num">/// Overview</span>
+    <h2>W U T A I  O V E R V I E W</h2>
+    <div class="dashboard-separator"></div>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <div class="card-icon">🏛</div>
+      <div class="card-value">2009</div>
+      <div class="card-label">World Cultural<br/>Landscape Heritage</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="card-icon">🏔</div>
+      <div class="card-value">Foremost</div>
+      <div class="card-label">Sacred Mountain<br/>of the Four</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="card-icon">📐</div>
+      <div class="card-value">2,837km²</div>
+      <div class="card-label">Total Area<br/>Expanse</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="card-icon">⛰</div>
+      <div class="card-value">3,061m</div>
+      <div class="card-label">North Peak<br/>Yedou Summit</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="card-icon">🏯</div>
+      <div class="card-value">86</div>
+      <div class="card-label">Existing Temples<br/>Inner + Outer</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="card-icon">🏅</div>
+      <div class="card-value">13</div>
+      <div class="card-label">National-Level<br/>Protected Sites</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="card-icon">🗺</div>
+      <div class="card-value">607km²</div>
+      <div class="card-label">Scenic Area<br/>Planning Zone</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="card-icon">📜</div>
+      <div class="card-value">Eastern Han</div>
+      <div class="card-label">Founded Era<br/>Nearly 2,000 Years</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="cta-mist"></div>
+  <div class="cta-vignette"></div>
+  <div class="cta-content">
+    <h2>Yearning for Wutai</h2>
+    <p>Manjusri's Realm · Sacred Sanctuary · Awaiting the Devoted</p>
+    <div class="cta-separator"></div>
+    <a href="../index.html?prov=%E5%B1%B1%E8%A5%BF%E7%9C%81" class="cta-btn">Back to Map</a>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <div class="footer-line"></div>
+  <p>
+    Mount Wutai Scenic Area<br/>
+    Wutai County, Xinzhou City, Shanxi Province<br/>
+    World Cultural Landscape Heritage · National 5A Tourist Attraction
+  </p>
+  <div class="footer-seal">Mount Wutai</div>
+</footer>
+
+</body>
+</html>

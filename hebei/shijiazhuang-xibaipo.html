@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Xibaipo · 5A Scenic Area Immersive Exploration</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    :root{
+      --primary:#b91c1c;
+      --secondary:#d4a843;
+      --bg:#faf8f3;
+      --bg-rgb:250,248,243;
+      --surface:rgba(185,28,28,0.06);
+      --text:#3c2415;
+      --text-dim:rgba(60,36,21,0.5);
+      --glow:rgba(185,28,28,0.15);
+      --gold-glow:rgba(212,168,67,0.18);
+    }
+    body{
+      font-family:'PingFang SC','Microsoft YaHei','Noto Serif SC',serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    /* 纸质纹理叠加 */
+    body::before{
+      content:'';
+      position:fixed;inset:0;z-index:0;pointer-events:none;
+      opacity:0.03;
+      background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+      background-size:256px 256px;
+    }
+
+    /* ===== 杂志风格动画 ===== */
+    @keyframes fadeUp{
+      0%{opacity:0;transform:translateY(30px);}
+      100%{opacity:1;transform:translateY(0);}
+    }
+    @keyframes editorialLine{
+      0%{width:0;opacity:0;}
+      100%{width:60px;opacity:0.3;}
+    }
+    @keyframes dateStamp{
+      0%{opacity:0;transform:scale(0.9);}
+      100%{opacity:1;transform:scale(1);}
+    }
+
+    /* ===== Hero ===== */
+    .hero{
+      position:relative;width:100%;height:100vh;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .hero-bg{
+      position:absolute;inset:-10px;
+      background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/images/石家庄市西柏坡景区/石家庄市西柏坡景区_01.jpg') center/cover no-repeat;
+      filter:brightness(0.8) saturate(0.85) contrast(0.95);
+      transition:transform 0.1s ease-out;
+    }
+    .hero-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(180deg,rgba(250,248,243,.3) 0%,rgba(250,248,243,.15) 40%,rgba(250,248,243,.7) 100%);
+    }
+    /* 杂志红调光晕 */
+    .hero-red-aura{
+      position:absolute;bottom:15%;left:50%;transform:translateX(-50%);
+      width:600px;height:250px;z-index:3;pointer-events:none;
+      background:radial-gradient(ellipse at center,rgba(185,28,28,0.06),transparent 70%);
+      border-radius:50%;filter:blur(50px);
+    }
+    .hero-gold-touch{
+      position:absolute;top:20%;right:10%;width:300px;height:120px;z-index:3;pointer-events:none;
+      background:radial-gradient(ellipse at center,rgba(212,168,67,0.08),transparent 70%);
+      border-radius:50%;filter:blur(40px);
+    }
+    .scanlines{
+      position:absolute;inset:0;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(60,36,21,.004) 2px,rgba(60,36,21,.004) 4px);
+    }
+    .top-fade{
+      position:absolute;top:0;left:0;right:0;height:25vh;
+      background:linear-gradient(180deg,var(--bg) 0%,transparent 100%);
+    }
+    .bottom-fade{
+      position:absolute;bottom:0;left:0;right:0;height:50vh;
+      background:linear-gradient(0deg,var(--bg) 0%,rgba(250,248,243,.85) 30%,transparent 100%);
+    }
+
+    /* ===== 杂志编辑线 ===== */
+    .editorial-divider{
+      position:absolute;left:40px;top:50%;width:60px;height:1px;z-index:8;
+      background:var(--primary);opacity:0;
+      animation:editorialLine 1.2s ease-out 0.6s forwards;
+    }
+    .editorial-divider-2{
+      position:absolute;right:40px;top:55%;width:60px;height:1px;z-index:8;
+      background:var(--secondary);opacity:0;
+      animation:editorialLine 1.2s ease-out 0.8s forwards;
+    }
+
+    /* ===== HUD ===== */
+    .hud{
+      position:absolute;inset:0;z-index:10;
+      padding:28px 40px;display:flex;flex-direction:column;
+    }
+    .hud-top{display:flex;justify-content:space-between;align-items:flex-start}
+    .back-btn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 18px;border-radius:20px;
+      background:rgba(250,248,243,.7);
+      border:1px solid rgba(185,28,28,.15);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      color:rgba(60,36,21,.5);font-size:13px;cursor:pointer;
+      transition:all .3s;width:fit-content;text-decoration:none;
+    }
+    .back-btn:hover{border-color:var(--primary);color:var(--primary)}
+
+    .title-group{position:relative}
+    /* 日签式日期标注 */
+    .date-stamp{
+      font-family:'Georgia','Noto Serif SC',serif;
+      font-size:11px;color:var(--primary);opacity:0.6;
+      letter-spacing:5px;margin-bottom:8px;
+      animation:dateStamp 1s ease-out 0.3s backwards;
+    }
+    .title-group h1{
+      font-size:clamp(44px,7vw,76px);font-weight:800;letter-spacing:10px;
+      color:var(--primary);
+      animation:fadeUp 1s ease-out 0.2s backwards;
+    }
+    .title-group .subtitle{
+      font-size:15px;color:var(--text-dim);letter-spacing:8px;margin-top:6px;
+      font-weight:300;
+      animation:fadeUp 1s ease-out 0.4s backwards;
+    }
+
+    .data-panel{display:flex;gap:8px}
+    .data-item{
+      text-align:center;padding:10px 18px;border-radius:10px;
+      background:rgba(250,248,243,.6);
+      border:1px solid rgba(185,28,28,.08);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      min-width:72px;
+    }
+    .data-item .num{font-size:20px;font-weight:700;color:var(--primary)}
+    .data-item .label{font-size:9px;color:var(--text-dim);margin-top:2px;letter-spacing:1px}
+
+    /* Hero info card */
+    .hero-info{
+      position:absolute;left:40px;bottom:130px;z-index:11;max-width:440px;
+    }
+    .hero-info .card{
+      background:rgba(250,248,243,.7);
+      backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      border-radius:14px;
+      border:1px solid rgba(185,28,28,.1);
+      padding:22px 28px;
+      box-shadow:0 8px 40px rgba(60,36,21,.06);
+    }
+    .hero-info .card p{
+      font-size:14px;line-height:1.8;color:var(--text-dim);
+    }
+    .hero-info .tags{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+    .hero-info .tags span{
+      padding:4px 14px;border-radius:14px;font-size:11px;
+      letter-spacing:1px;border:1px solid;
+    }
+    .tag-red{
+      background:rgba(185,28,28,.06);
+      border-color:rgba(185,28,28,.2);
+      color:var(--primary);
+    }
+    .tag-gold{
+      background:rgba(212,168,67,.06);
+      border-color:rgba(212,168,67,.25);
+      color:var(--secondary);
+    }
+
+    .scroll-hint{
+      position:absolute;bottom:50px;left:50%;z-index:11;
+      transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:8px;
+      color:var(--text-dim);font-size:10px;letter-spacing:2px;
+    }
+    .scroll-hint .line{
+      width:1px;height:30px;
+      background:linear-gradient(180deg,var(--primary),transparent);
+      animation:scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse{
+      0%,100%{opacity:0.3;transform:scaleY(0.5)}
+      50%{opacity:1;transform:scaleY(1)}
+    }
+
+    /* ===== Content Sections ===== */
+    .section{
+      position:relative;min-height:80vh;display:flex;align-items:center;
+      padding:80px 40px;
+      background:var(--bg);
+    }
+    .section-inner{
+      max-width:1200px;margin:0 auto;width:100%;
+      display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+    }
+    .section-inner.reverse{direction:rtl}
+    .section-inner.reverse>*{direction:ltr}
+    .section-image{
+      border-radius:14px;overflow:hidden;position:relative;
+      box-shadow:0 12px 40px rgba(60,36,21,.1),0 0 24px var(--glow);
+      border:1px solid rgba(185,28,28,.08);
+      opacity:0;transform:translateY(40px);
+      transition:all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .section-image.visible{opacity:1;transform:translateY(0)}
+    .section-image img{
+      width:100%;height:400px;object-fit:cover;display:block;
+      transition:transform 0.6s;
+    }
+    .section-image:hover img{transform:scale(1.03)}
+
+    .section-content{
+      opacity:0;transform:translateY(30px);
+      transition:all 0.8s cubic-bezier(.16,1,.3,1) 0.15s;
+    }
+    .section-content.visible{opacity:1;transform:translateY(0)}
+    .section-content .numeral{
+      font-family:'Georgia','Noto Serif SC',serif;
+      font-size:13px;color:var(--primary);opacity:0.4;letter-spacing:4px;margin-bottom:12px;
+    }
+    .section-content h2{
+      font-size:clamp(24px,3vw,36px);font-weight:700;
+      letter-spacing:2px;margin-bottom:20px;line-height:1.3;
+      color:var(--text);
+    }
+    .section-content h2 .highlight{color:var(--primary)}
+    .section-content p{
+      font-size:15px;line-height:1.9;color:var(--text-dim);margin-bottom:20px;
+    }
+    .section-content .stat-row{display:flex;gap:24px;margin-top:24px}
+    .section-content .stat-item{
+      text-align:center;padding:16px 24px;border-radius:10px;
+      background:var(--surface);
+      border:1px solid rgba(185,28,28,.06);
+      min-width:100px;
+    }
+    .section-content .stat-item .num{
+      font-size:28px;font-weight:700;color:var(--primary);
+    }
+    .section-content .stat-item .lbl{
+      font-size:10px;color:var(--text-dim);margin-top:4px;letter-spacing:1px;
+    }
+
+    .section-divider{
+      position:absolute;top:0;left:50%;transform:translateX(-50%);
+      width:60px;height:2px;
+      background:linear-gradient(90deg,transparent,var(--primary),transparent);
+      opacity:0.15;
+    }
+
+    /* ===== Image Break ===== */
+    .image-break{
+      position:relative;width:100%;height:60vh;overflow:hidden;
+    }
+    .image-break .bg{
+      position:absolute;inset:-10px;
+      background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/images/石家庄市西柏坡景区/石家庄市西柏坡景区_05.jpg') center/cover no-repeat;
+      background-attachment:fixed;
+      filter:brightness(0.65) saturate(0.8) contrast(0.95);
+    }
+    .image-break .overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(180deg,var(--bg) 0%,transparent 20%,transparent 80%,var(--bg) 100%);
+    }
+    .image-break .quote{
+      position:absolute;bottom:60px;left:40px;right:40px;z-index:2;max-width:600px;
+    }
+    .image-break .quote p{
+      font-size:22px;font-weight:300;line-height:1.6;
+      color:rgba(60,36,21,.6);letter-spacing:3px;
+    }
+    .image-break .quote .author{
+      font-size:12px;color:rgba(60,36,21,.3);
+      letter-spacing:4px;margin-top:12px;
+    }
+
+    /* ===== Gallery ===== */
+    .gallery-section{padding:100px 40px;background:linear-gradient(180deg,var(--bg),rgba(185,28,28,.02),var(--bg))}
+    .gallery-section .section-header{max-width:1200px;margin:0 auto 40px}
+    .gallery-section .section-header .numeral{
+      font-family:'Georgia','Noto Serif SC',serif;
+      font-size:13px;color:var(--primary);opacity:0.4;letter-spacing:4px;margin-bottom:12px;
+    }
+    .gallery-section .section-header h2{
+      font-size:32px;font-weight:700;letter-spacing:3px;
+    }
+    .gallery-grid{
+      max-width:1200px;margin:0 auto;display:grid;
+      grid-template-columns:2fr 1fr;gap:12px;
+    }
+    .gallery-grid .col{display:flex;flex-direction:column;gap:12px}
+    .gallery-grid .col:first-child{grid-row:span 2}
+    .gallery-item{
+      border-radius:12px;overflow:hidden;position:relative;
+      border:1px solid rgba(185,28,28,.06);
+      opacity:0;transform:translateY(30px);
+      transition:all 0.8s cubic-bezier(.16,1,.3,1);
+      box-shadow:0 8px 30px rgba(60,36,21,.06);
+    }
+    .gallery-item.visible{opacity:1;transform:translateY(0)}
+    .gallery-item img{
+      width:100%;height:100%;object-fit:cover;display:block;
+      transition:transform 0.6s;
+    }
+    .gallery-item:hover img{transform:scale(1.05)}
+
+    /* ===== Dashboard ===== */
+    .dashboard-section{
+      padding:100px 40px;
+      background:linear-gradient(180deg,var(--bg),rgba(185,28,28,.03),var(--bg));
+    }
+    .dashboard-section .section-header{max-width:1200px;margin:0 auto 50px}
+    .dashboard-section .section-header .numeral{
+      font-family:'Georgia','Noto Serif SC',serif;
+      font-size:13px;color:var(--primary);opacity:0.4;letter-spacing:4px;margin-bottom:12px;
+    }
+    .dashboard-section .section-header h2{
+      font-size:32px;font-weight:700;letter-spacing:3px;
+    }
+    .dashboard-grid{
+      max-width:1200px;margin:0 auto;display:grid;
+      grid-template-columns:repeat(4,1fr);gap:12px;
+    }
+    .dashboard-card{
+      padding:28px 24px;border-radius:14px;
+      background:var(--surface);
+      border:1px solid rgba(185,28,28,.05);
+      text-align:center;
+      opacity:0;transform:translateY(20px);
+      transition:all 0.6s cubic-bezier(.16,1,.3,1);
+    }
+    .dashboard-card.visible{opacity:1;transform:translateY(0)}
+    .dashboard-card:hover{
+      transform:translateY(-4px);
+      border-color:var(--primary);
+      box-shadow:0 4px 20px var(--glow);
+      background:rgba(185,28,28,.08);
+    }
+    .dashboard-card .icon{font-size:28px;margin-bottom:12px}
+    .dashboard-card .d-num{
+      font-size:32px;font-weight:700;letter-spacing:1px;
+      color:var(--primary);
+    }
+    .dashboard-card .d-label{
+      font-size:10px;color:var(--text-dim);letter-spacing:2px;margin-top:6px;
+    }
+
+    /* ===== CTA ===== */
+    .cta-section{padding:120px 40px;text-align:center;position:relative}
+    .cta-section .bg{
+      position:absolute;inset:0;
+      background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/images/石家庄市西柏坡景区/石家庄市西柏坡景区_01.jpg') center/cover no-repeat;
+      filter:brightness(0.7) saturate(0.7) contrast(0.9);
+    }
+    .cta-section .overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(180deg,var(--bg) 0%,rgba(250,248,243,.6) 30%,rgba(250,248,243,.6) 70%,var(--bg) 100%);
+    }
+    .cta-section .content{position:relative;z-index:2;max-width:600px;margin:0 auto}
+    .cta-section .content .numeral{
+      font-family:'Georgia','Noto Serif SC',serif;
+      font-size:13px;color:var(--primary);opacity:0.4;letter-spacing:4px;margin-bottom:16px;
+    }
+    .cta-section .content h2{
+      font-size:36px;font-weight:700;letter-spacing:4px;margin-bottom:16px;
+    }
+    .cta-section .content p{
+      font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:30px;
+    }
+    .cta-btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:14px 32px;
+      border:1px solid rgba(185,28,28,.25);
+      background:rgba(185,28,28,.06);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      border-radius:12px;
+      color:var(--primary);font-size:14px;
+      cursor:pointer;transition:all .3s;
+      letter-spacing:1px;text-decoration:none;
+    }
+    .cta-btn:hover{
+      background:rgba(185,28,28,.14);
+      box-shadow:0 0 40px var(--glow);
+      transform:translateY(-2px);
+    }
+
+    /* ===== Footer ===== */
+    footer{
+      padding:40px;text-align:center;
+      border-top:1px solid rgba(185,28,28,.06);
+      background:var(--bg);
+    }
+    footer p{font-size:11px;color:var(--text-dim);letter-spacing:2px}
+
+    /* ===== Scroll HUD ===== */
+    .scroll-hud{
+      position:fixed;top:0;left:0;right:0;z-index:50;
+      padding:12px 40px;
+      display:flex;justify-content:space-between;align-items:center;
+      background:rgba(250,248,243,.92);
+      backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(185,28,28,.06);
+      transform:translateY(-100%);
+      transition:transform 0.4s cubic-bezier(.16,1,.3,1);
+    }
+    .scroll-hud.active{transform:translateY(0)}
+    .scroll-hud .site-name{
+      font-size:13px;color:var(--text-dim);letter-spacing:2px;
+    }
+    .scroll-hud .site-name strong{color:var(--primary)}
+
+    /* ===== Scroll Progress ===== */
+    .scroll-progress{
+      position:fixed;top:0;left:0;right:0;z-index:60;
+      height:2px;background:rgba(185,28,28,.04);
+    }
+    .scroll-progress-fill{
+      height:100%;width:0%;
+      background:linear-gradient(90deg,var(--primary),var(--secondary));
+      transition:width 0.1s linear;
+    }
+
+    /* ===== Chapter Nav ===== */
+    .chapter-nav{
+      position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:55;
+      display:flex;flex-direction:column;align-items:center;gap:10px;
+    }
+    .chapter-dot{
+      width:6px;height:6px;border-radius:50%;
+      background:rgba(185,28,28,.1);
+      cursor:pointer;transition:all .3s;position:relative;
+    }
+    .chapter-dot:hover{background:var(--primary);transform:scale(1.4)}
+    .chapter-dot.active{
+      background:var(--primary);transform:scale(1.5);
+      box-shadow:0 0 10px var(--glow);
+    }
+
+    /* ===== Page Transition ===== */
+    .page-transition{
+      position:fixed;inset:0;z-index:9999;pointer-events:none;
+      background:var(--bg);opacity:0;
+      transition:opacity 0.5s cubic-bezier(.16,1,.3,1);
+    }
+    .page-transition.active{opacity:1}
+
+    /* ===== Responsive ===== */
+    @media(max-width:768px){
+      .hud{padding:16px 20px}
+      .hud-top{flex-direction:column}
+      .data-panel{margin-top:12px;gap:4px}
+      .data-item{padding:6px 12px;min-width:56px}
+      .data-item .num{font-size:16px}
+      .title-group h1{font-size:38px;letter-spacing:4px}
+      .hero-info{left:20px;right:20px;bottom:100px}
+      .hero-info .card{padding:16px 20px}
+      .hero-info .card p{font-size:12px}
+      .section{padding:60px 20px;min-height:auto}
+      .section-inner{grid-template-columns:1fr;gap:30px}
+      .section-inner.reverse{direction:ltr}
+      .section-image img{height:250px}
+      .section-content h2{font-size:24px}
+      .section-content .stat-row{flex-wrap:wrap}
+      .gallery-section{padding:60px 20px}
+      .gallery-grid{grid-template-columns:1fr}
+      .gallery-grid .col:first-child{grid-row:auto}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .dashboard-section{padding:60px 20px}
+      .cta-section{padding:80px 20px}
+      .cta-section .content h2{font-size:26px}
+      .image-break .quote p{font-size:16px}
+      .scroll-hud{padding:10px 20px}
+      .editorial-divider,.editorial-divider-2{display:none}
+    }
+
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+  </style>
+</head>
+<body>
+
+  <!-- ===== Page Transition ===== -->
+  <div class="page-transition" id="pageTransition"></div>
+
+  <!-- ===== Scroll Progress ===== -->
+  <div class="scroll-progress" id="scrollProgress">
+    <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+  </div>
+
+  <!-- ===== Scroll HUD ===== -->
+  <div class="scroll-hud" id="scrollHud">
+    <div class="site-name"><strong>Xibaipo</strong> · Immersive Exploration</div>
+    <div style="font-size:10px;color:var(--text-dim);letter-spacing:2px">Hebei Province · Shijiazhuang City</div>
+  </div>
+
+  <!-- ===== Chapter Nav ===== -->
+  <div class="chapter-nav" id="chapterNav"></div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-red-aura"></div>
+    <div class="hero-gold-touch"></div>
+    <div class="scanlines"></div>
+    <div class="top-fade"></div>
+    <div class="bottom-fade"></div>
+    <div class="editorial-divider"></div>
+    <div class="editorial-divider-2"></div>
+
+    <div class="hud">
+      <div class="hud-top">
+        <div>
+          <a class="back-btn" href="../index.html?prov=%E6%B2%B3%E5%8C%97%E7%9C%81">
+            <span>←</span> Back to Hebei Province
+          </a>
+          <div class="title-group">
+            <div class="date-stamp">N 38° 20′ · E 114° 00′ · Pingshan County</div>
+            <h1>Xibaipo</h1>
+            <div class="subtitle">New China Rose from Here · Revolutionary Sacred Land</div>
+          </div>
+        </div>
+        <div class="data-panel">
+          <div class="data-item">
+            <div class="num">1948</div>
+            <div class="label">Year Stationed</div>
+          </div>
+          <div class="data-item">
+            <div class="num">Three Major Campaigns</div>
+            <div class="label">Command Decisions</div>
+          </div>
+          <div class="data-item">
+            <div class="num">2nd Plenary Session</div>
+            <div class="label">Historic Meeting</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-info">
+      <div class="card">
+        <p>
+          <span style="color:var(--primary);font-size:11px;letter-spacing:3px;display:block;margin-bottom:8px;opacity:0.5;">◈ Sacred Land Briefing</span>
+          <span style="color:var(--text);">Xibaipo was once the seat of the Central Committee of the Communist Party of China. From here, the Party Central Committee and Chairman Mao commanded the three major campaigns that shook the world and convened the historically significant Second Plenary Session of the Seventh Central Committee. It is hailed as the revolutionary sacred land where "New China rose from here."</span>
+        </p>
+        <div class="tags">
+          <span class="tag-red">⭐ Revolutionary Sacred Land</span>
+          <span class="tag-gold">🏛️ 5A Scenic Area</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll Down to Explore</span>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 1: Revolutionary Sacred Land ===== -->
+  <section class="section" data-chapter="Revolutionary Sacred Land">
+    <div class="section-divider"></div>
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/images/石家庄市西柏坡景区/石家庄市西柏坡景区_02.jpg" alt="Revolutionary Sacred Land" loading="lazy"/>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// Revolutionary Sacred Land</div>
+        <h2>Revolutionary Sacred Land · <span class="highlight">Historic Monument</span></h2>
+        <p>Xibaipo is located in Pingshan County, Shijiazhuang City, Hebei Province, at the eastern foot of the Taihang Mountains and on the north bank of the Hutuo River. From May 1948 to March 1949, it served as the seat of the Central Committee of the Communist Party of China and the headquarters of the People's Liberation Army — the last rural command post of the Chinese revolution.</p>
+        <p>From here, the Party Central Committee and Chairman Mao commanded the Liaoshen, Huaihai, and Pingjin campaigns, leading the People's Liberation Army to a decisive victory in the War of Liberation. In March 1949, the historic Second Plenary Session of the Seventh Central Committee was convened here.</p>
+        <p>Though the Xibaipo period lasted only ten months, it marked a historic turning point for the Chinese revolution — from the countryside to the cities, from war to peace, and from revolution to construction — holding a milestone status in the history of the Chinese revolution.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">1948</div><div class="lbl">Year Stationed</div></div>
+          <div class="stat-item"><div class="num">10 Months</div><div class="lbl">Duration</div></div>
+          <div class="stat-item"><div class="num">2nd Plenary Session</div><div class="lbl">Historic Meeting</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== IMAGE BREAK ===== -->
+  <div class="image-break">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <p>"New China Rose from Here"</p>
+      <div class="author">—— Xibaipo · Chinese Revolutionary Sacred Land</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: Strategic Command ===== -->
+  <section class="section" data-chapter="Strategic Command">
+    <div class="section-divider"></div>
+    <div class="section-inner reverse">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/images/石家庄市西柏坡景区/石家庄市西柏坡景区_03.jpg" alt="Strategic Command" loading="lazy"/>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// Strategic Command</div>
+        <h2>Strategic Command · <span class="highlight">Decisive Victory</span></h2>
+        <p>The former site of the CPC Central Committee is the core of the Xibaipo Scenic Area, preserving the former residences of revolutionary leaders including Mao Zedong, Zhu De, Liu Shaoqi, Zhou Enlai, and Ren Bishi, as well as historic buildings such as the Central Military Commission Operations Room and the venue of the Second Plenary Session of the Seventh Central Committee.</p>
+        <p>The Central Military Commission Operations Room was a modest adobe building of less than 30 square meters, with large military maps on the walls and telephones and documents on the tables. It was under such humble conditions that the Party Central Committee commanded the three major campaigns, creating a miracle in the history of warfare.</p>
+        <p>Zhou Enlai once said wryly: "This operations room of ours — it issued no guns, no grain, only telegrams — and yet it defeated the Kuomintang." Every brick and tile, every table and chair here tells the story of those arduous yet glorious years.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">197</div><div class="lbl">Campaign Telegrams</div></div>
+          <div class="stat-item"><div class="num">30m²</div><div class="lbl">Operations Room</div></div>
+          <div class="stat-item"><div class="num">Five Secretaries</div><div class="lbl">Preserved Residences</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: Red Memories ===== -->
+  <section class="section" data-chapter="Red Memories">
+    <div class="section-divider"></div>
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/images/石家庄市西柏坡景区/石家庄市西柏坡景区_04.jpg" alt="Red Memories" loading="lazy"/>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// Red Memories</div>
+        <h2>Red Memories · <span class="highlight">Passing the Torch</span></h2>
+        <p>The Xibaipo Memorial Hall is a national-level patriotic education demonstration base, housing more than 2,000 cultural relics. Through historical photographs, artifacts, sculptures, and multimedia displays, it comprehensively recreates the great revolutionary practices of the CPC Central Committee in Xibaipo.</p>
+        <p>In front of the memorial hall stands the bronze statue of the "Five Secretaries," vividly capturing the historic moment of Mao Zedong, Zhu De, Liu Shaoqi, Zhou Enlai, and Ren Bishi striding forward — a landmark scene where visitors pay tribute to their predecessors and take commemorative photos.</p>
+        <p>Xibaipo is not only a witness to revolutionary history but also the birthplace of the "Examination" spirit. The "Two Musts" proposed by Chairman Mao at the Second Plenary Session of the Seventh Central Committee still resonate powerfully today, inspiring generation after generation to stay true to their original aspirations and forge ahead.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">2000+</div><div class="lbl">Cultural Relics</div></div>
+          <div class="stat-item"><div class="num">Patriotic Education</div><div class="lbl">Base Type</div></div>
+          <div class="stat-item"><div class="num">Examination Spirit</div><div class="lbl">Birthplace</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section class="gallery-section" data-chapter="Photo Gallery">
+    <div class="section-header">
+      <div class="numeral">/// Photo Gallery</div>
+      <h2>Xibaipo · <span style="color:var(--primary);">Panoramic View</span></h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="col">
+        <div class="gallery-item" data-animate style="height:100%;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/images/石家庄市西柏坡景区/石家庄市西柏坡景区_06.jpg" alt="Xibaipo Panorama" style="height:100%;min-height:500px;" loading="lazy"/>
+</div>
+        <div class="gallery-item" data-animate style="height:200px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/images/石家庄市西柏坡景区/石家庄市西柏坡景区_07.jpg" alt="Historic Site" style="height:100%;" loading="lazy"/>
+</div>
+      </div>
+      <div class="col">
+        <div class="gallery-item" data-animate style="height:240px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/images/石家庄市西柏坡景区/石家庄市西柏坡景区_08.jpg" alt="Memorial Hall" style="height:100%;" loading="lazy"/>
+</div>
+        <div class="gallery-item" data-animate style="height:260px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hebei/images/石家庄市西柏坡景区/石家庄市西柏坡景区_09.jpg" alt="Red Memories" style="height:100%;" loading="lazy"/>
+</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DATA DASHBOARD ===== -->
+  <section class="dashboard-section" data-chapter="Data Dashboard">
+    <div class="section-header">
+      <div class="numeral">/// Data Dashboard</div>
+      <h2>Xibaipo · <span style="color:var(--primary);">Key Indicators</span></h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dashboard-card" data-animate>
+        <div class="icon">⭐</div>
+        <div class="d-num">5A Level</div>
+        <div class="d-label">Scenic Rating</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">🏛️</div>
+        <div class="d-num">National Heritage Site</div>
+        <div class="d-label">Protection Level</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">📅</div>
+        <div class="d-num">1948-1949</div>
+        <div class="d-label">Historic Period</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">⚔️</div>
+        <div class="d-num">Three Major Campaigns</div>
+        <div class="d-label">Command Decisions</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">📜</div>
+        <div class="d-num">2nd Plenary Session</div>
+        <div class="d-label">Historic Meeting</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">🔴</div>
+        <div class="d-num">Revolutionary Sacred Land</div>
+        <div class="d-label">Site Identity</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">🎫</div>
+        <div class="d-num">Free Admission</div>
+        <div class="d-label">Ticket Policy</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">🌸</div>
+        <div class="d-num">Year-Round</div>
+        <div class="d-label">Opening Hours</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="content">
+      <div class="numeral">1948 · The Examination Ground</div>
+      <h2>New China Rose from <span style="color:var(--primary);">Here</span></h2>
+      <p>Xibaipo — the last rural command post of the Chinese revolution.<br/>Chairman Mao proposed the "Two Musts" here, and New China strode forward from this place to the whole nation.</p>
+      <a class="cta-btn" href="../index.html?prov=%E6%B2%B3%E5%8C%97%E7%9C%81">
+        <span>← Back to Scenic Map</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Xibaipo · 5A Scenic Area · National Key Cultural Heritage Protection Unit · Pingshan County, Shijiazhuang City, Hebei Province</p>
+  </footer>
+
+  <script>
+    // ===== Parallax =====
+    const heroBg=document.querySelector('.hero-bg');
+    window.addEventListener('scroll',()=>{
+      heroBg.style.transform=`translateY(${window.scrollY*0.3}px)`;
+      const hud=document.getElementById('scrollHud');
+      hud.classList.toggle('active',window.scrollY>window.innerHeight*0.6);
+    });
+
+    // ===== Scroll Progress =====
+    const progressFill=document.getElementById('scrollProgressFill');
+    window.addEventListener('scroll',()=>{
+      const h=document.documentElement.scrollHeight-window.innerHeight;
+      if(h>0)progressFill.style.width=Math.min(100,Math.round(window.scrollY/h*100))+'%';
+    });
+
+    // ===== Intersection Observer =====
+    const observer=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+    },{threshold:0.15,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('[data-animate]').forEach(el=>observer.observe(el));
+
+    // ===== Chapter Navigation =====
+    const chapters=document.querySelectorAll('[data-chapter]');
+    const nav=document.getElementById('chapterNav');
+    chapters.forEach((sec,i)=>{
+      const dot=document.createElement('div');
+      dot.className='chapter-dot';
+      if(i===0)dot.classList.add('active');
+      dot.title=sec.getAttribute('data-chapter');
+      dot.addEventListener('click',()=>sec.scrollIntoView({behavior:'smooth'}));
+      nav.appendChild(dot);
+    });
+
+    const chObs=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const idx=Array.from(chapters).indexOf(e.target);
+          document.querySelectorAll('.chapter-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+        }
+      });
+    },{threshold:0.3,rootMargin:'-80px 0px 0px 0px'});
+    chapters.forEach(s=>chObs.observe(s));
+
+    // ===== Page Transition =====
+    function navigateTo(url){
+      const pt=document.getElementById('pageTransition');
+      pt.classList.add('active');
+      setTimeout(()=>{window.location.href=url;},400);
+    }
+    document.querySelector('.back-btn').addEventListener('click',function(e){
+      e.preventDefault();navigateTo(this.getAttribute('href'));
+    });
+    document.querySelector('.cta-btn').addEventListener('click',function(e){
+      e.preventDefault();navigateTo(this.getAttribute('href'));
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Jingdezhen Ancient Kiln · Millennium Porcelain Capital | 5A Scenic Immersive Exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cobalt: #1565c0;
+  --blue: #1976d2;
+  --porcelain: #e3f2fd;
+  --cream: #fff8e1;
+  --gold: #c9a96e;
+  --deep: #050a14;
+  --surface: #0a1225;
+  --fog: rgba(21,101,192,.06);
+  --text: #e8ecf5;
+  --text-dim: rgba(232,236,245,.55);
+  --text-faint: rgba(232,236,245,.25);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background:var(--deep);
+  color:var(--text);
+  font-family:'Noto Serif SC',serif;
+  line-height:1.8;
+  overflow-x:hidden;
+}
+
+#loading {
+  position:fixed; inset:0; z-index:9999;
+  background:var(--deep);
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity .6s,visibility .6s;
+}
+#loading.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+#loading .spinner {
+  width:48px; height:48px;
+  border:2px solid var(--text-faint);
+  border-top-color:var(--cobalt);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+.hero {
+  position:relative; height:100vh; min-height:700px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.hero-bg {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  transform:scale(1.1);
+  transition:transform 1.5s cubic-bezier(.25,.46,.45,.94);
+}
+.hero.loaded .hero-bg { transform:scale(1); }
+.hero-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(5,10,20,.3) 0%,rgba(5,10,20,.5) 50%,var(--deep) 100%);
+}
+.porcelain-layer {
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 55%,rgba(21,101,192,.1) 0%,transparent 60%);
+  animation:glazePulse 8s ease-in-out infinite;
+}
+@keyframes glazePulse {
+  0%,100% { opacity:.5; }
+  50% { opacity:.9; }
+}
+
+.hero-content {
+  position:relative; z-index:2; text-align:center;
+  max-width:900px; padding:0 2rem;
+}
+.hero-tag {
+  display:inline-block;
+  font-size:.85rem; letter-spacing:.3em;
+  color:var(--porcelain);
+  border:1px solid rgba(227,242,253,.3);
+  padding:.4rem 1.5rem; border-radius:2px;
+  margin-bottom:2rem;
+  backdrop-filter:blur(10px);
+}
+.hero h1 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(3.5rem,8vw,7rem);
+  font-weight:400;
+  color:var(--text);
+  line-height:1.2;
+  margin-bottom:.5rem;
+  text-shadow:0 0 80px rgba(21,101,192,.4);
+}
+.hero .subtitle {
+  font-size:clamp(1rem,2vw,1.4rem);
+  color:var(--porcelain);
+  letter-spacing:.2em;
+  margin-bottom:1.5rem;
+}
+.hero .desc {
+  font-size:1.05rem;
+  color:var(--text-dim);
+  max-width:600px; margin:0 auto 2.5rem;
+  line-height:1.9;
+}
+.hero .scroll-hint {
+  position:absolute; bottom:3rem; left:50%;
+  transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center;
+  gap:.5rem;
+  color:var(--text-faint);
+  font-size:.75rem; letter-spacing:.2em;
+}
+.scroll-hint .line {
+  width:1px; height:40px;
+  background:linear-gradient(180deg,var(--cobalt),transparent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%,100% { transform:scaleY(1); opacity:.5; }
+  50% { transform:scaleY(1.8); opacity:1; }
+}
+
+.section {
+  max-width:1100px; margin:0 auto;
+  padding:6rem 2rem;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:4rem; align-items:center;
+}
+.section.reverse { direction:rtl; }
+.section.reverse .section-text { direction:ltr; }
+.section.reverse .section-visual { direction:ltr; }
+
+.section-text .chapter-num {
+  font-family:'ZCOOL XiaoWei',serif;
+  font-size:.8rem; letter-spacing:.3em;
+  color:var(--cobalt);
+  margin-bottom:1rem;
+}
+.section-text h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+  margin-bottom:1.5rem;
+  line-height:1.3;
+}
+.section-text p {
+  color:var(--text-dim);
+  font-size:1.05rem;
+  line-height:2;
+  margin-bottom:1rem;
+}
+.section-text .highlight {
+  color:var(--porcelain);
+  font-weight:600;
+}
+
+.section-visual {
+  position:relative;
+  border-radius:8px; overflow:hidden;
+  aspect-ratio:4/5;
+  box-shadow:0 20px 60px rgba(21,101,192,.15);
+}
+.section-visual img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .8s ease;
+}
+.section-visual:hover img { transform:scale(1.05); }
+
+.image-break {
+  position:relative; height:60vh; min-height:400px;
+  background-size:cover; background-position:center;
+  background-attachment:fixed;
+  display:flex; align-items:center; justify-content:center;
+}
+.image-break .break-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,var(--deep),rgba(5,10,20,.4),var(--deep));
+}
+.image-break .break-quote {
+  position:relative; z-index:1; text-align:center;
+  max-width:700px; padding:0 2rem;
+}
+.image-break .break-quote .quote-text {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  color:var(--text);
+  line-height:1.6;
+  margin-bottom:1rem;
+}
+.image-break .break-quote .quote-author {
+  font-size:.9rem; color:var(--porcelain);
+  letter-spacing:.2em;
+}
+
+.gallery-section {
+  max-width:1100px; margin:0 auto;
+  padding:6rem 2rem;
+}
+.gallery-section .gallery-header {
+  text-align:center; margin-bottom:3rem;
+}
+.gallery-section .gallery-header h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+}
+.gallery-section .gallery-header .gallery-sub {
+  color:var(--cobalt);
+  font-size:.85rem; letter-spacing:.3em;
+  margin-top:.5rem;
+}
+.gallery-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+}
+.gallery-grid .gallery-item {
+  position:relative;
+  border-radius:6px; overflow:hidden;
+  aspect-ratio:3/4;
+  cursor:pointer;
+}
+.gallery-grid .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 2; }
+.gallery-grid .gallery-item img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .6s ease;
+}
+.gallery-grid .gallery-item:hover img { transform:scale(1.08); }
+
+.dashboard-section {
+  max-width:1100px; margin:0 auto;
+  padding:4rem 2rem 6rem;
+}
+.dashboard-section .dash-header {
+  text-align:center; margin-bottom:3rem;
+}
+.dashboard-section .dash-header h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+}
+.dashboard-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.5rem;
+}
+.dash-card {
+  background:var(--surface);
+  border:1px solid rgba(21,101,192,.1);
+  border-radius:8px;
+  padding:2rem 1.5rem;
+  text-align:center;
+  transition:border-color .3s,transform .3s;
+}
+.dash-card:hover {
+  border-color:rgba(21,101,192,.3);
+  transform:translateY(-4px);
+}
+.dash-card .dash-icon {
+  font-size:2rem; margin-bottom:1rem;
+}
+.dash-card .dash-value {
+  font-family:'ZCOOL XiaoWei',serif;
+  font-size:2.2rem;
+  color:var(--cobalt);
+  margin-bottom:.3rem;
+}
+.dash-card .dash-label {
+  font-size:.85rem; color:var(--text-dim);
+  letter-spacing:.1em;
+}
+
+.cta-section {
+  text-align:center; padding:6rem 2rem;
+  background:linear-gradient(180deg,transparent,rgba(21,101,192,.05),transparent);
+}
+.cta-section h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+  margin-bottom:1rem;
+}
+.cta-section p {
+  color:var(--text-dim);
+  margin-bottom:2rem;
+  font-size:1.05rem;
+}
+.cta-btn {
+  display:inline-block;
+  padding:.9rem 2.5rem;
+  border:1px solid var(--cobalt);
+  color:var(--cobalt);
+  text-decoration:none;
+  font-size:.9rem; letter-spacing:.2em;
+  border-radius:2px;
+  transition:all .3s;
+}
+.cta-btn:hover {
+  background:var(--cobalt);
+  color:var(--text);
+}
+
+footer {
+  text-align:center; padding:3rem 2rem;
+  border-top:1px solid rgba(21,101,192,.1);
+}
+footer p {
+  color:var(--text-faint);
+  font-size:.8rem; letter-spacing:.15em;
+}
+
+.chapter-nav {
+  position:fixed; right:2rem; top:50%;
+  transform:translateY(-50%);
+  z-index:100;
+  display:flex; flex-direction:column;
+  gap:1rem;
+}
+.chapter-nav .nav-dot {
+  width:8px; height:8px;
+  border-radius:50%;
+  background:var(--text-faint);
+  transition:all .3s;
+  cursor:pointer;
+}
+.chapter-nav .nav-dot.active {
+  background:var(--cobalt);
+  box-shadow:0 0 12px rgba(21,101,192,.5);
+}
+
+@media (max-width:768px) {
+  .section {
+    grid-template-columns:1fr;
+    gap:2rem; padding:4rem 1.5rem;
+  }
+  .section.reverse { direction:ltr; }
+  .gallery-grid {
+    grid-template-columns:repeat(2,1fr);
+  }
+  .gallery-grid .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 1; }
+  .dashboard-grid { grid-template-columns:repeat(2,1fr); }
+  .chapter-nav { display:none; }
+  .image-break { background-attachment:scroll; }
+}
+</style>
+</head>
+<body>
+
+<div id="loading"><div class="spinner"></div></div>
+
+<nav class="chapter-nav" id="chapterNav">
+  <div class="nav-dot active" data-target="hero"></div>
+  <div class="nav-dot" data-target="kiln"></div>
+  <div class="nav-dot" data-target="bluewhite"></div>
+  <div class="nav-dot" data-target="craft"></div>
+  <div class="nav-dot" data-target="gallery"></div>
+  <div class="nav-dot" data-target="dashboard"></div>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="porcelain-layer"></div>
+  <div class="hero-content">
+    <div class="hero-tag">National 5A Scenic Area · Millennium Porcelain Capital</div>
+    <h1>Jingdezhen Ancient Kiln</h1>
+    <div class="subtitle">Millennium Porcelain Capital · Blue-and-White Elegance</div>
+    <p class="desc">"White as jade, bright as a mirror, thin as paper, resonant as chime stone" — Jingdezhen ceramics have been renowned worldwide for a millennium. The Ancient Kiln Folk Custom Expo Area completely preserves the Ming and Qing imperial kiln sites and handmade porcelain techniques, serving as a living ceramic culture museum.</p>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll to explore</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<section class="section" id="kiln" data-chapter="Ancient Kiln Expo">
+  <div class="section-text">
+    <div class="chapter-num">Chapter One</div>
+    <h2>Ancient Kiln Folk Custom Expo Area</h2>
+    <p>Jingdezhen Ancient Kiln Folk Custom Expo Area is the only <span class="highlight">ceramic culture</span>-themed 5A scenic area in China, completely recreating the kilns from the Song to the Qing dynasties — <span class="highlight">Song Dynasty Dragon Kiln, Yuan Dynasty Mantou Kiln, Ming Dynasty Gourd Kiln, Qing Dynasty Town Kiln</span> — making it a living history of kiln development.</p>
+    <p>Here, intangible cultural heritage inheritors demonstrate the <span class="highlight">72 steps</span> of handmade porcelain production on site, from kneading clay and throwing to painting and glazing — each step embodies a millennium of craftsmanship.</p>
+  </div>
+  <div class="section-visual">
+    <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/景德镇昌江区古窑民俗博览区/景德镇昌江区古窑民俗博览区_02.jpg" alt="Ancient Kiln Expo Area" loading="lazy">
+  </div>
+</section>
+
+<div class="image-break" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/景德镇昌江区古窑民俗博览区/景德镇昌江区古窑民俗博览区_04.jpg')">
+  <div class="break-overlay"></div>
+  <div class="break-quote">
+    <div class="quote-text">"White as jade, bright as a mirror, thin as paper, resonant as chime stone"</div>
+    <div class="quote-author">— Four Wonders of Jingdezhen Ceramics</div>
+  </div>
+</div>
+
+<section class="section reverse" id="bluewhite" data-chapter="Blue-and-White Elegance">
+  <div class="section-text">
+    <div class="chapter-num">Chapter Two</div>
+    <h2>Blue-and-White Elegance</h2>
+    <p>Blue-and-white porcelain is Jingdezhen's <span class="highlight">soul work</span>. Cobalt pigment is used to paint patterns on the raw body, covered with a transparent glaze, and fired at 1300°C in a single firing. The blue and white contrast elegantly, bright and vivid, earning it the title of <span class="highlight">"King of Porcelain"</span>.</p>
+    <p>The Yuan Dynasty blue-and-white jar depicting Guiguzi descending the mountain sold for a record <span class="highlight">230 million yuan</span>, while Ming Dynasty Yongle and Xuande blue-and-white wares are unmatched through the ages. Jingdezhen blue-and-white porcelain has been exported overseas, becoming the most elegant ambassador of Chinese culture.</p>
+  </div>
+  <div class="section-visual">
+    <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/景德镇昌江区古窑民俗博览区/景德镇昌江区古窑民俗博览区_06.jpg" alt="Blue-and-white porcelain plate" loading="lazy">
+  </div>
+</section>
+
+<section class="section" id="craft" data-chapter="Artisan Heritage">
+  <div class="section-text">
+    <div class="chapter-num">Chapter Three</div>
+    <h2>Artisan Heritage</h2>
+    <p>Jingdezhen's handmade porcelain techniques are listed as <span class="highlight">National Intangible Cultural Heritage</span>. From quarrying and refining clay to throwing, trimming, and underglaze painting, the <span class="highlight">72 steps</span> are interlinked, with each piece embodying the craftsman's dedication and wisdom.</p>
+    <p>Inside the Ancient Kiln scenic area, <span class="highlight">intangible cultural heritage inheritors</span> demonstrate throwing, painting, and other master techniques on site. Visitors can also experience the joy of making porcelain with their own hands. The millennium-old kiln fire burns endlessly, and the spirit of craftsmanship is passed down through generations.</p>
+  </div>
+  <div class="section-visual">
+    <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/景德镇昌江区古窑民俗博览区/景德镇昌江区古窑民俗博览区_23.jpg" alt="Ancient kiln statue" loading="lazy">
+  </div>
+</section>
+
+<section class="gallery-section" id="gallery" data-chapter="Gallery">
+  <div class="gallery-header">
+    <h2>Gallery</h2>
+    <div class="gallery-sub">GALLERY</div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/景德镇昌江区古窑民俗博览区/景德镇昌江区古窑民俗博览区_08.jpg" alt="Ancient Kiln Expo Area" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/景德镇昌江区古窑民俗博览区/景德镇昌江区古窑民俗博览区_11.jpg" alt="Ancient kiln" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/景德镇昌江区古窑民俗博览区/景德镇昌江区古窑民俗博览区_21.jpg" alt="Ancient kiln" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section class="dashboard-section" id="dashboard" data-chapter="Dashboard">
+  <div class="dash-header">
+    <h2>Jingdezhen Ancient Kiln · Dashboard</h2>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dash-card">
+      <div class="dash-icon">🏺</div>
+      <div class="dash-value">1000+</div>
+      <div class="dash-label">Porcelain History (Years)</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🔥</div>
+      <div class="dash-value">72</div>
+      <div class="dash-label">Crafting Steps</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">⭐</div>
+      <div class="dash-value">4.5</div>
+      <div class="dash-label">Visitor Rating</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🏛️</div>
+      <div class="dash-value">All Dynasties</div>
+      <div class="dash-label">Ancient Kiln Reconstruction Display</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Visit the Millennium Porcelain Capital</h2>
+  <p>Best season: All year round, spring and autumn offer the most pleasant climate</p>
+  <span class="cta-btn">Back to Scenic Map</span>
+</section>
+
+<footer>
+  <p>Jingdezhen Ancient Kiln · Millennium Porcelain Capital · Blue-and-White Elegance · 5A Immersive Exploration</p>
+</footer>
+
+<script>
+(function(){
+  setTimeout(function(){
+    document.getElementById('loading').classList.add('hidden');
+  },800);
+
+  var heroBg=document.getElementById('heroBg');
+  var img=new Image();
+  img.onload=function(){
+    heroBg.style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/景德镇昌江区古窑民俗博览区/景德镇昌江区古窑民俗博览区_22.jpg')";
+    document.querySelector('.hero').classList.add('loaded');
+  };
+  img.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/景德镇昌江区古窑民俗博览区/景德镇昌江区古窑民俗博览区_16.jpg';
+
+  var sections=document.querySelectorAll('[data-chapter]');
+  var navDots=document.querySelectorAll('.nav-dot');
+
+  function updateNav(){
+    var scrollY=window.scrollY+window.innerHeight/3;
+    var current='';
+    sections.forEach(function(s){
+      if(s.offsetTop<=scrollY) current=s.id;
+    });
+    navDots.forEach(function(d){
+      d.classList.toggle('active',d.dataset.target===current);
+    });
+  }
+
+  navDots.forEach(function(dot){
+    dot.addEventListener('click',function(){
+      var target=document.getElementById(dot.dataset.target);
+      if(target) target.scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  window.addEventListener('scroll',updateNav);
+
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting) e.target.style.opacity='1';
+    });
+  },{threshold:.15});
+
+  document.querySelectorAll('.section,.gallery-section,.dashboard-section').forEach(function(el){
+    el.style.opacity='0';
+    el.style.transition='opacity .8s ease';
+    observer.observe(el);
+  });
+})();
+</script>
+
+<a href="../index.html?prov=江西省" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Scenic Map</a>
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Lushan West Sea · Jiangxi Thousand Islands Lake | 5A Scenic Immersive Exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+:root {
+  --lake: #0277bd;
+  --wave: #0288d1;
+  --sky: #81d4fa;
+  --gold: #b8a06e;
+  --deep: #050a10;
+  --surface: #0a1520;
+  --text: #e1f5fe;
+  --text-dim: rgba(225,245,254,.55);
+  --text-faint: rgba(225,245,254,.25);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background:var(--deep);
+  color:var(--text);
+  font-family:'Noto Serif SC',serif;
+  line-height:1.8;
+  overflow-x:hidden;
+}
+
+#loading {
+  position:fixed; inset:0; z-index:9999;
+  background:var(--deep);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  transition:opacity .6s,visibility .6s;
+}
+#loading.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+#loading .spinner {
+  width:48px; height:48px;
+  border:2px solid var(--text-faint);
+  border-top-color:var(--lake);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+#loading p {
+  margin-top:1rem; font-size:.85rem;
+  color:var(--text-faint); letter-spacing:.2em;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+.hero {
+  position:relative; height:100vh; min-height:700px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.hero-bg {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  transform:scale(1.1);
+  transition:transform 1.5s cubic-bezier(.25,.46,.45,.94);
+}
+.hero.loaded .hero-bg { transform:scale(1); }
+.hero-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(5,10,16,.2) 0%,rgba(5,10,16,.4) 50%,var(--deep) 100%);
+}
+.ripple-layer {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 30% 50%,rgba(129,212,250,.04) 0%,transparent 50%),
+    radial-gradient(ellipse at 65% 45%,rgba(129,212,250,.03) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 60%,rgba(184,160,110,.02) 0%,transparent 40%);
+  animation:rippleDrift 10s ease-in-out infinite;
+}
+@keyframes rippleDrift {
+  0%,100% { transform:translateX(0) translateY(0); opacity:.7; }
+  25% { transform:translateX(8px) translateY(-4px); opacity:1; }
+  50% { transform:translateX(-6px) translateY(3px); opacity:.6; }
+  75% { transform:translateX(4px) translateY(-2px); opacity:.9; }
+}
+
+.hero-content {
+  position:relative; z-index:2; text-align:center;
+  max-width:900px; padding:0 2rem;
+}
+.hero-tag {
+  display:inline-block;
+  font-size:.85rem; letter-spacing:.3em;
+  color:var(--sky);
+  border:1px solid rgba(129,212,250,.25);
+  padding:.4rem 1.5rem; border-radius:2px;
+  margin-bottom:2rem;
+  backdrop-filter:blur(10px);
+}
+.hero h1 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(3.5rem,8vw,7rem);
+  font-weight:400;
+  color:var(--text);
+  line-height:1.2;
+  margin-bottom:.5rem;
+  text-shadow:0 0 80px rgba(2,119,189,.4);
+}
+.hero .subtitle {
+  font-size:clamp(1rem,2vw,1.4rem);
+  color:var(--sky);
+  letter-spacing:.2em;
+  margin-bottom:1.5rem;
+}
+.hero .desc {
+  font-size:1.05rem;
+  color:var(--text-dim);
+  max-width:650px; margin:0 auto 2.5rem;
+  line-height:1.9;
+}
+.hero .scroll-hint {
+  position:absolute; bottom:3rem; left:50%;
+  transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center;
+  gap:.5rem;
+  color:var(--text-faint);
+  font-size:.75rem; letter-spacing:.2em;
+}
+.scroll-hint .line {
+  width:1px; height:40px;
+  background:linear-gradient(180deg,var(--lake),transparent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%,100% { transform:scaleY(1); opacity:.5; }
+  50% { transform:scaleY(1.8); opacity:1; }
+}
+
+.section {
+  max-width:1100px; margin:0 auto;
+  padding:6rem 2rem;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:4rem; align-items:center;
+}
+.section.reverse { direction:rtl; }
+.section.reverse .section-text { direction:ltr; }
+.section.reverse .section-visual { direction:ltr; }
+
+.section-text .chapter-num {
+  font-family:'ZCOOL XiaoWei',serif;
+  font-size:.8rem; letter-spacing:.3em;
+  color:var(--lake);
+  margin-bottom:1rem;
+}
+.section-text h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+  margin-bottom:1.5rem;
+  line-height:1.3;
+}
+.section-text p {
+  color:var(--text-dim);
+  font-size:1.05rem;
+  line-height:2;
+  margin-bottom:1rem;
+}
+.section-text .highlight {
+  color:var(--sky);
+  font-weight:600;
+}
+
+.section-visual {
+  position:relative;
+  border-radius:8px; overflow:hidden;
+  aspect-ratio:4/5;
+  box-shadow:0 20px 60px rgba(2,119,189,.12);
+}
+.section-visual img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .8s ease;
+}
+.section-visual:hover img { transform:scale(1.05); }
+
+.image-break {
+  position:relative; height:60vh; min-height:400px;
+  background-size:cover; background-position:center;
+  background-attachment:fixed;
+  display:flex; align-items:center; justify-content:center;
+}
+.image-break .break-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,var(--deep),rgba(5,10,16,.4),var(--deep));
+}
+.image-break .break-quote {
+  position:relative; z-index:1; text-align:center;
+  max-width:800px; padding:0 2rem;
+}
+.image-break .break-quote .quote-text {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(1.5rem,3vw,2.4rem);
+  color:var(--text);
+  line-height:1.8;
+  margin-bottom:1rem;
+}
+.image-break .break-quote .quote-author {
+  font-size:.9rem; color:var(--gold);
+  letter-spacing:.2em;
+}
+
+.gallery-section {
+  max-width:1100px; margin:0 auto;
+  padding:6rem 2rem;
+}
+.gallery-section .gallery-header {
+  text-align:center; margin-bottom:3rem;
+}
+.gallery-section .gallery-header h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+}
+.gallery-section .gallery-header .gallery-sub {
+  color:var(--lake);
+  font-size:.85rem; letter-spacing:.3em;
+  margin-top:.5rem;
+}
+.gallery-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+}
+.gallery-grid .gallery-item {
+  position:relative;
+  border-radius:6px; overflow:hidden;
+  aspect-ratio:3/4;
+  cursor:pointer;
+}
+.gallery-grid .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 2; }
+.gallery-grid .gallery-item img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .6s ease;
+}
+.gallery-grid .gallery-item:hover img { transform:scale(1.08); }
+
+.dashboard {
+  max-width:1100px; margin:0 auto;
+  padding:6rem 2rem;
+}
+.dashboard .dash-header {
+  text-align:center; margin-bottom:3rem;
+}
+.dashboard .dash-header h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+}
+.dashboard .dash-header .dash-sub {
+  color:var(--lake);
+  font-size:.85rem; letter-spacing:.3em;
+  margin-top:.5rem;
+}
+.dash-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.5rem;
+}
+.dash-card {
+  text-align:center;
+  padding:2rem 1.5rem;
+  border-radius:8px;
+  background:rgba(2,119,189,.04);
+  border:1px solid rgba(2,119,189,.08);
+  transition:transform .3s,border-color .3s;
+}
+.dash-card:hover {
+  transform:translateY(-4px);
+  border-color:rgba(2,119,189,.2);
+}
+.dash-card .dash-icon { font-size:2rem; margin-bottom:.8rem; }
+.dash-card .dash-num {
+  font-size:2rem; font-weight:700;
+  color:var(--gold);
+  margin-bottom:.3rem;
+}
+.dash-card .dash-label {
+  font-size:.8rem; color:var(--text-faint);
+  letter-spacing:.1em;
+}
+
+.cta-section {
+  position:relative; height:60vh; min-height:400px;
+  background-size:cover; background-position:center;
+  background-attachment:fixed;
+  display:flex; align-items:center; justify-content:center;
+  text-align:center;
+}
+.cta-section .cta-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,var(--deep),rgba(5,10,16,.5),var(--deep));
+}
+.cta-section .cta-content {
+  position:relative; z-index:1;
+  max-width:600px; padding:0 2rem;
+}
+.cta-section .cta-content h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+  margin-bottom:1rem;
+}
+.cta-section .cta-content p {
+  color:var(--text-dim);
+  font-size:1.05rem;
+  line-height:1.9;
+  margin-bottom:2rem;
+}
+.cta-btn {
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.8rem 2rem;
+  border:1px solid rgba(129,212,250,.25);
+  background:rgba(2,119,189,.1);
+  backdrop-filter:blur(10px);
+  border-radius:4px;
+  color:var(--sky); font-size:1rem;
+  cursor:pointer; transition:all .3s;
+  letter-spacing:.1em; text-decoration:none;
+}
+.cta-btn:hover {
+  background:rgba(2,119,189,.2);
+  box-shadow:0 0 30px rgba(2,119,189,.2);
+  transform:translateY(-2px);
+}
+
+footer {
+  text-align:center; padding:3rem 2rem;
+  border-top:1px solid rgba(2,119,189,.08);
+}
+footer p {
+  font-size:.8rem; color:var(--text-faint);
+  letter-spacing:.2em;
+}
+
+.scroll-progress {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  height:2px; background:rgba(2,119,189,.1);
+}
+.scroll-progress-fill {
+  height:100%; width:0;
+  background:linear-gradient(90deg,var(--lake),var(--gold));
+  transition:width .1s linear;
+}
+
+.scroll-hud {
+  position:fixed; top:0; left:0; right:0; z-index:99;
+  padding:.8rem 2rem;
+  display:flex; justify-content:space-between; align-items:center;
+  background:rgba(5,10,16,.9);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(2,119,189,.08);
+  transform:translateY(-100%);
+  transition:transform .4s cubic-bezier(.16,1,.3,1);
+}
+.scroll-hud.active { transform:translateY(0); }
+.scroll-hud .hud-left {
+  display:flex; align-items:center; gap:1rem;
+}
+.scroll-hud .hud-left a {
+  color:var(--text-dim); text-decoration:none;
+  font-size:.85rem; letter-spacing:.1em;
+  transition:color .3s;
+}
+.scroll-hud .hud-left a:hover { color:var(--sky); }
+.scroll-hud .hud-right {
+  font-size:.75rem; color:var(--text-faint);
+  letter-spacing:.2em;
+}
+
+@media(max-width:768px){
+  .section {
+    grid-template-columns:1fr;
+    gap:2rem; padding:3rem 1.5rem;
+  }
+  .section.reverse { direction:ltr; }
+  .gallery-grid { grid-template-columns:repeat(2,1fr); }
+  .gallery-grid .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 1; }
+  .dash-grid { grid-template-columns:repeat(2,1fr); }
+  .hero h1 { font-size:2.8rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Sailing into the Lake of Thousand Islands ...</p>
+</div>
+
+<div class="scroll-progress"><div class="scroll-progress-fill" id="progressFill"></div></div>
+
+<div class="scroll-hud" id="scrollHud">
+  <div class="hud-left">
+    <span style="color:var(--text-dim);font-size:.85rem;">Lushan West Sea · Jiangxi Thousand Islands Lake</span>
+  </div>
+  <div class="hud-right">5A · Aquatic Wonderland</div>
+</div>
+
+<section class="hero" id="hero">
+  <div class="hero-bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_01.jpg')"></div>
+  <div class="hero-overlay"></div>
+  <div class="ripple-layer"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Jiangxi Thousand Islands Lake · 1667 Islands</div>
+    <h1>Lushan West Sea</h1>
+    <div class="subtitle">Jiangxi Province · Jiujiang City</div>
+    <p class="desc">Originally named Zhelin Lake, formed by the largest earth-fill dam in Asia. 1,667 islands are scattered across vast emerald waters, earning it the title "Jiangxi Thousand Islands Lake." It is a paradise for water sports and a haven for leisure vacations.</p>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll to Explore</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<section class="section" id="s1">
+  <div class="section-text">
+    <div class="chapter-num">Chapter One</div>
+    <h2>Lake of a Thousand Islands · <span class="highlight">Vast Emerald Waters</span></h2>
+    <p><span class="highlight">Lushan West Sea</span>, originally named Zhelin Lake, covers a water area of 308 square kilometers. The lake contains <span class="highlight">1,667 islands</span> of various shapes scattered like stars. Viewed from above, the islands resemble emeralds scattered across the blue lake, creating a magnificent landscape painting.</p>
+    <p>The Zhelin Lake Dam is the <span class="highlight">largest earth-fill dam in Asia</span>, standing 63.5 meters high and 590 meters long. This magnificent hydraulic project not only created the stunning landscape of Lushan West Sea but also provides abundant water resources and electricity to the surrounding areas.</p>
+  </div>
+  <div class="section-visual">
+    <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_02.jpg" alt="Lushan West Sea" loading="lazy"/>
+  </div>
+</section>
+
+<div class="image-break" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_03.jpg')">
+  <div class="break-overlay"></div>
+  <div class="break-quote">
+    <div class="quote-text">"The lake and mountains blend in harmony, the water surface smooth as a mirror without a ripple — Lushan West Sea, a poetic dwelling of 1,667 islands."</div>
+    <div class="quote-author">—— Lushan West Sea · Jiangxi Thousand Islands Lake</div>
+  </div>
+</div>
+
+<section class="section reverse" id="s2">
+  <div class="section-visual">
+    <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_04.jpg" alt="Lushan West Sea Islands" loading="lazy"/>
+  </div>
+  <div class="section-text">
+    <div class="chapter-num">Chapter Two</div>
+    <h2>Water Sports · <span class="highlight">Leisure Paradise</span></h2>
+    <p>Lushan West Sea is a <span class="highlight">water sports</span> enthusiast's paradise. With its clear waters and open lake surface, it is ideal for sailing, kayaking, jet skiing, flyboarding, and various other water activities. Every summer, water sports lovers from all over the country gather here.</p>
+    <p>Beyond thrilling water sports, Lushan West Sea also offers <span class="highlight">hot spring resorts</span> and <span class="highlight">West Sea Fishing Village</span> for leisure. Soak in a hot spring, savor a table of lake delicacies, and enjoy a slow life amidst the lake and mountains — the ideal escape from urban hustle and bustle.</p>
+  </div>
+</section>
+
+<section class="section" id="s3">
+  <div class="section-text">
+    <div class="chapter-num">Chapter Three</div>
+    <h2>Golden Dragon Bridge · <span class="highlight">Lakeside Stroll</span></h2>
+    <p><span class="highlight">Golden Dragon Bridge</span> is one of the iconic landmarks of Lushan West Sea. Spanning between two islands, it lies like a golden dragon resting upon the emerald waves. Walking on the bridge, the lake breeze caresses your face, distant mountains appear misty blue, and the nearby waters shimmer with haze — as if strolling through a landscape painting.</p>
+    <p>Lushan West Sea also features numerous viewing platforms such as <span class="highlight">Haohan Slope</span>. From atop, a thousand islands compete in beauty, and vast emerald waters stretch before your eyes. Whether cruising the lake by boat, exploring islands, fishing by the shore, or soaking in hot springs, Lushan West Sea fulfills every vision of a vacation.</p>
+  </div>
+  <div class="section-visual">
+    <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_05.jpg" alt="Golden Dragon Bridge at Lushan West Sea" loading="lazy"/>
+  </div>
+</section>
+
+<div class="gallery-section">
+  <div class="gallery-header">
+    <h2>Lushan West Sea · Visual Chronicle</h2>
+    <div class="gallery-sub">GALLERY · Jiangxi Thousand Islands Lake</div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_06.jpg" alt="Panoramic View of Lushan West Sea" loading="lazy"/>
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_10.jpg" alt="Lushan West Sea Scenery" loading="lazy"/>
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_11.jpg" alt="Haohan Slope at Lushan West Sea" loading="lazy"/>
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_12.jpg" alt="Lushan West Sea Scenery" loading="lazy"/>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard">
+  <div class="dash-header">
+    <h2>Lushan West Sea · Core Archive</h2>
+    <div class="dash-sub">DASHBOARD · Data Overview</div>
+  </div>
+  <div class="dash-grid">
+    <div class="dash-card">
+      <div class="dash-icon">🏝️</div>
+      <div class="dash-num">1667</div>
+      <div class="dash-label">Number of Islands</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🌊</div>
+      <div class="dash-num">308</div>
+      <div class="dash-label">Water Area (km²)</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🏗️</div>
+      <div class="dash-num">63.5m</div>
+      <div class="dash-label">Dam Height</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">📅</div>
+      <div class="dash-num">4-10</div>
+      <div class="dash-label">Best Months to Visit</div>
+    </div>
+  </div>
+</div>
+
+<div class="cta-section" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_13.jpg')">
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <h2>Lushan West Sea · Come Explore</h2>
+    <p>Take a small boat and wander through 1,667 islands. Lushan West Sea, this vast aquatic wonderland of emerald waters, awaits you to embark on a poetic journey of lakes and mountains.</p>
+    <span class="cta-btn">Explore More 5A Scenic Spots →</span>
+  </div>
+</div>
+
+<footer>
+  <p>Lushan West Sea · Jiujiang City, Jiangxi Province · 5A Tourist Attraction · Jiangxi Thousand Islands Lake · Aquatic Wonderland</p>
+</footer>
+
+<script>
+(function(){
+  var hero = document.getElementById('hero');
+  var img = new Image();
+  img.onload = function(){
+    hero.classList.add('loaded');
+    document.getElementById('loading').classList.add('hidden');
+  };
+  img.src = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/九江市永修县庐山西海景区/九江市永修县庐山西海景区_14.jpg';
+  setTimeout(function(){
+    if(!img.complete){
+      hero.classList.add('loaded');
+      document.getElementById('loading').classList.add('hidden');
+    }
+  }, 6000);
+
+  var scrollHud = document.getElementById('scrollHud');
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY;
+    if(y > window.innerHeight * 0.6){
+      scrollHud.classList.add('active');
+    } else {
+      scrollHud.classList.remove('active');
+    }
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = docH > 0 ? Math.min((y / docH) * 100, 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+  });
+
+  hero.addEventListener('mousemove', function(e){
+    var bg = hero.querySelector('.hero-bg');
+    var x = (e.clientX / window.innerWidth - 0.5) * 6;
+    var y = (e.clientY / window.innerHeight - 0.5) * 6;
+    bg.style.transform = 'scale(1.1) translate(' + x + 'px, ' + y + 'px)';
+  });
+
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.section, .gallery-item, .dash-card').forEach(function(el){
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'all 0.8s cubic-bezier(.16,1,.3,1)';
+    observer.observe(el);
+  });
+})();
+</script>
+
+
+<a href="../index.html?prov=江西省" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Scenic Map</a>
+</body>
+</html>

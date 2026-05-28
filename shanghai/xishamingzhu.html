@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Xisha Mingzhu Lake · Ecological Pearl | 5A Scenic Immersive Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400;600&family=Noto+Sans+SC:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#7ab8a5;
+  --secondary:#a8d8c8;
+  --bg:#fafcfa;
+  --surface:#ffffff;
+  --text:#3a5a4a;
+  --text-dim:rgba(58,90,74,0.4);
+  --accent:#e8c86a;
+  --shadow:rgba(58,90,74,0.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_01.jpg') center/cover;filter:brightness(0.5) saturate(1.1);transition:transform 0.1s ease-out}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(122,184,165,0.25) 0%,rgba(168,216,200,0.15) 50%,transparent 100%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:0 40px}
+.hero-title{font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(32px,6vw,64px);color:#fff;letter-spacing:16px;margin-bottom:12px;text-shadow:0 2px 30px rgba(0,0,0,0.3)}
+.hero-sub{font-family:'Noto Sans SC',sans-serif;font-weight:200;font-size:clamp(14px,1.8vw,20px);color:rgba(255,255,255,0.75);letter-spacing:8px;margin-bottom:8px}
+.hero-english{font-family:'Noto Serif SC',serif;font-weight:200;font-size:clamp(10px,1.2vw,14px);color:rgba(255,255,255,0.4);letter-spacing:6px;text-transform:uppercase}
+
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.6s ease}
+.scroll-hint span{font-size:11px;letter-spacing:4px;color:rgba(255,255,255,0.5)}
+.scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,rgba(255,255,255,0.6),transparent);animation:scrollPulse 2.4s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+.hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.5s ease}
+.hud-item{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:rgba(255,255,255,0.75);border:1px solid rgba(122,184,165,0.15);border-radius:14px;padding:10px 18px;text-align:center;min-width:72px;box-shadow:0 4px 20px var(--shadow)}
+.hud-value{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:22px;color:var(--primary);letter-spacing:1px}
+.hud-label{font-family:'Noto Sans SC',sans-serif;font-size:10px;color:var(--text-dim);margin-top:2px;letter-spacing:2px}
+
+.content-section{max-width:1100px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.content-section.reverse{direction:rtl}
+.content-section.reverse .content-text{direction:ltr}
+.content-image{width:100%;border-radius:50% 50% 50% 50% / 40% 40% 40% 40%;overflow:hidden;box-shadow:0 12px 40px var(--shadow);aspect-ratio:1/1;max-width:460px;margin:0 auto}
+.content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.8s ease}
+.content-image:hover img{transform:scale(1.06)}
+.content-text h2{font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(26px,3.2vw,36px);color:var(--text);letter-spacing:6px;margin-bottom:8px}
+.content-label{font-family:'Noto Sans SC',sans-serif;font-weight:200;font-size:12px;color:var(--primary);letter-spacing:4px;margin-bottom:16px;text-transform:uppercase}
+.content-divider{width:48px;height:2px;background:var(--secondary);margin-bottom:24px}
+.content-text p{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:15px;line-height:2.2;color:var(--text);opacity:0.75;margin-bottom:16px}
+.content-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.content-tag{padding:5px 16px;background:rgba(122,184,165,0.08);border:1px solid rgba(122,184,165,0.2);border-radius:20px;font-family:'Noto Sans SC',sans-serif;font-size:12px;color:var(--primary);letter-spacing:2px}
+
+.image-break{height:55vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_03.jpg') center/cover fixed;filter:brightness(0.45) saturate(1.05)}
+.image-break .bg-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(122,184,165,0.2) 0%,transparent 60%)}
+.image-break .quote{position:relative;z-index:2;text-align:center;padding:0 40px}
+.image-break .quote-cn{font-family:'Noto Serif SC',serif;font-weight:200;font-size:clamp(24px,3.6vw,44px);color:#fff;letter-spacing:10px;margin-bottom:14px;text-shadow:0 2px 24px rgba(0,0,0,0.3)}
+.image-break .quote-en{font-family:'Noto Sans SC',sans-serif;font-weight:200;font-size:12px;color:rgba(255,255,255,0.45);letter-spacing:6px;text-transform:uppercase}
+
+.gallery{padding:100px 40px;max-width:1200px;margin:0 auto}
+.gallery-title{font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(22px,2.8vw,32px);text-align:center;color:var(--text);letter-spacing:8px;margin-bottom:8px}
+.gallery-sub{font-family:'Noto Sans SC',sans-serif;font-weight:200;font-size:12px;text-align:center;color:var(--text-dim);letter-spacing:4px;margin-bottom:48px}
+.gallery-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:240px 240px;gap:12px}
+.gallery-item{position:relative;overflow:hidden;border-radius:16px;cursor:pointer}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease}
+.gallery-item:hover img{transform:scale(1.07)}
+.gallery-item:nth-child(1){grid-column:1;grid-row:1/3}
+.gallery-item:nth-child(2){grid-column:2/4;grid-row:1}
+.gallery-item:nth-child(3){grid-column:2;grid-row:2}
+.gallery-item:nth-child(4){grid-column:3;grid-row:2}
+
+.dashboard{padding:80px 40px 100px;max-width:1000px;margin:0 auto}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.dash-card{background:var(--surface);border:1px solid rgba(122,184,165,0.12);border-radius:20px;padding:36px 20px 32px;text-align:center;transition:transform 0.3s ease,border-color 0.3s ease,box-shadow 0.3s ease;box-shadow:0 4px 24px var(--shadow)}
+.dash-card:hover{transform:translateY(-4px);border-color:var(--secondary);box-shadow:0 8px 36px rgba(122,184,165,0.12)}
+.dash-icon{font-size:30px;margin-bottom:10px;display:block}
+.dash-value{font-family:'Noto Serif SC',serif;font-weight:300;font-size:30px;color:var(--primary);margin-bottom:4px;letter-spacing:2px}
+.dash-label{font-family:'Noto Sans SC',sans-serif;font-size:12px;color:var(--text-dim);letter-spacing:3px}
+
+.cta{height:55vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_01.jpg') center/cover;filter:brightness(0.35) saturate(0.9)}
+.cta-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(122,184,165,0.15) 0%,transparent 50%)}
+.cta-content{position:relative;z-index:2;text-align:center;padding:0 40px}
+.cta-num{font-family:'Noto Serif SC',serif;font-weight:200;font-size:clamp(56px,8vw,100px);color:rgba(255,255,255,0.08);letter-spacing:10px;margin-bottom:-16px}
+.cta-sub{font-family:'Noto Sans SC',sans-serif;font-weight:200;font-size:13px;color:rgba(255,255,255,0.4);letter-spacing:6px;margin-bottom:16px}
+.cta-title{font-family:'Noto Serif SC',serif;font-weight:300;font-size:clamp(22px,3vw,36px);color:#fff;letter-spacing:8px;margin-bottom:36px;text-shadow:0 2px 20px rgba(0,0,0,0.2)}
+.cta-btn{display:inline-block;padding:12px 44px;border:1px solid rgba(255,255,255,0.25);border-radius:30px;font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:14px;letter-spacing:4px;text-decoration:none;color:rgba(255,255,255,0.85);transition:all 0.4s ease;background:transparent}
+.cta-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.4);color:#fff}
+
+.footer{padding:48px 40px;text-align:center}
+.footer p{font-family:'Noto Sans SC',sans-serif;font-weight:200;font-size:12px;color:var(--text-dim);letter-spacing:3px;line-height:2}
+
+[data-animate]{opacity:0;transform:translateY(32px);transition:opacity 0.8s ease,transform 0.8s ease}
+[data-animate].visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  .hero-title{letter-spacing:8px}
+  .hero-sub{letter-spacing:4px}
+  .hud{top:12px;right:12px;gap:6px}
+  .hud-item{padding:6px 12px;min-width:60px;border-radius:10px}
+  .hud-value{font-size:16px}
+  .hud-label{font-size:9px;letter-spacing:1px}
+  .content-section{grid-template-columns:1fr;padding:60px 24px;gap:36px}
+  .content-section.reverse{direction:ltr}
+  .content-image{max-width:320px;border-radius:40% 40% 40% 40% / 36% 36% 36% 36%}
+  .image-break{height:45vh}
+  .image-break .bg{background-attachment:scroll}
+  .image-break .quote-cn{letter-spacing:6px}
+  .gallery{padding:60px 24px}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:200px 160px 160px}
+  .gallery-item:nth-child(1){grid-column:1/3;grid-row:1}
+  .gallery-item:nth-child(2){grid-column:1/3;grid-row:2}
+  .gallery-item:nth-child(3){grid-column:1;grid-row:3}
+  .gallery-item:nth-child(4){grid-column:2;grid-row:3}
+  .dashboard{padding:60px 24px 80px}
+  .dashboard-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .dash-card{padding:28px 16px 24px}
+  .dash-value{font-size:24px}
+  .cta{height:45vh}
+  .cta-title{letter-spacing:4px}
+  .footer{padding:32px 24px}
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+<div class="hero-bg" id="heroBg"></div>
+<div class="hero-overlay"></div>
+<div class="hero-content">
+<h1 class="hero-title">Xisha Mingzhu Lake</h1>
+<p class="hero-sub">Ecological Pearl of Chongming Island</p>
+<p class="hero-english">Xisha Mingzhu Lake Scenic Area</p>
+</div>
+<div class="scroll-hint" id="scrollHint">
+<span>Explore</span>
+<div class="scroll-line"></div>
+</div>
+</section>
+
+<div class="hud" id="hud">
+<div class="hud-item"><div class="hud-value">7.8</div><div class="hud-label">km² Total Area</div></div>
+<div class="hud-item"><div class="hud-value">149</div><div class="hud-label">Bird Species</div></div>
+<div class="hud-item"><div class="hud-value">4.2</div><div class="hud-label">Scenic Rating</div></div>
+</div>
+
+<section class="content-section" data-animate>
+<div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_02.jpg" alt="Xisha Mingzhu Lake Scenic Area" loading="lazy"/></div>
+<div class="content-text">
+<h2>Ecological Pearl</h2>
+<div class="content-label">Ecological Pearl</div>
+<div class="content-divider"></div>
+<p>Xisha Mingzhu Lake Scenic Area is located at the southwestern tip of Chongming Island, Shanghai — the world's largest estuary alluvial island. Covering a total area of 7.8 square kilometers, it integrates diverse natural landscapes including wetlands, lakes, forests, and marshes. On February 6, 2024, Xisha Mingzhu Lake was officially designated as a national 5A-level tourist attraction, becoming Shanghai's first national 5A scenic area defined by its ecological character.</p>
+<p>The exceptional ecological environment keeps the air quality at the national Level 1 standard year-round, with negative oxygen ion concentrations exceeding 2,700 per cubic centimeter — making it a true natural oxygen bar.</p>
+<div class="content-tags">
+<span class="content-tag">Wetland Ecology</span>
+<span class="content-tag">Chongming Island</span>
+<span class="content-tag">Migratory Bird Haven</span>
+<span class="content-tag">Shanghai's Backyard</span>
+</div>
+</div>
+</section>
+
+<section class="image-break">
+<div class="bg"></div>
+<div class="bg-overlay"></div>
+<div class="quote">
+<div class="quote-cn">Ecological Pearl of Chongming Island</div>
+<div class="quote-en">Ecological Gem on Chongming Island</div>
+</div>
+</section>
+
+<section class="content-section reverse" data-animate>
+<div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_04.jpg" alt="Xisha Wetland" loading="lazy"/></div>
+<div class="content-text">
+<h2>Wetland Wonder</h2>
+<div class="content-label">Wetland Wonder</div>
+<div class="content-divider"></div>
+<p>Xisha Wetland is currently the only Yangtze River estuary tidal flat wetland in Shanghai with natural tidal phenomena, featuring unique tidal creek geological landscapes. With 2 major categories and 17 typical types of tidal creek landform relics, it bears witness to thousands of years of Chongming Island's formation history. The layered water forests, endless reed marshes, and well-arranged cedar groves create a unique visual tapestry at Xisha Wetland.</p>
+<p>Visitors can walk along the ecological boardwalk through the landscape, experiencing the poetry of traveling within a painting. A total of 149 bird species and 67 fish species have been observed in the wetland, including the nationally protected Yangtze finless porpoise and the rare Reed Parrotbill, often called the "giant panda of the bird world."</p>
+<div class="content-tags">
+<span class="content-tag">Tidal Wetland</span>
+<span class="content-tag">Tidal Creek Landscape</span>
+<span class="content-tag">Reed Marshes</span>
+<span class="content-tag">Birdwatching Paradise</span>
+</div>
+</div>
+</section>
+
+<section class="content-section" data-animate>
+<div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_10.jpg" alt="Mingzhu Lake Scenery" loading="lazy"/></div>
+<div class="content-text">
+<h2>Lake & Leisure</h2>
+<div class="content-label">Lake & Leisure</div>
+<div class="content-divider"></div>
+<p>Mingzhu Lake is Chongming's largest natural inland freshwater lake, stretching 3,000 meters from north to south and about 600 meters from east to west, with a maximum depth of 8 meters. The lake water is as clear as a mirror, reflecting the blue sky, white clouds, and verdant shores. The scenic area combines water recreation, eco-agricultural sightseeing, and competitive leisure sports, having hosted major international events such as the IRONMAN 70.3 World Triathlon and the UCI Women's World Tour.</p>
+<p>Films such as "1911 Revolution" and the TV series "Boss & Me" were shot on location here. It has become the "backyard garden" for Shanghai residents' weekend getaways.</p>
+<div class="content-tags">
+<span class="content-tag">Freshwater Lake</span>
+<span class="content-tag">Water Sports</span>
+<span class="content-tag">Leisure Getaway</span>
+<span class="content-tag">Film Location</span>
+</div>
+</div>
+</section>
+
+<section class="gallery" data-animate>
+<h2 class="gallery-title">Scenes of the Pearl</h2>
+<p class="gallery-sub">Gallery</p>
+<div class="gallery-grid">
+<div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_11.jpg" alt="Xisha Mingzhu Lake Views" loading="lazy"/></div>
+<div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_12.jpg" alt="Xisha Mingzhu Lake Views" loading="lazy"/></div>
+<div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_13.jpg" alt="Xisha Mingzhu Lake Views" loading="lazy"/></div>
+<div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_14.jpg" alt="Xisha Mingzhu Lake Views" loading="lazy"/></div>
+</div>
+</section>
+
+<section class="dashboard" data-animate>
+<div class="dashboard-grid">
+<div class="dash-card"><span class="dash-icon">🏞</span><div class="dash-value">7.8km²</div><div class="dash-label">Total Area</div></div>
+<div class="dash-card"><span class="dash-icon">🦅</span><div class="dash-value">149</div><div class="dash-label">Bird Species</div></div>
+<div class="dash-card"><span class="dash-icon">🐟</span><div class="dash-value">67</div><div class="dash-label">Fish Species</div></div>
+<div class="dash-card"><span class="dash-icon">⭐</span><div class="dash-value">2024</div><div class="dash-label">5A Certified</div></div>
+</div>
+</section>
+
+<section class="cta">
+<div class="cta-bg"></div>
+<div class="cta-overlay"></div>
+<div class="cta-content">
+<div class="cta-num">2024</div>
+<div class="cta-sub">Shanghai's First Eco-5A</div>
+<h2 class="cta-title">Poetry & Distant Lands</h2>
+<a href="../index.html?prov=%E4%B8%8A%E6%B5%B7%E5%B8%82" class="cta-btn">Back to Scenic Map</a>
+</div>
+</section>
+
+<footer class="footer">
+<p>Xisha Mingzhu Lake · National 5A Scenic Area · Shanghai</p>
+</footer>
+
+<script>
+(function(){
+var img=new Image();
+img.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_01.jpg')"};
+img.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/xishamingzhu/西沙明珠湖景区_01.jpg';
+})();
+
+window.addEventListener('scroll',function(){
+var hint=document.getElementById('scrollHint');
+if(hint)hint.style.opacity=window.scrollY>100?'0':'1';
+});
+
+document.querySelector('.hero').addEventListener('mousemove',function(e){
+var x=(e.clientX/window.innerWidth-0.5)*12;
+var y=(e.clientY/window.innerHeight-0.5)*12;
+var bg=document.getElementById('heroBg');
+if(bg)bg.style.transform='translate('+x+'px,'+y+'px)';
+});
+
+var observer=new IntersectionObserver(function(entries){
+entries.forEach(function(entry){
+if(entry.isIntersecting)entry.target.classList.add('visible');
+});
+},{threshold:0.15});
+document.querySelectorAll('[data-animate]').forEach(function(el){observer.observe(el)});
+</script>
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The Palace Museum · Forbidden City | Beijing 5A Scenic Spot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #c41e3a;
+  --secondary: #f9d56e;
+  --bg: #1a0a0a;
+  --surface: rgba(196,30,58,0.08);
+  --text: #fdf5e6;
+  --text-dim: rgba(253,245,230,0.50);
+  --text-faint: rgba(253,245,230,0.20);
+  --glow: rgba(196,30,58,0.25);
+  --gold-glow: rgba(249,213,110,0.15);
+  --accent: #d4a017;
+  --gold: #f9d56e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Serif SC','Noto Sans SC','PingFang SC','Microsoft YaHei',serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.85;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--primary);border-radius:3px}
+
+#loading{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .6s ease,visibility .6s ease;
+}
+#loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-ring{
+  width:48px;height:48px;border:2px solid var(--text-faint);
+  border-top-color:var(--accent);border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{
+  margin-top:20px;font-family:'Noto Serif SC',serif;font-size:13px;
+  letter-spacing:.3em;color:var(--text-dim);
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .4s ease,backdrop-filter .4s ease,padding .4s ease;
+}
+nav.scrolled{
+  background:rgba(26,10,10,.90);backdrop-filter:blur(20px);
+  padding:10px 40px;
+}
+.nav-logo a{
+  font-family:'Noto Serif SC',serif;font-size:18px;font-weight:700;
+  color:var(--text);text-decoration:none;letter-spacing:.05em;
+}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{
+  color:var(--text-dim);text-decoration:none;font-size:13px;
+  letter-spacing:.12em;transition:color .3s ease;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.nav-links a:hover{color:var(--gold)}
+
+.hero{
+  position:relative;height:100vh;min-height:700px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  background-repeat:no-repeat;
+  transition:opacity 1.5s ease;
+}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(26,10,10,.40) 0%,rgba(26,10,10,.20) 40%,rgba(26,10,10,.80) 85%,var(--bg) 100%);
+}
+.imperial-glow{
+  position:absolute;top:38%;left:50%;
+  transform:translate(-50%,-50%);
+  width:900px;height:550px;
+  background:
+    radial-gradient(ellipse at 50% 50%,var(--glow) 0%,transparent 55%),
+    radial-gradient(ellipse at 50% 70%,var(--gold-glow) 0%,transparent 45%);
+  animation:imperialPulse 6s ease-in-out infinite;
+}
+@keyframes imperialPulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.35}
+  50%{transform:translate(-50%,-50%) scale(1.10);opacity:.65}
+}
+.hero-content{
+  position:relative;z-index:2;text-align:center;padding:0 24px;
+}
+.hero-badge{
+  display:inline-block;border:1px solid var(--gold);
+  color:var(--gold);padding:6px 24px;
+  font-size:11px;letter-spacing:.25em;
+  margin-bottom:28px;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.hero-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(3rem,7vw,5.5rem);
+  font-weight:900;line-height:1.1;
+  letter-spacing:.06em;color:var(--text);
+}
+.hero-subtitle{
+  font-size:clamp(.85rem,1.4vw,1.1rem);
+  font-weight:300;color:var(--text-dim);
+  margin-top:20px;letter-spacing:.35em;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.hero-scroll{
+  position:absolute;bottom:40px;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--text-faint);font-size:10px;letter-spacing:.3em;
+  animation:bounceDown 2s ease-in-out infinite;
+  font-family:'Noto Sans SC',sans-serif;
+}
+@keyframes bounceDown{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(10px)}
+}
+.scroll-line{width:1px;height:40px;background:var(--text-faint)}
+
+.content-section{padding:100px 0;position:relative}
+.section-inner{
+  max-width:1200px;margin:0 auto;padding:0 40px;
+  display:flex;align-items:center;gap:80px;
+}
+.section-inner.reverse{flex-direction:row-reverse}
+.section-text{flex:1;min-width:0}
+.section-image{flex:1;position:relative;overflow:hidden;border-radius:2px}
+.section-image img{width:100%;display:block;object-fit:cover;aspect-ratio:4/3}
+.section-image .img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,var(--bg) 0%,transparent 25%);
+}
+.section-image .img-label{
+  position:absolute;bottom:16px;left:16px;
+  font-size:11px;letter-spacing:.2em;color:var(--text-dim);
+  font-family:'Noto Sans SC',sans-serif;
+}
+.section-label{
+  font-size:11px;letter-spacing:.3em;color:var(--accent);
+  margin-bottom:16px;font-weight:500;font-family:'Noto Sans SC',sans-serif;
+}
+.section-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:700;line-height:1.3;
+  margin-bottom:24px;color:var(--text);
+}
+.section-body{
+  color:var(--text-dim);font-size:15px;line-height:2;
+}
+.section-body p{margin-bottom:16px}
+.highlight-stat{
+  display:inline-flex;align-items:baseline;gap:6px;
+  font-size:clamp(2rem,4vw,3.2rem);
+  font-weight:800;color:var(--gold);
+  line-height:1;margin:8px 0;
+  font-family:'Noto Serif SC',serif;
+}
+.highlight-stat span{font-size:14px;font-weight:400;color:var(--text-dim)}
+
+.image-break{
+  position:relative;height:60vh;min-height:420px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.image-break .break-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  background-attachment:fixed;
+}
+.image-break .break-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(26,10,10,.40),rgba(26,10,10,.55));
+}
+.break-quote{
+  position:relative;z-index:1;text-align:center;padding:0 24px;
+}
+.break-quote blockquote{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(1.3rem,2.8vw,2rem);
+  font-weight:600;color:var(--text);
+  letter-spacing:.08em;line-height:1.7;
+}
+.break-quote cite{
+  display:block;margin-top:16px;
+  font-size:13px;letter-spacing:.25em;color:var(--text-dim);
+  font-style:normal;font-family:'Noto Sans SC',sans-serif;
+}
+
+.gallery-section{padding:80px 0;overflow:hidden}
+.gallery-inner{max-width:1280px;margin:0 auto;padding:0 40px}
+.gallery-header{text-align:center;margin-bottom:56px}
+.gallery-header .section-label{text-align:center}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.gallery-item{position:relative;overflow:hidden;border-radius:2px}
+.gallery-item img{width:100%;display:block;object-fit:cover;aspect-ratio:4/3}
+.gallery-item .item-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(26,10,10,.75) 0%,transparent 40%);
+  opacity:0;transition:opacity .4s ease;
+}
+.gallery-item:hover .item-overlay{opacity:1}
+.gallery-item .item-overlay span{
+  position:absolute;bottom:14px;left:14px;
+  font-size:13px;letter-spacing:.12em;color:var(--text);
+  font-family:'Noto Sans SC',sans-serif;
+}
+
+.dashboard{padding:100px 0}
+.dashboard-inner{max-width:1100px;margin:0 auto;padding:0 40px}
+.dashboard-header{text-align:center;margin-bottom:56px}
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+.stat-card{
+  background:var(--surface);
+  border:1px solid rgba(253,245,230,.04);
+  padding:32px 24px;text-align:center;border-radius:2px;
+}
+.stat-value{
+  font-size:clamp(1.6rem,2.8vw,2.4rem);
+  font-weight:700;color:var(--gold);
+  line-height:1.2;font-family:'Noto Serif SC',serif;
+}
+.stat-label{
+  font-size:11px;letter-spacing:.15em;color:var(--text-faint);
+  margin-top:10px;font-family:'Noto Sans SC',sans-serif;
+}
+
+.cta-section{
+  padding:120px 0;position:relative;overflow:hidden;
+}
+.cta-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:.20;
+}
+.cta-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,var(--bg) 0%,rgba(26,10,10,.35) 40%,var(--bg) 100%);
+}
+.cta-inner{
+  position:relative;z-index:1;text-align:center;padding:0 24px;
+}
+.cta-title{
+  font-family:'Noto Serif SC',serif;
+  font-size:clamp(1.8rem,3.5vw,2.6rem);
+  font-weight:700;color:var(--text);margin-bottom:32px;
+  letter-spacing:.04em;
+}
+.cta-btn{
+  display:inline-block;padding:14px 48px;
+  border:1px solid var(--gold);
+  color:var(--gold);text-decoration:none;
+  font-size:13px;letter-spacing:.2em;
+  transition:background .35s ease,color .35s ease;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.cta-btn:hover{background:var(--gold);color:var(--bg)}
+.cta-back{margin-top:16px}
+.cta-back a{
+  font-size:12px;color:var(--text-faint);text-decoration:none;
+  letter-spacing:.15em;transition:color .3s;
+  font-family:'Noto Sans SC',sans-serif;
+}
+.cta-back a:hover{color:var(--text-dim)}
+
+footer{
+  padding:48px 40px;text-align:center;
+  border-top:1px solid rgba(253,245,230,.04);
+}
+footer p{
+  font-size:12px;color:var(--text-faint);letter-spacing:.1em;
+  font-family:'Noto Sans SC',sans-serif;
+}
+
+[data-animate]{
+  opacity:0;transform:translateY(40px);
+  transition:opacity .8s ease,transform .8s ease;
+}
+[data-animate].visible{opacity:1;transform:translateY(0)}
+[data-animate-delay]{transition-delay:.15s}
+
+@media(max-width:900px){
+  .section-inner,.section-inner.reverse{
+    flex-direction:column;gap:40px;
+  }
+  .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+  .gallery-grid{grid-template-columns:1fr}
+  nav{padding:12px 20px}
+  nav.scrolled{padding:8px 20px}
+  .nav-links{gap:16px}
+  .content-section{padding:60px 0}
+  .image-break{height:50vh}
+}
+@media(max-width:600px){
+  .section-inner{padding:0 20px}
+  .section-body{font-size:14px}
+  .hero-title{font-size:2.4rem}
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="loader-ring"></div>
+  <p class="loading-text">FORBIDDEN CITY · THE IMPERIAL PALACE</p>
+</div>
+
+<nav id="nav">
+  <div class="nav-logo"><a href="../index.html?prov=%E5%8C%97%E4%BA%AC%E5%B8%82">Beijing 5A</a></div>
+  
+</nav>
+
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="imperial-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">WORLD HERITAGE · UNESCO</div>
+    <h1 class="hero-title">The Palace<br>Museum</h1>
+    <p class="hero-subtitle">Forbidden City · Six Centuries of Imperial Grandeur</p>
+  </div>
+  <div class="hero-scroll">
+    <span>EXPLORE</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<section class="content-section" id="overview">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_01.jpg" alt="Panoramic view of the Forbidden City" loading="lazy" />
+      <div class="img-overlay"></div>
+      </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">OVERVIEW · AT A GLANCE</div>
+      <h2 class="section-title">Supreme Sovereignty<br>Center of the Realm</h2>
+      <div class="section-body">
+        <p>Founded in 1925, the Palace Museum is based on the imperial palace of the Ming and Qing dynasties — the <span style="color:var(--gold);">Forbidden City</span>. Covering <span style="color:var(--gold);">720,000 square meters</span> with a floor area of approximately 150,000 square meters, it is the largest and best-preserved wooden architectural complex in the world.</p>
+        <p>Inscribed as a <span style="color:var(--gold);">UNESCO World Heritage Site</span> in 1987. Its collection exceeds <span style="color:var(--gold);">1.95 million pieces (sets)</span>, spanning 25 categories including paintings, ceramics, bronzes, and timepieces. It is China's largest museum of ancient art and culture, and the most iconic cultural landmark of Chinese civilization.</p>
+        <div class="highlight-stat">1420<span> · Completed in the 18th year of Yongle</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="image-break">
+  <div class="break-bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_02.jpg')"></div>
+  <div class="break-overlay"></div>
+  <div class="break-quote">
+    <blockquote>"Golden splendor, the Forbidden City stands,<br>Crimson walls, a thousand gates within its lands."</blockquote>
+    <cite>— The Forbidden City · Six Centuries of Glory</cite>
+  </div>
+</div>
+
+<section class="content-section" id="meridian">
+  <div class="section-inner reverse">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_03.jpg" alt="Meridian Gate" loading="lazy" />
+      <div class="img-overlay"></div>
+      </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">MERIDIAN GATE</div>
+      <h2 class="section-title">Five Phoenix Towers<br>Gateway to the Empire</h2>
+      <div class="section-body">
+        <p>The Meridian Gate is the main entrance to the Forbidden City, first built in the 18th year of Yongle (1420). Its U-shaped plan features <span style="color:var(--gold);">five</span> towering pavilions resembling five phoenixes spreading their wings, earning it the name "<span style="color:var(--gold);">Five Phoenix Tower</span>." During the Qing dynasty, civil and military officials would queue here for imperial audiences; triumphant armies held victory ceremonies at this very gate.</p>
+        <p>Passing through the Meridian Gate, five white marble bridges arch across the Golden Water River like rainbows. The Gate of Supreme Harmony stands majestically ahead, beyond which lies <span style="color:var(--gold);">the largest existing wooden hall in China</span> — the Hall of Supreme Harmony, the axial heart of the Forbidden City complex.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" id="palace">
+  <div class="section-inner">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_04.jpg" alt="Hall of Supreme Harmony" loading="lazy" />
+      <div class="img-overlay"></div>
+      </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">HALL OF SUPREME HARMONY · TAIHEDIAN</div>
+      <h2 class="section-title">The Golden Throne Hall<br>Supreme Imperial Power</h2>
+      <div class="section-body">
+        <p>The Hall of Supreme Harmony — commonly known as the "<span style="color:var(--gold);">Golden Throne Hall</span>" — is the highest-ranking ancient architectural structure in China. On the marble terrace before it stand a sundial, a grain measure, bronze tortoises, and bronze cranes. Inside, a golden-coffered ceiling and a gilded cloud-and-dragon throne embody imperial majesty at its peak.</p>
+        <p>The Palace Museum houses over <span style="color:var(--gold);">1.95 million pieces (sets)</span> of precious artifacts. National treasures such as <em>Along the River During the Qingming Festival</em>, <em>A Thousand Li of Rivers and Mountains</em>, and the various-glazed ceremonial vases silently narrate the splendor of Chinese civilization. The Forbidden City itself is a living, three-dimensional <span style="color:var(--gold);">history of Chinese architecture</span>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" id="garden">
+  <div class="section-inner reverse">
+    <div class="section-image" data-animate>
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_05.jpg" alt="Golden Water River" loading="lazy" />
+      <div class="img-overlay"></div>
+      </div>
+    <div class="section-text" data-animate>
+      <div class="section-label">IMPERIAL GARDEN</div>
+      <h2 class="section-title">Depths of the Palace<br>Where Time Stands Still</h2>
+      <div class="section-body">
+        <p>The Imperial Garden lies behind the Palace of Earthly Tranquility, marking the northern terminus of the Forbidden City's central axis. Here, <span style="color:var(--gold);">ancient cypresses scrape the sky</span>, fantastical rockeries pile into layered peaks, and the Pavilion of Ten Thousand Springs stands opposite the Pavilion of a Thousand Autumns. Six-hundred-year-old ginkgo trees and dragon-claw pagoda trees have witnessed the daily lives of Ming and Qing emperors and empresses.</p>
+        <p>The <span style="color:var(--gold);">Treasure Gallery</span> and <span style="color:var(--gold);">Clock and Watch Gallery</span> are among the museum's most dazzling collections — phoenix coronets and embroidered capes, the Golden Vessel of Eternal Unity, the copper-gilt writing automaton clock… each piece embodies the supreme craftsmanship of ancient Chinese artisans.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section" id="gallery">
+  <div class="gallery-inner">
+    <div class="gallery-header" data-animate>
+      <div class="section-label">GALLERY · ARCHITECTURAL SPLENDOR</div>
+      <h2 class="section-title" style="font-size:clamp(1.4rem,2.5vw,1.8rem);margin-top:8px;">Forbidden City · Beauty of the Halls</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="col">
+        <div class="gallery-item tall" data-animate style="grid-row:span 2;height:100%;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_07.jpg" alt="Bronze Guardian Lion" style="height:100%;min-height:500px;" loading="lazy" />
+          </div>
+        <div class="gallery-item" data-animate style="height:250px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_08.jpg" alt="Bronze Dragon-Turtle" style="height:100%;" loading="lazy" />
+          </div>
+      </div>
+      <div class="col">
+        <div class="gallery-item" data-animate style="height:300px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_09.jpg" alt="Palace Architecture" style="height:100%;" loading="lazy" />
+          </div>
+        <div class="gallery-item" data-animate style="height:270px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_11.jpg" alt="Forbidden City — June 2012" style="height:100%;" loading="lazy" />
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dashboard">
+  <div class="dashboard-inner">
+    <div class="dashboard-header" data-animate>
+      <div class="section-label">DASHBOARD · DATA</div>
+    </div>
+    <div class="dashboard-grid">
+      <div class="stat-card" data-animate>
+        <div class="stat-value">720,000 m²</div>
+        <div class="stat-label">Total Area</div>
+      </div>
+      <div class="stat-card" data-animate>
+        <div class="stat-value">1.95M+</div>
+        <div class="stat-label">Collection Items</div>
+      </div>
+      <div class="stat-card" data-animate>
+        <div class="stat-value">9,999</div>
+        <div class="stat-label">Legendary Rooms</div>
+      </div>
+      <div class="stat-card" data-animate>
+        <div class="stat-value">600+ yrs</div>
+        <div class="stat-label">Forbidden City History</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_14.jpg')"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-inner" data-animate>
+    <h2 class="cta-title">Step into the Forbidden City<br>Touch the Backbone of Chinese Civilization</h2>
+    <p style="color:var(--text-dim);font-size:14px;letter-spacing:.15em;margin-bottom:24px;font-family:'Noto Sans SC',sans-serif;">Best Season: Spring &amp; Autumn (Apr–May, Sep–Oct) · Metro Line 1, Tian'anmen East Station</p>
+    <a href="#" class="cta-btn">EXPLORE THE PALACE</a>
+    <div class="cta-back" style="margin-top:24px;">
+      <a href="../index.html?prov=%E5%8C%97%E4%BA%AC%E5%B8%82">← Back to Scenic Map</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>The Palace Museum · Forbidden City · Imperial Palace of Ming &amp; Qing Dynasties · UNESCO World Heritage Site</p>
+  <p style="margin-top:8px;color:rgba(253,245,230,.15);">No. 4 Jingshan Front Street, Dongcheng District, Beijing · Images via Wikimedia Commons</p>
+</footer>
+
+<script>
+(function(){
+  var heroBg = document.getElementById('heroBg');
+  heroBg.style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/beijing/images/gugong/故宫博物院_01.jpg')";
+  document.getElementById('loading').classList.add('hidden');
+})();
+
+var nav = document.getElementById('nav');
+window.addEventListener('scroll',function(){
+  nav.classList.toggle('scrolled',window.scrollY > 80);
+});
+
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting) entry.target.classList.add('visible');
+  });
+},{threshold:.15,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('[data-animate]').forEach(function(el){observer.observe(el)});
+
+document.addEventListener('mousemove',function(e){
+  var x = (e.clientX / window.innerWidth - .5) * 10;
+  var y = (e.clientY / window.innerHeight - .5) * 8;
+  var heroEl = document.querySelector('.hero-bg');
+  if(heroEl.style.backgroundImage){
+    heroEl.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(1.05)';
+  }
+});
+</script>
+
+</body>
+</html>

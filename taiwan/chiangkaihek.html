@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Chiang Kai-shek Memorial Hall · White Walls, Blue Roof, Majestic Spirit | Taiwan 5A Scenic Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;700&family=Orbitron:wght@400;700;900&family=Oswald:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #c62828;
+      --secondary: #d4a843;
+      --bg: #1a0a0a;
+      --surface: rgba(198,40,40,0.12);
+      --text: #f5e6d3;
+      --text-dim: rgba(245,230,211,0.55);
+      --text-faint: rgba(245,230,211,0.25);
+      --glow: rgba(212,168,67,0.25);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    /* === Hero === */
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:center/cover;filter:brightness(0.5) saturate(1.2);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;background:radial-gradient(circle at center,rgba(212,168,67,0.08) 0%,transparent 60%)}
+    .golden-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(212,168,67,0.15) 0%,transparent 70%);animation:goldenPulse 4s ease-in-out infinite;pointer-events:none}
+    @keyframes goldenPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.6}50%{transform:translate(-50%,-50%) scale(1.3);opacity:1}}
+    .hero-content{position:relative;z-index:2;text-align:center}
+    .hero-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(48px,7vw,88px);letter-spacing:16px;color:var(--text);text-shadow:0 2px 30px rgba(0,0,0,0.6),0 0 60px rgba(212,168,67,0.15)}
+    .hero-sub{font-size:clamp(14px,1.8vw,22px);opacity:0.7;margin-top:18px;letter-spacing:8px;font-weight:300}
+    .hero-divider{width:120px;height:2px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:20px auto}
+    .hero-tagline{font-size:clamp(12px,1.2vw,16px);opacity:0.4;letter-spacing:6px;margin-top:12px;font-weight:300}
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-size:11px;letter-spacing:3px;opacity:0.5}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+    /* === HUD === */
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 16px;text-align:center;min-width:72px}
+    .hud-value{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;color:var(--secondary)}
+    .hud-label{font-size:10px;opacity:0.5;margin-top:3px;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif}
+
+    /* === Content Section === */
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.08)}
+    .content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .content-image:hover img{transform:scale(1.05)}
+    .content-text h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,3.5vw,40px);margin-bottom:16px;letter-spacing:6px;color:var(--text)}
+    .content-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--secondary),transparent);margin-bottom:24px}
+    .content-text p{font-size:16px;line-height:2.1;opacity:0.8;margin-bottom:16px;font-weight:300}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .content-tag{padding:5px 16px;border:1px solid rgba(212,168,67,0.2);border-radius:20px;font-size:12px;letter-spacing:2px;color:var(--secondary);font-family:'Noto Sans SC',sans-serif}
+
+    /* === Image Break === */
+    .image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:center/cover fixed;filter:brightness(0.4) saturate(1.15)}
+    .image-break .bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(212,168,67,0.08) 0%,transparent 70%)}
+    .image-break .quote{position:relative;z-index:2;text-align:center}
+    .image-break .quote-cn{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,4vw,48px);letter-spacing:10px;margin-bottom:12px}
+    .image-break .quote-en{font-size:13px;opacity:0.45;letter-spacing:5px;text-transform:uppercase;font-family:'Orbitron',sans-serif}
+
+    /* === Gallery === */
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{font-family:'ZCOOL XiaoWei',serif;text-align:center;font-size:clamp(28px,3vw,38px);margin-bottom:48px;letter-spacing:8px}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .gallery-item{position:relative;overflow:hidden;border-radius:10px;cursor:pointer;border:1px solid rgba(212,168,67,0.06)}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .gallery-item:hover img{transform:scale(1.08)}
+
+    /* === Dashboard === */
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dashboard h2{font-family:'ZCOOL XiaoWei',serif;text-align:center;font-size:clamp(28px,3vw,38px);margin-bottom:48px;letter-spacing:8px}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .dash-card{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:28px 20px;text-align:center;transition:transform 0.3s,border-color 0.3s}
+    .dash-card:hover{transform:translateY(-4px);border-color:var(--secondary)}
+    .dash-icon{font-size:26px;margin-bottom:10px;opacity:0.7}
+    .dash-value{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:700;color:var(--secondary);margin-bottom:4px}
+    .dash-label{font-size:12px;opacity:0.5;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif}
+
+    /* === CTA === */
+    .cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:center/cover;filter:brightness(0.3) saturate(0.9)}
+    .cta-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(212,168,67,0.06) 0%,transparent 70%)}
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{font-family:'Orbitron',sans-serif;font-size:clamp(60px,10vw,120px);font-weight:900;letter-spacing:8px;opacity:0.12;margin-bottom:-24px;color:var(--secondary)}
+    .cta-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3vw,36px);letter-spacing:8px;margin-bottom:32px}
+    .cta-btn{display:inline-block;padding:14px 48px;border:1px solid rgba(255,255,255,0.2);border-radius:30px;font-size:14px;letter-spacing:4px;text-decoration:none;color:var(--text);transition:all 0.3s;font-family:'Noto Sans SC',sans-serif;font-weight:300}
+    .cta-btn:hover{background:rgba(212,168,67,0.1);border-color:var(--secondary);color:var(--secondary)}
+
+    /* === Footer === */
+    .footer{padding:40px;text-align:center;opacity:0.3;font-size:13px;letter-spacing:3px;border-top:1px solid rgba(212,168,67,0.06)}
+
+    /* === Animations === */
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    /* === Responsive === */
+    @media(max-width:768px){
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .gallery-grid{grid-template-columns:1fr}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+      .hud-item{padding:6px 12px;min-width:60px}
+      .hud-value{font-size:16px}
+      .hud-label{font-size:9px}
+      .hero-title{letter-spacing:8px}
+      .content-text p{font-size:15px}
+      .dash-card{padding:20px 14px}
+      .dash-value{font-size:22px}
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="golden-glow"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-divider"></div>
+      <h1 class="hero-title">Chiang Kai-shek Memorial Hall</h1>
+      <p class="hero-sub">White Walls, Blue Roof · Solemn Hall</p>
+      <p class="hero-tagline">CHIANG KAI-SHEK MEMORIAL HALL · TAIPEI</p>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- HUD -->
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">70m</div><div class="hud-label">Height</div></div>
+    <div class="hud-item"><div class="hud-value">89</div><div class="hud-label">Steps</div></div>
+    <div class="hud-item"><div class="hud-value">1980</div><div class="hud-label">Completed</div></div>
+  </div>
+
+  <!-- Content 1 -->
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/images/chiangkaihek/img1.jpg" alt="Chiang Kai-shek Memorial Hall Distant View" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>A Solemn Hall of White Walls and Blue Roof</h2>
+      <div class="content-divider"></div>
+      <p>Chiang Kai-shek Memorial Hall is located in Zhongzheng District, Taipei. It is a grand memorial building built in honor of former President Chiang Kai-shek. The main structure adopts a Chinese palace-style design with white walls, blue roof tiles, and an octagonal roof. Its sapphire-blue glazed tile roof glistens under the sunlight, making it one of Taipei's most iconic landmarks.</p>
+      <p>The memorial hall faces west toward the Chinese mainland, covering an area of approximately 250,000 square meters with a height of 70 meters. The main gate faces Zhongshan South Road, with the spacious Liberty Square in front, flanked by the National Theater and the National Concert Hall. These three buildings together form Taipei's most magnificent cultural landscape axis. The entire complex is laid out along the axis of "Chiang Kai-shek's spirit," blending traditional Chinese architectural aesthetics with modern urban spatial planning.</p>
+      <div class="content-tags">
+        <span class="content-tag">Palace-Style Architecture</span>
+        <span class="content-tag">Sapphire Glazed Roof</span>
+        <span class="content-tag">Taipei Landmark</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Image Break -->
+  <section class="image-break">
+    <div class="bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/images/chiangkaihek/img2.jpg')"></div>
+    <div class="quote">
+      <div class="quote-cn">White Walls, Blue Roof · Majestic Spirit</div>
+      <div class="quote-en">C.K.S. MEMORIAL HALL · TAIPEI</div>
+    </div>
+  </section>
+
+  <!-- Content 2 (reverse) -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/images/chiangkaihek/img3.jpg" alt="Liberty Square" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>A Cultural Symphony on Liberty Square</h2>
+      <div class="content-divider"></div>
+      <p>Liberty Square, located within the Chiang Kai-shek Memorial Hall complex, is the largest cultural square in Taipei, covering a total area of approximately 250,000 square meters. At the front of the square stands the "Liberty Square" archway, 30 meters high and 80 meters wide, one of the most magnificent archway structures in Taiwan.</p>
+      <p>The exhibition halls and artifact rooms on the first floor of the memorial hall showcase Chiang Kai-shek's life stories and artifacts from modern Taiwanese history. A bronze statue of Chiang Kai-shek stands in the main hall, 6.3 meters tall and weighing approximately 21.25 tons. The daily honor guard changing ceremony at the top of every hour is a must-see traditional performance for visitors, both solemn and breathtaking. The National Theater and the National Concert Hall represent the pinnacle of performing arts in Taiwan, hosting classic plays and concerts year-round. Chiang Kai-shek Memorial Hall is not only a tourist attraction but also an important venue for daily leisure and cultural activities for the people of Taiwan.</p>
+      <div class="content-tags">
+        <span class="content-tag">Liberty Square</span>
+        <span class="content-tag">Honor Guard</span>
+        <span class="content-tag">National Theater</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" data-animate>
+    <h2>Visual Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="height:500px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/images/chiangkaihek/g1.jpg" alt="" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:220px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/images/chiangkaihek/g2.jpg" alt="" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:260px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/images/chiangkaihek/g3.jpg" alt="" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:280px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/images/chiangkaihek/g4.jpg" alt="" style="height:100%" loading="lazy"/></div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="dashboard" data-animate>
+    <h2>Data at a Glance</h2>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🏛️</div><div class="dash-value">70m</div><div class="dash-label">Building Height</div></div>
+      <div class="dash-card"><div class="dash-icon">🪜</div><div class="dash-value">89</div><div class="dash-label">Steps</div></div>
+      <div class="dash-card"><div class="dash-icon">📅</div><div class="dash-value">1980</div><div class="dash-label">Year Completed</div></div>
+      <div class="dash-card"><div class="dash-icon">📍</div><div class="dash-value">250K m²</div><div class="dash-label">Complex Area</div></div>
+      <div class="dash-card"><div class="dash-icon">🏗️</div><div class="dash-value">30m</div><div class="dash-label">Archway Height</div></div>
+      <div class="dash-card"><div class="dash-icon">🗿</div><div class="dash-value">6.3m</div><div class="dash-label">Statue Height</div></div>
+      <div class="dash-card"><div class="dash-icon">🏟️</div><div class="dash-value">Liberty Square</div><div class="dash-label">Cultural Plaza</div></div>
+      <div class="dash-card"><div class="dash-icon">🎖️</div><div class="dash-value">Honor Guard</div><div class="dash-label">Traditional Ceremony</div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/images/chiangkaihek/hero.jpg')"></div>
+    <div class="cta-content">
+      <div class="cta-num">1980</div>
+      <div class="cta-title">Step into Taiwan's Most Solemn Cultural Hall</div>
+      <a href="../index.html?prov=Taiwan" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Chiang Kai-shek Memorial Hall · Taipei City · Taiwan 5A Tourist Attraction</p>
+  </footer>
+
+  <script>
+    (function(){var i=new Image();i.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/images/chiangkaihek/hero.jpg')"};i.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/taiwan/images/chiangkaihek/hero.jpg'})();
+    window.addEventListener('scroll',function(){var s=document.getElementById('scrollHud');if(s)s.style.opacity=window.scrollY>100?'0':'1'});
+    document.querySelector('.hero').addEventListener('mousemove',function(e){var x=(e.clientX/window.innerWidth-0.5)*10,y=(e.clientY/window.innerHeight-0.5)*10;document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)'});
+    var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});
+    document.querySelectorAll('[data-animate]').forEach(function(e){o.observe(e)});
+  </script>
+</body>
+</html>

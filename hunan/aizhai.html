@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aizhai · Shibadong · Dehang Grand Canyon · Xiangxi Mystic Realm | 5A Scenic Area Immersive Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #10b981;
+      --secondary: #34d399;
+      --bg: #0a1a0f;
+      --surface: rgba(16,185,129,0.1);
+      --text: #d1fae5;
+      --text-dim: rgba(209,250,229,0.5);
+      --glow: rgba(16,185,129,0.2);
+    }
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/hero.jpg') center/cover;filter:brightness(0.5) saturate(1.1);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(16,185,129,0.1) 0%,transparent 50%)}
+    .forest-mist{position:absolute;bottom:0;left:0;right:0;height:200px;z-index:2;pointer-events:none;
+      background:linear-gradient(0deg,var(--bg) 0%,transparent 100%);
+    }
+    .hero-content{position:relative;z-index:3;text-align:center}
+    .hero-content .glass-title{background:rgba(16,185,129,0.06);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(16,185,129,0.12);border-radius:20px;padding:40px 60px;display:inline-block}
+    .hero-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(36px,6vw,72px);letter-spacing:8px;color:var(--text);text-shadow:0 0 40px rgba(16,185,129,0.15)}
+    .hero-sub{font-family:'Noto Sans SC',sans-serif;font-size:clamp(14px,1.8vw,22px);opacity:0.7;margin-top:16px;letter-spacing:8px;font-weight:300}
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-size:11px;letter-spacing:3px;opacity:0.5;font-family:'Noto Sans SC',sans-serif}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:12px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px 20px;text-align:center;min-width:80px}
+    .hud-value{font-size:24px;font-weight:700;color:var(--secondary);font-family:'Noto Sans SC',sans-serif}
+    .hud-label{font-size:11px;opacity:0.55;margin-top:4px;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif}
+
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:1px solid rgba(16,185,129,0.1)}
+    .content-image img{width:100%;height:400px;object-fit:cover;display:block;transition:transform 0.6s}
+    .content-image:hover img{transform:scale(1.05)}
+    .content-text h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,4vw,42px);margin-bottom:20px;letter-spacing:6px;color:var(--text)}
+    .content-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--primary),var(--secondary));margin-bottom:24px}
+    .content-text p{font-size:16px;line-height:2;opacity:0.8;margin-bottom:16px;font-family:'Noto Sans SC',sans-serif;font-weight:300}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .content-tag{padding:6px 18px;border:1px solid rgba(16,185,129,0.25);background:rgba(16,185,129,0.06);border-radius:20px;font-size:13px;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif;color:var(--secondary)}
+
+    .image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/img2.jpg') center/cover fixed;filter:brightness(0.4) saturate(1.0)}
+    .image-break .overlay{position:absolute;inset:0;background:linear-gradient(180deg,var(--bg) 0%,transparent 20%,transparent 80%,var(--bg) 100%)}
+    .image-break .quote{position:relative;z-index:2;text-align:center;max-width:800px;padding:0 40px}
+    .image-break .quote-cn{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3.5vw,42px);letter-spacing:8px;margin-bottom:16px;color:var(--text);text-shadow:0 0 30px rgba(16,185,129,0.12)}
+    .image-break .quote-en{font-size:14px;opacity:0.5;letter-spacing:4px;text-transform:uppercase;font-family:'Noto Sans SC',sans-serif}
+
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{text-align:center;font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3vw,36px);margin-bottom:48px;letter-spacing:8px}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .gallery-item{position:relative;overflow:hidden;border-radius:12px;cursor:pointer;border:1px solid rgba(16,185,129,0.08)}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.6s}
+    .gallery-item:hover img{transform:scale(1.08)}
+
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .dash-card{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:32px 24px;text-align:center;transition:transform 0.3s,border-color 0.3s}
+    .dash-card:hover{transform:translateY(-4px);border-color:var(--secondary)}
+    .dash-icon{font-size:28px;margin-bottom:12px}
+    .dash-value{font-family:'Noto Sans SC',sans-serif;font-size:32px;font-weight:700;color:var(--secondary);margin-bottom:6px}
+    .dash-label{font-size:13px;opacity:0.55;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif}
+
+    .cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/g1.png') center/cover;filter:brightness(0.3) saturate(0.8)}
+    .cta-overlay{position:absolute;inset:0;background:linear-gradient(180deg,var(--bg) 0%,transparent 30%,transparent 70%,var(--bg) 100%)}
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(64px,10vw,120px);font-weight:900;letter-spacing:8px;opacity:0.1;margin-bottom:-20px;color:var(--secondary)}
+    .cta-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3vw,36px);letter-spacing:6px;margin-bottom:32px}
+    .cta-btn{display:inline-block;padding:14px 48px;border:1px solid rgba(255,255,255,0.15);background:rgba(16,185,129,0.06);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:30px;font-size:15px;letter-spacing:4px;text-decoration:none;color:var(--text);transition:all 0.3s;font-family:'Noto Sans SC',sans-serif}
+    .cta-btn:hover{background:rgba(16,185,129,0.15);border-color:var(--secondary);transform:translateY(-2px)}
+
+    .footer{padding:40px;text-align:center;opacity:0.35;font-size:13px;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif;border-top:1px solid rgba(16,185,129,0.06)}
+
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:768px){
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .content-image img{height:250px}
+      .gallery-grid{grid-template-columns:1fr}
+      .gallery-item{height:280px!important}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:6px}
+      .hud-item{padding:8px 14px;min-width:60px}
+      .hud-value{font-size:18px}
+      .hero-content .glass-title{padding:24px 30px}
+      .dashboard{padding:60px 24px}
+      .gallery{padding:60px 24px}
+    }
+    @media(max-width:480px){
+      .dashboard-grid{grid-template-columns:1fr}
+      .hud{flex-wrap:wrap;width:calc(100% - 24px);top:12px}
+      .hud-item{flex:1;min-width:0;padding:6px 10px}
+      .hud-value{font-size:16px}
+      .hud-label{font-size:10px}
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="forest-mist"></div>
+    <div class="hero-content">
+      <div class="glass-title">
+        <h1 class="hero-title">Aizhai · Shibadong · Dehang Grand Canyon</h1>
+        <p class="hero-sub">Xiangxi Mystic Realm · Canyon Sky Bridge</p>
+      </div>
+    </div>
+    <div class="scroll-hint" id="scrollHint">
+      <span>Scroll to Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">1176m</div><div class="hud-label">Aizhai Bridge</div></div>
+    <div class="hud-item"><div class="hud-value">355m</div><div class="hud-label">Bridge Height</div></div>
+    <div class="hud-item"><div class="hud-value">18</div><div class="hud-label">Miao Villages</div></div>
+  </div>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/img1.jpg" alt="Aizhai Bridge Panorama" loading="lazy" /></div>
+    <div class="content-text">
+      <h2>Canyon Sky Bridge</h2>
+      <div class="content-divider"></div>
+      <p>Aizhai Bridge is located in Aizhai Town, Jishou City, Xiangxi Prefecture, Hunan Province, spanning the Dehang Grand Canyon. It is a key control project of the Baomao Expressway. With a main span of 1,176 meters and a deck height of 355 meters above the valley floor, it is one of the world's longest-spanning steel truss suspension bridges across a canyon.</p>
+      <p>Completed in 2012, the bridge connects east and west, turning a natural chasm into a thoroughfare, fundamentally transforming Xiangxi's historically isolated transportation network. Viewed from afar, the bridge appears as a silver rainbow floating above the misty canyon, complementing the lush green mountains, earning it the title "World's No.1 Canyon Bridge."</p>
+      <div class="content-tags">
+        <span class="content-tag">World-Class Suspension Bridge</span>
+        <span class="content-tag">Main Span 1,176m</span>
+        <span class="content-tag">Canyon Wonder</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <div class="quote-cn">A bridge flies across, turning a chasm into a thoroughfare</div>
+      <div class="quote-en">Aizhai Bridge · Wonder of the Canyon</div>
+    </div>
+  </section>
+
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/img3.jpg" alt="Dehang Grand Canyon Scenery" loading="lazy" /></div>
+    <div class="content-text">
+      <h2>Dehang Grand Canyon</h2>
+      <div class="content-divider"></div>
+      <p>Dehang means "beautiful grand canyon" in the Miao language. With towering peaks, babbling streams, and cascading waterfalls, it features classic karst landforms. The canyon has exceptionally high levels of negative oxygen ions, making it a natural forest oxygen bar. Walking along the canyon trails, you will find waterfalls, springs, and ancient trees everywhere.</p>
+      <p>Aizhai Canyon also includes the famous "Shibadong" — a cluster of eighteen traditional Miao villages. Here, intact Miao cultural traditions and architectural styles are preserved, with intangible cultural heritage such as Miao drum dance, batik, and silver ornaments passed down through generations. It was here that the important principle of "targeted poverty alleviation — seeking truth from facts and adapting measures to local conditions" was first proposed.</p>
+      <div class="content-tags">
+        <span class="content-tag">Miao Language Mystic Realm</span>
+        <span class="content-tag">Shibadong Village</span>
+        <span class="content-tag">Poverty Alleviation Cradle</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" data-animate>
+    <h2>Xiangxi Mystic Realm · Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="height:480px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/g1.png" alt="Aizhai Bridge" loading="lazy" /></div>
+      <div class="gallery-item" style="height:220px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/g2.png" alt="Canyon Scenery" loading="lazy" /></div>
+      <div class="gallery-item" style="height:260px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/g3.png" alt="Miao Village" loading="lazy" /></div>
+      <div class="gallery-item" style="height:260px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/g4.png" alt="Dehang Grand Canyon" loading="lazy" /></div>
+    </div>
+  </section>
+
+  <section class="dashboard" data-animate>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🌉</div><div class="dash-value">1176m</div><div class="dash-label">Main Span</div></div>
+      <div class="dash-card"><div class="dash-icon">⛰️</div><div class="dash-value">355m</div><div class="dash-label">Bridge Height</div></div>
+      <div class="dash-card"><div class="dash-icon">🏘️</div><div class="dash-value">18</div><div class="dash-label">Miao Villages</div></div>
+      <div class="dash-card"><div class="dash-icon">🌲</div><div class="dash-value">95%</div><div class="dash-label">Forest Coverage</div></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="cta-overlay"></div>
+    <div class="cta-content">
+      <div class="cta-num">2026</div>
+      <div class="cta-title">Experience the Beauty of Xiangxi in Person</div>
+      <a href="../index.html?prov=Hunan" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Aizhai · Shibadong · Dehang Grand Canyon · National 5A Scenic Area · Jishou City, Xiangxi Prefecture, Hunan Province</p>
+  </footer>
+
+  <script>
+    (function(){
+      var img = new Image();
+      img.onload = function(){
+        document.getElementById('heroBg').style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/hero.jpg')";
+      };
+      img.src = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/hunan/images/aizhai/hero.jpg';
+    })();
+
+    var hudEl = document.getElementById('hud');
+    var hintEl = document.getElementById('scrollHint');
+    window.addEventListener('scroll', function(){
+      hintEl.style.opacity = window.scrollY > 100 ? '0' : '1';
+    });
+
+    var hero = document.querySelector('.hero');
+    var heroBg = document.getElementById('heroBg');
+    hero.addEventListener('mousemove', function(e){
+      var x = (e.clientX / window.innerWidth - 0.5) * 10;
+      var y = (e.clientY / window.innerHeight - 0.5) * 10;
+      heroBg.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    });
+
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('[data-animate]').forEach(function(el){
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

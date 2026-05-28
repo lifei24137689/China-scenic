@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baquan Gorge · First Grand Canyon of Taihang | 5A Scenic Immersive Exploration</title>
+  <style>
+    /* ===== T1 Minimalist & Photography-Driven ===== */
+    :root {
+      --primary: #1a3a2a;
+      --secondary: #2d8c5a;
+      --bg: #f8faf8;
+      --bg-alt: #edf2ed;
+      --surface: rgba(26,58,42,0.04);
+      --surface-hover: rgba(26,58,42,0.08);
+      --text: #1a2a1f;
+      --text-dim: rgba(26,42,31,0.55);
+      --text-faint: rgba(26,42,31,0.25);
+      --accent: #3aaf6c;
+      --water: #5b9bd5;
+      --stone: #8b7355;
+      --border: rgba(26,58,42,0.1);
+      --border-hover: rgba(26,58,42,0.25);
+      --overlay-light: rgba(255,255,255,0.15);
+      --shadow: 0 20px 60px rgba(0,0,0,0.08);
+    }
+
+    /* ===== Reset & Base ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'PingFang SC','Microsoft YaHei','SimSun',sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ===== Loading ===== */
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid rgba(26,58,42,0.12);
+      border-top: 1.5px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p {
+      margin-top: 24px; font-size: 13px;
+      color: var(--text-dim); letter-spacing: 6px;
+      font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
+    }
+
+    /* ===== T1 Corner Decorations (Minimal Line Frame) ===== */
+    .corner { position: fixed; z-index: 100; pointer-events: none; }
+    .corner-h { position: absolute; width: 20px; height: 1px; background: rgba(26,58,42,0.25); }
+    .corner-v { position: absolute; width: 1px; height: 20px; background: rgba(26,58,42,0.25); }
+    .corner-dot { position: absolute; width: 3px; height: 3px; background: var(--accent); border-radius: 50%; }
+    .corner-tl { top: 16px; left: 16px; }
+    .corner-tr { top: 16px; right: 16px; }
+    .corner-bl { bottom: 16px; left: 16px; }
+    .corner-br { bottom: 16px; right: 16px; }
+    .corner-tl .corner-h { top: 0; left: 0; }
+    .corner-tl .corner-v { top: 0; left: 0; }
+    .corner-tl .corner-dot { top: 0; left: 0; }
+    .corner-tr .corner-h { top: 0; right: 0; }
+    .corner-tr .corner-v { top: 0; right: 0; }
+    .corner-tr .corner-dot { top: 0; right: 0; }
+    .corner-bl .corner-h { bottom: 0; left: 0; }
+    .corner-bl .corner-v { bottom: 0; left: 0; }
+    .corner-bl .corner-dot { bottom: 0; left: 0; }
+    .corner-br .corner-h { bottom: 0; right: 0; }
+    .corner-br .corner-v { bottom: 0; right: 0; }
+    .corner-br .corner-dot { bottom: 0; right: 0; }
+
+    /* ===== Hero Section ===== */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: -10px;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.7);
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,
+        rgba(248,250,248,0) 0%,
+        rgba(248,250,248,0) 60%,
+        rgba(248,250,248,0.7) 100%
+      );
+    }
+    .hero .top-fade {
+      position: absolute; top: 0; left: 0; right: 0; height: 16vh;
+      background: linear-gradient(180deg,rgba(248,250,248,0.7) 0%,transparent 100%);
+    }
+
+    /* ===== Minimal Divider ===== */
+    .minimal-divider {
+      width: 48px; height: 1px;
+      background: var(--accent);
+      margin: 12px 0 20px;
+      opacity: 0.5;
+    }
+
+    /* ===== HUD Overlay on Hero ===== */
+    .hud {
+      position: absolute; inset: 0; z-index: 10;
+      padding: 32px 44px;
+      display: flex; flex-direction: column;
+    }
+    .hud-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 22px; border-radius: 20px;
+      background: rgba(248,250,248,0.7);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      color: var(--text-dim); font-size: 13px; cursor: pointer;
+      transition: all .3s; width: fit-content;
+      text-decoration: none;
+    }
+    .back-btn:hover {
+      border-color: var(--accent);
+      color: var(--primary);
+      background: rgba(248,250,248,0.9);
+    }
+    .back-btn .arrow { display: inline-block; transition: transform .3s; }
+    .back-btn:hover .arrow { transform: translateX(-3px); }
+
+    .title-group { margin-top: 24px; }
+    .title-group h1 {
+      font-size: clamp(48px,8vw,80px); font-weight: 700; letter-spacing: 10px;
+      color: #fff;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.2);
+      display: flex; align-items: baseline; gap: 16px;
+      flex-wrap: wrap;
+    }
+    .title-group h1 .badge {
+      font-size: 11px; padding: 5px 16px; border-radius: 12px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #fff; letter-spacing: 4px;
+      font-weight: 400;
+    }
+    .title-group h1 .stars {
+      font-size: 16px; color: rgba(255,255,255,0.6);
+      letter-spacing: 4px; font-weight: 400;
+    }
+    .title-group .subtitle {
+      font-size: 14px; color: rgba(255,255,255,0.7);
+      letter-spacing: 8px; margin-top: 6px;
+    }
+
+    /* T1 Data Panel */
+    .data-panel { display: flex; gap: 4px; }
+    .data-panel .data-item {
+      text-align: center; padding: 12px 20px; border-radius: 8px;
+      background: rgba(248,250,248,0.75);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      min-width: 72px;
+    }
+    .data-item .num {
+      font-size: 20px; font-weight: 700; color: var(--primary);
+    }
+    .data-item .num.green { color: var(--secondary); }
+    .data-item .num.leaf { color: var(--accent); }
+    .data-item .num.stone-c { color: var(--stone); }
+    .data-item .label {
+      font-size: 9px; color: var(--text-dim); margin-top: 2px; letter-spacing: 1px;
+    }
+
+    /* Info card on hero */
+    .hero-info {
+      position: absolute; left: 44px; bottom: 130px; z-index: 11;
+      max-width: 480px;
+    }
+    .hero-info .card {
+      background: rgba(248,250,248,0.8);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-radius: 10px; border: 1px solid var(--border);
+      padding: 26px 30px;
+      box-shadow: var(--shadow);
+    }
+    .hero-info .card p {
+      font-size: 14px; line-height: 1.8; color: var(--text);
+    }
+    .hero-info .tags { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+    .hero-info .tags span {
+      padding: 5px 14px; border-radius: 12px; font-size: 11px;
+      letter-spacing: 1px;
+    }
+    .tag-green { background: rgba(26,58,42,0.06); color: var(--primary); }
+    .tag-accent { background: rgba(58,175,108,0.08); color: var(--accent); }
+    .tag-water { background: rgba(91,155,213,0.08); color: var(--water); }
+    .tag-stone { background: rgba(139,115,85,0.08); color: var(--stone); }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%; z-index: 11;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      color: var(--text-faint);
+      font-size: 10px; letter-spacing: 4px;
+    }
+    .scroll-hint .line {
+      width: 1px; height: 32px;
+      background: linear-gradient(180deg,var(--accent),transparent);
+      animation: scrollPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.3; transform: scaleY(0.4); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ===== Content Sections ===== */
+    .section {
+      position: relative; z-index: 1;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 44px;
+    }
+    .section::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg,transparent,var(--border),transparent);
+    }
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      align-items: center;
+    }
+    .section-inner.reverse {
+      direction: rtl;
+    }
+    .section-inner.reverse > * {
+      direction: ltr;
+    }
+
+    .section-image {
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .section-image.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .section-image img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .section-image:hover img {
+      transform: scale(1.03);
+    }
+    .section-image .img-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(0deg,rgba(248,250,248,0.3) 0%,transparent 100%);
+      pointer-events: none;
+    }
+
+    .section-content {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1) 0.15s;
+    }
+    .section-content.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .section-content .numeral {
+      font-size: 13px; color: var(--accent);
+      letter-spacing: 4px; margin-bottom: 14px;
+    }
+    .section-content h2 {
+      font-size: 34px; font-weight: 700; letter-spacing: 4px;
+      margin-bottom: 22px; line-height: 1.3;
+      color: var(--primary);
+    }
+    .section-content h2 .highlight {
+      color: var(--accent);
+    }
+    .section-content p {
+      font-size: 15px; line-height: 2;
+      color: var(--text-dim);
+      margin-bottom: 22px;
+    }
+    .section-content .stat-row {
+      display: flex; gap: 14px; margin-top: 26px;
+    }
+    .section-content .stat-item {
+      text-align: center;
+      padding: 18px 24px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      min-width: 100px;
+    }
+    .section-content .stat-item .num {
+      font-size: 26px; font-weight: 700; color: var(--primary);
+    }
+    .section-content .stat-item .lbl {
+      font-size: 10px; color: var(--text-dim);
+      margin-top: 4px; letter-spacing: 1px;
+    }
+
+    /* ===== Full-width Image Break ===== */
+    .image-break {
+      position: relative;
+      width: 100%;
+      height: 60vh;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .image-break .bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      background-attachment: fixed;
+      filter: brightness(0.65);
+    }
+    .image-break .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,var(--bg) 0%,transparent 25%,transparent 75%,var(--bg) 100%);
+    }
+    .image-break .quote {
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      max-width: 640px; margin: 0 auto; left: 0; right: 0;
+      text-align: center;
+    }
+    .image-break .quote p {
+      font-size: 26px; font-weight: 300; line-height: 1.6;
+      color: #fff;
+      letter-spacing: 8px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .image-break .quote .author {
+      font-size: 12px; color: rgba(255,255,255,0.6);
+      letter-spacing: 6px; margin-top: 16px;
+    }
+
+    /* ===== Gallery Grid ===== */
+    .gallery-section {
+      padding: 110px 44px;
+      position: relative; z-index: 1;
+    }
+    .gallery-section .section-header {
+      max-width: 1200px;
+      margin: 0 auto 50px;
+    }
+    .gallery-section .section-header .numeral {
+      font-size: 13px; color: var(--accent);
+      letter-spacing: 4px; margin-bottom: 14px;
+    }
+    .gallery-section .section-header h2 {
+      font-size: 34px; font-weight: 700; letter-spacing: 4px;
+      color: var(--primary);
+    }
+    .gallery-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .gallery-grid .col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .gallery-item {
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .gallery-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item:hover {
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow);
+    }
+    /* ===== Data Dashboard ===== */
+    .dashboard-section {
+      padding: 110px 44px;
+      background: var(--bg-alt);
+      position: relative; z-index: 1;
+    }
+    .dashboard-section .section-header {
+      max-width: 1200px; margin: 0 auto 50px;
+    }
+    .dashboard-section .section-header .numeral {
+      font-size: 13px; color: var(--accent);
+      letter-spacing: 4px; margin-bottom: 14px;
+    }
+    .dashboard-section .section-header h2 {
+      font-size: 34px; font-weight: 700; letter-spacing: 4px;
+      color: var(--primary);
+    }
+    .dashboard-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 14px;
+    }
+    .dashboard-card {
+      padding: 32px 24px;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(.16,1,.3,1);
+      position: relative;
+    }
+    .dashboard-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .dashboard-card:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-hover);
+      box-shadow: var(--shadow);
+    }
+    .dashboard-card .icon { font-size: 26px; margin-bottom: 14px; }
+    .dashboard-card .d-num {
+      font-size: 32px; font-weight: 700; letter-spacing: 1px;
+      color: var(--primary);
+    }
+    .dashboard-card .d-label {
+      font-size: 10px; color: var(--text-dim);
+      letter-spacing: 2px; margin-top: 8px;
+    }
+
+    /* ===== CTA / Footer ===== */
+    .cta-section {
+      padding: 130px 44px;
+      text-align: center;
+      position: relative;
+    }
+    .cta-section .bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      filter: brightness(0.55);
+    }
+    .cta-section .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,var(--bg-alt) 0%,transparent 30%,transparent 70%,var(--bg) 100%);
+    }
+    .cta-section .content {
+      position: relative; z-index: 2;
+      max-width: 620px; margin: 0 auto;
+    }
+    .cta-section .content .numeral {
+      font-size: 13px; color: var(--accent);
+      letter-spacing: 4px; margin-bottom: 18px;
+    }
+    .cta-section .content h2 {
+      font-size: 38px; font-weight: 700; letter-spacing: 6px;
+      margin-bottom: 18px; color: #fff;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .cta-section .content p {
+      font-size: 15px; color: rgba(255,255,255,0.75);
+      line-height: 1.8; margin-bottom: 32px;
+    }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 15px 36px;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      border-radius: 10px;
+      color: #fff; font-size: 14px;
+      cursor: pointer; transition: all .3s;
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+    .cta-btn:hover {
+      background: rgba(255,255,255,0.22);
+      border-color: rgba(255,255,255,0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    footer {
+      padding: 44px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      position: relative; z-index: 1;
+      background: var(--bg);
+    }
+    footer p {
+      font-size: 11px; color: var(--text-faint);
+      letter-spacing: 2px;
+    }
+
+    /* ===== Fixed HUD Top Bar ===== */
+    .scroll-hud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 14px 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(248,250,248,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transform: translateY(-100%);
+      transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+    }
+    .scroll-hud.active {
+      transform: translateY(0);
+    }
+    .scroll-hud .left {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .scroll-hud .site-name {
+      font-size: 13px; color: var(--text-dim);
+      letter-spacing: 3px;
+    }
+    .scroll-hud .site-name strong {
+      color: var(--accent);
+    }
+    .scroll-hud .right span {
+      font-size: 10px; color: var(--text-faint);
+      letter-spacing: 2px;
+    }
+
+    /* ===== Scroll Progress ===== */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 2px; background: rgba(26,58,42,0.05);
+    }
+    .scroll-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      transition: width 0.1s linear;
+    }
+
+    /* ===== Chapter Navigation ===== */
+    .chapter-nav {
+      position: fixed; right: 16px; top: 50%; transform: translateY(-50%); z-index: 55;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+    }
+    .chapter-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--text-faint);
+      cursor: pointer;
+      transition: all .3s;
+      position: relative;
+    }
+    .chapter-dot:hover { background: var(--accent); transform: scale(1.5); }
+    .chapter-dot.active {
+      background: var(--accent); transform: scale(1.6);
+    }
+    .chapter-dot .chapter-label {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      white-space: nowrap; font-size: 10px; color: var(--text-dim);
+      letter-spacing: 2px;
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+    }
+    .chapter-dot:hover .chapter-label { opacity: 1; }
+
+    /* ===== Page Transition ===== */
+    .page-transition {
+      position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none;
+      background: var(--bg);
+      opacity: 0;
+      transition: opacity 0.5s cubic-bezier(.16,1,.3,1);
+    }
+    .page-transition.active { opacity: 1; }
+
+    /* ===== T1 Geometric Accents ===== */
+    .geo-line {
+      position: absolute; pointer-events: none; z-index: 0;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .hud { padding: 16px 20px; }
+      .hud-top { flex-direction: column; }
+      .data-panel { margin-top: 12px; gap: 4px; flex-wrap: wrap; }
+      .data-item { padding: 8px 14px; min-width: 56px; }
+      .data-item .num { font-size: 16px; }
+      .title-group h1 { font-size: 38px; letter-spacing: 4px; flex-wrap: wrap; }
+      .hero-info { left: 20px; right: 20px; bottom: 100px; }
+      .hero-info .card { padding: 18px 22px; }
+      .hero-info .card p { font-size: 13px; }
+
+      .section { padding: 60px 20px; min-height: auto; }
+      .section-inner { grid-template-columns: 1fr; gap: 30px; }
+      .section-inner.reverse { direction: ltr; }
+      .section-image img { height: 260px; }
+      .section-content h2 { font-size: 26px; }
+      .section-content .stat-row { flex-wrap: wrap; }
+
+      .gallery-section { padding: 60px 20px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+
+      .dashboard-grid { grid-template-columns: repeat(2,1fr); }
+      .dashboard-section { padding: 60px 20px; }
+
+      .cta-section { padding: 80px 20px; }
+      .cta-section .content h2 { font-size: 28px; }
+
+      .image-break .quote p { font-size: 18px; letter-spacing: 4px; }
+      .scroll-hud { padding: 10px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Loading ===== -->
+  <div class="loading-overlay" id="loading">
+    <div class="loading-ring"></div>
+    <p>TAIHANG WONDERLAND · LOADING</p>
+  </div>
+
+  <!-- ===== T1 Corner Decorations (Minimal Line Frame) ===== -->
+  <div class="corner corner-tl"><div class="corner-h"></div><div class="corner-v"></div><div class="corner-dot"></div></div>
+  <div class="corner corner-tr"><div class="corner-h"></div><div class="corner-v"></div><div class="corner-dot"></div></div>
+  <div class="corner corner-bl"><div class="corner-h"></div><div class="corner-v"></div><div class="corner-dot"></div></div>
+  <div class="corner corner-br"><div class="corner-h"></div><div class="corner-v"></div><div class="corner-dot"></div></div>
+
+  <!-- ===== Fixed HUD ===== -->
+  <div class="scroll-progress" id="scrollProgress">
+    <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+  </div>
+
+  <div class="scroll-hud" id="scrollHud">
+    <div class="left">
+      <span class="site-name"><strong>5A</strong> · Minimalist Exploration</span>
+    </div>
+    <div class="right">
+      <span id="hudLocation">Changzhi City, Shanxi · Baquan Gorge, Taihang Mountain Grand Canyon</span>
+    </div>
+  </div>
+
+  <div class="chapter-nav" id="chapterNav"></div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="top-fade"></div>
+
+    <div class="hud">
+      <div class="hud-top">
+        <div>
+          <a class="back-btn" id="backBtn" href="../index.html?prov=%E5%B1%B1%E8%A5%BF%E7%9C%81">
+            <span class="arrow">←</span> Back to Shanxi
+          </a>
+          <div class="title-group">
+            <h1>
+              <span id="spotName">Baquan Gorge</span>
+              <span class="badge">5A · 2020</span>
+              <span class="stars">★★★★★</span>
+            </h1>
+            <div class="subtitle"><span>Huguan County, Changzhi City, Shanxi</span></div>
+          </div>
+        </div>
+        <div class="data-panel">
+          <div class="data-item"><div class="num">1100</div><div class="label">Max Drop m</div></div>
+          <div class="data-item"><div class="num green">24.11</div><div class="label">Total Area km²</div></div>
+          <div class="data-item"><div class="num leaf">300+</div><div class="label">Spring Sources</div></div>
+          <div class="data-item"><div class="num stone-c">36</div><div class="label">Main Attractions</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-info">
+      <div class="card">
+        <p>
+          <span style="color:var(--accent);font-size:11px;letter-spacing:4px;display:block;margin-bottom:12px;">◆ First Grand Canyon of Taihang</span>
+          <span style="color:var(--text);">Baquan Gorge in the Taihang Mountain Grand Canyon — eight springs converge at one source, flowing into clear streams that weave through the gorge. The 208m Sky City elevator, the 3000m cableway through the clouds, and the 760m Time Tunnel — canyons, clear springs, and cascading waterfalls intertwine to form the most magnificent natural tableau of the Taihang Mountains.</span>
+        </p>
+        <div class="tags">
+          <span class="tag-accent">🏔️ First Grand Canyon of Taihang</span>
+          <span class="tag-green">💧 Source of Eight Springs</span>
+          <span class="tag-water">🛗 Sky City 208m</span>
+          <span class="tag-stone">🚡 Cableway 3000m</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll Down</span>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 1: First Grand Canyon of Taihang ===== -->
+  <section class="section" data-chapter="Grand Canyon">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_02.png" alt="Baquan Gorge, Taihang Mountain Grand Canyon · Panoramic View" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 01</div>
+        <h2>First <span class="highlight">Grand Canyon</span> of Taihang</h2>
+        <div class="minimal-divider"></div>
+        <p>Baquan Gorge is named after <b style='color:var(--accent);'>eight springs converging at one source</b>. It stretches <b style='color:var(--primary);'>13 km</b> in length, with a basin area of <b style='color:var(--primary);'>60.33 km²</b>. The canyon's lowest elevation is over 600 m, the highest over 1400 m, with a maximum drop of approximately <b style='color:var(--accent);'>1100 m</b>. It is acclaimed as the '<b style='color:var(--secondary);'>First Grand Canyon of Taihang</b>'.</p>
+        <p>Within the scenic area, there are <b style='color:var(--primary);'>over 300 spring sources</b> and <b style='color:var(--primary);'>over 30 waterfalls</b>. Winding gorges and babbling brooks make this the most exquisite section of the Taihang Mountain Grand Canyon. After their inspection, UNESCO experts praised it as a '<b style='color:var(--accent);'>world-class premium tourism resource</b>'.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">13km</div><div class="lbl">Total Length</div></div>
+          <div class="stat-item"><div class="num">300+</div><div class="lbl">Spring Sources</div></div>
+          <div class="stat-item"><div class="num">1100m</div><div class="lbl">Max Drop</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FULL WIDTH IMAGE BREAK ===== -->
+  <div class="image-break">
+    <div class="bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_03.jpg');"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <p>"Northward I go to Taihang — how steep and high, a formidable climb!"</p>
+      <div class="author">—— Cao Cao, "Bitter Cold Journey"</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: Sky City ===== -->
+  <section class="section" data-chapter="Sky City">
+    <div class="section-inner reverse">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_04.jpg" alt="Baquan Gorge, Taihang Mountain Grand Canyon · Sky City" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 02</div>
+        <h2><span class="highlight">Sky</span> City</h2>
+        <div class="minimal-divider"></div>
+        <p>Baquan Gorge boasts multiple world-class tourism facilities. The <b style='color:var(--accent);'>208 m</b> sightseeing elevator — 'Sky City' — ascends from the canyon floor to the summit, offering visitors a 360-degree panorama of the Taihang peaks. The <b style='color:var(--accent);'>3000 m</b> cableway spans the canyon with a vertical drop of <b style='color:var(--primary);'>369 m</b>, providing an aerial view of the gorge's magnificent landscape.</p>
+        <p>The <b style='color:var(--primary);'>760 m</b> 'Time Tunnel' cuts through the mountain, connecting both sides of the canyon. The scenic area is divided into four touring zones: Gate Tower Landscape Area, Canyon Sightseeing Area, Cableway Sightseeing Area, and Trail Viewing Area, encompassing <b style='color:var(--accent);'>36 major attractions</b> for a rich and diverse experience.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">208m</div><div class="lbl">Sky City</div></div>
+          <div class="stat-item"><div class="num">3000m</div><div class="lbl">Cableway Length</div></div>
+          <div class="stat-item"><div class="num">760m</div><div class="lbl">Time Tunnel</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: Eco-Treasure ===== -->
+  <section class="section" data-chapter="Eco-Treasure">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_05.jpg" alt="Baquan Gorge, Taihang Mountain Grand Canyon · Eco-Treasure" loading="lazy" />
+        <div class="img-overlay"></div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 03</div>
+        <h2>Taihang <span class="highlight">Eco-Treasure</span></h2>
+        <div class="minimal-divider"></div>
+        <p>Baquan Gorge is not only a geological wonder but also an ecological treasure. Covering a total area of <b style='color:var(--primary);'>24.11 km²</b>, the scenery is lush with vegetation and fresh air, making it a National Forest Park and National Geopark. Streams within the canyon flow year-round with clear, sweet water.</p>
+        <p>In <b style='color:var(--accent);'>January 2020</b>, Baquan Gorge was officially rated as a National 5A Tourist Attraction, becoming a new landmark of Shanxi tourism. Here, spring brings blooming wildflowers, summer offers clear springs and plunging waterfalls, autumn paints the mountains in red leaves, and winter showcases spectacular ice formations — each season presents a unique landscape, making it the most rewarding wonderland to explore in the Taihang Mountains.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">24.11</div><div class="lbl">Area km²</div></div>
+          <div class="stat-item"><div class="num">2020</div><div class="lbl">5A Rating</div></div>
+          <div class="stat-item"><div class="num">Forest</div><div class="lbl">National Park</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section class="gallery-section" data-chapter="Canyon Gallery">
+    <div class="section-header">
+      <div class="numeral">/// Canyon Gallery</div>
+      <h2>Canyon Gallery · <span class="highlight">Taihang Wonderland</span></h2>
+      <div class="minimal-divider"></div>
+    </div>
+    <div class="gallery-grid">
+      <div class="col">
+        <div class="gallery-item tall" data-animate style="height:100%;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_06.jpg" alt="Baquan Gorge · Skyline Fissure" style="height:100%;min-height:500px;" loading="lazy" />
+          
+        </div>
+        <div class="gallery-item" data-animate style="height:220px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_07.png" alt="Sky City · 208m Elevator" style="height:100%;" loading="lazy" />
+          
+        </div>
+      </div>
+      <div class="col">
+        <div class="gallery-item" data-animate style="height:260px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_08.jpg" alt="Cloud Cableway · 3000m Aerial Ride" style="height:100%;" loading="lazy" />
+          
+        </div>
+        <div class="gallery-item" data-animate style="height:260px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_09.jpg" alt="Clear Springs & Waterfalls · Source of Eight Springs" style="height:100%;" loading="lazy" />
+          
+        </div>
+        <div class="gallery-item" data-animate style="height:200px;">
+          <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_11.png" alt="Baquan Gorge, Taihang Mountain Grand Canyon · Canyon Wonderland" style="height:100%;" loading="lazy" />
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DATA DASHBOARD ===== -->
+  <section class="dashboard-section" data-chapter="Data Dashboard">
+    <div class="section-header">
+      <div class="numeral">/// Scenic Data</div>
+      <h2>Baquan Gorge <span class="highlight">Key Metrics</span></h2>
+      <div class="minimal-divider"></div>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dashboard-card" data-animate>
+        <div class="icon">🏆</div>
+        <div class="d-num">5A(2020)</div>
+        <div class="d-label">Scenic Rating</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">📏</div>
+        <div class="d-num">13km</div>
+        <div class="d-label">Canyon Length</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">🗺️</div>
+        <div class="d-num">24.11km²</div>
+        <div class="d-label">Scenic Area</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">🏔️</div>
+        <div class="d-num">1100m</div>
+        <div class="d-label">Max Drop</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">🛗</div>
+        <div class="d-num">208m</div>
+        <div class="d-label">Sky City</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">🚡</div>
+        <div class="d-num">3000m</div>
+        <div class="d-label">Cableway Length</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">💧</div>
+        <div class="d-num">300+</div>
+        <div class="d-label">Spring Sources</div>
+      </div>
+      <div class="dashboard-card" data-animate>
+        <div class="icon">📍</div>
+        <div class="d-num">36</div>
+        <div class="d-label">Main Attractions</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section">
+    <div class="bg" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_10.jpg');"></div>
+    <div class="overlay"></div>
+    <div class="content">
+      <div class="numeral">/// Explore Next</div>
+      <h2>Ride the Sky City<br/>Above Taihang's Peak<br/>Explore Baquan's Depths</h2>
+      <p>Eight clear springs from one source — the essence of a thousand miles of Taihang lies here.</p>
+      <a class="cta-btn" href="../index.html?prov=%E5%B1%B1%E8%A5%BF%E7%9C%81">
+        <span>← Back to Overview</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>5A Minimalist Exploration · Shanxi 5A Scenic Spots · Data: Ministry of Culture and Tourism / Official Sources</p>
+  </footer>
+
+  <!-- ===== Page Transition ===== -->
+  <div class="page-transition" id="pageTransition"></div>
+
+  <script>
+    // ===== Image Preloading for Hero =====
+    (function() {
+      var heroImg = new Image();
+      heroImg.onload = function() {
+        document.getElementById('heroBg').style.backgroundImage =
+          "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_01.jpg')";
+      };
+      heroImg.src = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanxi/images/太行山大峡谷八泉峡景区/太行山大峡谷八泉峡景区_01.jpg';
+    })();
+
+    // ===== Loading =====
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        var loading = document.getElementById('loading');
+        if (loading) loading.classList.add('hidden');
+      }, 600);
+    });
+
+    // ===== Mouse Parallax on Hero =====
+    var heroBgEl = document.getElementById('heroBg');
+    document.addEventListener('mousemove', function(e) {
+      if (window.scrollY > window.innerHeight) return;
+      var x = (e.clientX / window.innerWidth - 0.5) * 20;
+      var y = (e.clientY / window.innerHeight - 0.5) * 20;
+      if (heroBgEl) {
+        heroBgEl.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+      }
+    });
+
+    // ===== Scroll: Hero Parallax + Scroll HUD + Progress =====
+    var scrollHudEl = document.getElementById('scrollHud');
+    var progressFillEl = document.getElementById('scrollProgressFill');
+
+    window.addEventListener('scroll', function() {
+      var scrollY = window.scrollY;
+
+      // Hero parallax
+      if (heroBgEl && scrollY <= window.innerHeight) {
+        heroBgEl.style.transform = 'translateY(' + (scrollY * 0.35) + 'px)';
+      }
+
+      // Scroll HUD
+      if (scrollHudEl) {
+        if (scrollY > 100) {
+          scrollHudEl.classList.add('active');
+        } else {
+          scrollHudEl.classList.remove('active');
+        }
+      }
+
+      // Scroll progress
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0 && progressFillEl) {
+        var pct = Math.min(100, Math.round((scrollY / docHeight) * 100));
+        progressFillEl.style.width = pct + '%';
+      }
+    });
+
+    // ===== IntersectionObserver for Scroll Animations =====
+    var animObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('[data-animate]').forEach(function(el) {
+      animObserver.observe(el);
+    });
+
+    // ===== Chapter Navigation Dots =====
+    var chapterNav = document.getElementById('chapterNav');
+    var chapters = document.querySelectorAll('[data-chapter]');
+    var chapterNames = ["Grand Canyon", "Sky City", "Eco-Treasure", "Canyon Gallery", "Data Dashboard"];
+
+    chapters.forEach(function(section, i) {
+      var name = chapterNames[i] || section.getAttribute('data-chapter');
+
+      var dot = document.createElement('div');
+      dot.className = 'chapter-dot';
+      if (i === 0) dot.classList.add('active');
+
+      var label = document.createElement('span');
+      label.className = 'chapter-label';
+      label.textContent = name;
+      dot.appendChild(label);
+
+      (function(idx) {
+        dot.addEventListener('click', function() {
+          chapters[idx].scrollIntoView({ behavior: 'smooth' });
+        });
+      })(i);
+
+      chapterNav.appendChild(dot);
+    });
+
+    // Chapter highlight tracking
+    var chapterObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var idx = Array.from(chapters).indexOf(entry.target);
+          document.querySelectorAll('.chapter-dot').forEach(function(dot, i) {
+            dot.classList.toggle('active', i === idx);
+          });
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-80px 0px 0px 0px' });
+
+    chapters.forEach(function(section) {
+      chapterObserver.observe(section);
+    });
+
+    // ===== Page Transition Navigation =====
+    function navigateTo(url) {
+      var overlay = document.getElementById('pageTransition');
+      if (overlay) overlay.classList.add('active');
+      setTimeout(function() {
+        window.location.href = url;
+      }, 400);
+    }
+
+    // ===== Navigation: back button + CTA =====
+    document.getElementById('backBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      navigateTo('../index.html?prov=%E5%B1%B1%E8%A5%BF%E7%9C%81');
+    });
+
+    var ctaBtn = document.querySelector('.cta-btn');
+    if (ctaBtn) {
+      ctaBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        navigateTo('../index.html?prov=%E5%B1%B1%E8%A5%BF%E7%9C%81');
+      });
+    }
+  </script>
+</body>
+</html>

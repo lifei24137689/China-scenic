@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>The Memorial Halls of the 1st, 2nd &amp; 4th CPC Congresses · Red Origin | 5A Scenic Immersive Exploration</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --primary: #c62828;
+  --secondary: #d4a843;
+  --bg: #1a0505;
+  --surface: rgba(198,40,40,0.1);
+  --text: #f5e6d3;
+  --text-dim: rgba(245,230,211,0.55);
+  --glow: rgba(212,168,67,0.2);
+  --accent: #8b0000;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_01.jpg') center/cover;filter:brightness(0.45) saturate(1.15);transition:transform 0.1s ease-out}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(198,40,40,0.12) 0%,transparent 60%),radial-gradient(ellipse at 50% 80%,rgba(0,0,0,0.4) 0%,transparent 50%)}
+.hero-content{position:relative;z-index:2;text-align:center}
+.hero-badge{display:inline-block;border:1px solid rgba(212,168,67,0.3);padding:6px 28px;font-size:12px;letter-spacing:4px;color:var(--secondary);margin-bottom:24px;font-family:'Noto Sans SC',sans-serif}
+.hero-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(40px,7vw,76px);letter-spacing:12px;color:#fff;text-shadow:0 4px 40px rgba(0,0,0,0.5)}
+.hero-title .accent{color:var(--secondary)}
+.hero-sub{font-size:clamp(14px,1.8vw,22px);opacity:0.75;margin-top:18px;letter-spacing:8px;color:rgba(255,255,255,0.8);font-family:'Noto Sans SC',sans-serif;font-weight:300}
+.hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(212,168,67,0.08) 0%,transparent 70%);animation:goldenPulse 5s ease-in-out infinite;pointer-events:none}
+@keyframes goldenPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.5}50%{transform:translate(-50%,-50%) scale(1.4);opacity:0.9}}
+
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+.scroll-hint span{font-size:11px;letter-spacing:4px;opacity:0.4;font-family:'Noto Sans SC',sans-serif}
+.scroll-line{width:1px;height:45px;background:linear-gradient(to bottom,var(--secondary),transparent);animation:scrollPulse 2.5s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+.hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.4s}
+.hud-item{backdrop-filter:blur(16px);background:rgba(26,5,5,0.6);border:1px solid rgba(212,168,67,0.15);border-radius:12px;padding:12px 20px;text-align:center;min-width:75px}
+.hud-value{font-family:'Noto Sans SC',sans-serif;font-size:24px;font-weight:700;color:var(--secondary)}
+.hud-label{font-size:10px;opacity:0.45;margin-top:4px;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif}
+
+.content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.content-section.reverse{direction:rtl}
+.content-section.reverse .content-text{direction:ltr}
+.content-image{width:100%;border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:1px solid rgba(212,168,67,0.12);position:relative}
+.content-image::after{content:'';position:absolute;inset:0;border-radius:12px;border:1px solid rgba(212,168,67,0.08);pointer-events:none}
+.content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease;display:block}
+.content-image:hover img{transform:scale(1.05)}
+.content-text h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,4vw,42px);margin-bottom:14px;letter-spacing:6px;color:#fff}
+.content-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--secondary),transparent);margin-bottom:24px}
+.content-text p{font-size:16px;line-height:2;opacity:0.78;margin-bottom:16px;font-weight:300;font-family:'Noto Sans SC',sans-serif}
+.content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.content-tag{padding:6px 18px;border:1px solid rgba(212,168,67,0.2);border-radius:20px;font-size:12px;letter-spacing:2px;color:var(--secondary);font-family:'Noto Sans SC',sans-serif;background:rgba(212,168,67,0.04)}
+
+.image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_04.jpg') center/cover fixed;filter:brightness(0.35) saturate(1.05)}
+.image-break .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,5,5,0.4),transparent,rgba(26,5,5,0.3))}
+.image-break .quote{position:relative;z-index:2;text-align:center}
+.image-break .quote-cn{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,4.5vw,50px);letter-spacing:10px;margin-bottom:14px;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,0.4)}
+.image-break .quote-en{font-size:13px;opacity:0.4;letter-spacing:6px;text-transform:uppercase;font-family:'Noto Sans SC',sans-serif;font-weight:300}
+.image-break .deco-line{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:20px auto 0}
+
+.gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+.gallery-header{text-align:center;margin-bottom:48px}
+.gallery-header h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3vw,36px);letter-spacing:8px;color:#fff;margin-bottom:12px}
+.gallery-header .line{width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:0 auto}
+.gallery-grid{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:240px 240px;gap:14px}
+.gallery-item{position:relative;overflow:hidden;border-radius:12px;border:1px solid rgba(212,168,67,0.08);cursor:pointer}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease;display:block}
+.gallery-item:hover img{transform:scale(1.07)}
+.gallery-item:first-child{grid-row:span 2}
+
+.dashboard{padding:80px 40px 100px;max-width:1200px;margin:0 auto}
+.dashboard-header{text-align:center;margin-bottom:48px}
+.dashboard-header h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3vw,36px);letter-spacing:8px;color:#fff;margin-bottom:12px}
+.dashboard-header .line{width:60px;height:2px;background:linear-gradient(90deg,transparent,var(--secondary),transparent);margin:0 auto}
+.dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.dash-card{backdrop-filter:blur(16px);background:rgba(26,5,5,0.4);border:1px solid rgba(212,168,67,0.1);border-radius:16px;padding:36px 24px;text-align:center;transition:transform 0.4s,border-color 0.4s}
+.dash-card:hover{transform:translateY(-5px);border-color:rgba(212,168,67,0.3)}
+.dash-icon{font-size:28px;margin-bottom:12px;opacity:0.7}
+.dash-value{font-family:'Noto Sans SC',sans-serif;font-size:32px;font-weight:700;color:var(--secondary);margin-bottom:6px}
+.dash-label{font-size:12px;opacity:0.45;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif}
+
+.cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_01.jpg') center/cover;filter:brightness(0.3) saturate(0.9)}
+.cta-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(198,40,40,0.3) 0%,rgba(26,5,5,0.6) 100%)}
+.cta-content{position:relative;z-index:2;text-align:center}
+.cta-num{font-family:'Noto Sans SC',sans-serif;font-size:clamp(64px,10vw,120px);font-weight:700;letter-spacing:8px;opacity:0.08;color:var(--secondary);margin-bottom:-20px}
+.cta-sub{font-size:13px;letter-spacing:6px;opacity:0.4;margin-bottom:16px;font-family:'Noto Sans SC',sans-serif}
+.cta-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3.5vw,40px);letter-spacing:8px;margin-bottom:36px;color:#fff}
+.cta-btn{display:inline-block;padding:14px 50px;border:1px solid rgba(212,168,67,0.3);border-radius:30px;font-size:14px;letter-spacing:4px;text-decoration:none;color:var(--text);transition:all 0.4s;font-family:'Noto Sans SC',sans-serif;background:rgba(212,168,67,0.05)}
+.cta-btn:hover{background:rgba(212,168,67,0.15);border-color:var(--secondary)}
+
+.footer{padding:48px 40px;text-align:center;border-top:1px solid rgba(212,168,67,0.06)}
+.footer p{font-size:12px;letter-spacing:3px;opacity:0.3;font-weight:300;font-family:'Noto Sans SC',sans-serif}
+
+[data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+[data-animate].visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+  .content-section.reverse{direction:ltr}
+  .hud{top:12px;right:12px;gap:6px}
+  .hud-item{padding:8px 14px;min-width:60px}
+  .hud-value{font-size:18px}
+  .hud-label{font-size:9px}
+  .gallery-grid{grid-template-columns:1fr;grid-template-rows:200px 200px 200px 200px}
+  .gallery-item:first-child{grid-row:span 1}
+  .dashboard-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .hero-title{letter-spacing:6px}
+  .hero-glow{width:300px;height:300px}
+  .image-break{height:50vh}
+  .image-break .bg{background-attachment:scroll}
+  .cta{height:50vh}
+  .dash-card{padding:24px 16px}
+  .dash-value{font-size:26px}
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Red Origin · Where It All Began</div>
+    <h1 class="hero-title">The 1st, 2nd &amp; <span class="accent">4th CPC Congress Memorial Halls</span></h1>
+    <p class="hero-sub">Memorial Hall of the CPC Congresses</p>
+  </div>
+  <div class="scroll-hint" id="scrollHud">
+    <span>Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="hud" id="hud">
+  <div class="hud-item"><div class="hud-value">2021</div><div class="hud-label">5A Year</div></div>
+  <div class="hud-item"><div class="hud-value">0.02</div><div class="hud-label">km²</div></div>
+  <div class="hud-item"><div class="hud-value">4.6</div><div class="hud-label">Rating</div></div>
+</div>
+
+<section class="content-section" data-animate>
+  <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_03.jpg" alt="Memorial Hall of the First CPC Congress" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>Shikumen Memories</h2>
+    <div class="content-divider"></div>
+    <p>The site of the First CPC Congress is located at 76 Xingye Road, Shanghai, in a typical Shikumen building. In 1921, delegates from across the country gathered here, witnessing a pivotal moment in modern Chinese history. The memorial hall was completed in 1952, making it one of the earliest revolutionary memorials established after the founding of New China, and was rated a national 5A tourist attraction in 2021. This Shikumen building, with its grey bricks, dark tiles, and red lintels, carries profound historical memories, drawing visitors from all over the country to pay homage.</p>
+    <div class="content-tags">
+      <span class="content-tag">Shikumen Architecture</span>
+      <span class="content-tag">Red Culture</span>
+      <span class="content-tag">First Congress Site</span>
+      <span class="content-tag">Urban Memory</span>
+    </div>
+  </div>
+</section>
+
+<section class="image-break">
+  <div class="bg"></div>
+  <div class="overlay"></div>
+  <div class="quote">
+    <div class="quote-cn">Remain True to the Founding Mission</div>
+    <div class="quote-en">FROM SHANGHAI · FOR THE NATION</div>
+    <div class="deco-line"></div>
+  </div>
+</section>
+
+<section class="content-section reverse" data-animate>
+  <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_05.jpg" alt="Memorial Exhibition Hall" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>Red Footprints</h2>
+    <div class="content-divider"></div>
+    <p>The site of the Second CPC Congress is located at No. 30, Lane 7, North Laochengdu Road, Shanghai, where the congress was held in 1922. The site of the Fourth CPC Congress is located on Dongbaoxing Road, Hongkou District, where it was held in 1925. These three sites together form an important thread in Shanghai's red culture. Each site preserves its original architectural style and, through carefully designed exhibitions, tells visitors the story of those momentous years. The Shikumen building complex of the Second Congress site and the neighborhood of the Fourth Congress site are both vital parts of Shanghai's urban history.</p>
+    <div class="content-tags">
+      <span class="content-tag">Second Congress Site</span>
+      <span class="content-tag">Fourth Congress Site</span>
+      <span class="content-tag">Historic Architecture</span>
+      <span class="content-tag">Red Tour Route</span>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" data-animate>
+  <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_06.jpg" alt="Cultural Relics Exhibition" loading="lazy"/></div>
+  <div class="content-text">
+    <h2>Precious Relics</h2>
+    <div class="content-divider"></div>
+    <p>The three memorial halls feature rich exhibitions of cultural relics, photographs, charts, and multimedia interactive displays. The collections include over a hundred precious artifacts, including the first complete Chinese translation of The Communist Manifesto and other historically significant documents. Using modern exhibition technology, the memorials recreate the meeting scenes and everyday details of a century ago, offering visitors an immersive experience of historic moments inside Shanghai's Shikumen buildings. The memorials receive over a million visitors annually and are a key destination for Shanghai's red culture tourism.</p>
+    <div class="content-tags">
+      <span class="content-tag">Precious Artifacts</span>
+      <span class="content-tag">Multimedia Exhibits</span>
+      <span class="content-tag">Immersive Experience</span>
+      <span class="content-tag">Cultural Tourism</span>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" data-animate>
+  <div class="gallery-header">
+    <h2>Visual Memories</h2>
+    <div class="line"></div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_07.jpg" alt="Memorial Exterior" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_09.jpg" alt="Architectural Details" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_10.jpg" alt="Exhibition Area" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_12.jpg" alt="Street View of the Memorial" loading="lazy"/></div>
+  </div>
+</section>
+
+<section class="dashboard" data-animate>
+  <div class="dashboard-header">
+    <h2>Key Facts</h2>
+    <div class="line"></div>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dash-card"><div class="dash-icon">🏛</div><div class="dash-value">1921</div><div class="dash-label">Party Founding</div></div>
+    <div class="dash-card"><div class="dash-icon">⭐</div><div class="dash-value">2021</div><div class="dash-label">5A Rating</div></div>
+    <div class="dash-card"><div class="dash-icon">📍</div><div class="dash-value">3</div><div class="dash-label">Congress Sites</div></div>
+    <div class="dash-card"><div class="dash-icon">📊</div><div class="dash-value">4.6</div><div class="dash-label">Overall Rating</div></div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <div class="cta-num">1921</div>
+    <div class="cta-sub">National 5A Tourist Attraction</div>
+    <div class="cta-title">Red Memories in Shikumen</div>
+    <a href="../index.html?prov=%E4%B8%8A%E6%B5%B7%E5%B8%82" class="cta-btn">Back to Scenic Map</a>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>The Memorial Halls of the 1st, 2nd &amp; 4th CPC Congresses · National 5A Tourist Attraction · Shanghai</p>
+</footer>
+
+<script>
+(function(){var i=new Image();i.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_01.jpg')"};i.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/shanghai/images/yidazhongzhi/中国共产党一大·二大·四大纪念馆景区_01.jpg'})();
+window.addEventListener('scroll',function(){var s=document.getElementById('scrollHud');if(s)s.style.opacity=window.scrollY>120?'0':'1'});
+document.querySelector('.hero').addEventListener('mousemove',function(e){var x=(e.clientX/window.innerWidth-0.5)*10,y=(e.clientY/window.innerHeight-0.5)*10;document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)'});
+var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});
+document.querySelectorAll('[data-animate]').forEach(function(e){o.observe(e)});
+</script>
+</body>
+</html>

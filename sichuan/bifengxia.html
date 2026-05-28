@@ -1,0 +1,802 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Bifengxia · Lungs of Tianfu, Home of Pandas | 5A Scenic Area Immersive Exploration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;600;700;900&family=Rajdhani:wght@300;500;600;700&family=Noto+Sans+SC:wght@300;400;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --emerald: #10b981;
+      --stone-green: #a3e635;
+      --dark-green: #0a1a0f;
+      --surface: rgba(16,185,129,0.08);
+      --surface-light: rgba(163,230,53,0.06);
+      --text: #d1fae5;
+      --text-dim: rgba(209,250,229,0.45);
+      --accent: #34d399;
+      --glow: rgba(16,185,129,0.3);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Rajdhani','Noto Sans SC','PingFang SC',sans-serif;
+      background:var(--dark-green);
+      color:var(--text);
+      overflow-x:hidden
+    }
+
+    /* === Particle Canvas === */
+    #particleCanvas{
+      position:fixed;inset:0;z-index:0;
+      pointer-events:none;
+      opacity:0.6
+    }
+
+    /* === Scanlines === */
+    .scanlines{
+      position:fixed;inset:0;z-index:1;pointer-events:none;
+      background:repeating-linear-gradient(
+        0deg,
+        transparent,transparent 2px,
+        rgba(16,185,129,0.03) 2px,rgba(16,185,129,0.03) 4px
+      )
+    }
+    .vignette{
+      position:fixed;inset:0;z-index:1;pointer-events:none;
+      background:radial-gradient(ellipse at center,transparent 35%,var(--dark-green) 95%)
+    }
+
+    /* === Hero === */
+    .hero{
+      height:100vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+      z-index:2
+    }
+    .hero-bg{
+      position:absolute;inset:-20px;
+      background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_01.jpg') center/cover;
+      filter:brightness(0.35) saturate(1.2) hue-rotate(-5deg);
+      transition:transform 0.1s ease-out
+    }
+    .hero-overlay{
+      position:absolute;inset:0;z-index:1;
+      background:
+        radial-gradient(ellipse at 50% 30%, rgba(16,185,129,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 30% 70%, rgba(163,230,53,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 50%, rgba(10,26,15,0.6) 0%, transparent 40%)
+    }
+    .hero-content{position:relative;z-index:3;text-align:center}
+    .hero-badge-top{
+      font-family:'Orbitron',sans-serif;
+      font-size:11px;letter-spacing:8px;
+      color:var(--emerald);opacity:0.5;
+      margin-bottom:20px
+    }
+    .hero-title{
+      font-family:'Orbitron',sans-serif;
+      font-weight:700;
+      font-size:clamp(48px,8vw,100px);
+      letter-spacing:12px;
+      color:var(--text);
+      text-shadow:
+        0 0 40px rgba(16,185,129,0.3),
+        0 0 80px rgba(16,185,129,0.1)
+    }
+    .hero-title .highlight{
+      background:linear-gradient(135deg,var(--emerald),var(--stone-green));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent
+    }
+    .hero-sub{
+      font-family:'Rajdhani',sans-serif;
+      font-weight:300;
+      font-size:clamp(16px,2vw,22px);
+      opacity:0.6;
+      margin-top:12px;
+      letter-spacing:14px;
+      color:var(--stone-green)
+    }
+    .hero-badge{
+      margin-top:32px;
+      display:inline-flex;gap:16px;
+      font-family:'Orbitron',sans-serif;
+      font-size:10px;letter-spacing:4px
+    }
+    .hero-badge span{
+      padding:8px 22px;
+      border:1px solid rgba(16,185,129,0.2);
+      border-radius:4px;
+      color:var(--emerald);
+      background:rgba(16,185,129,0.05)
+    }
+
+    .scroll-hint{
+      position:absolute;bottom:40px;left:50%;z-index:3;
+      transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:8px;
+      transition:opacity 0.4s
+    }
+    .scroll-hint span{
+      font-family:'Orbitron',sans-serif;
+      font-size:9px;letter-spacing:6px;
+      opacity:0.3;color:var(--emerald)
+    }
+    .scroll-line{
+      width:1px;height:40px;
+      background:linear-gradient(to bottom,var(--emerald),transparent);
+      animation:scrollPulse 2s ease-in-out infinite
+    }
+    @keyframes scrollPulse{
+      0%,100%{opacity:0.2;transform:scaleY(0.5)}
+      50%{opacity:0.8;transform:scaleY(1)}
+    }
+
+    /* === HUD === */
+    .hud{
+      position:fixed;top:24px;left:50%;transform:translateX(-50%);
+      z-index:100;display:flex;gap:12px;
+      transition:opacity 0.4s
+    }
+    .hud-item{
+      backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      background:rgba(10,26,15,0.7);
+      border:1px solid rgba(16,185,129,0.12);
+      padding:8px 20px;text-align:center;
+      min-width:80px
+    }
+    .hud-value{
+      font-family:'Orbitron',sans-serif;
+      font-size:18px;font-weight:600;
+      color:var(--emerald)
+    }
+    .hud-label{
+      font-family:'Rajdhani',sans-serif;
+      font-weight:300;font-size:10px;
+      opacity:0.4;margin-top:2px;letter-spacing:4px;
+      color:var(--stone-green)
+    }
+
+    /* === Content Sections === */
+    .content-section{
+      position:relative;z-index:2;
+      max-width:1200px;margin:0 auto;
+      padding:100px 40px;
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:64px;align-items:center
+    }
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{
+      width:100%;overflow:hidden;position:relative
+    }
+    .content-image::before{
+      content:'';position:absolute;inset:0;z-index:1;
+      border:1px solid rgba(16,185,129,0.08);
+      pointer-events:none
+    }
+    .content-image::after{
+      content:'';position:absolute;inset:0;z-index:1;
+      background:linear-gradient(135deg,transparent 60%,rgba(16,185,129,0.05));
+      pointer-events:none
+    }
+    .content-image img{
+      width:100%;height:100%;object-fit:cover;
+      transition:transform 0.7s ease,filter 0.7s ease;
+      display:block;filter:saturate(0.9) brightness(0.85)
+    }
+    .content-image:hover img{transform:scale(1.05);filter:saturate(1.1) brightness(0.9)}
+    .content-corner{
+      position:absolute;bottom:12px;right:12px;z-index:2;
+      font-family:'Orbitron',sans-serif;
+      font-size:9px;letter-spacing:3px;
+      color:var(--emerald);opacity:0.25
+    }
+    .content-text h2{
+      font-family:'Orbitron',sans-serif;
+      font-weight:600;
+      font-size:clamp(24px,3.5vw,36px);
+      margin-bottom:12px;
+      letter-spacing:6px;
+      color:var(--text)
+    }
+    .content-text h2 .highlight{color:var(--stone-green)}
+    .content-divider{
+      width:50px;height:1px;
+      background:linear-gradient(90deg,var(--emerald),transparent);
+      margin-bottom:20px
+    }
+    .content-text p{
+      font-family:'Noto Sans SC',sans-serif;
+      font-weight:300;
+      font-size:15px;line-height:2.2;
+      opacity:0.7;margin-bottom:14px;
+      color:var(--text)
+    }
+    .content-text p:last-of-type{margin-bottom:0}
+    .content-tags{
+      display:flex;gap:8px;flex-wrap:wrap;margin-top:22px
+    }
+    .content-tag{
+      padding:5px 16px;
+      border:1px solid rgba(16,185,129,0.15);
+      font-family:'Orbitron',sans-serif;
+      font-weight:300;
+      font-size:10px;letter-spacing:3px;
+      color:var(--emerald);
+      background:rgba(16,185,129,0.04)
+    }
+    .content-stats{
+      display:grid;grid-template-columns:1fr 1fr 1fr;
+      gap:12px;margin-top:24px
+    }
+    .content-stat{
+      text-align:center;
+      padding:16px 8px;
+      border:1px solid rgba(16,185,129,0.06);
+      background:rgba(16,185,129,0.02)
+    }
+    .content-stat .num{
+      font-family:'Orbitron',sans-serif;
+      font-size:22px;font-weight:600;
+      color:var(--stone-green)
+    }
+    .content-stat .lbl{
+      font-family:'Rajdhani',sans-serif;
+      font-size:10px;letter-spacing:3px;
+      opacity:0.35;margin-top:4px;
+      color:var(--emerald)
+    }
+
+    /* === Image Break === */
+    .image-break{
+      height:60vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+      z-index:2
+    }
+    .image-break .bg{
+      position:absolute;inset:-10px;
+      background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_06.jpg') center/cover fixed;
+      filter:brightness(0.3) saturate(1.1) hue-rotate(-5deg)
+    }
+    .image-break .overlay{
+      position:absolute;inset:0;z-index:1;
+      background:
+        radial-gradient(ellipse at 40% 50%, rgba(16,185,129,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 60% 30%, rgba(10,26,15,0.5) 0%, transparent 50%)
+    }
+    .image-break .scanlines{
+      position:absolute;inset:0;z-index:2;pointer-events:none;
+      background:repeating-linear-gradient(
+        0deg,
+        transparent,transparent 2px,
+        rgba(16,185,129,0.02) 2px,rgba(16,185,129,0.02) 4px
+      )
+    }
+    .image-break .quote{
+      position:relative;z-index:3;text-align:center
+    }
+    .image-break .quote-icon{
+      font-family:'Orbitron',sans-serif;
+      font-size:10px;letter-spacing:8px;
+      color:var(--emerald);opacity:0.2;
+      margin-bottom:12px
+    }
+    .image-break .quote-cn{
+      font-family:'Orbitron',sans-serif;
+      font-weight:400;
+      font-size:clamp(24px,4vw,44px);
+      letter-spacing:14px;
+      color:var(--text);
+      text-shadow:0 0 30px rgba(16,185,129,0.15)
+    }
+    .image-break .quote-cn .highlight{
+      background:linear-gradient(135deg,var(--emerald),var(--stone-green));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent
+    }
+    .image-break .quote-en{
+      font-family:'Rajdhani',sans-serif;
+      font-weight:300;
+      font-size:12px;opacity:0.3;
+      letter-spacing:6px;margin-top:10px;
+      color:var(--stone-green)
+    }
+
+    /* === Gallery === */
+    .gallery{
+      position:relative;z-index:2;
+      padding:80px 40px;max-width:1400px;margin:0 auto
+    }
+    .gallery-header{
+      text-align:center;margin-bottom:48px
+    }
+    .gallery-header .pre{
+      font-family:'Orbitron',sans-serif;
+      font-size:10px;letter-spacing:8px;
+      color:var(--emerald);opacity:0.3;
+      margin-bottom:8px
+    }
+    .gallery-header h2{
+      font-family:'Orbitron',sans-serif;
+      font-weight:600;
+      font-size:clamp(22px,3vw,32px);
+      letter-spacing:8px;
+      color:var(--text)
+    }
+    .gallery-header h2 .highlight{
+      background:linear-gradient(135deg,var(--emerald),var(--stone-green));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent
+    }
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:2fr 1fr;
+      grid-template-rows:280px 260px;
+      gap:10px
+    }
+    .gallery-item{
+      position:relative;overflow:hidden;cursor:pointer
+    }
+    .gallery-item img{
+      width:100%;height:100%;object-fit:cover;
+      transition:transform 0.7s ease,filter 0.7s ease;
+      display:block;filter:saturate(0.85) brightness(0.8)
+    }
+    .gallery-item:hover img{transform:scale(1.06);filter:saturate(1.05) brightness(0.85)}
+    .gallery-item:first-child{
+      grid-row:1/3
+    }
+
+    /* === Dashboard === */
+    .dashboard{
+      position:relative;z-index:2;
+      padding:80px 40px;max-width:1200px;margin:0 auto
+    }
+    .dashboard-header{
+      text-align:center;margin-bottom:48px
+    }
+    .dashboard-header .pre{
+      font-family:'Orbitron',sans-serif;
+      font-size:10px;letter-spacing:8px;
+      color:var(--emerald);opacity:0.3;
+      margin-bottom:8px
+    }
+    .dashboard-header h2{
+      font-family:'Orbitron',sans-serif;
+      font-weight:600;
+      font-size:clamp(20px,2.5vw,30px);
+      letter-spacing:8px;
+      color:var(--text)
+    }
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px
+    }
+    .dash-card{
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      background:rgba(16,185,129,0.03);
+      border:1px solid rgba(16,185,129,0.08);
+      padding:28px 16px;text-align:center;
+      transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s
+    }
+    .dash-card:hover{
+      transform:translateY(-3px);
+      border-color:rgba(16,185,129,0.2);
+      box-shadow:0 8px 30px rgba(16,185,129,0.06)
+    }
+    .dash-icon{
+      font-family:'Orbitron',sans-serif;
+      font-size:22px;margin-bottom:8px;
+      color:var(--stone-green);opacity:0.6
+    }
+    .dash-value{
+      font-family:'Orbitron',sans-serif;
+      font-weight:600;font-size:26px;
+      color:var(--emerald);margin-bottom:4px
+    }
+    .dash-label{
+      font-family:'Rajdhani',sans-serif;
+      font-weight:300;font-size:11px;
+      opacity:0.35;letter-spacing:4px;
+      color:var(--stone-green)
+    }
+
+    /* === CTA === */
+    .cta{
+      height:55vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;
+      z-index:2
+    }
+    .cta-bg{
+      position:absolute;inset:-10px;
+      background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_11.jpg') center/cover;
+      filter:brightness(0.25) saturate(1.0) hue-rotate(-5deg)
+    }
+    .cta .overlay{
+      position:absolute;inset:0;z-index:1;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(16,185,129,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 30%, rgba(10,26,15,0.6) 0%, transparent 50%)
+    }
+    .cta-content{
+      position:relative;z-index:3;text-align:center
+    }
+    .cta-pre{
+      font-family:'Orbitron',sans-serif;
+      font-size:10px;letter-spacing:8px;
+      color:var(--emerald);opacity:0.2;
+      margin-bottom:12px
+    }
+    .cta-title{
+      font-family:'Orbitron',sans-serif;
+      font-weight:600;
+      font-size:clamp(20px,3vw,32px);
+      letter-spacing:10px;
+      margin-bottom:30px;
+      color:var(--text);
+      text-shadow:0 0 20px rgba(16,185,129,0.1)
+    }
+    .cta-btn{
+      display:inline-block;
+      padding:12px 44px;
+      border:1px solid rgba(16,185,129,0.2);
+      font-family:'Orbitron',sans-serif;
+      font-weight:400;
+      font-size:12px;letter-spacing:6px;
+      text-decoration:none;
+      color:var(--emerald);
+      transition:all 0.3s;
+      background:rgba(16,185,129,0.04)
+    }
+    .cta-btn:hover{
+      background:rgba(16,185,129,0.1);
+      border-color:rgba(16,185,129,0.35);
+      box-shadow:0 0 30px rgba(16,185,129,0.08);
+      color:var(--stone-green)
+    }
+
+    /* === Footer === */
+    .footer{
+      position:relative;z-index:2;
+      padding:36px 40px;text-align:center;
+      opacity:0.25;
+      font-family:'Rajdhani',sans-serif;
+      font-weight:300;
+      font-size:11px;letter-spacing:6px;
+      border-top:1px solid rgba(16,185,129,0.05);
+      color:var(--emerald)
+    }
+
+    /* === Animations === */
+    [data-animate]{
+      opacity:0;transform:translateY(40px);
+      transition:opacity 0.8s ease,transform 0.8s ease
+    }
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    @keyframes pulse{
+      0%,100%{opacity:0.3}
+      50%{opacity:0.8}
+    }
+
+    @media(max-width:768px){
+      .hud{top:12px;gap:6px;flex-wrap:wrap;justify-content:center}
+      .hud-item{padding:6px 14px;min-width:60px}
+      .hud-value{font-size:14px}
+      .hud-label{font-size:9px}
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .content-stats{grid-template-columns:1fr 1fr}
+      .gallery-grid{grid-template-columns:1fr;grid-template-rows:auto auto auto auto}
+      .gallery-item:first-child{grid-row:auto}
+      .gallery-item{height:220px}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hero-title{letter-spacing:6px}
+      .hero-sub{letter-spacing:6px}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particleCanvas"></canvas>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge-top">/// SECTOR 5A</div>
+      <h1 class="hero-title">Bifeng<span class="highlight">xia</span></h1>
+      <p class="hero-sub">BIFENGXIA · LUNGS OF TIANFU</p>
+      <div class="hero-badge">
+        <span>Elev. 1200M</span>
+        <span>Area 20KM²</span>
+        <span>Panda Sanctuary</span>
+      </div>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>▼ SCROLL TO EXPLORE</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ===== HUD ===== -->
+  <div class="hud" id="hud">
+    <div class="hud-item" style="border-color:rgba(16,185,129,0.15)"><div class="hud-value">1200m</div><div class="hud-label">Elevation</div></div>
+    <div class="hud-item" style="border-color:rgba(163,230,53,0.12)"><div class="hud-value">20km²</div><div class="hud-label">Area</div></div>
+    <div class="hud-item" style="border-color:rgba(16,185,129,0.15)"><div class="hud-value">Sp./Aut.</div><div class="hud-label">Best Season</div></div>
+    <div class="hud-item" style="border-color:rgba(163,230,53,0.12)"><div class="hud-value">5A</div><div class="hud-label">Rating</div></div>
+  </div>
+
+  <!-- ===== SECTION 1: Location ===== -->
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_03.jpg" alt="Bifengxia Panorama" loading="lazy"/>
+      <div class="content-corner">SECTOR 01</div>
+    </div>
+    <div class="content-text">
+      <h2>Lungs of Tianfu · <span class="highlight">Bifengxia Wonderland</span></h2>
+      <div class="content-divider"></div>
+      <p>Bifengxia is located in Ya'an, Sichuan, on the western edge of the Sichuan Basin bordering the Qinghai-Tibet Plateau. Known as the "Lungs of Tianfu," its two V-shaped gorges wind deep into the landscape with dense forests and numerous waterfalls, creating a natural green tapestry.</p>
+      <p>The gorge is rich in negative oxygen ions, with the air filled with the fresh scent of vegetation. Its unique natural environment makes it an ideal habitat for rare animals such as giant pandas and golden monkeys, truly an ecological treasure trove.</p>
+      <div class="content-tags">
+        <span class="content-tag">V-Shaped Gorge</span>
+        <span class="content-tag">Natural Oxygen Bar</span>
+        <span class="content-tag">Ya'an · Rain City</span>
+      </div>
+      <div class="content-stats">
+        <div class="content-stat">
+          <div class="num">1200m</div>
+          <div class="lbl">Elevation</div>
+        </div>
+        <div class="content-stat">
+          <div class="num">20km²</div>
+          <div class="lbl">Area</div>
+        </div>
+        <div class="content-stat">
+          <div class="num">Sp./Aut.</div>
+          <div class="lbl">Best Season</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== IMAGE BREAK ===== -->
+  <div class="image-break">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="scanlines"></div>
+    <div class="quote">
+      <div class="quote-icon">/// NATURE RESERVE</div>
+      <div class="quote-cn">Explore the <span class="highlight">Panda Sanctuary</span> · Wander the Bifengxia Valley</div>
+      <div class="quote-en">BIFENGXIA · WHERE NATURE WHISPERS</div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: Panda Base ===== -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_05.png" alt="Bifengxia Giant Panda" loading="lazy"/>
+      <div class="content-corner">SECTOR 02</div>
+    </div>
+    <div class="content-text">
+      <h2>Panda Base · <span class="highlight">National Treasure Sanctuary</span></h2>
+      <div class="content-divider"></div>
+      <p>Bifengxia Giant Panda Base is China's largest semi-wild panda breeding base and a key part of the China Conservation and Research Center for the Giant Panda. The pandas live in a near-natural environment, freely roaming, foraging, and breeding in semi-wild conditions.</p>
+      <p>Visitors can observe the daily lives of giant pandas up close, watching these adorable national treasures play and leisurely feed among the bamboo groves. Bifengxia's panda breeding program has achieved remarkable results, contributing significantly to the protection of this endangered species.</p>
+      <div class="content-tags">
+        <span class="content-tag">Semi-Wild Breeding</span>
+        <span class="content-tag">Close Observation</span>
+        <span class="content-tag">Breeding Center</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: Waterfall Wonders ===== -->
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_04.jpg" alt="Bifengxia Waterfall" loading="lazy"/>
+      <div class="content-corner">SECTOR 03</div>
+    </div>
+    <div class="content-text">
+      <h2>Flying Waterfalls · <span class="highlight">Nature's Harmony</span></h2>
+      <div class="content-divider"></div>
+      <p>Bifengxia's waterfall cluster is one of the most magnificent sights in the gorge. Thousand-Layer Rock Waterfall cascades like silver silk over layered rocks, spraying droplets that refract rainbow light under the sun. White Dragon Pool Waterfall surges like a white dragon emerging from the sea, with thunderous power echoing through the valley.</p>
+      <p>Azure Cloud Stairway is built along the cliff face. Ascending the steps offers a panoramic view of the gorge's grandeur. Below, rushing streams; around, the roar of waterfalls; ahead, an emerald sea of forest — every step unfolds a stunning landscape painting.</p>
+      <div class="content-tags">
+        <span class="content-tag">Thousand-Layer Rock Waterfall</span>
+        <span class="content-tag">White Dragon Pool Waterfall</span>
+        <span class="content-tag">Azure Cloud Stairway</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section class="gallery" data-animate>
+    <div class="gallery-header">
+      <div class="pre">/// GALLERY</div>
+      <h2>Bifengxia · <span class="highlight">Gallery of Light</span></h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_08.jpg" alt="Bifengxia Scenery" loading="lazy"/></div>
+      <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_02.jpg" alt="Bifengxia Views" loading="lazy"/></div>
+      <div class="gallery-item"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_09.jpeg" alt="Bifengxia Scenery" loading="lazy"/></div>
+    </div>
+  </section>
+
+  <!-- ===== DASHBOARD ===== -->
+  <section class="dashboard" data-animate>
+    <div class="dashboard-header">
+      <div class="pre">/// DATA PANEL</div>
+      <h2>Scenic Area · Data Panel</h2>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">█</div><div class="dash-value">5A-Class</div><div class="dash-label">Rating</div></div>
+      <div class="dash-card"><div class="dash-icon">█</div><div class="dash-value">1200m</div><div class="dash-label">Elevation</div></div>
+      <div class="dash-card"><div class="dash-icon">█</div><div class="dash-value">20km²</div><div class="dash-label">Area</div></div>
+      <div class="dash-card"><div class="dash-icon">█</div><div class="dash-value">Sp./Aut.</div><div class="dash-label">Best Visit</div></div>
+      <div class="dash-card"><div class="dash-icon">█</div><div class="dash-value">Pandas</div><div class="dash-label">Core Icon</div></div>
+      <div class="dash-card"><div class="dash-icon">█</div><div class="dash-value">5 Major</div><div class="dash-label">Attractions</div></div>
+      <div class="dash-card"><div class="dash-icon">█</div><div class="dash-value">Many</div><div class="dash-label">Waterfalls</div></div>
+      <div class="dash-card"><div class="dash-icon">█</div><div class="dash-value">Ya'an</div><div class="dash-label">Location</div></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4: Wildlife Park ===== -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_10.jpeg" alt="Bifengxia Wildlife Park" loading="lazy"/>
+      <div class="content-corner">SECTOR 04</div>
+    </div>
+    <div class="content-text">
+      <h2>Wildlife Park · <span class="highlight">Living in Harmony</span></h2>
+      <div class="content-divider"></div>
+      <p>Bifengxia Wildlife Park is one of the largest wildlife parks in Southwest China, divided into the Predator Zone and the Gentle Animal Zone. Visitors can take a safari vehicle through the Predator Zone to observe tigers, lions, black bears, and other predators up close in their natural behavior.</p>
+      <p>In the Gentle Animal Zone, sika deer, antelopes, peacocks, and other animals roam freely across vast meadows. The park employs an eco-ranging model, striving to create a living environment as close to natural habitats as possible, offering visitors the most authentic wildlife experience.</p>
+      <div class="content-tags">
+        <span class="content-tag">Predator Zone</span>
+        <span class="content-tag">Eco-Ranging</span>
+        <span class="content-tag">Safari Tour</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="overlay"></div>
+    <div class="cta-content">
+      <div class="cta-pre">/// EXPLORE MORE</div>
+      <div class="cta-title">Bifengxia Valley · Land of Pandas</div>
+      <a href="../index.html?prov=%E5%9B%9B%E5%B7%9D%E7%9C%81" class="cta-btn">Back to Scenic Star Map</a>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <p>Bifengxia · National 5A Tourist Attraction · Ya'an, Sichuan</p>
+  </footer>
+
+  <script>
+    // === Particle Animation System ===
+    (function(){
+      var canvas = document.getElementById('particleCanvas');
+      var ctx = canvas.getContext('2d');
+      var particles = [];
+      var mouse = { x: 0, y: 0 };
+      var W, H;
+
+      function resize(){
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function createParticle(){
+        return {
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4 - 0.15,
+          size: Math.random() * 3 + 1,
+          alpha: Math.random() * 0.5 + 0.15,
+          hue: Math.random() > 0.5 ? 160 : 80
+        };
+      }
+
+      for(var i = 0; i < 120; i++){
+        particles.push(createParticle());
+      }
+
+      document.addEventListener('mousemove', function(e){
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      function draw(){
+        ctx.clearRect(0, 0, W, H);
+
+        for(var i = 0; i < particles.length; i++){
+          var p = particles[i];
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if(p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+          if(p.x < -10) p.x = W + 10;
+          if(p.x > W + 10) p.x = -10;
+
+          var dx = mouse.x - p.x;
+          var dy = mouse.y - p.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if(dist < 150){
+            var force = (150 - dist) / 150 * 0.3;
+            p.vx -= dx / dist * force;
+            p.vy -= dy / dist * force;
+          }
+
+          p.vx *= 0.995;
+          p.vy *= 0.995;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = 'hsla(' + p.hue + ', 70%, ' + (p.hue === 160 ? '50%' : '60%') + ', ' + p.alpha + ')';
+          ctx.fill();
+        }
+
+        // Connect lines
+        for(var i = 0; i < particles.length; i++){
+          for(var j = i + 1; j < particles.length; j++){
+            var a = particles[i];
+            var b = particles[j];
+            var dx = a.x - b.x;
+            var dy = a.y - b.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if(dist < 120){
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.strokeStyle = 'rgba(16,185,129,' + ((1 - dist / 120) * 0.12) + ')';
+              ctx.lineWidth = 0.6;
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+
+    // === Background Image Preload ===
+    (function(){
+      var img = new Image();
+      img.onload = function(){
+        document.getElementById('heroBg').style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_01.jpg')";
+      };
+      img.src = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/bifengxia/雅安市碧峰峡旅游区_01.jpg';
+    })();
+
+    // === Scroll Parallax ===
+    window.addEventListener('scroll', function(){
+      var s = document.getElementById('scrollHud');
+      if(s) s.style.opacity = window.scrollY > 100 ? '0' : '1';
+    });
+
+    document.querySelector('.hero').addEventListener('mousemove', function(e){
+      var x = (e.clientX / window.innerWidth - 0.5) * 12;
+      var y = (e.clientY / window.innerHeight - 0.5) * 12;
+      document.getElementById('heroBg').style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    });
+
+    // === Scroll Fade In ===
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('[data-animate]').forEach(function(el){ observer.observe(el); });
+  </script>
+</body>
+</html>

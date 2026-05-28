@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taihao Fuxi Mausoleum · The First Mausoleum Under Heaven</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Serif SC', 'PingFang SC', serif;
+      background: #0a0505;
+      color: #f5e6d3;
+      overflow-x: hidden;
+    }
+
+    :root {
+      --primary: #c62828;
+      --secondary: #ffcdd2;
+      --gold: #d4a843;
+      --bg: #0a0505;
+      --surface: rgba(198,40,40,0.08);
+      --text: #f5e6d3;
+      --text-dim: rgba(245,230,211,0.55);
+      --cinnabar: #c41e3a;
+      --ochre: #8b4513;
+      --mist: rgba(245,230,211,0.04);
+      --bagua-yin: rgba(196,30,58,0.12);
+      --bagua-yang: rgba(212,168,67,0.12);
+    }
+
+    @keyframes bgDrift {
+      0%,100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(198,40,40,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(212,168,67,0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(196,30,58,0.04) 0%, transparent 50%),
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 5px),
+        repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(255,255,255,0.01) 4px, rgba(255,255,255,0.01) 6px);
+      animation: bgDrift 30s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner {
+      width: 50px; height: 50px;
+      border: 2px solid rgba(212,168,67,.1);
+      border-top: 2px solid var(--gold);
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p {
+      margin-top: 24px; font-size: 14px;
+      color: var(--text-dim);
+      letter-spacing: 4px;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      height: 2px; background: rgba(212,168,67,.08);
+    }
+    .scroll-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--cinnabar), var(--gold), var(--primary));
+      transition: width 0.1s linear;
+    }
+    .scroll-progress-pct {
+      position: fixed; top: 8px; right: 42px; z-index: 60;
+      font-size: 9px; color: rgba(212,168,67,.2);
+      font-family: 'Noto Serif SC', serif;
+      letter-spacing: 1px;
+    }
+
+    .scroll-hud {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 14px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10,5,5,.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212,168,67,.08);
+      transform: translateY(-100%);
+      transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+    }
+    .scroll-hud.active { transform: translateY(0); }
+    .scroll-hud .left { display: flex; align-items: center; gap: 16px; }
+    .scroll-hud .site-name {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 14px; color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+    .scroll-hud .site-name strong { color: var(--gold); }
+    .scroll-hud .right span {
+      font-size: 11px; color: rgba(245,230,211,.2);
+      letter-spacing: 2px;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .chapter-nav {
+      position: fixed; right: 14px; top: 50%; transform: translateY(-50%); z-index: 55;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .chapter-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(212,168,67,.15);
+      cursor: pointer;
+      transition: all .3s;
+      position: relative;
+    }
+    .chapter-dot:hover { background: var(--gold); transform: scale(1.4); }
+    .chapter-dot.active { background: var(--gold); transform: scale(1.5); box-shadow: 0 0 12px rgba(212,168,67,.4); }
+    .chapter-dot .chapter-label {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      white-space: nowrap; font-size: 9px; color: rgba(245,230,211,.15);
+      letter-spacing: 2px; font-family: 'Noto Serif SC', serif;
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+    }
+    .chapter-dot:hover .chapter-label { opacity: 1; }
+
+    .chapter-counter {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      z-index: 45; font-size: 10px; color: rgba(212,168,67,.1);
+      font-family: 'Noto Serif SC', serif; letter-spacing: 3px;
+      transition: opacity 0.4s; opacity: 0; pointer-events: none;
+    }
+    .chapter-counter.visible { opacity: 1; }
+
+    .bagua {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.06;
+      font-size: 120px;
+      font-family: 'Noto Serif SC', serif;
+      animation: baguaFloat 8s ease-in-out infinite;
+      user-select: none;
+    }
+    @keyframes baguaFloat {
+      0%,100% { transform: translateY(0) rotate(0deg); opacity: 0.06; }
+      50% { transform: translateY(-15px) rotate(5deg); opacity: 0.1; }
+    }
+    .bagua.tl { top: 8%; left: 5%; animation-delay: 0s; }
+    .bagua.tr { top: 12%; right: 8%; animation-delay: 1.5s; }
+    .bagua.bl { bottom: 10%; left: 8%; animation-delay: 3s; }
+    .bagua.br { bottom: 15%; right: 5%; animation-delay: 4.5s; }
+
+    .bagua-mini {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.03;
+      font-size: 60px;
+      font-family: 'Noto Serif SC', serif;
+      user-select: none;
+    }
+
+    .mist-layer {
+      position: absolute;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .mist-layer::before {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      background: rgba(245,230,211,0.03);
+    }
+    .mist-layer.tl {
+      top: 60px; left: 20px;
+      width: 200px; height: 100px;
+    }
+    .mist-layer.tl::before {
+      width: 200px; height: 100px;
+      top: 0; left: 0;
+      animation: mistMove 12s ease-in-out infinite;
+    }
+    .mist-layer.tr {
+      top: 80px; right: 20px;
+      width: 180px; height: 90px;
+    }
+    .mist-layer.tr::before {
+      width: 180px; height: 90px;
+      top: 0; right: 0;
+      animation: mistMove 10s ease-in-out infinite reverse;
+    }
+    .mist-layer.bl {
+      bottom: 100px; left: 30px;
+      width: 160px; height: 80px;
+    }
+    .mist-layer.bl::before {
+      width: 160px; height: 80px;
+      bottom: 0; left: 0;
+      animation: mistMove 14s ease-in-out infinite 2s;
+    }
+    .mist-layer.br {
+      bottom: 120px; right: 30px;
+      width: 200px; height: 100px;
+    }
+    .mist-layer.br::before {
+      width: 200px; height: 100px;
+      bottom: 0; right: 0;
+      animation: mistMove 11s ease-in-out infinite 1s;
+    }
+    @keyframes mistMove {
+      0%,100% { transform: translateX(0) scale(1); opacity: 0.3; }
+      50% { transform: translateX(30px) scale(1.2); opacity: 0.6; }
+    }
+
+    .pattern-border {
+      position: relative;
+    }
+    .pattern-border::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 10%; right: 10%;
+      height: 2px;
+      background: repeating-linear-gradient(90deg,
+        var(--cinnabar) 0, var(--cinnabar) 8px,
+        transparent 8px, transparent 12px,
+        var(--gold) 12px, var(--gold) 20px,
+        transparent 20px, transparent 24px,
+        var(--primary) 24px, var(--primary) 32px,
+        transparent 32px, transparent 36px
+      );
+      opacity: 0.3;
+    }
+
+    .bagua-divider {
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cinnabar), var(--gold), var(--cinnabar));
+      margin: 18px auto;
+      opacity: 0.5;
+      position: relative;
+    }
+    .bagua-divider::before {
+      content: '☰';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      color: var(--gold);
+      opacity: 0.4;
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: -10px;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.4) saturate(1.15) sepia(0.2);
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(135deg, rgba(10,5,5,0.75) 0%, transparent 40%, transparent 60%, rgba(10,5,5,0.75) 100%),
+        radial-gradient(ellipse at center, rgba(10,5,5,0.3) 30%, var(--bg) 85%);
+    }
+    .hero .top-fade {
+      position: absolute; top: 0; left: 0; right: 0; height: 30vh;
+      background: linear-gradient(180deg, var(--bg) 0%, transparent 100%);
+    }
+    .hero .bottom-fade {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40vh;
+      background: linear-gradient(0deg, var(--bg) 0%, rgba(10,5,5,.7) 20%, transparent 100%);
+    }
+
+    .hero-glow {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(196,30,58,0.1) 0%, rgba(212,168,67,0.06) 30%, transparent 70%);
+      animation: glowPulse 5s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+    @keyframes glowPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+      50% { transform: translate(-50%, -50%) scale(1.4); opacity: 1; }
+    }
+
+    .hero-bagua-bg {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 300px;
+      opacity: 0.025;
+      font-family: 'Noto Serif SC', serif;
+      animation: baguaRotate 20s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+      user-select: none;
+    }
+    @keyframes baguaRotate {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .hud {
+      position: absolute; inset: 0; z-index: 10;
+      padding: 28px 50px;
+      display: flex; flex-direction: column;
+    }
+    .hud-top {
+      display: flex; justify-content: flex-end; align-items: flex-start;
+    }
+
+    .hero-main {
+      position: absolute;
+      left: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 11;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .vertical-title {
+      writing-mode: vertical-rl;
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 90px;
+      color: var(--text);
+      letter-spacing: 12px;
+      text-shadow: 0 0 80px rgba(212,168,67,.2), 0 0 40px rgba(0,0,0,.5);
+      opacity: 0;
+      transform: translateX(-30px);
+      animation: fadeInRight 1.2s cubic-bezier(.16,1,.3,1) 0.3s forwards;
+      line-height: 1.2;
+    }
+    @keyframes fadeInRight {
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .hero-title-block {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s cubic-bezier(.16,1,.3,1) 0.5s forwards;
+    }
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-title-block h1 {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 52px; font-weight: 400;
+      letter-spacing: 6px;
+      color: var(--text);
+      text-shadow: 0 0 60px rgba(212,168,67,.2);
+    }
+    .hero-title-block h1 .highlight {
+      color: var(--gold);
+    }
+    .hero-title-block .badge {
+      display: inline-block;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 13px; padding: 4px 18px; border-radius: 20px;
+      background: rgba(212,168,67,.12);
+      border: 1px solid rgba(212,168,67,.25);
+      color: var(--gold); letter-spacing: 2px;
+      font-weight: 600;
+      margin-left: 14px;
+      vertical-align: middle;
+    }
+    .hero-title-block .stars {
+      display: block;
+      font-size: 16px; color: var(--gold);
+      letter-spacing: 3px; margin-top: 6px;
+    }
+    .hero-title-block .subtitle {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 20px; color: var(--text-dim);
+      letter-spacing: 6px; margin-top: 10px;
+    }
+    .cinnabar-divider {
+      width: 180px; height: 2px;
+      background: linear-gradient(90deg, var(--cinnabar), var(--gold), var(--primary), var(--gold), var(--cinnabar));
+      margin: 18px 0 22px;
+      opacity: 0.6;
+    }
+
+    .hero-data {
+      position: absolute; right: 50px; top: 50%;
+      transform: translateY(-50%);
+      z-index: 11;
+      opacity: 0;
+      animation: fadeIn 1s ease 0.8s forwards;
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+    .hero-data .data-card {
+      background: rgba(10,5,5,.55);
+      backdrop-filter: blur(14px);
+      border-radius: 12px;
+      border: 1px solid rgba(212,168,67,.1);
+      padding: 20px 28px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .hero-data .data-row {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 30px;
+    }
+    .hero-data .data-row .val {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 22px; font-weight: 400;
+      color: var(--gold);
+    }
+    .hero-data .data-row .lbl {
+      font-size: 11px; color: var(--text-dim);
+      letter-spacing: 2px;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .hero-info {
+      position: absolute; left: 50px; bottom: 130px; z-index: 11;
+      max-width: 520px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s cubic-bezier(.16,1,.3,1) 0.9s forwards;
+    }
+    .hero-info .card {
+      background: rgba(10,5,5,.55);
+      backdrop-filter: blur(16px);
+      border-radius: 12px;
+      border: 1px solid rgba(212,168,67,.1);
+      padding: 22px 28px;
+    }
+    .hero-info .card p {
+      font-size: 15px; line-height: 1.9; color: var(--text-dim);
+    }
+    .hero-info .tags { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-info .tags span {
+      padding: 4px 16px; border-radius: 16px; font-size: 11px;
+      letter-spacing: 2px; border: 1px solid;
+      font-family: 'Noto Serif SC', serif;
+    }
+    .tag-cinnabar { background: rgba(196,30,58,.1); border-color: rgba(196,30,58,.25); color: #e05a5a; }
+    .tag-gold { background: rgba(212,168,67,.1); border-color: rgba(212,168,67,.25); color: var(--gold); }
+    .tag-bg { background: rgba(255,205,210,.08); border-color: rgba(255,205,210,.2); color: var(--secondary); }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%; z-index: 11;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      color: var(--text-dim);
+      font-size: 11px; letter-spacing: 4px;
+      font-family: 'Noto Serif SC', serif;
+    }
+    .scroll-hint .line {
+      width: 1px; height: 30px;
+      background: linear-gradient(180deg, rgba(212,168,67,.3), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.3; transform: scaleY(0.5); }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    .section {
+      position: relative;
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      padding: 80px 50px;
+    }
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .section-inner.reverse { direction: rtl; }
+    .section-inner.reverse > * { direction: ltr; }
+
+    .section-image {
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+      border: 1px solid rgba(212,168,67,.07);
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+    }
+    .section-image.visible { opacity: 1; transform: translateY(0); }
+    .section-image::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 1;
+      border: 2px solid rgba(196,30,58,0.08);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+    .section-image img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .section-image:hover img { transform: scale(1.03); }
+    .section-image .img-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(0deg, var(--bg) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .section-content {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1) 0.15s;
+    }
+    .section-content.visible { opacity: 1; transform: translateY(0); }
+    .section-content .numeral {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 13px; color: var(--text-dim);
+      letter-spacing: 4px; margin-bottom: 12px;
+    }
+    .section-content h2 {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 36px; font-weight: 400;
+      letter-spacing: 3px;
+      margin-bottom: 20px; line-height: 1.3;
+      color: var(--text);
+    }
+    .section-content h2 .highlight {
+      color: var(--gold);
+    }
+    .section-content .section-divider {
+      width: 100px; height: 2px;
+      background: linear-gradient(90deg, var(--cinnabar), var(--gold));
+      margin: 16px 0 20px;
+      opacity: 0.5;
+    }
+    .section-content p {
+      font-size: 16px; line-height: 2;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+    }
+    .section-content .stat-row {
+      display: flex; gap: 16px; margin-top: 24px;
+    }
+    .section-content .stat-item {
+      text-align: center;
+      padding: 16px 22px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid rgba(212,168,67,.06);
+      min-width: 100px;
+    }
+    .section-content .stat-item .num {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 26px; font-weight: 400;
+      color: var(--gold);
+    }
+    .section-content .stat-item .lbl {
+      font-size: 10px; color: var(--text-dim);
+      margin-top: 4px; letter-spacing: 2px;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .vertical-label {
+      writing-mode: vertical-rl;
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 14px;
+      color: rgba(196,30,58,0.3);
+      letter-spacing: 6px;
+      position: absolute;
+      right: -30px; top: 20px;
+      pointer-events: none;
+    }
+
+    .image-break {
+      position: relative;
+      width: 100%;
+      height: 55vh;
+      overflow: hidden;
+    }
+    .image-break .bg {
+      position: absolute; inset: -10px;
+      background-size: cover; background-position: center;
+      background-attachment: fixed;
+      filter: brightness(0.4) saturate(1.1) sepia(0.15);
+    }
+    .image-break .overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(180deg, var(--bg) 0%, transparent 20%, transparent 80%, var(--bg) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 5px);
+    }
+    .image-break .quote {
+      position: absolute; bottom: 60px; left: 50px; right: 50px; z-index: 2;
+      max-width: 750px;
+    }
+    .image-break .quote p {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 28px; font-weight: 400; line-height: 1.7;
+      color: var(--text);
+      letter-spacing: 3px;
+      text-shadow: 0 0 30px rgba(0,0,0,.4);
+    }
+    .image-break .quote .author {
+      font-size: 12px; color: var(--text-dim);
+      letter-spacing: 4px; margin-top: 14px;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .gallery-section {
+      padding: 100px 50px;
+      position: relative;
+    }
+    .gallery-section .section-header {
+      max-width: 1200px;
+      margin: 0 auto 50px;
+      text-align: center;
+    }
+    .gallery-section .section-header .numeral {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 13px; color: var(--text-dim);
+      letter-spacing: 4px; margin-bottom: 12px;
+    }
+    .gallery-section .section-header h2 {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 40px; font-weight: 400;
+      letter-spacing: 3px;
+      color: var(--text);
+    }
+    .gallery-section .section-header h2 .highlight { color: var(--gold); }
+    .gallery-section .section-header .cinnabar-divider { margin: 16px auto 0; }
+    .gallery-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .gallery-item {
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(.16,1,.3,1);
+      border: 1px solid rgba(212,168,67,.06);
+    }
+    .gallery-item.visible { opacity: 1; transform: translateY(0); }
+    .gallery-item::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 1;
+      border: 2px solid rgba(196,30,58,0.06);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item.tall { grid-row: span 2; }
+    .gallery-item.wide { grid-column: span 2; }
+
+    .dashboard-section {
+      padding: 100px 50px;
+      position: relative;
+    }
+    .dashboard-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(196,30,58,0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 50%, rgba(212,168,67,0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .dashboard-section .section-header {
+      max-width: 1200px; margin: 0 auto 50px;
+      text-align: center;
+    }
+    .dashboard-section .section-header .numeral {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 13px; color: var(--text-dim);
+      letter-spacing: 4px; margin-bottom: 12px;
+    }
+    .dashboard-section .section-header h2 {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 40px; font-weight: 400;
+      letter-spacing: 3px;
+      color: var(--text);
+    }
+    .dashboard-section .section-header h2 .highlight { color: var(--gold); }
+    .dashboard-section .section-header .cinnabar-divider { margin: 16px auto 0; }
+    .dashboard-grid {
+      max-width: 900px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 14px;
+    }
+    .dashboard-card {
+      padding: 28px 18px;
+      border-radius: 12px;
+      background: rgba(10,5,5,.5);
+      border: 1px solid rgba(212,168,67,.07);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(.16,1,.3,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .dashboard-card.visible { opacity: 1; transform: translateY(0); }
+    .dashboard-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      opacity: 0.4;
+    }
+    .dashboard-card.cinnabar::before { background: linear-gradient(90deg, transparent, var(--cinnabar), transparent); }
+    .dashboard-card.gold::before { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+    .dashboard-card.red::before { background: linear-gradient(90deg, transparent, var(--primary), transparent); }
+    .dashboard-card.ochre::before { background: linear-gradient(90deg, transparent, var(--ochre), transparent); }
+    .dashboard-card.pink::before { background: linear-gradient(90deg, transparent, var(--secondary), transparent); }
+    .dashboard-card .icon { font-size: 28px; margin-bottom: 10px; display: block; }
+    .dashboard-card .d-num {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: 28px; font-weight: 400;
+      letter-spacing: 1px;
+    }
+    .dashboard-card.cinnabar .d-num { color: var(--cinnabar); }
+    .dashboard-card.gold .d-num { color: var(--gold); }
+    .dashboard-card.red .d-num { color: var(--primary); }
+    .dashboard-card.ochre .d-num { color: var(--ochre); }
+    .dashboard-card.pink .d-num { color: var(--secondary); }
+    .dashboard-card .d-label {
+      font-size: 10px; color: var(--text-dim);
+      letter-spacing: 2px; margin-top: 6px;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .cta-section {
+      padding: 120px 50px;
+      text-align: center;
+      position: relative;
+    }
+    .cta-section .bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      filter: brightness(0.35) sepia(0.15);
+    }
+    .cta-section .overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(180deg, var(--bg) 0%, transparent 30%, transparent 70%, var(--bg) 100%),
+        radial-gradient(ellipse at center, rgba(196,30,58,0.05) 0%, transparent 60%);
+    }
+    .cta-section .content {
+      position: relative; z-index: 2;
+      max-width: 650px; margin: 0 auto;
+    }
+    .cta-section .content .numeral {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 13px; color: var(--text-dim);
+      letter-spacing: 4px; margin-bottom: 16px;
+    }
+    .cta-section .content h2 {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 48px; font-weight: 400;
+      letter-spacing: 6px;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .cta-section .content h2 .highlight { color: var(--gold); }
+    .cta-section .content p {
+      font-size: 16px; color: var(--text-dim);
+      line-height: 2; margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 40px;
+      border: 1px solid rgba(212,168,67,.25);
+      background: rgba(10,5,5,.6);
+      backdrop-filter: blur(12px);
+      border-radius: 10px;
+      color: var(--gold);
+      font-family: 'Noto Serif SC', serif;
+      font-size: 15px;
+      cursor: pointer; transition: all .3s;
+      letter-spacing: 2px;
+    }
+    .cta-btn:hover {
+      background: rgba(212,168,67,.12);
+      box-shadow: 0 0 50px rgba(212,168,67,.08);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      padding: 50px;
+      text-align: center;
+      border-top: 1px solid rgba(212,168,67,.05);
+      position: relative;
+    }
+    footer .cinnabar-divider { margin: 0 auto 20px; max-width: 300px; }
+    footer p {
+      font-size: 11px; color: rgba(245,230,211,.1);
+      letter-spacing: 3px;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    @media (max-width: 1024px) {
+      .vertical-title { font-size: 70px; }
+      .hero-title-block h1 { font-size: 42px; }
+      .hero-data { right: 30px; }
+      .hero-data .data-card { padding: 16px 20px; }
+    }
+
+    @media (max-width: 768px) {
+      .hud { padding: 16px 20px; }
+      .hud-top { flex-direction: column; align-items: flex-end; }
+
+      .hero-main {
+        left: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .vertical-title {
+        writing-mode: horizontal-tb;
+        font-size: 42px;
+        letter-spacing: 6px;
+        transform: translateY(-20px);
+        animation: fadeInDown 1.2s cubic-bezier(.16,1,.3,1) 0.3s forwards;
+      }
+      @keyframes fadeInDown {
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .hero-title-block h1 { font-size: 30px; }
+      .hero-title-block .badge { font-size: 11px; padding: 3px 14px; margin-left: 0; margin-top: 8px; }
+      .hero-title-block .subtitle { font-size: 14px; }
+      .cinnabar-divider { width: 120px; }
+
+      .hero-data {
+        position: absolute;
+        right: 20px; top: auto; bottom: 180px;
+        transform: none;
+      }
+      .hero-data .data-card { padding: 12px 16px; flex-direction: row; flex-wrap: wrap; gap: 6px; }
+      .hero-data .data-row { gap: 12px; }
+      .hero-data .data-row .val { font-size: 16px; }
+      .hero-data .data-row .lbl { font-size: 9px; }
+
+      .hero-info { left: 20px; right: 20px; bottom: 100px; max-width: none; }
+      .hero-info .card { padding: 14px 18px; }
+      .hero-info .card p { font-size: 13px; }
+
+      .section { padding: 60px 20px; min-height: auto; }
+      .section-inner { grid-template-columns: 1fr; gap: 30px; }
+      .section-inner.reverse { direction: ltr; }
+      .section-image img { height: 250px; }
+      .section-content h2 { font-size: 26px; }
+      .section-content .stat-row { flex-wrap: wrap; gap: 10px; }
+      .section-content .stat-item { padding: 12px 16px; min-width: 80px; }
+      .vertical-label { display: none; }
+
+      .gallery-section { padding: 60px 20px; }
+      .gallery-section .section-header h2 { font-size: 30px; }
+      .gallery-grid { grid-template-columns: 1fr; gap: 10px; }
+      .gallery-item.tall { grid-row: auto; }
+
+      .dashboard-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+      .dashboard-section { padding: 60px 20px; }
+      .dashboard-section .section-header h2 { font-size: 30px; }
+      .dashboard-card { padding: 18px 12px; }
+      .dashboard-card .d-num { font-size: 22px; }
+
+      .cta-section { padding: 80px 20px; }
+      .cta-section .content h2 { font-size: 34px; }
+
+      .image-break { height: 40vh; }
+      .image-break .quote p { font-size: 20px; }
+      .image-break .quote { left: 20px; right: 20px; bottom: 40px; }
+      .scroll-hud { padding: 10px 20px; }
+      .scroll-hud .site-name { font-size: 12px; }
+
+      .mist-layer { display: none; }
+      .bagua { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title-block h1 { font-size: 24px; }
+      .vertical-title { font-size: 32px; }
+      .hero-glow { width: 400px; height: 400px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="loading-overlay" id="loading">
+    <div class="loading-spinner"></div>
+    <p>Taihao Fuxi Mausoleum · Loading</p>
+  </div>
+
+  <div class="scroll-progress" id="scrollProgress">
+    <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+    <span class="scroll-progress-pct" id="scrollPct">0%</span>
+  </div>
+
+  <div class="scroll-hud" id="scrollHud">
+    <div class="left">
+      <span class="site-name"><strong>Taihao Fuxi Mausoleum</strong> · The First Mausoleum Under Heaven</span>
+    </div>
+    <div class="right">
+      <span>Henan · Zhoukou City</span>
+    </div>
+  </div>
+
+  <div class="chapter-nav" id="chapterNav"></div>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-bagua-bg">☯</div>
+    <div class="hero-overlay"></div>
+    <div class="top-fade"></div>
+    <div class="bottom-fade"></div>
+
+    <div class="mist-layer tl"></div>
+    <div class="mist-layer tr"></div>
+    <div class="mist-layer bl"></div>
+    <div class="mist-layer br"></div>
+
+    <div class="bagua tl">☰</div>
+    <div class="bagua tr">☷</div>
+    <div class="bagua bl">☵</div>
+    <div class="bagua br">☲</div>
+
+    <div class="hud">
+      <div class="hud-top">
+        <div class="data-panel"></div>
+      </div>
+    </div>
+
+    <div class="hero-main">
+      <div class="vertical-title">Taihao Fuxi Mausoleum</div>
+      <div class="hero-title-block">
+        <h1>
+          Taihao Fuxi Mausoleum
+          <span class="badge">5A</span>
+        </h1>
+        <span class="stars">★★★★☆</span>
+        <div class="cinnabar-divider"></div>
+        <div class="subtitle">"The First Mausoleum Under Heaven" · Mausoleum of Fuxi, the Human Ancestor</div>
+      </div>
+    </div>
+
+    <div class="hero-data">
+      <div class="data-card">
+        <div class="data-row">
+          <span class="val">2024</span>
+          <span class="lbl">5A Rating</span>
+        </div>
+        <div class="data-row">
+          <span class="val">0.58</span>
+          <span class="lbl">Area km²</span>
+        </div>
+        <div class="data-row">
+          <span class="val">45</span>
+          <span class="lbl">Elevation m</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-info">
+      <div class="card">
+        <p>
+          <span style="color:var(--gold);font-size:12px;letter-spacing:3px;display:block;margin-bottom:10px;">◈ Human Ancestor · The First Mausoleum Under Heaven</span>
+          <span style="color:var(--text);font-size:16px;line-height:1.9;">Taihao Fuxi Mausoleum is the tomb and temple of Fuxi, the human ancestor of Chinese civilization. Revered as "The First Mausoleum Under Heaven," Fuxi created the Eight Trigrams, established marriage rites, and invented writing, laying the foundation of Chinese civilization.</span>
+        </p>
+        <div class="tags">
+          <span class="tag-cinnabar">Fuxi</span>
+          <span class="tag-gold">Human Ancestor</span>
+          <span class="tag-bg">First Mausoleum</span>
+          <span class="tag-cinnabar">Temple Fair</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll Down · Human Ancestor</span>
+      <div class="line"></div>
+    </div>
+  </section>
+
+  <section class="section" data-chapter="Human Ancestor">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/" alt="" loading="lazy" />
+        <div class="img-overlay"></div>
+        <div class="vertical-label">Human Ancestor</div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 01</div>
+        <h2>The <span class="highlight">Human Ancestor</span></h2>
+        <div class="section-divider"></div>
+        <p>Fuxi is a legendary figure in ancient Chinese history, regarded as the human ancestor of the Chinese nation and the earliest king recorded in ancient Chinese texts. He was born in Chengji (present-day Tianshui, Gansu), established his capital in Chen (present-day Huaiyang, Henan), and was buried in Chen. Taihao Fuxi Mausoleum is located in Huaiyang District, Zhoukou City, Henan Province, and serves as the burial site and temple of Fuxi.</p>
+        <p>Fuxi is honored as "Foremost of the Three Sovereigns" and "First Among Hundred Kings," the founder who led the Chinese nation from ignorance to civilization. By observing the heavens above and the earth below, he created the Eight Trigrams system that has influenced Chinese civilization for millennia, opening the gateway to Chinese cultural wisdom. Taihao Fuxi Mausoleum was first built during the Spring and Autumn period, with a history spanning thousands of years.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">Three Sovereigns</div><div class="lbl">Historical Status</div></div>
+          <div class="stat-item"><div class="num">Millennia</div><div class="lbl">History</div></div>
+          <div class="stat-item"><div class="num">0.58</div><div class="lbl">Area km²</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="image-break">
+    <div class="bg" id="breakBg1"></div>
+    <div class="overlay"></div>
+    <div class="bagua-mini" style="top:15%;left:10%;font-size:80px;opacity:0.03;">☰</div>
+    <div class="bagua-mini" style="top:20%;right:12%;font-size:70px;opacity:0.025;">☷</div>
+    <div class="bagua-mini" style="bottom:20%;left:15%;font-size:60px;opacity:0.02;">☲</div>
+    <div class="quote">
+      <p>"Fuxi succeeded Heaven as king, foremost among all kings. He observed the patterns in the sky above and examined the laws on the earth below, took from near his own body and from distant things, and thus created the Eight Trigrams."</p>
+      <div class="author">—— The Book of Changes · Commentary on the Appended Phrases</div>
+    </div>
+  </div>
+
+  <section class="section" data-chapter="Fuxi's Achievements">
+    <div class="section-inner reverse">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/" alt="" loading="lazy" />
+        <div class="img-overlay"></div>
+        <div class="vertical-label" style="right:auto;left:-30px;">Fuxi's Achievements</div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 02</div>
+        <h2>Fuxi's <span class="highlight">Achievements</span></h2>
+        <div class="section-divider"></div>
+        <p>Fuxi made groundbreaking contributions to Chinese civilization. He created the Eight Trigrams, using eight symbols to represent the fundamental laws of heaven, earth, and all things. This became the core of the I Ching (Book of Changes), profoundly influencing Chinese philosophy, science, medicine, and various other fields. "In change there is the Supreme Ultimate, which generates the Two Modes; the Two Modes generate the Four Phenomena; the Four Phenomena generate the Eight Trigrams" — this cosmological view still guides Chinese thinking today.</p>
+        <p>He also "established marriage rites and rectified surnames," creating the marriage system and surname system, transitioning human society from group marriage to paired marriage, laying the foundation for family ethics. Fuxi also "invented writing to replace knot-tying," creating the earliest recording symbols and initiating the dawn of writing. He taught people to weave nets, fish, and domesticate animals, driving a great transformation in production methods.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">Eight Trigrams</div><div class="lbl">Created Trigrams</div></div>
+          <div class="stat-item"><div class="num">Marriage</div><div class="lbl">Established Rites</div></div>
+          <div class="stat-item"><div class="num">Writing</div><div class="lbl">Invented Script</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-chapter="Temple Fair">
+    <div class="section-inner">
+      <div class="section-image" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/" alt="" loading="lazy" />
+        <div class="img-overlay"></div>
+        <div class="vertical-label">Temple Fair</div>
+      </div>
+      <div class="section-content" data-animate>
+        <div class="numeral">/// 03</div>
+        <h2>Temple <span class="highlight">Fair</span></h2>
+        <div class="section-divider"></div>
+        <p>The Taihao Mausoleum Temple Fair is one of the largest folk temple fairs in China and around the world. Every year from the 2nd day of the 2nd lunar month to the 3rd day of the 3rd lunar month, millions of pilgrims and tourists from across the country gather here to pay homage to their ancestors, pray for blessings, and receive good fortune. The scene during the fair is spectacular — a sea of people with incense smoke swirling, earning it the reputation of "China's Most Amazing Temple Fair."</p>
+        <p>In 2016, the Taihao Mausoleum Temple Fair set a Guinness World Record for the number of pilgrims in a single day, demonstrating the profound influence of Fuxi culture among Chinese people at home and abroad. The fair also features a variety of folk art activities such as pole dancing, dragon and lion dances, and acrobatic performances, offering an excellent window into Central Plains folk culture. Ancient architectural complexes such as the Tongtian Hall and Xianren Hall stand in solemn grandeur, bearing witness to millennia of sacrificial traditions.</p>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">Millions</div><div class="lbl">Pilgrims</div></div>
+          <div class="stat-item"><div class="num">Feb 2nd</div><div class="lbl">Fair Start</div></div>
+          <div class="stat-item"><div class="num">Guinness</div><div class="lbl">World Record</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section" data-chapter="Gallery">
+    <div class="section-header">
+      <div class="numeral">/// Gallery</div>
+      <h2>Taihao Fuxi Mausoleum <span class="highlight">Highlights</span></h2>
+      <div class="cinnabar-divider"></div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item tall" data-animate>
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/" alt="" style="height:100%;min-height:500px;" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-animate style="height:240px;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/" alt="" style="height:100%;" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-animate style="height:260px;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/" alt="" style="height:100%;" loading="lazy" />
+      </div>
+      <div class="gallery-item" data-animate style="height:250px;">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/" alt="" style="height:100%;" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section class="dashboard-section" data-chapter="Dashboard">
+    <div class="section-header">
+      <div class="numeral">/// Dashboard</div>
+      <h2>Taihao Fuxi Mausoleum <span class="highlight">Key Metrics</span></h2>
+      <div class="cinnabar-divider"></div>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dashboard-card gold" data-animate>
+        <span class="icon">🏛️</span>
+        <div class="d-num">5A Level</div>
+        <div class="d-label">Scenic Grade</div>
+      </div>
+      <div class="dashboard-card cinnabar" data-animate>
+        <span class="icon">📅</span>
+        <div class="d-num">2024</div>
+        <div class="d-label">Rating Year</div>
+      </div>
+      <div class="dashboard-card red" data-animate>
+        <span class="icon">📐</span>
+        <div class="d-num">0.58</div>
+        <div class="d-label">Area km²</div>
+      </div>
+      <div class="dashboard-card ochre" data-animate>
+        <span class="icon">⛰️</span>
+        <div class="d-num">45</div>
+        <div class="d-label">Elevation m</div>
+      </div>
+      <div class="dashboard-card gold" data-animate>
+        <span class="icon">⭐</span>
+        <div class="d-num">4.3</div>
+        <div class="d-label">Visitor Rating</div>
+      </div>
+      <div class="dashboard-card cinnabar" data-animate>
+        <span class="icon">☰</span>
+        <div class="d-num">Fuxi</div>
+        <div class="d-label">Human Ancestor</div>
+      </div>
+      <div class="dashboard-card pink" data-animate>
+        <span class="icon">🏮</span>
+        <div class="d-num">Guinness</div>
+        <div class="d-label">Fair Record</div>
+      </div>
+      <div class="dashboard-card red" data-animate>
+        <span class="icon">🌸</span>
+        <div class="d-num">Fair Season</div>
+        <div class="d-label">Best Season</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="bg" id="ctaBg"></div>
+    <div class="overlay"></div>
+    <div class="content">
+      <div class="numeral">/// Journey of Discovery</div>
+      <h2>Visit the <span class="highlight">Human Ancestor</span></h2>
+      <p>Step into Taihao Fuxi Mausoleum, trace your roots, pay homage to your ancestors,<br/>and experience the profound depth of Fuxi culture and the enduring legacy of the Chinese nation.</p>
+      <div class="cta-btn">
+        <span>Begin Your Taihao Journey</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="cinnabar-divider"></div>
+    <p>Taihao Fuxi Mausoleum · The First Mausoleum Under Heaven · Huaiyang District, Zhoukou City, Henan Province · Mausoleum of Fuxi, the Human Ancestor</p>
+  </footer>
+
+  <script>
+    const images = [
+      'images/taihao/周口市太昊伏羲陵文化旅游区_01.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_03.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_04.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_06.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_07.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_08.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_09.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_11.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_12.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_13.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_14.jpg',
+      'images/taihao/周口市太昊伏羲陵文化旅游区_15.jpg'
+    ];
+    const used = new Set();
+    function pickImg() {
+      for (let i = 0; i < images.length; i++) {
+        if (!used.has(images[i])) { used.add(images[i]); return images[i]; }
+      }
+      return images[0];
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loading').classList.add('hidden');
+      }, 600);
+    });
+
+    const heroBg = document.getElementById('heroBg');
+    heroBg.style.backgroundImage = `url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/${images[0]}')`;
+
+    const imgEls = document.querySelectorAll('.section-image img');
+    const galleryImgEls = document.querySelectorAll('.gallery-item img');
+
+    const sectionImgs = [];
+    for (let i = 0; i < imgEls.length; i++) sectionImgs.push(pickImg());
+    imgEls.forEach((el, i) => { if (sectionImgs[i]) el.src = sectionImgs[i]; });
+
+    const galleryImgs = [];
+    for (let i = 0; i < galleryImgEls.length; i++) galleryImgs.push(pickImg());
+    galleryImgEls.forEach((el, i) => { if (galleryImgs[i]) el.src = galleryImgs[i]; });
+
+    const breakImg = pickImg() || images[1];
+    const breakEl = document.getElementById('breakBg1');
+    const tmp = new Image();
+    tmp.onload = () => { breakEl.style.backgroundImage = `url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/${breakImg}')`; };
+    tmp.src = breakImg;
+
+    const ctaImg = pickImg() || images[2];
+    const ctaEl = document.getElementById('ctaBg');
+    const tmp2 = new Image();
+    tmp2.onload = () => { ctaEl.style.backgroundImage = `url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/henan/${ctaImg}')`; };
+    tmp2.src = ctaImg;
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      heroBg.style.transform = `translateY(${scrollY * 0.35}px)`;
+      const hud = document.getElementById('scrollHud');
+      if (scrollY > window.innerHeight * 0.6) {
+        hud.classList.add('active');
+      } else {
+        hud.classList.remove('active');
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('[data-animate]').forEach(el => {
+      observer.observe(el);
+    });
+
+    const dashboardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const numEl = entry.target.querySelector('.d-num');
+          if (numEl && !numEl.dataset.counted) {
+            numEl.dataset.counted = 'true';
+            const text = numEl.textContent.trim();
+            const match = text.match(/^([\d.]+)([M%+]|\+)?/);
+            if (match) {
+              const numTarget = parseInt(match[1]) || 0;
+              const suffix = match[2] || '';
+              const startTime = performance.now();
+              function tick(now) {
+                const p = Math.min((now - startTime) / 1000, 1);
+                const eased = 1 - Math.pow(1 - p, 3);
+                numEl.textContent = Math.round(numTarget * eased) + suffix;
+                if (p < 1) requestAnimationFrame(tick);
+              }
+              requestAnimationFrame(tick);
+            }
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.dashboard-card').forEach(card => {
+      dashboardObserver.observe(card);
+    });
+
+    const progressFill = document.getElementById('scrollProgressFill');
+    const scrollPctEl = document.getElementById('scrollPct');
+    function updateScrollProgress() {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) return;
+      const pct = Math.min(100, Math.round((window.scrollY / docHeight) * 100));
+      if (progressFill) progressFill.style.width = pct + '%';
+      if (scrollPctEl) scrollPctEl.textContent = pct + '%';
+    }
+    window.addEventListener('scroll', updateScrollProgress);
+
+    const chapterNav = document.getElementById('chapterNav');
+    const chapters = document.querySelectorAll('[data-chapter]');
+    const chapterNames = [];
+
+    chapters.forEach((section, i) => {
+      const name = section.getAttribute('data-chapter');
+      chapterNames.push(name);
+      const dot = document.createElement('div');
+      dot.className = 'chapter-dot';
+      if (i === 0) dot.classList.add('active');
+      const label = document.createElement('span');
+      label.className = 'chapter-label';
+      label.textContent = name;
+      dot.appendChild(label);
+      dot.addEventListener('click', () => {
+        section.scrollIntoView({ behavior: 'smooth' });
+      });
+      chapterNav.appendChild(dot);
+    });
+
+    const chapterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(chapters).indexOf(entry.target);
+          document.querySelectorAll('.chapter-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === idx);
+          });
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-80px 0px 0px 0px' });
+
+    chapters.forEach(section => chapterObserver.observe(section));
+
+    const chapterCounter = document.createElement('div');
+    chapterCounter.className = 'chapter-counter';
+    document.body.appendChild(chapterCounter);
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(chapters).indexOf(entry.target);
+          chapterCounter.textContent = `Chapter ${idx + 1} / ${chapters.length} · ${chapterNames[idx]}`;
+          chapterCounter.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-80px 0px 0px 0px' });
+
+    chapters.forEach(section => counterObserver.observe(section));
+  </script>
+
+<a href="../index.html?prov=%E6%B2%B3%E5%8D%97%E7%9C%81" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Map</a>
+</body>
+</html>

@@ -1,0 +1,388 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Beichuan Qiang City  Great Love Beichuan Qiang Customs | 5A Scenic Area Immersive Exploration</title>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&amp;family=Noto+Serif+SC:wght@400;600;700&amp;family=Noto+Sans+SC:wght@300;400;700&amp;family=Ma+Shan+Zheng&amp;display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --indigo: #1565c0;
+      --qiang-red: #c41e3a;
+      --gold: #d4a843;
+      --bg: #0f172a;
+      --surface: rgba(21,101,192,0.1);
+      --text: #e8e4dc;
+      --text-dim: rgba(232,228,220,0.55);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Noto Serif SC','Noto Sans SC',serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden
+    }
+    .ethnic-border{position:relative}
+    .ethnic-border::before{
+      content:'';position:absolute;inset:0;
+      border:3px solid transparent;
+      border-image:repeating-linear-gradient(135deg,var(--indigo) 0px,var(--indigo) 12px,var(--qiang-red) 12px,var(--qiang-red) 24px,var(--gold) 24px,var(--gold) 36px,var(--qiang-red) 36px,var(--qiang-red) 48px,var(--indigo) 48px,var(--indigo) 60px) 3;
+      pointer-events:none;z-index:1
+    }
+    .ethnic-corner{position:absolute;width:40px;height:40px;border:2px solid var(--gold);opacity:0.3;z-index:2;pointer-events:none}
+    .ethnic-corner.tl{top:8px;left:8px;border-right:none;border-bottom:none}
+    .ethnic-corner.tr{top:8px;right:8px;border-left:none;border-bottom:none}
+    .ethnic-corner.bl{bottom:8px;left:8px;border-right:none;border-top:none}
+    .ethnic-corner.br{bottom:8px;right:8px;border-left:none;border-top:none}
+    .prayer-flags{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+    .flag-line{position:absolute;display:flex;gap:0;animation:flagFloat var(--dur) ease-in-out infinite;opacity:0.45}
+    .flag-line .flag{width:28px;height:18px;clip-path:polygon(0 0,100% 0,80% 50%,100% 100%,0 100%);flex-shrink:0}
+    .flag-line .flag:nth-child(5n+1){background:var(--indigo)}
+    .flag-line .flag:nth-child(5n+2){background:#fff}
+    .flag-line .flag:nth-child(5n+3){background:var(--qiang-red)}
+    .flag-line .flag:nth-child(5n+4){background:var(--gold)}
+    .flag-line .flag:nth-child(5n+5){background:#2e7d32}
+    @keyframes flagFloat{0%,100%{transform:translateX(0) translateY(0)}25%{transform:translateX(8px) translateY(-3px)}50%{transform:translateX(0) translateY(-5px)}75%{transform:translateX(-6px) translateY(-2px)}}
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_01.jpg') center/cover;filter:brightness(0.5) saturate(1.15);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%, rgba(21,101,192,0.2) 0%, transparent 60%),radial-gradient(ellipse at 70% 60%, rgba(196,30,58,0.18) 0%, transparent 50%),radial-gradient(ellipse at 50% 80%, rgba(21,101,192,0.1) 0%, transparent 40%);z-index:1}
+    .hero-content{position:relative;z-index:3;text-align:center}
+    .hero-title{font-family:'Ma Shan Zheng',cursive;font-size:clamp(52px,8vw,96px);letter-spacing:16px;color:var(--text);text-shadow:0 0 40px rgba(21,101,192,0.3),0 0 80px rgba(196,30,58,0.15),0 4px 30px rgba(0,0,0,0.5);margin-bottom:8px}
+    .hero-sub{font-family:'Noto Sans SC',sans-serif;font-size:clamp(16px,2vw,24px);opacity:0.8;margin-top:20px;letter-spacing:8px;font-weight:300;text-shadow:0 2px 20px rgba(0,0,0,0.5)}
+    .hero-badge{margin-top:32px;display:inline-block;padding:8px 28px;border:1px solid rgba(212,168,67,0.3);border-radius:2px;font-size:13px;letter-spacing:4px;color:var(--gold);background:rgba(15,23,42,0.6);font-family:'Noto Sans SC',sans-serif}
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-size:11px;letter-spacing:4px;opacity:0.5;font-family:'Noto Sans SC',sans-serif;font-weight:300}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--text),transparent);animation:scrollPulse 2s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+    .hero-flags{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+    .hero-flags .flag-line{--dur:6s;top:10%;left:-120px;transform:rotate(-8deg)}
+    .hero-flags .flag-line:nth-child(2){--dur:8s;top:30%;left:-60px;transform:rotate(-5deg);animation-delay:-2s}
+    .hero-flags .flag-line:nth-child(3){--dur:7s;top:55%;left:-140px;transform:rotate(-10deg);animation-delay:-4s}
+    .hero-flags .flag-line:nth-child(4){--dur:9s;top:75%;left:-80px;transform:rotate(-6deg);animation-delay:-3s}
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(16px);background:rgba(15,23,42,0.7);border:1px solid rgba(21,101,192,0.25);border-radius:4px;padding:12px 18px;text-align:center;min-width:76px}
+    .hud-value{font-size:22px;font-weight:700;color:var(--gold);font-family:'Noto Serif SC',serif;letter-spacing:1px}
+    .hud-label{font-size:11px;opacity:0.55;margin-top:4px;letter-spacing:2px;font-family:'Noto Sans SC',sans-serif}
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:2px;overflow:hidden;position:relative;border:1px solid rgba(21,101,192,0.12)}
+    .content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .content-image:hover img{transform:scale(1.05)}
+    .content-text h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(28px,4vw,42px);margin-bottom:16px;letter-spacing:6px;color:var(--text)}
+    .content-text h2 .accent{color:var(--qiang-red)}
+    .content-text h2 .indigo{color:var(--indigo)}
+    .content-divider{width:60px;height:2px;background:linear-gradient(90deg,var(--qiang-red),var(--indigo),transparent);margin-bottom:24px}
+    .content-text p{font-size:16px;line-height:2.2;opacity:0.78;margin-bottom:16px;text-align:justify}
+    .content-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .content-tag{padding:5px 16px;border:1px solid rgba(212,168,67,0.25);border-radius:2px;font-size:12px;letter-spacing:2px;color:var(--gold);font-family:'Noto Sans SC',sans-serif}
+    .image-break{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_05.jpg') center/cover fixed;filter:brightness(0.35) saturate(1.1)}
+    .image-break .overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(15,23,42,0.2), rgba(15,23,42,0.65));z-index:1}
+    .image-break .quote{position:relative;z-index:2;text-align:center;padding:0 40px}
+    .image-break .quote-cn{font-family:'Ma Shan Zheng',cursive;font-size:clamp(32px,5vw,56px);letter-spacing:12px;margin-bottom:16px;color:var(--gold);text-shadow:0 2px 20px rgba(0,0,0,0.4)}
+    .image-break .quote-en{font-size:14px;opacity:0.45;letter-spacing:6px;font-family:'Noto Sans SC',sans-serif;font-weight:300}
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto;position:relative}
+    .gallery-header{text-align:center;margin-bottom:48px}
+    .gallery-header h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(26px,3vw,38px);letter-spacing:8px;margin-bottom:12px;color:var(--text)}
+    .gallery-header .sub{font-size:13px;opacity:0.45;letter-spacing:4px;font-family:'Noto Sans SC',sans-serif;font-weight:300}
+    .gallery-divider{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto 0}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .gallery-item{position:relative;overflow:hidden;border-radius:2px;cursor:pointer}
+    .gallery-item img{width:100%;object-fit:cover;transition:transform 0.6s;display:block}
+    .gallery-item:hover img{transform:scale(1.06)}
+    .gallery-item::after{content:'';position:absolute;inset:0;background:linear-gradient(to top, rgba(21,101,192,0.05), transparent);opacity:0;transition:opacity 0.4s;pointer-events:none}
+    .gallery-item:hover::after{opacity:1}
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto;position:relative}
+    .dashboard-header{text-align:center;margin-bottom:48px}
+    .dashboard-header h2{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(26px,3vw,38px);letter-spacing:8px;margin-bottom:12px;color:var(--text)}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .dash-card{backdrop-filter:blur(16px);background:rgba(15,23,42,0.6);border:1px solid rgba(21,101,192,0.15);border-radius:4px;padding:28px 20px;text-align:center;transition:transform 0.3s,border-color 0.3s,background 0.3s;position:relative;overflow:hidden}
+    .dash-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg, rgba(21,101,192,0.06), rgba(196,30,58,0.06));opacity:0;transition:opacity 0.4s}
+    .dash-card:hover{transform:translateY(-4px);border-color:rgba(212,168,67,0.25);background:rgba(15,23,42,0.8)}
+    .dash-card:hover::before{opacity:1}
+    .dash-icon{font-size:26px;margin-bottom:10px;position:relative;z-index:1}
+    .dash-value{font-size:28px;font-weight:700;color:var(--gold);margin-bottom:4px;position:relative;z-index:1;letter-spacing:2px;font-family:'Noto Serif SC',serif}
+    .dash-label{font-size:12px;opacity:0.5;letter-spacing:2px;position:relative;z-index:1;font-family:'Noto Sans SC',sans-serif}
+    .cta{height:60vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_09.jpg') center/cover;filter:brightness(0.3) saturate(0.9)}
+    .cta .overlay{position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(15,23,42,0.2), rgba(15,23,42,0.6));z-index:1}
+    .cta-content{position:relative;z-index:3;text-align:center;padding:0 40px}
+    .cta-num{font-family:'Ma Shan Zheng',cursive;font-size:clamp(64px,10vw,120px);font-weight:400;letter-spacing:12px;opacity:0.1;margin-bottom:-24px;color:var(--indigo)}
+    .cta-title{font-family:'ZCOOL XiaoWei',serif;font-size:clamp(24px,3vw,36px);letter-spacing:8px;margin-bottom:32px;color:var(--text)}
+    .cta-btn{display:inline-block;padding:12px 44px;border:1px solid rgba(212,168,67,0.3);border-radius:2px;font-size:14px;letter-spacing:4px;text-decoration:none;color:var(--gold);font-family:'Noto Sans SC',sans-serif;transition:all 0.3s;background:rgba(15,23,42,0.4)}
+    .cta-btn:hover{background:rgba(196,30,58,0.15);border-color:var(--gold)}
+    .footer{padding:40px;text-align:center;opacity:0.35;font-size:12px;letter-spacing:3px;font-family:'Noto Sans SC',sans-serif;border-top:1px solid rgba(21,101,192,0.08)}
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+    .ethnic-band{height:6px;background:repeating-linear-gradient(90deg,var(--indigo) 0px,var(--indigo) 16px,var(--qiang-red) 16px,var(--qiang-red) 32px,var(--gold) 32px,var(--gold) 48px,var(--qiang-red) 48px,var(--qiang-red) 64px,var(--indigo) 64px,var(--indigo) 80px);opacity:0.12}
+    @media(max-width:768px){.content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}.content-section.reverse{direction:ltr}.gallery-grid{grid-template-columns:1fr}.dashboard-grid{grid-template-columns:repeat(2,1fr)}.hud{top:12px;right:12px;gap:6px}.hud-item{padding:8px 14px;min-width:60px}.hud-value{font-size:18px}.hero-title{letter-spacing:10px}}
+    @media(max-width:480px){.dashboard-grid{grid-template-columns:1fr 1fr}.gallery{padding:40px 16px}.dashboard{padding:40px 16px}.content-section{padding:40px 16px}}
+  </style>
+</head><body>
+
+  <!-- Hero -->
+  <section class="hero ethnic-border">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-flags">
+      <div class="flag-line">
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+      </div>
+      <div class="flag-line">
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+      </div>
+      <div class="flag-line">
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+      </div>
+      <div class="flag-line">
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+      </div>
+    </div>
+    <div class="ethnic-corner tl"></div>
+    <div class="ethnic-corner tr"></div>
+    <div class="ethnic-corner bl"></div>
+    <div class="ethnic-corner br"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Beichuan Qiang City</h1>
+      <p class="hero-sub">Great Love Beichuan  Charm of the Qiang Homeland</p>
+      <div class="hero-badge">National 5A Tourist Attraction  Post-Wenchuan Earthquake Reconstruction</div>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Scroll to Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- HUD -->
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">Ancient Qiang</div><div class="hud-label">Cultural Heritage</div></div>
+    <div class="hud-item"><div class="hud-value">2008</div><div class="hud-label">Earthquake Memorial</div></div>
+    <div class="hud-item"><div class="hud-value">Spring &amp; Autumn</div><div class="hud-label">Best Season</div></div>
+  </div>
+
+  <!-- Content 1: Beichuan Qiang City -->
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_03.jpg" alt="New Look of Beichuan Qiang City" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Qiang City <span class="accent">Reborn</span></h2>
+      <div class="content-divider"></div>
+      <p>Beichuan Qiang City Tourist Area is located in Beichuan Qiang Autonomous County, Mianyang City, Sichuan Province. It is a national-level memorial scenic area rebuilt after the Great Wenchuan Earthquake. The scenic area consists of the old county town earthquake ruins, the May 12 Wenchuan Earthquake Memorial Museum, the new Beichuan county town, the Qiang Folk Museum, and the Banaqia Commercial Street, combining remembrance, cultural heritage, tourism, and leisure.</p>
+      <p>This is the only Qiang Autonomous County in China and an important center for Qiang cultural heritage. The melodious Qiang flute, vibrant Qiang embroidery, and majestic watchtowers  the ancient Qiang civilization radiates new vitality and brilliance on this reborn land, showcasing to the world the indomitable spirit of the people of Beichuan.</p>
+      <div class="content-tags">
+        <span class="content-tag">Qiang Culture</span>
+        <span class="content-tag">Post-Disaster Reconstruction</span>
+        <span class="content-tag">National Scenic Area</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Decorative Band -->
+  <div class="ethnic-band"></div>
+
+  <!-- Image Break -->
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="prayer-flags">
+      <div class="flag-line" style="--dur:7s;top:15%;left:-100px;transform:rotate(-6deg)">
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+      </div>
+      <div class="flag-line" style="--dur:9s;top:50%;left:-60px;transform:rotate(-4deg);animation-delay:-3s">
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+      </div>
+    </div>
+    <div class="quote">
+      <div class="quote-cn">Why should the Qiang flute lament  The spring breeze has reached Beichuan</div>
+      <div class="quote-en">FROM RUINS TO RENAISSANCE  THE SPIRIT OF BEICHUAN</div>
+    </div>
+  </section>
+
+  <!-- Decorative Band -->
+  <div class="ethnic-band"></div>
+
+  <!-- Content 2 (Reverse): Earthquake Ruins and Memorial -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_04.jpeg" alt="May 12 Wenchuan Earthquake Memorial" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Remember <span class="indigo"> Rebirth</span></h2>
+      <div class="content-divider"></div>
+      <p>The old Beichuan county town earthquake ruins preserve the original appearance of the Great Wenchuan Earthquake, making it one of the most complete and largest earthquake disaster sites in the world. The May 12 Wenchuan Earthquake Memorial Museum is located beside the ruins, displaying a vast collection of earthquake artifacts and materials, recreating the tragedy of that disaster and the great human love that emerged.</p>
+      <p>From earthquake relief to post-disaster reconstruction, from shattered mountains and rivers to a beautiful new homeland, every step of Beichuan embodies the profound friendship of people across the nation. This place is not only a deep remembrance of the departed but also a supreme tribute to the unyielding spirit of humanity in the face of disaster.</p>
+      <div class="content-tags">
+        <span class="content-tag">Earthquake Ruins</span>
+        <span class="content-tag">Memorial Hall</span>
+        <span class="content-tag">Remembrance</span>
+        <span class="content-tag">Resilience Spirit</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Decorative Band -->
+  <div class="ethnic-band"></div>
+
+  <!-- Content 3: Qiang Culture -->
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_07.jpeg" alt="Qiang Folk Museum" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Qiang Soul <span class="accent">Eternal</span></h2>
+      <div class="content-divider"></div>
+      <p>The Qiang Folk Museum is an excellent window into Qiang culture. It houses a large collection of precious Qiang artifacts, from ancient Qiang flutes and exquisite Qiang embroidery to unique watchtower architectural models, comprehensively showcasing the long history and splendid civilization of the Qiang people. The Qiang flute has been listed as a national intangible cultural heritage, its tone desolate and far-reaching, carrying the thousand-year memory of the Qiang people.</p>
+      <p>Banaqia Commercial Street is a landmark district of the new Beichuan county town, featuring traditional Qiang architectural style, bringing together Qiang embroidery, local specialties, and distinctive dining. Strolling through it, the rich Qiang ethnic atmosphere greets you at every turn, with every detail telling the cultural confidence and contemporary rebirth of this ancient people.</p>
+      <div class="content-tags">
+        <span class="content-tag">Qiang Flute</span>
+        <span class="content-tag">Qiang Embroidery</span>
+        <span class="content-tag">Watchtowers</span>
+        <span class="content-tag">Banaqia</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" data-animate>
+    <div class="gallery-header">
+      <h2>Splendid  Beichuan</h2>
+      <p class="sub">Qiang Mountains and Waters  Reborn from Ashes</p>
+      <div class="gallery-divider"></div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="grid-row:span 2;height:100%">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_08.jpeg" alt="New Beichuan County Town" style="height:100%;min-height:500px" loading="lazy"/>
+      </div>
+      <div class="gallery-item" style="height:240px">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_10.jpg" alt="Qiang Culture" style="height:100%" loading="lazy"/>
+      </div>
+      <div class="gallery-item" style="height:240px">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_11.jpeg" alt="Beichuan Scenery" style="height:100%" loading="lazy"/>
+      </div>
+      <div class="gallery-item" style="height:240px">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_12.png" alt="Qiang Architecture" style="height:100%" loading="lazy"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="dashboard" data-animate>
+    <div class="dashboard-header">
+      <h2>Qiang City  Data</h2>
+      <div class="gallery-divider"></div>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <div class="dash-icon">🏛️</div>
+        <div class="dash-value">National</div>
+        <div class="dash-label">5A Scenic Area</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-icon">🏔️</div>
+        <div class="dash-value">Ancient Qiang</div>
+        <div class="dash-label">Cultural Heritage</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-icon">🕊️</div>
+        <div class="dash-value">2008</div>
+        <div class="dash-label">Earthquake Memorial</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-icon">🌸</div>
+        <div class="dash-value">Spring &amp; Autumn</div>
+        <div class="dash-label">Best Season</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta ethnic-border">
+    <div class="cta-bg"></div>
+    <div class="overlay"></div>
+    <div class="prayer-flags">
+      <div class="flag-line" style="--dur:8s;top:20%;left:-80px;transform:rotate(-7deg);animation-delay:-1s">
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+      </div>
+      <div class="flag-line" style="--dur:10s;top:60%;left:-120px;transform:rotate(-5deg);animation-delay:-5s">
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+        <span class="flag"></span><span class="flag"></span><span class="flag"></span>
+      </div>
+    </div>
+    <div class="ethnic-corner tl"></div>
+    <div class="ethnic-corner tr"></div>
+    <div class="ethnic-corner bl"></div>
+    <div class="ethnic-corner br"></div>
+    <div class="cta-content">
+      <div class="cta-num">Ancient Qiang</div>
+      <div class="cta-title">Great Love Beichuan  Charm of the Qiang Homeland</div>
+      <a href="../index.html?prov=%E5%9B%9B%E5%B7%9D%E7%9C%81" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Beichuan Qiang City Tourist Area  National 5A Scenic Area  Beichuan Qiang Autonomous County, Mianyang City, Sichuan Province</p>
+  </footer>
+
+  <script>
+    (function(){
+      var img = new Image();
+      img.onload = function(){
+        document.getElementById('heroBg').style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_01.jpg')";
+      };
+      img.src = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/beichuan/绵阳市北川羌城旅游区_01.jpg';
+    })();
+
+    window.addEventListener('scroll', function(){
+      var hud = document.getElementById('scrollHud');
+      if(hud) hud.style.opacity = window.scrollY > 100 ? '0' : '1';
+    });
+
+    document.querySelector('.hero').addEventListener('mousemove', function(e){
+      var x = (e.clientX / window.innerWidth - 0.5) * 12;
+      var y = (e.clientY / window.innerHeight - 0.5) * 12;
+      document.getElementById('heroBg').style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    });
+
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, {threshold: 0.15});
+
+    document.querySelectorAll('[data-animate]').forEach(function(el){
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Sanqingshan · Taoist Sacred Mountain | 5A Scenic Area Immersive Exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+:root {
+  --amethyst: #7c3aed;
+  --lavender: #a78bfa;
+  --gold: #fbbf24;
+  --amber: #f59e0b;
+  --mist: #c4b5fd;
+  --deep: #0a0510;
+  --surface: #1a1025;
+  --fog: rgba(124,58,237,0.06);
+  --text: #e8e0f0;
+  --text-dim: rgba(232,224,240,0.55);
+  --text-faint: rgba(232,224,240,0.25);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background:var(--deep);
+  color:var(--text);
+  font-family:'Noto Serif SC',serif;
+  line-height:1.8;
+  overflow-x:hidden;
+}
+
+#loading {
+  position:fixed; inset:0; z-index:9999;
+  background:var(--deep);
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity .6s,visibility .6s;
+}
+#loading.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+#loading .spinner {
+  width:48px; height:48px;
+  border:2px solid var(--text-faint);
+  border-top-color:var(--amethyst);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+.hero {
+  position:relative; height:100vh; min-height:700px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.hero-bg {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  transform:scale(1.1);
+  transition:transform 1.5s cubic-bezier(.25,.46,.45,.94);
+}
+.hero.loaded .hero-bg { transform:scale(1); }
+.hero-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,rgba(10,5,16,.3) 0%,rgba(10,5,16,.5) 50%,var(--deep) 100%);
+}
+.mist-layer {
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 60%,rgba(124,58,237,.15) 0%,transparent 60%);
+  animation:mistPulse 8s ease-in-out infinite;
+}
+@keyframes mistPulse {
+  0%,100% { opacity:.6; }
+  50% { opacity:1; }
+}
+
+.hero-content {
+  position:relative; z-index:2; text-align:center;
+  max-width:900px; padding:0 2rem;
+}
+.hero-tag {
+  display:inline-block;
+  font-size:.85rem; letter-spacing:.3em;
+  color:var(--gold);
+  border:1px solid rgba(251,191,36,.3);
+  padding:.4rem 1.5rem; border-radius:2px;
+  margin-bottom:2rem;
+  backdrop-filter:blur(10px);
+}
+.hero h1 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(3.5rem,8vw,7rem);
+  font-weight:400;
+  color:var(--text);
+  line-height:1.2;
+  margin-bottom:.5rem;
+  text-shadow:0 0 80px rgba(124,58,237,.4);
+}
+.hero .subtitle {
+  font-size:clamp(1rem,2vw,1.4rem);
+  color:var(--lavender);
+  letter-spacing:.2em;
+  margin-bottom:1.5rem;
+}
+.hero .desc {
+  font-size:1.05rem;
+  color:var(--text-dim);
+  max-width:600px; margin:0 auto 2.5rem;
+  line-height:1.9;
+}
+.hero .scroll-hint {
+  position:absolute; bottom:3rem; left:50%;
+  transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center;
+  gap:.5rem;
+  color:var(--text-faint);
+  font-size:.75rem; letter-spacing:.2em;
+}
+.scroll-hint .line {
+  width:1px; height:40px;
+  background:linear-gradient(180deg,var(--amethyst),transparent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%,100% { transform:scaleY(1); opacity:.5; }
+  50% { transform:scaleY(1.8); opacity:1; }
+}
+
+.section {
+  max-width:1100px; margin:0 auto;
+  padding:6rem 2rem;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:4rem; align-items:center;
+}
+.section.reverse { direction:rtl; }
+.section.reverse .section-text { direction:ltr; }
+.section.reverse .section-visual { direction:ltr; }
+
+.section-text .chapter-num {
+  font-family:'ZCOOL XiaoWei',serif;
+  font-size:.8rem; letter-spacing:.3em;
+  color:var(--amethyst);
+  margin-bottom:1rem;
+}
+.section-text h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+  margin-bottom:1.5rem;
+  line-height:1.3;
+}
+.section-text p {
+  color:var(--text-dim);
+  font-size:1.05rem;
+  line-height:2;
+  margin-bottom:1rem;
+}
+.section-text .highlight {
+  color:var(--gold);
+  font-weight:600;
+}
+
+.section-visual {
+  position:relative;
+  border-radius:8px; overflow:hidden;
+  aspect-ratio:4/5;
+  box-shadow:0 20px 60px rgba(124,58,237,.15);
+}
+.section-visual img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .8s ease;
+}
+.section-visual:hover img { transform:scale(1.05); }
+
+.image-break {
+  position:relative; height:60vh; min-height:400px;
+  background-size:cover; background-position:center;
+  background-attachment:fixed;
+  display:flex; align-items:center; justify-content:center;
+}
+.image-break .break-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,var(--deep),rgba(10,5,16,.4),var(--deep));
+}
+.image-break .break-quote {
+  position:relative; z-index:1; text-align:center;
+  max-width:700px; padding:0 2rem;
+}
+.image-break .break-quote .quote-text {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  color:var(--text);
+  line-height:1.6;
+  margin-bottom:1rem;
+}
+.image-break .break-quote .quote-author {
+  font-size:.9rem; color:var(--gold);
+  letter-spacing:.2em;
+}
+
+.gallery-section {
+  max-width:1100px; margin:0 auto;
+  padding:6rem 2rem;
+}
+.gallery-section .gallery-header {
+  text-align:center; margin-bottom:3rem;
+}
+.gallery-section .gallery-header h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+}
+.gallery-section .gallery-header .gallery-sub {
+  color:var(--amethyst);
+  font-size:.85rem; letter-spacing:.3em;
+  margin-top:.5rem;
+}
+.gallery-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;
+}
+.gallery-grid .gallery-item {
+  position:relative;
+  border-radius:6px; overflow:hidden;
+  aspect-ratio:3/4;
+  cursor:pointer;
+}
+.gallery-grid .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 2; }
+.gallery-grid .gallery-item img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .6s ease;
+}
+.gallery-grid .gallery-item:hover img { transform:scale(1.08); }
+
+.dashboard-section {
+  max-width:1100px; margin:0 auto;
+  padding:4rem 2rem 6rem;
+}
+.dashboard-section .dash-header {
+  text-align:center; margin-bottom:3rem;
+}
+.dashboard-section .dash-header h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+}
+.dashboard-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1.5rem;
+}
+.dash-card {
+  background:var(--surface);
+  border:1px solid rgba(124,58,237,.1);
+  border-radius:8px;
+  padding:2rem 1.5rem;
+  text-align:center;
+  transition:border-color .3s,transform .3s;
+}
+.dash-card:hover {
+  border-color:rgba(124,58,237,.3);
+  transform:translateY(-4px);
+}
+.dash-card .dash-icon {
+  font-size:2rem; margin-bottom:1rem;
+}
+.dash-card .dash-value {
+  font-family:'ZCOOL XiaoWei',serif;
+  font-size:2.2rem;
+  color:var(--amethyst);
+  margin-bottom:.3rem;
+}
+.dash-card .dash-label {
+  font-size:.85rem; color:var(--text-dim);
+  letter-spacing:.1em;
+}
+
+.cta-section {
+  text-align:center; padding:6rem 2rem;
+  background:linear-gradient(180deg,transparent,rgba(124,58,237,.05),transparent);
+}
+.cta-section h2 {
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:400;
+  color:var(--text);
+  margin-bottom:1rem;
+}
+.cta-section p {
+  color:var(--text-dim);
+  margin-bottom:2rem;
+  font-size:1.05rem;
+}
+.cta-btn {
+  display:inline-block;
+  padding:.9rem 2.5rem;
+  border:1px solid var(--amethyst);
+  color:var(--amethyst);
+  text-decoration:none;
+  font-size:.9rem; letter-spacing:.2em;
+  border-radius:2px;
+  transition:all .3s;
+}
+.cta-btn:hover {
+  background:var(--amethyst);
+  color:var(--text);
+}
+
+footer {
+  text-align:center; padding:3rem 2rem;
+  border-top:1px solid rgba(124,58,237,.1);
+}
+footer p {
+  color:var(--text-faint);
+  font-size:.8rem; letter-spacing:.15em;
+}
+
+.chapter-nav {
+  position:fixed; right:2rem; top:50%;
+  transform:translateY(-50%);
+  z-index:100;
+  display:flex; flex-direction:column;
+  gap:1rem;
+}
+.chapter-nav .nav-dot {
+  width:8px; height:8px;
+  border-radius:50%;
+  background:var(--text-faint);
+  transition:all .3s;
+  cursor:pointer;
+}
+.chapter-nav .nav-dot.active {
+  background:var(--amethyst);
+  box-shadow:0 0 12px rgba(124,58,237,.5);
+}
+
+@media (max-width:768px) {
+  .section {
+    grid-template-columns:1fr;
+    gap:2rem; padding:4rem 1.5rem;
+  }
+  .section.reverse { direction:ltr; }
+  .gallery-grid {
+    grid-template-columns:repeat(2,1fr);
+  }
+  .gallery-grid .gallery-item:nth-child(1) { grid-column:span 2; grid-row:span 1; }
+  .dashboard-grid { grid-template-columns:repeat(2,1fr); }
+  .chapter-nav { display:none; }
+  .image-break { background-attachment:scroll; }
+}
+</style>
+</head>
+<body>
+
+<div id="loading"><div class="spinner"></div></div>
+
+<nav class="chapter-nav" id="chapterNav">
+  <div class="nav-dot active" data-target="hero"></div>
+  <div class="nav-dot" data-target="python"></div>
+  <div class="nav-dot" data-target="goddess"></div>
+  <div class="nav-dot" data-target="temple"></div>
+  <div class="nav-dot" data-target="gallery"></div>
+  <div class="nav-dot" data-target="dashboard"></div>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="mist-layer"></div>
+  <div class="hero-content">
+    <div class="hero-tag">UNESCO World Heritage · National 5A Scenic Area</div>
+    <h1>Sanqingshan</h1>
+    <div class="subtitle">Taoist Sacred Mountain · Floating Wonderland</div>
+    <p class="desc">A masterpiece of granite peak forest landforms and a UNESCO World Natural Heritage site. The Giant Python Emerging from the Mountain and the Goddess of Spring — nature's uncanny craftsmanship has crystallized into eternal poetry here.</p>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll Down</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<section class="section" id="python" data-chapter="Giant Python Emerging">
+  <div class="section-text">
+    <div class="chapter-num">Chapter I</div>
+    <h2>Giant Python Emerging from the Mountain</h2>
+    <p>A towering granite pillar of <span class="highlight">128 meters</span> rises abruptly from the mountain, like a giant python bursting forth and piercing the clouds. It is the most iconic landmark of Sanqingshan and a unique wonder among the world's granite landforms.</p>
+    <p>After hundreds of millions of years of weathering and erosion, Python Peak stands firm with a flat top, a slightly slender neck, and a thick body — its narrowest point measures less than <span class="highlight">7 meters</span> in diameter. When mist and clouds swirl around it, the python appears and disappears, as if swimming through a sea of clouds.</p>
+  </div>
+  <div class="section-visual">
+    <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/上饶市玉山县三清山风景区/上饶市玉山县三清山风景区_04.jpg" alt="Giant Python Emerging from the Mountain" loading="lazy">
+  </div>
+</section>
+
+<div class="image-break" style="background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/上饶市玉山县三清山风景区/上饶市玉山县三清山风景区_05.jpg')">
+  <div class="break-overlay"></div>
+  <div class="break-quote">
+    <div class="quote-text">"Having toured the Five Sacred Mountains, the finest scenery lies at Sanqing"</div>
+    <div class="quote-author">— Su Shi</div>
+  </div>
+</div>
+
+<section class="section reverse" id="goddess" data-chapter="Goddess of Spring">
+  <div class="section-text">
+    <div class="chapter-num">Chapter II</div>
+    <h2>Goddess of Spring</h2>
+    <p>The Goddess of Spring Peak rises <span class="highlight">86 meters</span> high, shaped like an elegant and graceful maiden seated among the surrounding peaks. With her hands holding two ancient pines, she appears to be sowing the seeds of spring, guarding this sacred mountain paradise.</p>
+    <p>Legend has it that the Goddess of Spring is a Taoist deity who oversees the beauty of spring on earth. When the first rays of morning sunlight bathe the peak in golden glow, the entire mountain seems draped in a sacred halo, inspiring awe and reverence.</p>
+  </div>
+  <div class="section-visual">
+    <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/上饶市玉山县三清山风景区/上饶市玉山县三清山风景区_07.jpg" alt="Goddess of Spring" loading="lazy">
+  </div>
+</section>
+
+<section class="section" id="temple" data-chapter="Sanqing Holy Land">
+  <div class="section-text">
+    <div class="chapter-num">Chapter III</div>
+    <h2>Sanqing Holy Land</h2>
+    <p>The Sanqing Temple was first built during the <span class="highlight">Shengping era of the Eastern Jin Dynasty</span> (357–361 AD), with a history spanning over 1,600 years. It serves as the sacred site for the <span class="highlight">Three Pure Ones</span> (Yuqing, Shangqing, Taiqing) of Taoism.</p>
+    <p>The ancient architectural complex is built along the mountain, centered around Sanqing Temple and laid out according to the Eight Trigrams of the I Ching, embodying the Taoist philosophy of "unity of heaven and humanity." The West Coast Plank Road clings to thousand-meter-high cliffs — walking along it, with the sea of clouds surging beneath your feet, feels like treading through a fairyland.</p>
+  </div>
+  <div class="section-visual">
+    <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/上饶市玉山县三清山风景区/上饶市玉山县三清山风景区_08.jpg" alt="Sanqing Temple" loading="lazy">
+  </div>
+</section>
+
+<section class="gallery-section" id="gallery" data-chapter="Gallery">
+  <div class="gallery-header">
+    <h2>Gallery</h2>
+    <div class="gallery-sub">GALLERY</div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/上饶市玉山县三清山风景区/上饶市玉山县三清山风景区_09.jpg" alt="Yujing Peak" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/上饶市玉山县三清山风景区/上饶市玉山县三清山风景区_10.jpg" alt="West Coast Plank Road" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/上饶市玉山县三清山风景区/上饶市玉山县三清山风景区_11.jpg" alt="Purple Mist Stone" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/上饶市玉山县三清山风景区/上饶市玉山县三清山风景区_12.jpg" alt="Sea of Clouds" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section class="dashboard-section" id="dashboard" data-chapter="Dashboard">
+  <div class="dash-header">
+    <h2>Sanqingshan · Dashboard</h2>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dash-card">
+      <div class="dash-icon">🏔️</div>
+      <div class="dash-value">1816.9m</div>
+      <div class="dash-label">Highest Elevation</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">📐</div>
+      <div class="dash-value">229km²</div>
+      <div class="dash-label">Total Area</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">⭐</div>
+      <div class="dash-value">4.7</div>
+      <div class="dash-label">Visitor Rating</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-icon">🏛️</div>
+      <div class="dash-value">1600+</div>
+      <div class="dash-label">Taoist Heritage (Years)</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Visit Sanqing Holy Land</h2>
+  <p>Best Season: Spring (Apr–May) for azalea blooms, Autumn (Sep–Nov) for sea of clouds and sunrise</p>
+  <span class="cta-btn">Back to Map</span>
+</section>
+
+<footer>
+  <p>Sanqingshan · Taoist Sacred Mountain · World Natural Heritage · 5A Immersive Exploration</p>
+</footer>
+
+<script>
+(function(){
+  setTimeout(function(){
+    document.getElementById('loading').classList.add('hidden');
+  },800);
+
+  var heroBg=document.getElementById('heroBg');
+  var img=new Image();
+  img.onload=function(){
+    heroBg.style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/上饶市玉山县三清山风景区/上饶市玉山县三清山风景区_03.jpg')";
+    document.querySelector('.hero').classList.add('loaded');
+  };
+  img.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/jiangxi/江西/上饶市玉山县三清山风景区/上饶市玉山县三清山风景区_03.jpg';
+
+  var sections=document.querySelectorAll('[data-chapter]');
+  var navDots=document.querySelectorAll('.nav-dot');
+
+  function updateNav(){
+    var scrollY=window.scrollY+window.innerHeight/3;
+    var current='';
+    sections.forEach(function(s){
+      if(s.offsetTop<=scrollY) current=s.id;
+    });
+    navDots.forEach(function(d){
+      d.classList.toggle('active',d.dataset.target===current);
+    });
+  }
+
+  navDots.forEach(function(dot){
+    dot.addEventListener('click',function(){
+      var target=document.getElementById(dot.dataset.target);
+      if(target) target.scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  window.addEventListener('scroll',updateNav);
+
+  var observer=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting) e.target.style.opacity='1';
+    });
+  },{threshold:.15});
+
+  document.querySelectorAll('.section,.gallery-section,.dashboard-section').forEach(function(el){
+    el.style.opacity='0';
+    el.style.transition='opacity .8s ease';
+    observer.observe(el);
+  });
+})();
+</script>
+
+<a href="../index.html?prov=江西省" style="position:fixed;top:20px;left:20px;z-index:9999;padding:10px 24px;background:rgba(5,8,16,0.85);backdrop-filter:blur(10px);border:1px solid rgba(79,172,254,0.2);border-radius:6px;color:rgba(255,255,255,0.8);text-decoration:none;font-size:13px;letter-spacing:2px;transition:all 0.3s;">← Back to Map</a>
+</body>
+</html>

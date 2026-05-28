@@ -1,0 +1,16 @@
+# 排除所有图片文件（已托管在 COS）
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.svg
+*.bmp
+*.ico
+
+# 排除 Python 脚本
+*.py
+
+# 排除系统文件
+Thumbs.db
+.DS_Store

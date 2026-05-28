@@ -1,0 +1,706 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Leshan Giant Buddha · The Mountain is a Buddha | 5A Scenic Area Immersive Exploration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=ZCOOL+QingKe+HuangYou&family=Noto+Serif+SC:wght@400;700&family=Long+Cang&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #c41e3a;
+      --secondary: #d4a843;
+      --bg: #1a0f0a;
+      --surface: rgba(196,30,58,0.08);
+      --text: #f5e6d3;
+      --text-dim: rgba(245,230,211,0.55);
+      --stone-green: #2d8c6c;
+      --stone-blue: #1e5a8c;
+      --ochre: #c47a3a;
+      --glow: rgba(196,30,58,0.2);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Noto Serif SC','PingFang SC','Microsoft YaHei',serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(196,30,58,0.015) 2px, rgba(196,30,58,0.015) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(212,168,67,0.01) 3px, rgba(212,168,67,0.01) 6px);
+    }
+
+    /* === Mural texture overlay === */
+    .mural-texture::after {
+      content:'';position:absolute;inset:0;
+      background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-size:256px 256px;
+      opacity:0.5;
+      mix-blend-mode:overlay;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    /* === Auspicious cloud decoration === */
+    .cloud-deco {
+      position:absolute;
+      pointer-events:none;
+      z-index:0;
+      opacity:0.08;
+    }
+    .cloud-deco svg{width:100%;height:100%}
+
+    /* === 1. Hero Section === */
+    .hero{
+      height:100vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center
+    }
+    .hero-bg{
+      position:absolute;inset:-20px;
+      background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_01.jpg') center/cover;
+      filter:brightness(0.5) saturate(1.1) sepia(0.15);
+      transition:transform 0.1s ease-out
+    }
+    .hero-overlay{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at 50% 40%, rgba(196,30,58,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 60%, rgba(45,140,108,0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 30% 20%, rgba(196,122,58,0.12) 0%, transparent 40%);
+      z-index:1
+    }
+    .hero-content{
+      position:relative;z-index:2;text-align:center;
+      display:flex;flex-direction:column;align-items:center
+    }
+    .hero-title{
+      font-family:'ZCOOL XiaoWei',serif;
+      font-size:clamp(48px,8vw,96px);
+      letter-spacing:20px;
+      color:var(--text);
+      text-shadow:
+        0 0 40px rgba(196,30,58,0.3),
+        0 2px 20px rgba(0,0,0,0.5);
+      margin-bottom:8px
+    }
+    .hero-title .small{
+      display:block;
+      font-family:'Ma Shan Zheng',cursive;
+      font-size:clamp(20px,3vw,36px);
+      letter-spacing:12px;
+      color:var(--secondary);
+      margin-top:8px;
+      font-weight:400
+    }
+    .hero-sub{
+      font-family:'Noto Serif SC',serif;
+      font-size:clamp(14px,1.8vw,22px);
+      opacity:0.7;
+      margin-top:24px;
+      letter-spacing:8px;
+      color:var(--text);
+      border-top:1px solid rgba(212,168,67,0.3);
+      border-bottom:1px solid rgba(212,168,67,0.3);
+      padding:12px 32px;
+      display:inline-block
+    }
+
+    /* === Auspicious cloud decoration === */
+    .hero-clouds{
+      position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden
+    }
+    .hero-clouds .cloud{
+      position:absolute;
+      width:300px;height:auto;
+      opacity:0.06;
+      animation:cloudDrift 30s ease-in-out infinite
+    }
+    .hero-clouds .cloud:nth-child(1){
+      top:15%;left:-100px;
+      animation-delay:0s;
+      width:400px
+    }
+    .hero-clouds .cloud:nth-child(2){
+      bottom:20%;right:-80px;
+      animation-delay:-15s;
+      width:350px
+    }
+    @keyframes cloudDrift{
+      0%,100%{transform:translateX(0) scale(1)}
+      50%{transform:translateX(60px) scale(1.05)}
+    }
+
+    /* === 2. HUD Data Panel === */
+    .hud{
+      position:fixed;top:24px;right:24px;z-index:100;
+      display:flex;gap:8px;
+      transition:opacity 0.4s
+    }
+    .hud-item{
+      backdrop-filter:blur(12px);
+      background:rgba(26,15,10,0.7);
+      border:1px solid rgba(212,168,67,0.15);
+      border-radius:8px;
+      padding:10px 16px;
+      text-align:center;
+      min-width:72px
+    }
+    .hud-item .hud-value{
+      font-family:'ZCOOL QingKe HuangYou',cursive;
+      font-size:22px;font-weight:400;
+      color:var(--secondary);
+      letter-spacing:2px
+    }
+    .hud-item .hud-label{
+      font-size:10px;opacity:0.5;
+      margin-top:3px;letter-spacing:2px;
+      color:var(--text)
+    }
+
+    /* === 3. Scroll Hint === */
+    .scroll-hint{
+      position:absolute;bottom:40px;left:50%;
+      transform:translateX(-50%);z-index:2;
+      display:flex;flex-direction:column;
+      align-items:center;gap:8px;
+      transition:opacity 0.4s
+    }
+    .scroll-hint span{
+      font-size:11px;letter-spacing:4px;opacity:0.5;
+      font-family:'Noto Serif SC',serif
+    }
+    .scroll-line{
+      width:1px;height:40px;
+      background:linear-gradient(to bottom,var(--text),transparent);
+      animation:scrollPulse 2s ease-in-out infinite
+    }
+    @keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+    /* === 4. Content Section === */
+    .content-section{
+      max-width:1200px;margin:0 auto;
+      padding:100px 40px;
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:60px;align-items:center;
+      position:relative;z-index:1
+    }
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{
+      width:100%;border-radius:4px;overflow:hidden;
+      position:relative
+    }
+    .content-image::after{
+      content:'';position:absolute;inset:0;
+      background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-size:256px 256px;
+      opacity:0.3;mix-blend-mode:overlay;
+      pointer-events:none;z-index:1
+    }
+    .content-image img{
+      width:100%;height:100%;object-fit:cover;
+      transition:transform 0.6s;
+      display:block
+    }
+    .content-image:hover img{transform:scale(1.05)}
+    .content-text h2{
+      font-family:'ZCOOL XiaoWei',serif;
+      font-size:clamp(28px,4vw,42px);
+      margin-bottom:16px;
+      letter-spacing:6px;
+      color:var(--text)
+    }
+    .content-text h2 .highlight{color:var(--secondary)}
+    .content-divider{
+      width:60px;height:2px;
+      background:linear-gradient(90deg,var(--secondary),transparent);
+      margin-bottom:20px
+    }
+    .content-text p{
+      font-size:16px;line-height:2.2;
+      opacity:0.78;
+      margin-bottom:16px;
+      text-align:justify
+    }
+    .content-tags{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:20px
+    }
+    .content-tag{
+      padding:5px 16px;
+      border:1px solid rgba(212,168,67,0.25);
+      border-radius:2px;
+      font-size:12px;letter-spacing:2px;
+      color:var(--secondary);
+      font-family:'Noto Serif SC',serif
+    }
+
+    /* === 5. Image Break Section === */
+    .image-break{
+      height:60vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center
+    }
+    .image-break .bg{
+      position:absolute;inset:-10px;
+      background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_05.jpg') center/cover fixed;
+      filter:brightness(0.35) saturate(0.9) sepia(0.1)
+    }
+    .image-break .overlay{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at center, rgba(26,15,10,0.3) 0%, rgba(26,15,10,0.7) 100%);
+      z-index:1
+    }
+    .image-break .quote{
+      position:relative;z-index:2;text-align:center;padding:0 40px
+    }
+    .image-break .quote-cn{
+      font-family:'Ma Shan Zheng',cursive;
+      font-size:clamp(32px,5vw,60px);
+      letter-spacing:12px;
+      color:var(--secondary);
+      margin-bottom:16px;
+      text-shadow:0 2px 20px rgba(0,0,0,0.4)
+    }
+    .image-break .quote-en{
+      font-family:'Noto Serif SC',serif;
+      font-size:14px;opacity:0.45;
+      letter-spacing:6px;
+      color:var(--text)
+    }
+
+    /* === 6. Gallery === */
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto;position:relative;z-index:1}
+    .gallery-header{
+      text-align:center;margin-bottom:48px
+    }
+    .gallery-header h2{
+      font-family:'ZCOOL XiaoWei',serif;
+      font-size:clamp(24px,3vw,36px);
+      letter-spacing:8px;
+      margin-bottom:12px;
+      color:var(--text)
+    }
+    .gallery-header .sub{
+      font-size:13px;opacity:0.45;letter-spacing:4px;
+      color:var(--text)
+    }
+    .gallery-divider{
+      width:80px;height:1px;
+      background:linear-gradient(90deg,transparent,var(--secondary),transparent);
+      margin:16px auto 0
+    }
+    .gallery-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:12px
+    }
+    .gallery-item{
+      position:relative;overflow:hidden;border-radius:2px;cursor:pointer
+    }
+    .gallery-item img{
+      width:100%;object-fit:cover;
+      transition:transform 0.6s;
+      display:block
+    }
+    .gallery-item:hover img{transform:scale(1.06)}
+    .gallery-item .mural-overlay{
+      position:absolute;inset:0;
+      background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      background-size:256px 256px;
+      opacity:0.15;mix-blend-mode:overlay;
+      pointer-events:none;z-index:1;
+      transition:opacity 0.4s
+    }
+    .gallery-item:hover .mural-overlay{opacity:0}
+
+    /* === 7. Data Dashboard === */
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+    .dashboard-header{
+      text-align:center;margin-bottom:48px
+    }
+    .dashboard-header h2{
+      font-family:'ZCOOL XiaoWei',serif;
+      font-size:clamp(24px,3vw,36px);
+      letter-spacing:8px;
+      margin-bottom:12px;
+      color:var(--text)
+    }
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .dash-card{
+      backdrop-filter:blur(12px);
+      background:rgba(26,15,10,0.6);
+      border:1px solid rgba(212,168,67,0.1);
+      border-radius:4px;
+      padding:28px 20px;
+      text-align:center;
+      transition:transform 0.3s,border-color 0.3s,background 0.3s;
+      position:relative;overflow:hidden
+    }
+    .dash-card::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg, rgba(196,30,58,0.05), rgba(45,140,108,0.05));
+      opacity:0;transition:opacity 0.4s
+    }
+    .dash-card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(212,168,67,0.3);
+      background:rgba(26,15,10,0.8)
+    }
+    .dash-card:hover::before{opacity:1}
+    .dash-icon{
+      font-family:'ZCOOL QingKe HuangYou',cursive;
+      font-size:24px;margin-bottom:10px;
+      position:relative;z-index:1
+    }
+    .dash-value{
+      font-family:'ZCOOL QingKe HuangYou',cursive;
+      font-size:28px;font-weight:400;
+      color:var(--secondary);
+      margin-bottom:4px;
+      position:relative;z-index:1;
+      letter-spacing:2px
+    }
+    .dash-label{
+      font-size:12px;opacity:0.5;
+      letter-spacing:2px;
+      position:relative;z-index:1
+    }
+
+    /* === 8. CTA Section === */
+    .cta{
+      height:60vh;position:relative;overflow:hidden;
+      display:flex;align-items:center;justify-content:center
+    }
+    .cta-bg{
+      position:absolute;inset:-10px;
+      background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_04.jpg') center/cover;
+      filter:brightness(0.3) saturate(0.8) sepia(0.1)
+    }
+    .cta .overlay{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at center, rgba(26,15,10,0.2), rgba(26,15,10,0.6));
+      z-index:1
+    }
+    .cta-content{
+      position:relative;z-index:2;text-align:center;padding:0 40px
+    }
+    .cta-num{
+      font-family:'ZCOOL QingKe HuangYou',cursive;
+      font-size:clamp(64px,10vw,120px);
+      font-weight:400;
+      letter-spacing:12px;
+      opacity:0.12;
+      margin-bottom:-24px;
+      color:var(--secondary)
+    }
+    .cta-title{
+      font-family:'ZCOOL XiaoWei',serif;
+      font-size:clamp(22px,3vw,36px);
+      letter-spacing:8px;
+      margin-bottom:32px;
+      color:var(--text)
+    }
+    .cta-btn{
+      display:inline-block;padding:12px 44px;
+      border:1px solid rgba(212,168,67,0.3);
+      border-radius:2px;
+      font-size:14px;letter-spacing:4px;
+      text-decoration:none;
+      color:var(--secondary);
+      font-family:'Noto Serif SC',serif;
+      transition:all 0.3s;
+      background:rgba(26,15,10,0.4)
+    }
+    .cta-btn:hover{
+      background:rgba(196,30,58,0.15);
+      border-color:var(--secondary)
+    }
+
+    /* === 9. Footer === */
+    .footer{
+      padding:40px;text-align:center;
+      opacity:0.35;
+      font-size:12px;letter-spacing:3px;
+      font-family:'Noto Serif SC',serif;
+      border-top:1px solid rgba(212,168,67,0.08)
+    }
+
+    /* === 10. Animations === */
+    [data-animate]{
+      opacity:0;transform:translateY(40px);
+      transition:opacity 0.8s ease,transform 0.8s ease
+    }
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    /* === 11. Mural Decorative Band === */
+    .mural-band{
+      height:6px;
+      background:repeating-linear-gradient(
+        90deg,
+        var(--primary) 0px,
+        var(--primary) 20px,
+        var(--stone-green) 20px,
+        var(--stone-green) 40px,
+        var(--ochre) 40px,
+        var(--ochre) 60px,
+        transparent 60px,
+        transparent 80px
+      );
+      opacity:0.15
+    }
+
+    /* === 12. Golden Glow === */
+    .golden-glow{
+      position:absolute;top:50%;left:50%;
+      transform:translate(-50%,-50%);
+      width:600px;height:600px;
+      background:radial-gradient(circle, rgba(212,168,67,0.08) 0%, transparent 70%);
+      animation:goldenPulse 5s ease-in-out infinite;
+      pointer-events:none;z-index:0
+    }
+    @keyframes goldenPulse{
+      0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.4}
+      50%{transform:translate(-50%,-50%) scale(1.2);opacity:0.8}
+    }
+
+    /* === 13. Responsive === */
+    @media(max-width:768px){
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .gallery-grid{grid-template-columns:1fr}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:4px}
+      .hud-item{padding:6px 10px;min-width:60px}
+      .hud-item .hud-value{font-size:18px}
+      .hud-item .hud-label{font-size:9px}
+      .hero-title{letter-spacing:12px}
+      .hero-sub{padding:10px 20px;font-size:13px}
+      .image-break .quote-cn{letter-spacing:8px}
+    }
+    @media(max-width:480px){
+      .dashboard-grid{grid-template-columns:1fr 1fr}
+      .gallery{padding:40px 16px}
+      .dashboard{padding:40px 16px}
+      .content-section{padding:40px 16px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero mural-texture">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-clouds">
+      <svg class="cloud" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="top:12%;left:-80px;width:380px">
+        <path d="M10 45 Q20 15 50 20 Q65 5 90 15 Q110 0 130 15 Q155 5 170 20 Q190 15 195 35 Q200 50 185 55 L15 55 Q0 55 10 45Z" fill="var(--secondary)" opacity="0.6"/>
+      </svg>
+      <svg class="cloud" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" style="bottom:18%;right:-100px;width:340px">
+        <path d="M10 45 Q20 15 50 20 Q65 5 90 15 Q110 0 130 15 Q155 5 170 20 Q190 15 195 35 Q200 50 185 55 L15 55 Q0 55 10 45Z" fill="var(--secondary)" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="golden-glow"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Leshan Giant Buddha
+        <span class="small">World's Largest Stone Seated Maitreya Buddha</span>
+      </h1>
+      <p class="hero-sub">The Mountain is a Buddha · The Buddha is a Mountain</p>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Scroll to Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- HUD -->
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">71m</div><div class="hud-label">Total Height</div></div>
+    <div class="hud-item"><div class="hud-value">713</div><div class="hud-label">Year Carved</div></div>
+    <div class="hud-item"><div class="hud-value">Dual Heritage</div><div class="hud-label">Year 1996</div></div>
+  </div>
+
+  <!-- Content Section 1: Location -->
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_03.jpg" alt="Leshan Giant Buddha Panorama" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Lingyun <span class="highlight">Giant Buddha</span></h2>
+      <div class="content-divider"></div>
+      <p>Leshan Giant Buddha is located in the central district of Leshan City, Sichuan Province, at the confluence of the Min River, Qingyi River, and Dadu River. It was carved into the cliff face of Qixia Peak on Mount Lingyun. The Buddha stands 71 meters tall, with a head height of 14.7 meters, head width of 10 meters, ear length of 7 meters, and instep width of 8.5 meters and length of 11 meters, making it the largest extant stone seated Maitreya Buddha in the world.</p>
+      <p>The construction of the Great Buddha began in the first year of the Kaiyuan era of the Tang Dynasty (713 AD). It was initiated by the eminent monk Haitong to tame the floodwaters and protect sentient beings. The project spanned three generations of craftsmen and took approximately 90 years, finally completed in the nineteenth year of the Zhenyuan era (803 AD). It stands as a masterpiece of ancient Chinese stone carving art.</p>
+      <div class="content-tags">
+        <span class="content-tag">World's Largest</span>
+        <span class="content-tag">Stone Maitreya</span>
+        <span class="content-tag">Three Rivers Confluence</span>
+        <span class="content-tag">Tang Dynasty Carving</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mural decorative band -->
+  <div class="mural-band"></div>
+
+  <!-- Image Break -->
+  <section class="image-break mural-texture">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <div class="quote-cn">The Mountain is a Buddha, the Buddha is a Mountain</div>
+      <div class="quote-en">THE MOUNTAIN IS A BUDDHA, THE BUDDHA IS A MOUNTAIN</div>
+    </div>
+  </section>
+
+  <!-- Mural decorative band -->
+  <div class="mural-band"></div>
+
+  <!-- Content Section 2: Millennia-old Buddha (reverse) -->
+  <section class="content-section reverse" data-animate>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_06.jpg" alt="Leshan Giant Buddha Side View" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Millennium <span class="highlight">Buddhist Chant</span></h2>
+      <div class="content-divider"></div>
+      <p>The Leshan Giant Buddha sits majestically by the river in a full "bhadrasana" (seated with feet on the ground) posture, hands resting on its knees, with a dignified and solemn appearance. Its design is exquisite — the entire statue features a drainage system hidden within the garment folds and hair bun, allowing rainwater to flow down naturally, effectively reducing the erosion of the stone statue over millennia of wind and rain, showcasing the extraordinary architectural wisdom of Tang Dynasty craftsmen.</p>
+      <p>After completion, a thirteen-story wooden pavilion (the Great Image Pavilion) was built to shelter the Buddha. It was called "Lingyun Pavilion" in the Tang Dynasty and "Tianning Pavilion" in the Song Dynasty, but was unfortunately destroyed at the end of the Ming Dynasty. Today, the Great Buddha sits in the open air, blending seamlessly with Mount Lingyun and the blue waters of the three rivers, becoming an eternal symbol of the perfect fusion of Chinese Buddhist culture and natural landscapes.</p>
+      <div class="content-tags">
+        <span class="content-tag">Bhadrasana Posture</span>
+        <span class="content-tag">Drainage System</span>
+        <span class="content-tag">Great Image Pavilion</span>
+        <span class="content-tag">Majestic Dignity</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mural decorative band -->
+  <div class="mural-band"></div>
+
+  <!-- Content Section 3: Key Attractions -->
+  <section class="content-section" data-animate>
+    <div class="content-image">
+      <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_07.jpg" alt="Lingyun Temple" loading="lazy"/>
+    </div>
+    <div class="content-text">
+      <h2>Buddhist <span class="highlight">Sacred Realm</span></h2>
+      <div class="content-divider"></div>
+      <p>Lingyun Temple, also known as "Great Buddha Temple," stands beside the Giant Buddha. Built during the Tang Dynasty, it is one of the most famous ancient temples in Leshan. The temple grounds are filled with towering ancient trees and the resonant sound of Buddhist chanting, together forming a sacred Buddhist site on Mount Lingyun alongside the Great Buddha. The Nine-Turn Plank Path spirals down from the Buddha's head to its feet, with over 250 steps, offering views of the Buddha's full grandeur and the magnificent confluence of the three rivers along the way.</p>
+      <p>The Mahao Cliff Tombs are outstanding representatives of Leshan's Han Dynasty cliff burial complex, rich in exquisite stone carvings and regarded as the "Han Dynasty Stone Carving Art Corridor." The Giant Sleeping Buddha is a natural wonder discovered in 1989 — viewed from the Binjiang Road in Leshan city, Mount Wuyou, Mount Lingyun, and Mount Guicheng form a colossal sleeping Buddha approximately 4,000 meters long, with the Leshan Giant Buddha seated precisely at the heart of the sleeping Buddha — a unity of heaven and man that inspires awe.</p>
+      <div class="content-tags">
+        <span class="content-tag">Lingyun Temple</span>
+        <span class="content-tag">Nine-Turn Plank Path</span>
+        <span class="content-tag">Mahao Cliff Tombs</span>
+        <span class="content-tag">Giant Sleeping Buddha</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery" data-animate>
+    <div class="gallery-header">
+      <h2>Murals · Buddha's Shadow</h2>
+      <p class="sub">Thousand-Year Giant Buddha · Majestic in All Forms</p>
+      <div class="gallery-divider"></div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="height:500px">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_08.png" alt="Leshan Giant Buddha Head" style="height:100%" loading="lazy"/>
+        <div class="mural-overlay"></div>
+      </div>
+      <div class="gallery-item" style="height:240px">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_09.jpeg" alt="Leshan Giant Buddha Distant View" style="height:100%" loading="lazy"/>
+        <div class="mural-overlay"></div>
+      </div>
+      <div class="gallery-item" style="height:280px">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_10.jpg" alt="Lingyun Temple Ancient Architecture" style="height:100%" loading="lazy"/>
+        <div class="mural-overlay"></div>
+      </div>
+      <div class="gallery-item" style="height:300px">
+        <img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_11.jpg" alt="Three Rivers Confluence" style="height:100%" loading="lazy"/>
+        <div class="mural-overlay"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section class="dashboard" data-animate>
+    <div class="dashboard-header">
+      <h2>Buddha Land · Data</h2>
+      <div class="gallery-divider"></div>
+    </div>
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <div class="dash-icon">⛰️</div>
+        <div class="dash-value">71m</div>
+        <div class="dash-label">Total Height</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-icon">📜</div>
+        <div class="dash-value">713 AD</div>
+        <div class="dash-label">Carving Era</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-icon">🌍</div>
+        <div class="dash-value">Dual Heritage</div>
+        <div class="dash-label">Listed in 1996</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-icon">🌸</div>
+        <div class="dash-value">Spring &amp; Autumn</div>
+        <div class="dash-label">Best Season</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta mural-texture">
+    <div class="cta-bg"></div>
+    <div class="overlay"></div>
+    <div class="cta-content">
+      <div class="cta-num">713</div>
+      <div class="cta-title">One Chisel, One Stone · Millennia of Immortality</div>
+      <a href="../index.html?prov=%E5%9B%9B%E5%B7%9D%E7%9C%81" class="cta-btn">Back to Scenic Map</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Leshan Giant Buddha · National 5A Tourist Attraction · Leshan, Sichuan · World Cultural and Natural Dual Heritage</p>
+  </footer>
+
+  <script>
+    // Image preload
+    (function(){
+      var img = new Image();
+      img.onload = function(){
+        document.getElementById('heroBg').style.backgroundImage = "url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_01.jpg')";
+      };
+      img.src = 'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/leshandafo/乐山市乐山大佛景区_01.jpg';
+    })();
+
+    // Scroll HUD hide
+    window.addEventListener('scroll', function(){
+      var hud = document.getElementById('scrollHud');
+      if(hud) hud.style.opacity = window.scrollY > 100 ? '0' : '1';
+    });
+
+    // Mouse parallax
+    document.querySelector('.hero').addEventListener('mousemove', function(e){
+      var x = (e.clientX / window.innerWidth - 0.5) * 12;
+      var y = (e.clientY / window.innerHeight - 0.5) * 12;
+      document.getElementById('heroBg').style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    });
+
+    // Intersection Observer
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, {threshold: 0.15});
+
+    document.querySelectorAll('[data-animate]').forEach(function(el){
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

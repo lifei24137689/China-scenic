@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Langzhong Ancient City · Langyuan Fairyland, Fengshui Ancient City | 5A Scenic Area Immersive Exploration</title>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #c47a3a;
+      --secondary: #e8c86a;
+      --bg: #f5f0e8;
+      --surface: #faf6ee;
+      --text: #3c2415;
+      --text-dim: rgba(60,36,21,0.55);
+      --accent: #d4453a;
+      --ink: #2a1a0e;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Noto Serif SC','Noto Sans SC',serif;background:var(--bg);color:var(--text);overflow-x:hidden;position:relative}
+
+    body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0.025;mix-blend-mode:multiply;background-image:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:200px 200px}
+
+    .vintage-paper{background:linear-gradient(135deg,#f5f0e8 0%,#ede4d3 50%,#f5f0e8 100%);border:2px solid rgba(196,122,58,0.25);box-shadow:0 4px 24px rgba(60,36,21,0.1)}
+
+    .hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .hero-bg{position:absolute;inset:-20px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_01.jpg') center/cover;filter:brightness(0.55) saturate(1.1) sepia(0.15);transition:transform 0.1s ease-out}
+    .hero-overlay{position:absolute;inset:0;z-index:1;
+      background:
+        radial-gradient(ellipse at 25% 40%, rgba(196,122,58,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 50%, rgba(232,200,106,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 40% 80%, rgba(60,36,21,0.15) 0%, transparent 45%);
+    }
+    .hero-content{position:relative;z-index:2;text-align:center}
+    .hero-title{font-family:'ZCOOL QingKe HuangYou',cursive;font-size:clamp(48px,8vw,88px);color:#fff;letter-spacing:14px;text-shadow:0 2px 40px rgba(60,36,21,0.4),0 0 80px rgba(196,122,58,0.2)}
+    .hero-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(18px,2.5vw,28px);color:#e8c86a;margin-top:16px;letter-spacing:4px;text-shadow:0 2px 20px rgba(60,36,21,0.3)}
+    .hero-badge{margin-top:28px;display:inline-block;padding:8px 32px;border:1px solid rgba(232,200,106,0.3);border-radius:2px;font-family:'Noto Sans SC',sans-serif;font-size:12px;letter-spacing:6px;color:#e8c86a;background:rgba(60,36,21,0.35);backdrop-filter:blur(4px)}
+
+    .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity 0.4s}
+    .scroll-hint span{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:11px;letter-spacing:4px;opacity:0.5;color:#e8c86a}
+    .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#e8c86a,transparent);animation:scrollPulse 2.5s ease-in-out infinite}
+    @keyframes scrollPulse{0%,100%{opacity:0.2}50%{opacity:0.7}}
+
+    .hud{position:fixed;top:24px;right:24px;z-index:100;display:flex;gap:10px;transition:opacity 0.4s}
+    .hud-item{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(250,246,238,0.75);border:1px solid rgba(196,122,58,0.15);border-radius:8px;padding:10px 18px;text-align:center;min-width:72px;box-shadow:0 2px 12px rgba(60,36,21,0.06)}
+    .hud-value{font-size:20px;font-weight:600;color:var(--primary);font-family:'Noto Serif SC',serif}
+    .hud-label{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:10px;opacity:0.55;margin-top:2px;letter-spacing:3px;color:var(--text)}
+
+    .content-section{max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+    .content-section.reverse{direction:rtl}
+    .content-section.reverse .content-text{direction:ltr}
+    .content-image{width:100%;border-radius:4px;overflow:hidden;box-shadow:0 8px 40px rgba(60,36,21,0.08);transition:box-shadow 0.4s;border:1px solid rgba(196,122,58,0.1)}
+    .content-image:hover{box-shadow:0 12px 60px rgba(60,36,21,0.15)}
+    .content-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease;display:block}
+    .content-image:hover img{transform:scale(1.04)}
+    .content-text h2{font-family:'Noto Serif SC',serif;font-weight:600;font-size:clamp(26px,3.5vw,38px);margin-bottom:16px;letter-spacing:6px;color:var(--text)}
+    .content-divider{width:50px;height:2px;background:var(--secondary);margin-bottom:22px}
+    .content-text p{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:15px;line-height:2.2;opacity:0.8;margin-bottom:14px;color:var(--text)}
+    .content-text p:last-of-type{margin-bottom:0}
+    .content-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+    .content-tag{padding:5px 18px;border:1px solid rgba(196,122,58,0.2);border-radius:2px;font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:12px;letter-spacing:2px;color:var(--primary);background:rgba(250,246,238,0.6)}
+
+    .image-break{height:55vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .image-break .bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_08.jpg') center/cover fixed;filter:brightness(0.5) saturate(1.05) sepia(0.2)}
+    .image-break .overlay{position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(196,122,58,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 40%, rgba(232,200,106,0.08) 0%, transparent 50%);
+      pointer-events:none;
+    }
+    .image-break .quote{position:relative;z-index:2;text-align:center}
+    .image-break .quote-cn{font-family:'ZCOOL QingKe HuangYou',cursive;font-size:clamp(32px,5vw,52px);letter-spacing:12px;margin-bottom:14px;color:#f5f0e8;text-shadow:0 2px 30px rgba(0,0,0,0.3)}
+    .image-break .quote-en{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;opacity:0.5;letter-spacing:6px;color:#e8c86a}
+
+    .gallery{padding:80px 40px;max-width:1400px;margin:0 auto}
+    .gallery h2{text-align:center;font-family:'Noto Serif SC',serif;font-weight:600;font-size:clamp(26px,3vw,36px);margin-bottom:48px;letter-spacing:8px;color:var(--text)}
+    .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .gallery-item{position:relative;overflow:hidden;border-radius:4px;cursor:pointer;background:var(--surface);border:1px solid rgba(196,122,58,0.08)}
+    .gallery-item img{width:100%;object-fit:cover;transition:transform 0.7s ease;display:block}
+    .gallery-item:hover img{transform:scale(1.06)}
+
+    .dashboard{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .dash-card{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(250,246,238,0.6);border:1px solid rgba(196,122,58,0.1);border-radius:8px;padding:32px 24px;text-align:center;transition:transform 0.3s,border-color 0.3s;box-shadow:0 2px 16px rgba(60,36,21,0.04)}
+    .dash-card:hover{transform:translateY(-3px);border-color:rgba(196,122,58,0.25)}
+    .dash-icon{font-size:28px;margin-bottom:10px;opacity:0.7}
+    .dash-value{font-family:'Noto Serif SC',serif;font-weight:600;font-size:30px;color:var(--primary);margin-bottom:5px}
+    .dash-label{font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:12px;opacity:0.5;letter-spacing:3px;color:var(--text)}
+
+    .cta{height:55vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .cta-bg{position:absolute;inset:-10px;background:url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_12.png') center/cover;filter:brightness(0.45) saturate(1.0) sepia(0.15)}
+    .cta .overlay{position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse at 40% 50%, rgba(196,122,58,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 60% 30%, rgba(232,200,106,0.06) 0%, transparent 50%);
+      pointer-events:none;
+    }
+    .cta-content{position:relative;z-index:2;text-align:center}
+    .cta-num{font-family:'ZCOOL QingKe HuangYou',cursive;font-size:clamp(56px,9vw,100px);letter-spacing:12px;opacity:0.1;margin-bottom:-16px;color:#f5f0e8}
+    .cta-title{font-family:'Noto Serif SC',serif;font-weight:600;font-size:clamp(22px,3vw,34px);letter-spacing:10px;margin-bottom:30px;color:#f5f0e8;text-shadow:0 2px 20px rgba(0,0,0,0.3)}
+    .cta-btn{display:inline-block;padding:12px 44px;border:1px solid rgba(232,200,106,0.3);border-radius:2px;font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:14px;letter-spacing:4px;text-decoration:none;color:#e8c86a;transition:all 0.3s;background:rgba(60,36,21,0.2);backdrop-filter:blur(4px)}
+    .cta-btn:hover{background:rgba(196,122,58,0.2);border-color:rgba(232,200,106,0.5);color:#fff}
+
+    .footer{padding:36px 40px;text-align:center;opacity:0.4;font-family:'Noto Sans SC',sans-serif;font-weight:300;font-size:12px;letter-spacing:4px;border-top:1px solid rgba(196,122,58,0.1);color:var(--text)}
+
+    [data-animate]{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+    [data-animate].visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:768px){
+      .content-section{grid-template-columns:1fr;padding:60px 24px;gap:32px}
+      .content-section.reverse{direction:ltr}
+      .gallery-grid{grid-template-columns:1fr}
+      .dashboard-grid{grid-template-columns:repeat(2,1fr)}
+      .hud{top:12px;right:12px;gap:6px}
+      .hud-item{padding:8px 12px;min-width:60px}
+      .hud-value{font-size:18px}
+      .hero-title{letter-spacing:8px;font-size:clamp(36px,10vw,56px)}
+      .hero-sub{letter-spacing:2px}
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Langzhong Ancient City</h1>
+      <p class="hero-sub">Langzhong · Ancient City of Fengshui</p>
+      <div class="hero-badge">One of China's Four Great Ancient Cities · 2,300 Years of History</div>
+    </div>
+    <div class="scroll-hint" id="scrollHud">
+      <span>Scroll to Enter</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="hud" id="hud">
+    <div class="hud-item"><div class="hud-value">2,300 yrs</div><div class="hud-label">History</div></div>
+    <div class="hud-item"><div class="hud-value">Spring &amp; Autumn</div><div class="hud-label">Best Season</div></div>
+    <div class="hud-item"><div class="hud-value">Four Great</div><div class="hud-label">Historic Status</div></div>
+  </div>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_03.jpg" alt="Panoramic View of Langzhong Ancient City" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Langyuan Fairyland</h2>
+      <div class="content-divider"></div>
+      <p>Langzhong Ancient City, located in Nanchong, Sichuan, is one of China's four great ancient cities, with over 2,300 years of history. Surrounded by mountains on four sides and water on three, the Jialing River winds around the city in a "U" shape, creating a unique landscape where mountains, water, and city coexist in harmony — hailed by ancients as "Langyuan Fairyland on Earth".</p>
+      <p>Since ancient times, Langzhong has been regarded as a blessed fengshui site. Its city site was chosen following the fengshui principle of "Azure Dragon on the left, White Tiger on the right, Vermilion Bird in front, Black Tortoise behind," making it a model of fengshui theory in ancient Chinese urban planning. It is renowned as the "Fengshui Ancient City." The Tang Dynasty painting sage Wu Daozi once painted "Langzhong Scroll," leaving behind a masterpiece for the ages.</p>
+      <div class="content-tags">
+        <span class="content-tag">Four Great Ancient Cities</span>
+        <span class="content-tag">Langyuan Fairyland</span>
+        <span class="content-tag">Fengshui Ancient City</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="image-break">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="quote">
+      <div class="quote-cn">Langyuan Fairyland · Fengshui Ancient City</div>
+      <div class="quote-en">Fairyland on Earth · The City of Fengshui</div>
+    </div>
+  </section>
+
+  <section class="content-section reverse" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_05.jpg" alt="Zhang Fei Temple" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Historical Relics</h2>
+      <div class="content-divider"></div>
+      <p>Zhang Fei Temple, also known as Han Huanhou Shrine, is a memorial temple dedicated to Zhang Fei, the famed general of the Three Kingdoms. Zhang Fei guarded Langzhong for seven years and was deeply loved by the people. Built during the Ming Dynasty and well-preserved, the temple features magnificent halls, a statue of Zhang Fei, and a wealth of Three Kingdoms cultural relics, making it one of Langzhong's most representative historical sites.</p>
+      <p>The Examination Hall, also known as Sichuan Examination Hall or Langzhong Examination Hall, was the venue for provincial civil service examinations during the Qing Dynasty. It is one of the best-preserved imperial examination sites in China. The complex retains buildings such as the Mingyuan Tower, Zhigong Hall, and Jianlin Hall, allowing visitors to travel back in time to the imperial examination era and experience the legacy of millennia of scholarly culture.</p>
+      <div class="content-tags">
+        <span class="content-tag">Zhang Fei Temple</span>
+        <span class="content-tag">Examination Hall</span>
+        <span class="content-tag">Three Kingdoms Culture</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section" data-animate>
+    <div class="content-image"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_02.jpg" alt="Huaguang Tower and Zhongtian Tower" loading="lazy"/></div>
+    <div class="content-text">
+      <h2>Towers and Elegance</h2>
+      <div class="content-divider"></div>
+      <p>Huaguang Tower, the iconic landmark of Langzhong Ancient City, was first built during the Tang Dynasty and stands on the southern street of the old city. The three-story tower features soaring eaves and a majestic presence. From the top, the Jialing River appears like a silk ribbon, the ancient city's blue-tiled roofs stretch in neat rows, and the distant mountains loom in misty blue — it is the best vantage point for panoramic photos of the ancient city.</p>
+      <p>Zhongtian Tower sits at the center of the ancient city's cross-shaped intersection, echoing Huaguang Tower from afar. With its three-tiered eaves and exquisite design, it is one of the highest points in the old city. The area around Zhongtian Tower is open in all directions, lined with shops, making it an excellent spot to experience the vibrant local life of Langzhong. From its top, the full splendor of the ancient city unfolds before your eyes.</p>
+      <p>Langzhong is the birthplace of Spring Festival culture. The Western Han astronomer Luo Xiahong created the "Taichu Calendar" here, establishing the first calendar system that designated the first lunar month as the beginning of the year, giving birth to the most important traditional Chinese festival — the Spring Festival. The Spring Festival Culture Theme Park, centered on Luo Xiahong, showcases the historical origins and folk heritage of Spring Festival culture.</p>
+      <div class="content-tags">
+        <span class="content-tag">Huaguang Tower</span>
+        <span class="content-tag">Zhongtian Tower</span>
+        <span class="content-tag">Spring Festival Culture</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" data-animate>
+    <h2>Langzhong · Impressions of the Ancient City</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item" style="height:500px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_06.jpg" alt="Streets of Langzhong Ancient City" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:220px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_07.jpg" alt="Architecture of Langzhong Ancient City" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:260px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_10.png" alt="Night View of Langzhong Ancient City" style="height:100%" loading="lazy"/></div>
+      <div class="gallery-item" style="height:280px"><img src="https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_11.jpg" alt="Jialing River at Langzhong Ancient City" style="height:100%" loading="lazy"/></div>
+    </div>
+  </section>
+
+  <section class="dashboard" data-animate>
+    <div class="dashboard-grid">
+      <div class="dash-card"><div class="dash-icon">🏛</div><div class="dash-value">2,300 yrs</div><div class="dash-label">History</div></div>
+      <div class="dash-card"><div class="dash-icon">🗺</div><div class="dash-value">Four Great</div><div class="dash-label">Cultural Status</div></div>
+      <div class="dash-card"><div class="dash-icon">🌿</div><div class="dash-value">Spring &amp; Autumn</div><div class="dash-label">Best Season</div></div>
+      <div class="dash-card"><div class="dash-icon">🏯</div><div class="dash-value">8 Sites</div><div class="dash-label">Protected Heritage</div></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-bg"></div>
+    <div class="overlay"></div>
+    <div class="cta-content">
+      <div class="cta-num">Langzhong</div>
+      <div class="cta-title">Langyuan Fairyland · Millennia-Old City</div>
+      <a href="../index.html?prov=%E5%9B%9B%E5%B7%9D%E7%9C%81" class="cta-btn">Back to Map</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Langzhong Ancient City · National 5A Tourist Attraction · Nanchong, Sichuan</p>
+  </footer>
+
+  <script>
+    (function(){var i=new Image();i.onload=function(){document.getElementById('heroBg').style.backgroundImage="url(https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/'https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_01.jpg')"};i.src='https://china-5a-spots-1416017610.cos.ap-hongkong.myqcloud.com/en/sichuan/images/langzhong/南充市阆中古城旅游区_01.jpg'})();
+    window.addEventListener('scroll',function(){var s=document.getElementById('scrollHud');if(s)s.style.opacity=window.scrollY>100?'0':'1'});
+    document.querySelector('.hero').addEventListener('mousemove',function(e){var x=(e.clientX/window.innerWidth-0.5)*10,y=(e.clientY/window.innerHeight-0.5)*10;document.getElementById('heroBg').style.transform='translate('+x+'px,'+y+'px)'});
+    var o=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});
+    document.querySelectorAll('[data-animate]').forEach(function(e){o.observe(e)});
+  </script>
+</body>
+</html>
